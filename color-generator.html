@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ottavia — Color Generator</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #FDFAF5;
+    --surface: #FFFFFF;
+    --text-primary: #333333;
+    --text-secondary: #7C7C7C;
+    --neutral-80: #433E36;
+    --neutral-50: #8F897D;
+    --border: #E8E3DA;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+  }
+
+  .layout {
+    display: flex;
+    height: 100vh;
+  }
+
+  /* ---- Left Panel: 68 Color Palette ---- */
+  .panel-left {
+    width: 580px;
+    min-width: 580px;
+    border-right: 1px solid var(--border);
+    background: var(--surface);
+    padding: 24px;
+    overflow-y: auto;
+  }
+
+  .panel-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--neutral-80);
+    margin-bottom: 2px;
+  }
+
+  .panel-subtitle {
+    font-size: 12px;
+    color: var(--neutral-50);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  /* Active category selector */
+  .category-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .cat-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--neutral-80);
+    transition: all 0.15s;
+  }
+
+  .cat-btn:hover { border-color: var(--neutral-50); }
+
+  .cat-btn.active {
+    border-color: var(--neutral-80);
+    background: var(--neutral-80);
+    color: #fff;
+  }
+
+  .cat-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.1);
+    flex-shrink: 0;
+  }
+
+  .cat-btn.active .cat-dot { border-color: rgba(255,255,255,0.3); }
+
+  /* Section labels */
+  .family-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--neutral-50);
+    margin: 20px 0 10px;
+  }
+
+  .family-label:first-of-type { margin-top: 0; }
+
+  /* Palette grid */
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 72px);
+    gap: 10px;
+  }
+
+  .palette-swatch {
+    width: 72px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition: transform 0.12s ease;
+    position: relative;
+  }
+
+  .palette-swatch:hover {
+    transform: scale(1.05);
+    z-index: 2;
+  }
+
+  .swatch-block {
+    width: 72px;
+    height: 52px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    position: relative;
+    transition: all 0.12s;
+  }
+
+  .palette-swatch:hover .swatch-block {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+
+  .palette-swatch.current .swatch-block {
+    border-color: var(--neutral-80);
+    box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--neutral-80);
+  }
+
+  .swatch-name {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--neutral-80);
+    margin-top: 4px;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .swatch-name-input {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--neutral-80);
+    margin-top: 4px;
+    border: none;
+    background: transparent;
+    width: 100%;
+    padding: 0;
+    font-family: 'Inter', -apple-system, sans-serif;
+    outline: none;
+    border-bottom: 1px solid transparent;
+  }
+
+  .swatch-name-input:hover { border-bottom-color: var(--border); }
+  .swatch-name-input:focus { border-bottom-color: var(--neutral-50); }
+
+  .swatch-hex-row {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-top: 1px;
+  }
+
+  .swatch-hex-label {
+    font-size: 9px;
+    font-weight: 500;
+    color: var(--neutral-50);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+
+  .swatch-copy {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 1px;
+    opacity: 0;
+    transition: opacity 0.12s;
+    display: flex;
+    align-items: center;
+  }
+
+  .palette-swatch:hover .swatch-copy { opacity: 0.5; }
+  .swatch-copy:hover { opacity: 1 !important; }
+
+  .swatch-copy svg {
+    width: 10px;
+    height: 10px;
+    stroke: var(--neutral-80);
+    stroke-width: 2;
+    fill: none;
+  }
+
+  .swatch-block .check-mark {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--neutral-80);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .swatch-block .check-mark svg {
+    width: 8px;
+    height: 8px;
+    stroke: #fff;
+    stroke-width: 3;
+    fill: none;
+  }
+
+  /* ---- Middle Panel: Card Previews ---- */
+  .panel-right {
+    flex: 1;
+    padding: 24px 40px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .preview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 420px;
+    margin-bottom: 20px;
+  }
+
+  .preview-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--neutral-80);
+  }
+
+  .preview-container {
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Card preview */
+  .preview-card {
+    border-radius: 16px;
+    padding: 16px 18px;
+    border: 1.5px solid;
+    transition: all 0.25s ease;
+  }
+
+  .preview-card .card-time {
+    font-size: 11px;
+    font-weight: 600;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+
+  .preview-card .card-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+
+  .preview-card .card-subtitle {
+    font-size: 12.5px;
+    font-weight: 400;
+    opacity: 0.85;
+    line-height: 1.3;
+  }
+
+  .preview-card .card-icon {
+    float: right;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 12px;
+  }
+
+  .preview-card .card-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .preview-completed { opacity: 0.7; }
+  .preview-completed .card-title { text-decoration: line-through; }
+
+  .card-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--neutral-50);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .text-test-strip {
+    border-radius: 10px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.25s ease;
+  }
+
+  .text-test-strip .sample-text {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .text-test-strip .ratio-label {
+    font-size: 10px;
+    font-weight: 700;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+
+  /* Contrast Badge */
+  .contrast-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+
+  .contrast-badge.pass { background: #E6F4EA; color: #1B7D3A; }
+  .contrast-badge.fail { background: #FDE8E8; color: #C53030; }
+  .contrast-badge.aa-large { background: #FEF3CD; color: #856404; }
+
+  /* Text color controls */
+  .text-controls {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    background: var(--surface);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .text-ctrl {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .text-ctrl label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--neutral-50);
+  }
+
+  .mini-swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    border: 1px solid rgba(0,0,0,0.08);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .mini-swatch input[type="color"] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    border: none;
+  }
+
+  .hex-input {
+    width: 68px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3px 6px;
+    font-size: 10px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    color: var(--neutral-80);
+    background: var(--bg);
+  }
+  .hex-input:focus { outline: none; border-color: var(--neutral-50); }
+
+  /* Buttons row */
+  .btn-row {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    max-width: 420px;
+    margin-top: 8px;
+  }
+
+  .action-btn {
+    padding: 8px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .reset-btn {
+    color: var(--neutral-50);
+    background: none;
+    border: 1px solid var(--border);
+  }
+  .reset-btn:hover { background: var(--surface); border-color: var(--neutral-50); color: var(--neutral-80); }
+
+  .copy-btn-main {
+    color: #fff;
+    background: var(--neutral-80);
+    border: 1px solid var(--neutral-80);
+  }
+  .copy-btn-main:hover { opacity: 0.85; }
+
+  /* Export strip */
+  .export-strip {
+    margin-top: 16px;
+    padding: 14px;
+    background: var(--neutral-80);
+    border-radius: 10px;
+    color: #fff;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 10px;
+    line-height: 1.8;
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    white-space: pre-wrap;
+  }
+
+  /* Custom color input at bottom of palette */
+  .custom-color-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .custom-color-row input[type="text"] {
+    width: 80px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 11px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    color: var(--neutral-80);
+  }
+
+  .custom-color-row input[type="text"]:focus { outline: none; border-color: var(--neutral-50); }
+
+  .custom-apply-btn {
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--neutral-80);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .custom-apply-btn:hover { opacity: 0.8; }
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <!-- LEFT PANEL: Palette -->
+  <div class="panel-left">
+    <div class="panel-title">Color Generator</div>
+    <div class="panel-subtitle">Select a category, then click a color to assign it. Hover swatches for hex.</div>
+
+    <!-- Category selector -->
+    <div class="category-bar" id="categoryBar"></div>
+
+    <!-- Palette families -->
+    <div id="paletteContainer"></div>
+
+    <!-- Custom hex input -->
+    <div class="custom-color-row">
+      <input type="text" id="customHex" placeholder="#HEX">
+      <button class="custom-apply-btn" onclick="applyCustom()">Apply to selected</button>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL: Previews -->
+  <div class="panel-right">
+    <div class="preview-header">
+      <div class="preview-title">Card Previews</div>
+    </div>
+
+    <div class="text-controls">
+      <div class="text-ctrl">
+        <label>Text</label>
+        <div class="mini-swatch" id="textSwatch">
+          <input type="color" id="textColorPicker" value="#FFFFFF">
+        </div>
+        <input type="text" class="hex-input" id="textHexInput" value="#FFFFFF">
+      </div>
+      <div class="text-ctrl">
+        <label>Completed</label>
+        <div class="mini-swatch" id="completedTextSwatch">
+          <input type="color" id="completedTextPicker" value="#FFFFFF">
+        </div>
+        <input type="text" class="hex-input" id="completedTextHex" value="#FFFFFF">
+      </div>
+    </div>
+
+    <div class="preview-container" id="previewCards"></div>
+
+    <div class="btn-row">
+      <button class="action-btn reset-btn" onclick="resetColors()">Reset to V15</button>
+      <button class="action-btn copy-btn-main" onclick="copyExport()">Copy CSS</button>
+    </div>
+
+    <div class="export-strip" id="exportStrip"></div>
+  </div>
+</div>
+
+<script>
+  // ---- V15 Defaults ----
+  const DEFAULTS = {
+    hydration:  '#689BBB',
+    activity:   '#D4A163',
+    nutrition:  '#58A471',
+    recovery:   '#8292D5',
+    now_accent: '#D7784A',
+    nudge:      '#5250A0'
+  };
+
+  const LABELS = {
+    hydration: 'Hydration',
+    activity: 'Activity',
+    nutrition: 'Nutrition',
+    recovery: 'Recovery',
+    now_accent: 'Now',
+    nudge: 'Nudge'
+  };
+
+  const ICONS = {
+    hydration: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>`,
+    activity: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
+    nutrition: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>`,
+    recovery: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 18a5 5 0 0 0-10 0"/><line x1="12" y1="9" x2="12" y2="2"/><path d="M4.22 10.22l1.42 1.42"/><path d="M18.36 11.64l1.42-1.42"/><line x1="1" y1="18" x2="23" y2="18"/></svg>`,
+    now_accent: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+    nudge: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`
+  };
+
+  // ---- 68 Curated Palette Colors (light → dark) with names ----
+  const PALETTE = {
+    'Blues — Hydration': [
+      { hex: '#92B7CE', name: 'Mist' },
+      { hex: '#8CB8D0', name: 'Soft Sky' },
+      { hex: '#7BAED0', name: 'Cloud' },
+      { hex: '#7AABC6', name: 'Morning' },
+      { hex: '#6D9FC0', name: 'Clear Day' },
+      { hex: '#689BBB', name: 'Stream' },
+      { hex: '#5E8FAF', name: 'Lake' },
+      { hex: '#5B93B6', name: 'Fjord' },
+      { hex: '#5289AD', name: 'Current' },
+      { hex: '#4E88B4', name: 'Ocean' },
+      { hex: '#4A7FA5', name: 'Deep Water' },
+      { hex: '#3D7A9E', name: 'Abyss' },
+    ],
+    'Greens — Nutrition': [
+      { hex: '#96D7AB', name: 'Mint' },
+      { hex: '#83BD96', name: 'Sprout' },
+      { hex: '#70B689', name: 'Meadow' },
+      { hex: '#6BB88A', name: 'Herb' },
+      { hex: '#64AD7D', name: 'Basil' },
+      { hex: '#5BA87A', name: 'Garden' },
+      { hex: '#58A471', name: 'Sage' },
+      { hex: '#519E70', name: 'Fern' },
+      { hex: '#489466', name: 'Grove' },
+      { hex: '#45926B', name: 'Ivy' },
+      { hex: '#3E8A5A', name: 'Pine' },
+      { hex: '#3B7F54', name: 'Forest' },
+    ],
+    'Ambers — Activity': [
+      { hex: '#F1CF9D', name: 'Vanilla' },
+      { hex: '#E5C48A', name: 'Sand' },
+      { hex: '#E1BD7E', name: 'Wheat' },
+      { hex: '#D9B068', name: 'Honey' },
+      { hex: '#DAB06E', name: 'Nectar' },
+      { hex: '#D4A163', name: 'Amber' },
+      { hex: '#D0A558', name: 'Gold' },
+      { hex: '#CCA044', name: 'Marigold' },
+      { hex: '#C89A4E', name: 'Saffron' },
+      { hex: '#C29538', name: 'Turmeric' },
+      { hex: '#B8892E', name: 'Bronze' },
+      { hex: '#B07E28', name: 'Copper' },
+    ],
+    'Purples — Recovery': [
+      { hex: '#96A6E5', name: 'Haze' },
+      { hex: '#8C9CDD', name: 'Dusk' },
+      { hex: '#8696D8', name: 'Twilight' },
+      { hex: '#89A4D7', name: 'Calm' },
+      { hex: '#8292D5', name: 'Lavender' },
+      { hex: '#7C8CD0', name: 'Iris' },
+      { hex: '#7A82C8', name: 'Wisteria' },
+      { hex: '#7282C8', name: 'Hyacinth' },
+      { hex: '#7078C0', name: 'Thistle' },
+      { hex: '#6A74BC', name: 'Amethyst' },
+      { hex: '#6670B8', name: 'Plum' },
+      { hex: '#5E68B0', name: 'Grape' },
+    ],
+    'Terracotta — Now': [
+      { hex: '#E89D72', name: 'Peach' },
+      { hex: '#E59268', name: 'Apricot' },
+      { hex: '#E0875C', name: 'Sunset' },
+      { hex: '#DE8558', name: 'Coral' },
+      { hex: '#D87B4E', name: 'Ember' },
+      { hex: '#D7784A', name: 'Terra' },
+      { hex: '#D07040', name: 'Clay' },
+      { hex: '#CE6D42', name: 'Sienna' },
+      { hex: '#C66338', name: 'Rust' },
+      { hex: '#C4612E', name: 'Brick' },
+      { hex: '#BF5A30', name: 'Cayenne' },
+      { hex: '#B85228', name: 'Mahogany' },
+    ],
+    'Indigo — Nudge': [
+      { hex: '#7270BE', name: 'Lilac' },
+      { hex: '#6664B4', name: 'Mauve' },
+      { hex: '#6260AE', name: 'Violet' },
+      { hex: '#5C5AAA', name: 'Crocus' },
+      { hex: '#5856A4', name: 'Royal' },
+      { hex: '#5250A0', name: 'Indigo' },
+      { hex: '#504E9A', name: 'Cobalt' },
+      { hex: '#4C4A94', name: 'Regal' },
+      { hex: '#484690', name: 'Midnight' },
+      { hex: '#44428A', name: 'Ink' },
+      { hex: '#3C3A80', name: 'Navy' },
+      { hex: '#353378', name: 'Abyss' },
+    ],
+  };
+
+  let colors = { ...DEFAULTS };
+  let textColor = '#FFFFFF';
+  let completedTextColor = '#FFFFFF';
+  let selectedCategory = 'hydration';
+
+  // Category key mapping from family name
+  const FAMILY_TO_CAT = {
+    'Blues — Hydration': 'hydration',
+    'Greens — Nutrition': 'nutrition',
+    'Ambers — Activity': 'activity',
+    'Purples — Recovery': 'recovery',
+    'Terracotta — Now': 'now_accent',
+    'Indigo — Nudge': 'nudge',
+  };
+
+  // ---- Helpers ----
+  function hexToRgb(hex) {
+    hex = hex.replace('#', '');
+    return { r: parseInt(hex.substr(0,2),16), g: parseInt(hex.substr(2,2),16), b: parseInt(hex.substr(4,2),16) };
+  }
+
+  function luminance(r, g, b) {
+    const a = [r, g, b].map(v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+    return 0.2126 * a[0] + 0.7152 * a[1] + 0.0722 * a[2];
+  }
+
+  function contrastRatio(hex1, hex2) {
+    const c1 = hexToRgb(hex1), c2 = hexToRgb(hex2);
+    const l1 = luminance(c1.r, c1.g, c1.b), l2 = luminance(c2.r, c2.g, c2.b);
+    return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+  }
+
+  function darkenHex(hex, amount) {
+    const rgb = hexToRgb(hex);
+    return '#' + [rgb.r, rgb.g, rgb.b].map(v => Math.max(0, v - amount).toString(16).padStart(2, '0')).join('');
+  }
+
+  function lightenHex(hex, amount) {
+    const rgb = hexToRgb(hex);
+    return '#' + [rgb.r, rgb.g, rgb.b].map(v => Math.min(255, v + amount).toString(16).padStart(2, '0')).join('');
+  }
+
+  function contrastBadge(ratio) {
+    if (ratio >= 4.5) return `<span class="contrast-badge pass">${ratio.toFixed(1)}:1 AA</span>`;
+    if (ratio >= 3) return `<span class="contrast-badge aa-large">${ratio.toFixed(1)}:1 AA-Lg</span>`;
+    return `<span class="contrast-badge fail">${ratio.toFixed(1)}:1 Fail</span>`;
+  }
+
+  // ---- Category Bar ----
+  function buildCategoryBar() {
+    const bar = document.getElementById('categoryBar');
+    bar.innerHTML = '';
+    Object.keys(colors).forEach(key => {
+      const btn = document.createElement('button');
+      btn.className = 'cat-btn' + (key === selectedCategory ? ' active' : '');
+      btn.innerHTML = `<span class="cat-dot" style="background: ${colors[key]}"></span>${LABELS[key]}`;
+      btn.onclick = () => { selectedCategory = key; updateAll(); };
+      bar.appendChild(btn);
+    });
+  }
+
+  // ---- Palette Grid ----
+  // Store editable names (persists during session)
+  const swatchNames = {};
+  Object.entries(PALETTE).forEach(([family, swatches]) => {
+    swatches.forEach(s => { swatchNames[s.hex] = s.name; });
+  });
+
+  function buildPalette() {
+    const container = document.getElementById('paletteContainer');
+    container.innerHTML = '';
+
+    Object.entries(PALETTE).forEach(([family, swatches]) => {
+      const label = document.createElement('div');
+      label.className = 'family-label';
+      label.textContent = family;
+      container.appendChild(label);
+
+      const grid = document.createElement('div');
+      grid.className = 'palette-grid';
+
+      swatches.forEach(item => {
+        const hex = item.hex;
+        const swatch = document.createElement('div');
+        swatch.className = 'palette-swatch';
+
+        const isCurrent = Object.values(colors).some(c => c.toLowerCase() === hex.toLowerCase());
+        if (isCurrent) swatch.classList.add('current');
+
+        const isSelected = colors[selectedCategory].toLowerCase() === hex.toLowerCase();
+        const checkHtml = isSelected
+          ? `<span class="check-mark"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>`
+          : '';
+
+        swatch.innerHTML = `
+          <div class="swatch-block" style="background: ${hex}">${checkHtml}</div>
+          <input class="swatch-name-input" value="${swatchNames[hex] || ''}" data-hex="${hex}" title="Click to rename">
+          <div class="swatch-hex-row">
+            <span class="swatch-hex-label">${hex}</span>
+            <button class="swatch-copy" title="Copy hex" data-hex="${hex}">
+              <svg viewBox="0 0 24 24" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </button>
+          </div>
+        `;
+
+        // Click block to assign color
+        swatch.querySelector('.swatch-block').onclick = () => {
+          colors[selectedCategory] = hex;
+          updateAll();
+        };
+
+        // Editable name
+        swatch.querySelector('.swatch-name-input').addEventListener('change', (e) => {
+          swatchNames[e.target.dataset.hex] = e.target.value;
+        });
+        // Don't propagate clicks on name input
+        swatch.querySelector('.swatch-name-input').addEventListener('click', e => e.stopPropagation());
+
+        // Copy button
+        swatch.querySelector('.swatch-copy').addEventListener('click', (e) => {
+          e.stopPropagation();
+          const h = e.currentTarget.dataset.hex;
+          navigator.clipboard.writeText(h.toUpperCase());
+          const svg = e.currentTarget.querySelector('svg');
+          const orig = svg.innerHTML;
+          svg.innerHTML = '<polyline points="20 6 9 17 4 12" stroke="#1B7D3A"/>';
+          setTimeout(() => svg.innerHTML = orig, 800);
+        });
+
+        grid.appendChild(swatch);
+      });
+
+      container.appendChild(grid);
+    });
+  }
+
+  // ---- Card Previews ----
+  function buildPreviews() {
+    const container = document.getElementById('previewCards');
+    container.innerHTML = '';
+
+    const categories = ['hydration', 'activity', 'nutrition', 'recovery'];
+    const sampleData = {
+      hydration: { time: '10:00 AM', title: 'Time to hydrate', subtitle: 'Drink a glass of water — you\u2019re 2 cups behind', icon: ICONS.hydration },
+      activity: { time: '12:00 PM', title: '20-min walk after lunch', subtitle: 'A short walk boosts digestion and afternoon focus', icon: ICONS.activity },
+      nutrition: { time: '1:00 PM', title: 'Afternoon snack', subtitle: 'Greek yogurt + handful of almonds — 280 kcal', icon: ICONS.nutrition },
+      recovery: { time: '9:30 PM', title: 'Wind-down routine', subtitle: 'Try 5 min of breathing before bed tonight', icon: ICONS.recovery },
+    };
+
+    // Active cards
+    categories.forEach(cat => {
+      const data = sampleData[cat];
+      const bg = colors[cat];
+      const border = darkenHex(bg, 16);
+      const ratio = contrastRatio(bg, textColor);
+      const isSelected = cat === selectedCategory;
+
+      const card = document.createElement('div');
+      card.style.cursor = 'pointer';
+      card.onclick = () => { selectedCategory = cat; updateAll(); };
+      card.innerHTML = `
+        <div class="card-label">${LABELS[cat]} ${contrastBadge(ratio)} ${isSelected ? '<span style="font-size:9px;color:var(--neutral-80);font-weight:700">← EDITING</span>' : ''}</div>
+        <div class="preview-card" style="background: ${bg}; border-color: ${border}; color: ${textColor}; ${isSelected ? 'box-shadow: 0 0 0 2px var(--neutral-80);' : ''}">
+          <div class="card-icon" style="color: ${textColor}">${data.icon}</div>
+          <div class="card-time">${data.time}</div>
+          <div class="card-title">${data.title}</div>
+          <div class="card-subtitle">${data.subtitle}</div>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+
+    // Now accent
+    const nowBg = colors.now_accent;
+    const nowRatio = contrastRatio(nowBg, '#FFFFFF');
+    const nowSelected = selectedCategory === 'now_accent';
+    const nowEl = document.createElement('div');
+    nowEl.style.cursor = 'pointer';
+    nowEl.onclick = () => { selectedCategory = 'now_accent'; updateAll(); };
+    nowEl.innerHTML = `
+      <div class="card-label">Now Accent ${contrastBadge(nowRatio)} ${nowSelected ? '<span style="font-size:9px;color:var(--neutral-80);font-weight:700">← EDITING</span>' : ''}</div>
+      <div class="text-test-strip" style="background: ${nowBg}; ${nowSelected ? 'box-shadow: 0 0 0 2px var(--neutral-80);' : ''} border-radius: 10px;">
+        <span class="sample-text" style="color: #FFFFFF">12:15 PM — Now</span>
+        <span class="ratio-label" style="color: rgba(255,255,255,0.7)">${nowRatio.toFixed(1)}:1</span>
+      </div>
+    `;
+    container.appendChild(nowEl);
+
+    // Nudge
+    const nudgeBg = '#EBEAF5';
+    const nudgeText = colors.nudge;
+    const nudgeRatio = contrastRatio(nudgeBg, nudgeText);
+    const nudgeSelected = selectedCategory === 'nudge';
+    const nudgeEl = document.createElement('div');
+    nudgeEl.style.cursor = 'pointer';
+    nudgeEl.onclick = () => { selectedCategory = 'nudge'; updateAll(); };
+    nudgeEl.innerHTML = `
+      <div class="card-label">Nudge ${contrastBadge(nudgeRatio)} ${nudgeSelected ? '<span style="font-size:9px;color:var(--neutral-80);font-weight:700">← EDITING</span>' : ''}</div>
+      <div class="preview-card" style="background: ${nudgeBg}; border-color: #CBC8E2; color: ${nudgeText}; ${nudgeSelected ? 'box-shadow: 0 0 0 2px var(--neutral-80);' : ''}">
+        <div class="card-icon" style="color: ${nudgeText}">${ICONS.nudge}</div>
+        <div class="card-time" style="opacity: 0.7">9:30 PM</div>
+        <div class="card-title">Coach suggestion</div>
+        <div class="card-subtitle">Try a 10-minute wind-down before sleep</div>
+      </div>
+    `;
+    container.appendChild(nudgeEl);
+
+    // Completed card
+    const compBg = lightenHex(colors.hydration, 80);
+    const compRatio = contrastRatio(compBg, completedTextColor);
+    const compEl = document.createElement('div');
+    compEl.innerHTML = `
+      <div class="card-label">Completed (hydration) ${contrastBadge(compRatio)}</div>
+      <div class="preview-card preview-completed" style="background: ${compBg}; border-color: ${darkenHex(compBg, 10)}; color: ${completedTextColor}">
+        <div class="card-icon" style="color: ${completedTextColor}">${ICONS.hydration}</div>
+        <div class="card-time">8:00 AM</div>
+        <div class="card-title">Morning glass of water</div>
+        <div class="card-subtitle">Done — great start to the day</div>
+      </div>
+    `;
+    container.appendChild(compEl);
+  }
+
+  // ---- Export ----
+  function updateExport() {
+    const strip = document.getElementById('exportStrip');
+    strip.textContent = Object.entries(colors).map(([key, val]) =>
+      `--${key.replace('_', '-')}: ${val.toUpperCase()};`
+    ).join('\n');
+  }
+
+  // ---- Sync Text Controls ----
+  function syncTextControls() {
+    document.getElementById('textColorPicker').value = textColor;
+    document.getElementById('textHexInput').value = textColor.toUpperCase();
+    document.getElementById('textSwatch').style.background = textColor;
+    document.getElementById('completedTextPicker').value = completedTextColor;
+    document.getElementById('completedTextHex').value = completedTextColor.toUpperCase();
+    document.getElementById('completedTextSwatch').style.background = completedTextColor;
+  }
+
+  // ---- Master Update ----
+  function updateAll() {
+    buildCategoryBar();
+    buildPalette();
+    buildPreviews();
+    updateExport();
+    syncTextControls();
+  }
+
+  // ---- Actions ----
+  function applyCustom() {
+    let val = document.getElementById('customHex').value.trim();
+    if (!val.startsWith('#')) val = '#' + val;
+    if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+      colors[selectedCategory] = val;
+      updateAll();
+    }
+  }
+
+  function resetColors() {
+    colors = { ...DEFAULTS };
+    textColor = '#FFFFFF';
+    completedTextColor = '#FFFFFF';
+    selectedCategory = 'hydration';
+    updateAll();
+  }
+
+  function copyExport() {
+    const text = Object.entries(colors).map(([key, val]) =>
+      `--${key.replace('_', '-')}: ${val.toUpperCase()};`
+    ).join('\n');
+    navigator.clipboard.writeText(text);
+  }
+
+  // ---- Text Color Listeners ----
+  document.getElementById('textColorPicker').addEventListener('input', e => { textColor = e.target.value; updateAll(); });
+  document.getElementById('textHexInput').addEventListener('change', e => {
+    let v = e.target.value.trim(); if (!v.startsWith('#')) v = '#' + v;
+    if (/^#[0-9A-Fa-f]{6}$/.test(v)) { textColor = v; updateAll(); }
+  });
+  document.getElementById('completedTextPicker').addEventListener('input', e => { completedTextColor = e.target.value; updateAll(); });
+  document.getElementById('completedTextHex').addEventListener('change', e => {
+    let v = e.target.value.trim(); if (!v.startsWith('#')) v = '#' + v;
+    if (/^#[0-9A-Fa-f]{6}$/.test(v)) { completedTextColor = v; updateAll(); }
+  });
+
+  // ---- Keyboard: Enter on custom hex ----
+  document.getElementById('customHex').addEventListener('keydown', e => { if (e.key === 'Enter') applyCustom(); });
+
+  // ---- Init ----
+  updateAll();
+</script>
+
+</body>
+</html>

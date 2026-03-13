@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ottavia — Coach Plan v3 (Icons & Cards Exploration)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --bg-primary: #FDFAF5;
+    --bg-card: #FFFFFF;
+    --bg-header: #F5F1EA;
+    --text-primary: #333333;
+    --text-secondary: #7C7C7C;
+    --text-muted: #B9B1A0;
+    --neutral-80: #433E36;
+    --neutral-50: #8F897D;
+    --border-light: #E8E3DA;
+
+    --hydration: #75A6FF;
+    --hydration-border: #6793E1;
+    --activity: #ECBD69;
+    --activity-border: #D5AA5D;
+    --nutrition: #4AC39F;
+    --nutrition-border: #4DAB95;
+    --recovery: #B49AFF;
+    --recovery-border: #9F85E0;
+
+    --red-60: #F76642;
+    --now-accent: #FF8C42;
+    --date-col-width: 58px;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  /* ---- Version Navigation ---- */
+  .version-nav {
+    position: fixed;
+    left: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 1000;
+  }
+
+  .version-nav a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 14px;
+    background: #2a2a2a;
+    border: 1px solid #3a3a3a;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #999;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s;
+    min-width: 100px;
+    text-align: center;
+  }
+
+  .version-nav a span {
+    font-size: 10px;
+    font-weight: 400;
+    color: #666;
+    margin-top: 2px;
+  }
+
+  .version-nav a:hover {
+    background: #333;
+    border-color: #555;
+    color: #ccc;
+  }
+
+  .version-nav a.active {
+    background: var(--neutral-80);
+    border-color: var(--neutral-80);
+    color: #fff;
+  }
+
+  .version-nav a.active span {
+    color: rgba(255,255,255,0.6);
+  }
+
+  .phone-frame {
+    width: 390px;
+    height: 844px;
+    background: var(--bg-primary);
+    border-radius: 40px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+  }
+
+  .screen {
+    height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .screen::-webkit-scrollbar { display: none; }
+
+  /* ---- Status Bar ---- */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 24px 0;
+    height: 50px;
+    background: #F5F1EA;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .status-time { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+
+  /* ---- Top Header ---- */
+  .top-header {
+    background: #F5F1EA;
+    padding: 6px 20px 14px;
+    position: sticky;
+    top: 50px;
+    z-index: 99;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .top-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .top-header h1 {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--neutral-50);
+    letter-spacing: -0.3px;
+  }
+
+  .top-header h1 .dynamic-day {
+    color: var(--neutral-80);
+  }
+
+  .top-header-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: none;
+    border-radius: 50%;
+    font-size: 18px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .icon-btn:hover { background: var(--bg-header); }
+
+  /* ---- Schedule Body ---- */
+  .schedule {
+    padding-bottom: 120px;
+  }
+
+  /* ---- Day Row ---- */
+  .day-group {
+    position: relative;
+    min-height: 80px;
+  }
+
+  /* Sticky date column */
+  .day-date {
+    position: sticky;
+    top: 107px;
+    z-index: 50;
+    width: var(--date-col-width);
+    padding: 14px 0 14px 18px;
+    background: var(--bg-primary);
+    float: left;
+  }
+
+  .day-date-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .day-name {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--neutral-50);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    line-height: 1;
+  }
+
+  .day-num {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--neutral-50);
+    line-height: 1.1;
+    margin-top: 1px;
+  }
+
+  /* Today date = Neutral 80 */
+  .day-group.today .day-name { color: var(--neutral-80); }
+  .day-group.today .day-num { color: var(--neutral-80); }
+
+  /* Past days = muted */
+  .day-group.past .day-name { color: var(--neutral-50); opacity: 0.6; }
+  .day-group.past .day-num { color: var(--neutral-50); opacity: 0.6; }
+
+  /* Events column */
+  .day-events {
+    margin-left: var(--date-col-width);
+    padding: 8px 16px 8px 12px;
+    min-height: 80px;
+    border-left: 1px solid var(--border-light);
+  }
+
+  .day-group::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+
+  /* Day divider */
+  .day-divider {
+    height: 1px;
+    background: var(--border-light);
+    margin-left: var(--date-col-width);
+  }
+
+  /* ============================================
+     EVENT CARDS — Filled color style with icons
+     ============================================ */
+  .event-card {
+    border-radius: 12px;
+    margin-bottom: 6px;
+    transition: all 0.3s ease;
+    position: relative;
+    cursor: default;
+  }
+
+  .event-inner {
+    display: flex;
+    align-items: flex-start;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1.5px solid transparent;
+    gap: 10px;
+  }
+
+  /* ---- Category icon (leading) ---- */
+  .event-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .event-icon svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: white;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ---- Filled backgrounds by category ---- */
+  .event-card.hydration .event-inner {
+    background: var(--hydration);
+    border-color: var(--hydration-border);
+  }
+  .event-card.nutrition .event-inner {
+    background: var(--nutrition);
+    border-color: var(--nutrition-border);
+  }
+  .event-card.activity .event-inner {
+    background: var(--activity);
+    border-color: var(--activity-border);
+  }
+  .event-card.recovery .event-inner {
+    background: var(--recovery);
+    border-color: var(--recovery-border);
+  }
+
+  /* All text white on colored cards */
+  .event-card .event-time,
+  .event-card .event-title,
+  .event-card .event-subtitle {
+    color: white;
+  }
+
+  .event-card .event-time {
+    font-size: 12px;
+    font-weight: 500;
+    opacity: 0.85;
+    margin-top: 8px;
+  }
+
+  .event-card .event-title {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .event-card .event-subtitle {
+    font-size: 12px;
+    font-weight: 400;
+    opacity: 0.85;
+    margin-top: 2px;
+    line-height: 1.3;
+  }
+
+  .event-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* ---- Check button ---- */
+  .event-check {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.5);
+    background: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: all 0.2s;
+    font-size: 0;
+  }
+
+  .event-check:hover {
+    border-color: rgba(255,255,255,0.8);
+    background: rgba(255,255,255,0.15);
+  }
+
+  .event-check svg {
+    width: 12px;
+    height: 12px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .event-check svg polyline {
+    stroke: white;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+  }
+
+  .event-check.checked {
+    background: rgba(255,255,255,0.3);
+    border-color: rgba(255,255,255,0.7);
+  }
+
+  .event-check.checked svg {
+    opacity: 1;
+  }
+
+  /* ---- Completed state ---- */
+  .event-card.completed {
+    opacity: 1;
+  }
+
+  .event-card.completed.hydration .event-inner {
+    background: #C4D9F7 !important;
+    border-color: #B3CCF0 !important;
+  }
+  .event-card.completed.nutrition .event-inner {
+    background: #A8DBC9 !important;
+    border-color: #98CFBC !important;
+  }
+  .event-card.completed.activity .event-inner {
+    background: #F0D9A5 !important;
+    border-color: #E5CF9A !important;
+  }
+  .event-card.completed.recovery .event-inner {
+    background: #D2C5F0 !important;
+    border-color: #C4B5E5 !important;
+  }
+
+  .event-card.completed .event-title,
+  .event-card.completed .event-subtitle,
+  .event-card.completed .event-time {
+    color: rgba(255,255,255,0.7) !important;
+    opacity: 1 !important;
+  }
+
+  .event-card.completed .event-icon svg {
+    stroke: rgba(255,255,255,0.7);
+  }
+
+  .event-card.completed .event-check {
+    border-color: rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.25);
+  }
+
+  /* ---- Nudge cards — soft tinted style ---- */
+  .event-card.nudge .event-inner {
+    background: #F0EBFF !important;
+    border: 1.5px solid #D8CFFA !important;
+  }
+
+  .event-card.nudge .event-title {
+    color: var(--recovery-border) !important;
+    font-weight: 600;
+  }
+
+  .event-card.nudge .event-subtitle {
+    color: #9F85E0 !important;
+    opacity: 0.85 !important;
+  }
+
+  .event-card.nudge .event-time {
+    color: #9F85E0 !important;
+    opacity: 0.7 !important;
+  }
+
+  .event-card.nudge .event-icon svg {
+    stroke: var(--recovery-border);
+  }
+
+  .event-card.nudge .coach-inline {
+    color: #9F85E0;
+    opacity: 0.7;
+  }
+
+  /* Completed nudge — lighter than default nudge */
+  .event-card.nudge.completed .event-inner {
+    background: #F7F4FF !important;
+    border-color: #E8E1F7 !important;
+  }
+
+  .event-card.nudge.completed .event-title {
+    color: #C4B5E5 !important;
+  }
+
+  .event-card.nudge.completed .event-subtitle {
+    color: #C4B5E5 !important;
+  }
+
+  .event-card.nudge.completed .event-time {
+    color: #C4B5E5 !important;
+  }
+
+  .event-card.nudge.completed .event-icon svg {
+    stroke: #C4B5E5;
+  }
+
+  /* ---- NOW Indicator ---- */
+  .now-marker {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    margin: 2px 0;
+    position: relative;
+  }
+
+  .now-marker-dot {
+    width: 10px;
+    height: 10px;
+    background: var(--now-accent);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-left: -6px;
+    box-shadow: 0 0 0 3px rgba(255, 140, 66, 0.2);
+    animation: pulse 2s ease-in-out infinite;
+    z-index: 2;
+  }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(255, 140, 66, 0.2); }
+    50% { box-shadow: 0 0 0 6px rgba(255, 140, 66, 0.08); }
+  }
+
+  .now-marker-line {
+    flex: 1;
+    height: 2px;
+    background: var(--now-accent);
+    opacity: 0.4;
+  }
+
+  .now-marker-time {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--now-accent);
+    margin-left: 6px;
+    white-space: nowrap;
+  }
+
+  /* ---- Expandable Detail ---- */
+  .event-card.expandable { cursor: pointer; }
+
+  .event-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .event-detail.open {
+    max-height: 350px;
+  }
+
+  .event-detail-inner {
+    padding: 10px 0 4px 0;
+    margin-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.9);
+  }
+
+  .detail-section {
+    margin-bottom: 8px;
+  }
+
+  .detail-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 4px;
+  }
+
+  .detail-items {
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.9);
+  }
+
+  .detail-coach {
+    font-size: 12px;
+    font-style: italic;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.4;
+    padding-top: 6px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  /* Nudge cards: detail text colors adapt */
+  .event-card.nudge .event-detail-inner { border-top-color: var(--border-light); }
+  .event-card.nudge .detail-label { color: var(--text-muted); }
+  .event-card.nudge .detail-items { color: var(--text-primary); }
+  .event-card.nudge .detail-coach { color: var(--text-muted); border-top-color: var(--border-light); }
+
+  /* Hide inline arrows */
+  .expand-arrow { display: none; }
+
+  /* ---- Subtitle row with inline expand circle ---- */
+  .subtitle-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 2px;
+  }
+
+  .expand-circle {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .expand-circle svg {
+    width: 8px;
+    height: 8px;
+    stroke: white;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+    transition: transform 0.25s ease;
+  }
+
+  .event-card.expanded .expand-circle svg {
+    transform: rotate(180deg);
+  }
+
+  .event-card.nudge .expand-circle {
+    background: rgba(0,0,0,0.08);
+  }
+  .event-card.nudge .expand-circle svg {
+    stroke: var(--text-secondary);
+  }
+
+  .event-card.completed .expand-circle {
+    background: rgba(0,0,0,0.08);
+  }
+  .event-card.completed .expand-circle svg {
+    stroke: rgba(255,255,255,0.5);
+  }
+
+  /* ---- Coach Note (inline on nudge) ---- */
+  .coach-inline {
+    font-size: 11px;
+    font-style: italic;
+    color: var(--text-muted);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  /* ---- Synced from Garmin ---- */
+  .synced-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.8);
+    margin-top: 3px;
+  }
+
+  .event-card.completed .synced-label { color: var(--text-muted); }
+
+  /* ---- Empty day ---- */
+  .day-empty {
+    padding: 20px 0;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  /* ---- Time-of-day separator ---- */
+  .time-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 0 6px;
+  }
+
+  .time-label-text {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--neutral-50);
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+  }
+
+  .time-label-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border-light);
+  }
+
+  /* Today jump button — Primary Button style */
+  .today-jump {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 28px;
+    background: var(--neutral-80);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 100px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    z-index: 200;
+    display: none;
+    transition: all 0.2s;
+  }
+  .today-jump:hover { opacity: 0.9; }
+  .today-jump.visible { display: block; }
+</style>
+</head>
+<body>
+
+<!-- Version Navigation -->
+<nav class="version-nav">
+  <a href="v1-coach-plan.html">V1<span>Horizontal Nav</span></a>
+  <a href="v2-schedule-scroll.html">V2<span>Vertical Nav</span></a>
+  <a href="v3-icons-exploration.html" class="active">V3<span>Icons & Cards</span></a>
+  <a href="v4-engaging-content.html">V4<span>Engaging Content</span></a>
+  <a href="v5-energy-line.html">V5<span>Energy Line</span></a>
+  <a href="v6-muted-palette.html">V6<span>Muted Palette</span></a>
+  <a href="v7-palette-b.html">V7<span>Palette B</span></a>
+  <a href="v8-accessible.html">V8<span>Accessible</span></a>
+  <a href="v9-now-at-card.html">V9<span>Now at Card</span></a>
+  <a href="v10-empty-state.html">V10<span>Empty State</span></a>
+  <a href="v11-day-banner.html">V11<span>Day Banner</span></a>
+  <a href="v12-daily-goals.html">V12<span>Daily Goals</span></a>
+  <a href="v13-barlow.html">V13<span>Barlow</span></a>
+  <a href="v14-claude-design.html">V14<span>Claude Design</span></a>
+  <a href="v15-next-animation.html">V15<span>Next Animation</span></a>
+</nav>
+
+<div class="phone-frame">
+  <div class="screen" id="screen">
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span class="status-time">9:41</span>
+      <span class="status-icons">
+        <svg width="16" height="12" viewBox="0 0 16 12"><rect x="0" y="3" width="3" height="9" rx="1" fill="#333" opacity="0.4"/><rect x="4.5" y="2" width="3" height="10" rx="1" fill="#333" opacity="0.6"/><rect x="9" y="1" width="3" height="11" rx="1" fill="#333" opacity="0.8"/><rect x="13.5" y="0" width="3" height="12" rx="1" fill="#333"/></svg>
+        <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 3C10.7 3 13.1 4.1 14.8 6L16 4.8C13.9 2.4 11.1 1 8 1S2.1 2.4 0 4.8L1.2 6C2.9 4.1 5.3 3 8 3Z" fill="#333"/><path d="M8 7C9.5 7 10.9 7.6 11.9 8.5L13.1 7.3C11.8 6.1 10 5.3 8 5.3S4.2 6.1 2.9 7.3L4.1 8.5C5.1 7.6 6.5 7 8 7Z" fill="#333"/><circle cx="8" cy="11" r="1.5" fill="#333"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0.5" y="0.5" width="22" height="11" rx="3" stroke="#333" stroke-opacity="0.35" fill="none"/><rect x="23.5" y="3.5" width="1.5" height="5" rx="0.75" fill="#333" opacity="0.4"/><rect x="2" y="2" width="19" height="8" rx="2" fill="#333"/></svg>
+      </span>
+    </div>
+
+    <!-- Top Header -->
+    <div class="top-header">
+      <div class="top-header-row">
+        <h1 id="headerTitle">Plan for <span class="dynamic-day">Today</span></h1>
+        <div class="top-header-actions">
+          <button class="icon-btn" title="Jump to today" onclick="scrollToToday()">⊙</button>
+          <button class="icon-btn" title="Close">✕</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Schedule -->
+    <div class="schedule" id="schedule">
+
+      <!-- ===== YESTERDAY - March 9 ===== -->
+      <div class="day-group past" data-date="2026-03-09">
+        <div class="day-date">
+          <div class="day-date-inner">
+            <span class="day-name">Sun</span>
+            <span class="day-num">9</span>
+          </div>
+        </div>
+        <div class="day-events">
+
+          <div class="time-label"><span class="time-label-text">Morning</span><span class="time-label-line"></span></div>
+
+          <div class="event-card hydration completed">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Hydration: 300 ml water</div>
+                <div class="event-time">7:00</div>
+              </div>
+              <button class="event-check checked" onclick="toggleCheck(this)"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <div class="event-card nutrition completed">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3"/><path d="M18 15v7"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Breakfast: Oatmeal + berries</div>
+                <div class="event-subtitle">~350 kcal · 18g protein</div>
+                <div class="event-time">8:30</div>
+              </div>
+              <button class="event-check checked" onclick="toggleCheck(this)"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <div class="event-card recovery nudge completed">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Rest day — active recovery only</div>
+                <div class="event-subtitle">Light stretching or walk</div>
+                <div class="event-time">10:00</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="time-label"><span class="time-label-text">Midday</span><span class="time-label-line"></span></div>
+
+          <div class="event-card nutrition completed">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3"/><path d="M18 15v7"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Lunch: Salmon & rice bowl</div>
+                <div class="event-subtitle">~480 kcal · 38g protein</div>
+                <div class="event-time">12:30</div>
+              </div>
+              <button class="event-check checked" onclick="toggleCheck(this)"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <div class="time-label"><span class="time-label-text">Afternoon</span><span class="time-label-line"></span></div>
+
+          <div class="event-card hydration completed">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Hydration: +300 ml</div>
+                <div class="event-time">15:00</div>
+              </div>
+              <button class="event-check checked" onclick="toggleCheck(this)"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <div class="time-label"><span class="time-label-text">Evening</span><span class="time-label-line"></span></div>
+
+          <div class="event-card nutrition completed">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3"/><path d="M18 15v7"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Dinner: Chicken stir-fry</div>
+                <div class="event-subtitle">~420 kcal · 36g protein</div>
+                <div class="event-time">19:00</div>
+              </div>
+              <button class="event-check checked" onclick="toggleCheck(this)"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="day-divider"></div>
+
+      <!-- ===== TODAY - March 10 ===== -->
+      <div class="day-group today" id="today-group" data-date="2026-03-10">
+        <div class="day-date">
+          <div class="day-date-inner">
+            <span class="day-name">Mon</span>
+            <span class="day-num">10</span>
+          </div>
+        </div>
+        <div class="day-events">
+
+          <div class="time-label"><span class="time-label-text">Morning</span><span class="time-label-line"></span></div>
+
+          <!-- Completed: morning hydration -->
+          <div class="event-card hydration completed">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Hydration: 300 ml water</div>
+                <div class="event-time">7:00</div>
+              </div>
+              <button class="event-check checked" onclick="toggleCheck(this)"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <!-- Completed: morning run (synced) -->
+          <div class="event-card activity completed expandable" onclick="toggleDetail(this)">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Easy run: 30 min <span class="expand-arrow">▾</span></div>
+                <div class="event-subtitle">Zone 2 · Recovery pace</div>
+                <div class="event-detail">
+                  <div class="event-detail-inner">
+                    <div class="detail-section">
+                      <div class="detail-label">Workout</div>
+                      <div class="detail-items">
+                        5 min warm-up walk<br>
+                        20 min easy jog · Zone 2<br>
+                        5 min cool-down walk
+                      </div>
+                    </div>
+                    <div class="detail-section">
+                      <div class="detail-label">Target</div>
+                      <div class="detail-items">HR 125–140 bpm · Conversational pace</div>
+                    </div>
+                    <div class="detail-coach">Recovery day after Sunday's rest — keep it light, focus on form.</div>
+                  </div>
+                </div>
+                <div class="event-time">7:30</div>
+              </div>
+              <button class="event-check checked" onclick="toggleCheck(this); event.stopPropagation();"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <!-- Completed: breakfast -->
+          <div class="event-card nutrition completed expandable" onclick="toggleDetail(this)">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3"/><path d="M18 15v7"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Breakfast: Yogurt bowl <span class="expand-arrow">▾</span></div>
+                <div class="event-subtitle">~300 kcal · 28g protein</div>
+                <div class="event-detail">
+                  <div class="event-detail-inner">
+                    <div class="detail-section">
+                      <div class="detail-label">Ingredients</div>
+                      <div class="detail-items">
+                        200g Greek yogurt<br>
+                        30g granola<br>
+                        Handful of blueberries<br>
+                        1 tbsp honey
+                      </div>
+                    </div>
+                    <div class="detail-coach">High-protein start to fuel your morning run recovery.</div>
+                  </div>
+                </div>
+                <div class="event-time">8:00</div>
+              </div>
+              <button class="event-check checked" onclick="toggleCheck(this); event.stopPropagation();"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <!-- ---- NOW ---- -->
+          <div class="now-marker" id="now-marker">
+            <div class="now-marker-dot"></div>
+            <div class="now-marker-line"></div>
+            <span class="now-marker-time">9:41</span>
+          </div>
+
+          <div class="time-label"><span class="time-label-text">Midday</span><span class="time-label-line"></span></div>
+
+          <!-- Upcoming: Lunch (expandable) -->
+          <div class="event-card nutrition expandable" onclick="toggleDetail(this)">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3"/><path d="M18 15v7"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Lunch: Chicken Salad <span class="expand-arrow">▾</span></div>
+                <div class="event-subtitle">~500 kcal · 42g protein</div>
+                <div class="event-detail">
+                  <div class="event-detail-inner">
+                    <div class="detail-section">
+                      <div class="detail-label">Ingredients</div>
+                      <div class="detail-items">
+                        120g grilled chicken breast<br>
+                        2 cups mixed greens (arugula + lettuce)<br>
+                        ½ avocado<br>
+                        6–8 cherry tomatoes<br>
+                        ½ cucumber<br>
+                        1 tsp olive oil + lemon
+                      </div>
+                    </div>
+                    <div class="detail-coach">Lean protein + healthy fats — good balance for afternoon energy.</div>
+                  </div>
+                </div>
+                <div class="event-time">12:00</div>
+              </div>
+              <button class="event-check" onclick="toggleCheck(this); event.stopPropagation();"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <!-- Upcoming: Midday hydration -->
+          <div class="event-card hydration">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Hydration: +300 ml</div>
+                <div class="event-subtitle">Running total: ~900 ml of 2.5L</div>
+                <div class="event-time">13:00</div>
+              </div>
+              <button class="event-check" onclick="toggleCheck(this)"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <div class="time-label"><span class="time-label-text">Afternoon</span><span class="time-label-line"></span></div>
+
+          <!-- Nudge: Recovery -->
+          <div class="event-card recovery nudge">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Take a break — stretch or walk</div>
+                <div class="coach-inline">Your energy usually dips around this time</div>
+                <div class="event-time">15:00</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Upcoming: Snack -->
+          <div class="event-card nutrition expandable" onclick="toggleDetail(this)">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3"/><path d="M18 15v7"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Snack: Nuts + fruit <span class="expand-arrow">▾</span></div>
+                <div class="event-subtitle">~200 kcal · 8g protein</div>
+                <div class="event-detail">
+                  <div class="event-detail-inner">
+                    <div class="detail-section">
+                      <div class="detail-label">Ingredients</div>
+                      <div class="detail-items">
+                        Handful of almonds (~20g)<br>
+                        1 small apple or pear
+                      </div>
+                    </div>
+                    <div class="detail-coach">Bridge snack before dinner — keeps blood sugar steady.</div>
+                  </div>
+                </div>
+                <div class="event-time">16:00</div>
+              </div>
+              <button class="event-check" onclick="toggleCheck(this); event.stopPropagation();"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <!-- Upcoming: Afternoon hydration -->
+          <div class="event-card hydration">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Hydration: +300 ml</div>
+                <div class="event-time">16:30</div>
+              </div>
+              <button class="event-check" onclick="toggleCheck(this)"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <div class="time-label"><span class="time-label-text">Evening</span><span class="time-label-line"></span></div>
+
+          <!-- Upcoming: Dinner (expandable) -->
+          <div class="event-card nutrition expandable" onclick="toggleDetail(this)">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3"/><path d="M18 15v7"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Dinner: Fish & quinoa <span class="expand-arrow">▾</span></div>
+                <div class="event-subtitle">~400 kcal · 35g protein</div>
+                <div class="event-detail">
+                  <div class="event-detail-inner">
+                    <div class="detail-section">
+                      <div class="detail-label">Ingredients</div>
+                      <div class="detail-items">
+                        150g grilled salmon fillet<br>
+                        ¾ cup cooked quinoa<br>
+                        Steamed broccoli + green beans<br>
+                        1 tsp olive oil drizzle
+                      </div>
+                    </div>
+                    <div class="detail-coach">Omega-3 rich dinner — supports recovery after this morning's run.</div>
+                  </div>
+                </div>
+                <div class="event-time">18:30</div>
+              </div>
+              <button class="event-check" onclick="toggleCheck(this); event.stopPropagation();"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <!-- Upcoming: Final hydration -->
+          <div class="event-card hydration">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Final hydration: +300 ml</div>
+                <div class="event-subtitle">Goal: reach 2.5L today</div>
+                <div class="event-time">20:00</div>
+              </div>
+              <button class="event-check" onclick="toggleCheck(this)"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <!-- Nudge: Wind down -->
+          <div class="event-card recovery nudge">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Start winding down</div>
+                <div class="event-subtitle">No screens 30 min before bed</div>
+                <div class="event-time">21:30</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="day-divider"></div>
+
+      <!-- ===== TOMORROW - March 11 ===== -->
+      <div class="day-group" data-date="2026-03-11">
+        <div class="day-date">
+          <div class="day-date-inner">
+            <span class="day-name">Tue</span>
+            <span class="day-num">11</span>
+          </div>
+        </div>
+        <div class="day-events">
+
+          <div class="time-label"><span class="time-label-text">Morning</span><span class="time-label-line"></span></div>
+
+          <div class="event-card hydration">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Hydration: 300 ml water</div>
+                <div class="event-time">7:00</div>
+              </div>
+              <button class="event-check" onclick="toggleCheck(this)"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <div class="event-card activity expandable" onclick="toggleDetail(this)">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><rect x="2" y="9" width="4" height="6" rx="1"/><rect x="18" y="9" width="4" height="6" rx="1"/><line x1="6" y1="12" x2="18" y2="12"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Strength: Upper body <span class="expand-arrow">▾</span></div>
+                <div class="event-subtitle">45 min · Moderate intensity</div>
+                <div class="event-detail">
+                  <div class="event-detail-inner">
+                    <div class="detail-section">
+                      <div class="detail-label">Workout</div>
+                      <div class="detail-items">
+                        5 min warm-up · Arm circles, band pull-aparts<br>
+                        3×10 Dumbbell bench press<br>
+                        3×12 Bent-over rows<br>
+                        3×10 Overhead press<br>
+                        2×15 Lateral raises<br>
+                        5 min cool-down stretch
+                      </div>
+                    </div>
+                    <div class="detail-coach">Upper body focus today — lower body recovers from tomorrow's tempo run.</div>
+                  </div>
+                </div>
+                <div class="event-time">7:00</div>
+              </div>
+              <button class="event-check" onclick="toggleCheck(this); event.stopPropagation();"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <div class="event-card nutrition expandable" onclick="toggleDetail(this)">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3"/><path d="M18 15v7"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Breakfast: Protein smoothie <span class="expand-arrow">▾</span></div>
+                <div class="event-subtitle">~380 kcal · 32g protein</div>
+                <div class="event-detail">
+                  <div class="event-detail-inner">
+                    <div class="detail-section">
+                      <div class="detail-label">Ingredients</div>
+                      <div class="detail-items">
+                        1 scoop whey protein<br>
+                        1 banana<br>
+                        200ml oat milk<br>
+                        1 tbsp peanut butter<br>
+                        Handful of spinach
+                      </div>
+                    </div>
+                    <div class="detail-coach">Post-workout fuel — fast protein + carbs for muscle recovery.</div>
+                  </div>
+                </div>
+                <div class="event-time">8:30</div>
+              </div>
+              <button class="event-check" onclick="toggleCheck(this); event.stopPropagation();"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <div class="event-card hydration">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Hydration: +300 ml</div>
+                <div class="event-time">10:30</div>
+              </div>
+              <button class="event-check" onclick="toggleCheck(this)"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <div class="time-label"><span class="time-label-text">Midday</span><span class="time-label-line"></span></div>
+
+          <div class="event-card nutrition expandable" onclick="toggleDetail(this)">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3"/><path d="M18 15v7"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Lunch: Turkey wrap <span class="expand-arrow">▾</span></div>
+                <div class="event-subtitle">~450 kcal · 35g protein</div>
+                <div class="event-detail">
+                  <div class="event-detail-inner">
+                    <div class="detail-section">
+                      <div class="detail-label">Ingredients</div>
+                      <div class="detail-items">
+                        Whole wheat tortilla<br>
+                        100g sliced turkey breast<br>
+                        Hummus, spinach, tomato<br>
+                        Side of mixed greens
+                      </div>
+                    </div>
+                    <div class="detail-coach">Balanced midday meal — protein and fiber to sustain energy.</div>
+                  </div>
+                </div>
+                <div class="event-time">12:30</div>
+              </div>
+              <button class="event-check" onclick="toggleCheck(this); event.stopPropagation();"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <div class="event-card hydration">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Hydration: +300 ml</div>
+                <div class="event-time">14:00</div>
+              </div>
+              <button class="event-check" onclick="toggleCheck(this)"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <div class="time-label"><span class="time-label-text">Afternoon</span><span class="time-label-line"></span></div>
+
+          <div class="event-card nutrition expandable" onclick="toggleDetail(this)">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3"/><path d="M18 15v7"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Snack: Banana + peanut butter <span class="expand-arrow">▾</span></div>
+                <div class="event-subtitle">~250 kcal · 7g protein</div>
+                <div class="event-detail">
+                  <div class="event-detail-inner">
+                    <div class="detail-section">
+                      <div class="detail-label">Ingredients</div>
+                      <div class="detail-items">
+                        1 medium banana<br>
+                        1 tbsp peanut butter
+                      </div>
+                    </div>
+                    <div class="detail-coach">Quick energy before tomorrow's tempo run — carbs + healthy fat.</div>
+                  </div>
+                </div>
+                <div class="event-time">16:00</div>
+              </div>
+              <button class="event-check" onclick="toggleCheck(this); event.stopPropagation();"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <div class="time-label"><span class="time-label-text">Evening</span><span class="time-label-line"></span></div>
+
+          <div class="event-card nutrition expandable" onclick="toggleDetail(this)">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3"/><path d="M18 15v7"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Dinner: Lean beef + sweet potato <span class="expand-arrow">▾</span></div>
+                <div class="event-subtitle">~520 kcal · 40g protein</div>
+                <div class="event-detail">
+                  <div class="event-detail-inner">
+                    <div class="detail-section">
+                      <div class="detail-label">Ingredients</div>
+                      <div class="detail-items">
+                        150g lean beef sirloin<br>
+                        1 medium sweet potato, baked<br>
+                        Steamed asparagus<br>
+                        Side salad with olive oil
+                      </div>
+                    </div>
+                    <div class="detail-coach">Iron-rich meal — supports muscle repair after strength training.</div>
+                  </div>
+                </div>
+                <div class="event-time">19:00</div>
+              </div>
+              <button class="event-check" onclick="toggleCheck(this); event.stopPropagation();"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <div class="event-card hydration">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Final hydration: +300 ml</div>
+                <div class="event-time">20:00</div>
+              </div>
+              <button class="event-check" onclick="toggleCheck(this)"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <div class="event-card recovery nudge">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Wind down — light reading</div>
+                <div class="event-subtitle">Tomorrow: tempo run, aim for 7.5h sleep</div>
+                <div class="event-time">21:00</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="day-divider"></div>
+
+      <!-- ===== March 12 ===== -->
+      <div class="day-group" data-date="2026-03-12">
+        <div class="day-date">
+          <div class="day-date-inner">
+            <span class="day-name">Wed</span>
+            <span class="day-num">12</span>
+          </div>
+        </div>
+        <div class="day-events">
+
+          <div class="time-label"><span class="time-label-text">Morning</span><span class="time-label-line"></span></div>
+
+          <div class="event-card hydration">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Hydration: 300 ml water</div>
+                <div class="event-time">6:30</div>
+              </div>
+              <button class="event-check" onclick="toggleCheck(this)"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <div class="event-card activity expandable" onclick="toggleDetail(this)">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Tempo run: 40 min <span class="expand-arrow">▾</span></div>
+                <div class="event-subtitle">Zone 3–4 · Build pace</div>
+                <div class="event-detail">
+                  <div class="event-detail-inner">
+                    <div class="detail-section">
+                      <div class="detail-label">Workout</div>
+                      <div class="detail-items">
+                        10 min warm-up · Easy jog<br>
+                        20 min tempo · Zone 3–4<br>
+                        10 min cool-down · Walk/jog
+                      </div>
+                    </div>
+                    <div class="detail-section">
+                      <div class="detail-label">Target</div>
+                      <div class="detail-items">Pace 5:30–6:00/km · HR 150–165 bpm</div>
+                    </div>
+                    <div class="detail-coach">Building aerobic threshold — you've been hitting Zone 2 consistently, time to push.</div>
+                  </div>
+                </div>
+                <div class="event-time">7:00</div>
+              </div>
+              <button class="event-check" onclick="toggleCheck(this); event.stopPropagation();"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <div class="event-card nutrition expandable" onclick="toggleDetail(this)">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3"/><path d="M18 15v7"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Breakfast: Eggs + toast <span class="expand-arrow">▾</span></div>
+                <div class="event-subtitle">~400 kcal · 28g protein</div>
+                <div class="event-detail">
+                  <div class="event-detail-inner">
+                    <div class="detail-section">
+                      <div class="detail-label">Ingredients</div>
+                      <div class="detail-items">
+                        2 scrambled eggs<br>
+                        2 slices whole grain toast<br>
+                        ½ avocado, sliced<br>
+                        Cherry tomatoes
+                      </div>
+                    </div>
+                    <div class="detail-coach">Carb-forward breakfast — fuel for the tempo run.</div>
+                  </div>
+                </div>
+                <div class="event-time">8:00</div>
+              </div>
+              <button class="event-check" onclick="toggleCheck(this); event.stopPropagation();"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <div class="time-label"><span class="time-label-text">Midday</span><span class="time-label-line"></span></div>
+
+          <div class="event-card nutrition expandable" onclick="toggleDetail(this)">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3"/><path d="M18 15v7"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Lunch: Lentil soup + bread <span class="expand-arrow">▾</span></div>
+                <div class="event-subtitle">~430 kcal · 22g protein</div>
+                <div class="event-detail">
+                  <div class="event-detail-inner">
+                    <div class="detail-section">
+                      <div class="detail-label">Ingredients</div>
+                      <div class="detail-items">
+                        1.5 cups red lentil soup<br>
+                        1 slice sourdough bread<br>
+                        Squeeze of lemon
+                      </div>
+                    </div>
+                    <div class="detail-coach">Easy-to-digest lunch — gentle on the stomach after a hard morning run.</div>
+                  </div>
+                </div>
+                <div class="event-time">12:30</div>
+              </div>
+              <button class="event-check" onclick="toggleCheck(this); event.stopPropagation();"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <div class="time-label"><span class="time-label-text">Afternoon</span><span class="time-label-line"></span></div>
+
+          <div class="event-card hydration">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Hydration: +300 ml</div>
+                <div class="event-time">15:00</div>
+              </div>
+              <button class="event-check" onclick="toggleCheck(this)"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <div class="time-label"><span class="time-label-text">Evening</span><span class="time-label-line"></span></div>
+
+          <div class="event-card nutrition expandable" onclick="toggleDetail(this)">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3"/><path d="M18 15v7"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Dinner: Grilled chicken + veggies <span class="expand-arrow">▾</span></div>
+                <div class="event-subtitle">~450 kcal · 42g protein</div>
+                <div class="event-detail">
+                  <div class="event-detail-inner">
+                    <div class="detail-section">
+                      <div class="detail-label">Ingredients</div>
+                      <div class="detail-items">
+                        150g grilled chicken thigh<br>
+                        Roasted zucchini + bell peppers<br>
+                        Small side of brown rice<br>
+                        Drizzle of tahini sauce
+                      </div>
+                    </div>
+                    <div class="detail-coach">High-protein recovery meal — replenish after today's tempo effort.</div>
+                  </div>
+                </div>
+                <div class="event-time">19:00</div>
+              </div>
+              <button class="event-check" onclick="toggleCheck(this); event.stopPropagation();"><svg viewBox="0 0 16 16"><polyline points="3 8.5 6.5 12 13 4"/></svg></button>
+            </div>
+          </div>
+
+          <div class="event-card recovery nudge">
+            <div class="event-inner">
+              <div class="event-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+              <div class="event-body">
+                <div class="event-title">Foam rolling: 10 min</div>
+                <div class="event-subtitle">Focus on calves and quads after tempo</div>
+                <div class="event-time">20:30</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="day-divider"></div>
+
+      <!-- ===== March 13 ===== -->
+      <div class="day-group" data-date="2026-03-13">
+        <div class="day-date">
+          <div class="day-date-inner">
+            <span class="day-name">Thu</span>
+            <span class="day-num">13</span>
+          </div>
+        </div>
+        <div class="day-events">
+          <div class="day-empty">
+            Plan generates the morning of — check back Thursday
+          </div>
+        </div>
+      </div>
+      <div class="day-divider"></div>
+
+      <!-- ===== March 14 ===== -->
+      <div class="day-group" data-date="2026-03-14">
+        <div class="day-date">
+          <div class="day-date-inner">
+            <span class="day-name">Fri</span>
+            <span class="day-num">14</span>
+          </div>
+        </div>
+        <div class="day-events">
+          <div class="day-empty">
+            Plan generates the morning of — check back Friday
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /schedule -->
+
+  </div><!-- /screen -->
+
+  <button class="today-jump" id="todayJump" onclick="scrollToToday()">↓ Today</button>
+
+</div><!-- /phone-frame -->
+
+<script>
+  function toggleCheck(btn) {
+    event.stopPropagation();
+    const card = btn.closest('.event-card');
+    card.classList.toggle('completed');
+    btn.classList.toggle('checked');
+  }
+
+  function toggleDetail(card) {
+    if (event.target.closest('.event-check')) return;
+    const detail = card.querySelector('.event-detail');
+    if (!detail) return;
+    detail.classList.toggle('open');
+    card.classList.toggle('expanded');
+  }
+
+  function scrollToToday() {
+    const now = document.getElementById('now-marker');
+    if (now) {
+      now.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  const screen = document.getElementById('screen');
+  const todayGroup = document.getElementById('today-group');
+  const todayJump = document.getElementById('todayJump');
+  const headerTitle = document.getElementById('headerTitle');
+  const dayGroups = document.querySelectorAll('.day-group');
+
+  const dayLabels = {
+    '2026-03-09': { text: 'Sunday', highlight: false },
+    '2026-03-10': { text: 'Today', highlight: true },
+    '2026-03-11': { text: 'Tomorrow', highlight: true },
+    '2026-03-12': { text: 'Wednesday', highlight: false },
+    '2026-03-13': { text: 'Thursday', highlight: false },
+    '2026-03-14': { text: 'Friday', highlight: false },
+  };
+
+  let lastDate = '';
+
+  screen.addEventListener('scroll', () => {
+    const rect = todayGroup.getBoundingClientRect();
+    const screenRect = screen.getBoundingClientRect();
+    const todayVisible = rect.top < screenRect.bottom - 100 && rect.bottom > screenRect.top + 100;
+    if (!todayVisible) {
+      todayJump.classList.add('visible');
+      todayJump.textContent = rect.top > screenRect.bottom ? '↓ Today' : '↑ Today';
+    } else {
+      todayJump.classList.remove('visible');
+    }
+
+    const headerBottom = 120;
+    let currentDate = '2026-03-10';
+
+    dayGroups.forEach(group => {
+      const groupRect = group.getBoundingClientRect();
+      const screenTop = screenRect.top;
+      if (groupRect.top - screenTop < headerBottom && groupRect.bottom - screenTop > headerBottom) {
+        currentDate = group.dataset.date;
+      }
+    });
+
+    if (currentDate !== lastDate) {
+      lastDate = currentDate;
+      const info = dayLabels[currentDate] || { text: currentDate, highlight: false };
+      if (info.highlight) {
+        headerTitle.innerHTML = 'Plan for <span class="dynamic-day">' + info.text + '</span>';
+      } else {
+        headerTitle.innerHTML = 'Plan for ' + info.text;
+      }
+    }
+  });
+
+  // Add AM/PM to all event times
+  document.querySelectorAll('.event-time').forEach(el => {
+    const t = el.textContent.trim();
+    const parts = t.match(/^(\d{1,2}):(\d{2})$/);
+    if (parts) {
+      let h = parseInt(parts[1]);
+      const m = parts[2];
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      if (h > 12) h -= 12;
+      if (h === 0) h = 12;
+      el.textContent = h + ':' + m + ' ' + ampm;
+    }
+  });
+
+  // Add expand circle inline after subtitle on expandable cards
+  document.querySelectorAll('.event-card.expandable').forEach(card => {
+    const subtitle = card.querySelector('.event-subtitle');
+    if (subtitle) {
+      // Wrap subtitle text + circle in a flex row
+      const row = document.createElement('div');
+      row.className = 'subtitle-row';
+      const textSpan = document.createElement('span');
+      textSpan.textContent = subtitle.textContent;
+      // Copy subtitle styles to the text span
+      textSpan.style.cssText = 'font-size:inherit;font-weight:inherit;opacity:inherit;color:inherit;line-height:inherit;';
+      const circle = document.createElement('div');
+      circle.className = 'expand-circle';
+      circle.innerHTML = '<svg viewBox="0 0 16 16"><polyline points="3 5.5 8 10.5 13 5.5"/></svg>';
+      row.appendChild(textSpan);
+      row.appendChild(circle);
+      subtitle.textContent = '';
+      subtitle.appendChild(row);
+      subtitle.style.marginTop = '2px';
+    }
+  });
+
+  window.addEventListener('load', () => {
+    setTimeout(scrollToToday, 200);
+  });
+</script>
+
+</body>
+</html>

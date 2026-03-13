@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ottavia — Coach Plan v1</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    /* Ottavia tokens */
+    --bg-primary: #FDFAF5;
+    --bg-card: #FFFFFF;
+    --bg-header: #F5F1EA;
+    --text-primary: #333333;
+    --text-secondary: #7C7C7C;
+    --text-muted: #B9B1A0;
+    --border-light: #E8E3DA;
+
+    /* Category colors */
+    --hydration: #75A6FF;
+    --hydration-border: #6793E1;
+    --hydration-bg: #EBF2FF;
+    --activity: #ECBD69;
+    --activity-border: #D5AA5D;
+    --activity-bg: #FFF8EB;
+    --nutrition: #4AC39F;
+    --nutrition-border: #4DAB95;
+    --nutrition-bg: #EAFAF5;
+    --recovery: #B49AFF;
+    --recovery-border: #9F85E0;
+    --recovery-bg: #F3EEFF;
+
+    /* States */
+    --completed-opacity: 0.5;
+    --now-accent: #FF8C42;
+    --progress-fill: #59534A;
+    --progress-track: #E8E3DA;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    background: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  /* ---- Version Navigation ---- */
+  .version-nav {
+    position: fixed;
+    left: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 1000;
+  }
+  .version-nav a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 14px;
+    background: #2a2a2a;
+    border: 1px solid #3a3a3a;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #999;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s;
+    min-width: 100px;
+    text-align: center;
+  }
+  .version-nav a span {
+    font-size: 10px;
+    font-weight: 400;
+    color: #666;
+    margin-top: 2px;
+  }
+  .version-nav a:hover {
+    background: #333;
+    border-color: #555;
+    color: #ccc;
+  }
+  .version-nav a.active {
+    background: #433E36;
+    border-color: #433E36;
+    color: #fff;
+  }
+  .version-nav a.active span {
+    color: rgba(255,255,255,0.6);
+  }
+
+  .phone-frame {
+    width: 390px;
+    height: 844px;
+    background: var(--bg-primary);
+    border-radius: 40px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+  }
+
+  .screen {
+    height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  .screen::-webkit-scrollbar { display: none; }
+
+  /* ---- Status Bar ---- */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 24px 0;
+    height: 54px;
+    background: var(--bg-header);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .status-time { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+  .status-icons { display: flex; gap: 6px; align-items: center; font-size: 12px; color: var(--text-primary); }
+
+  /* ---- Header ---- */
+  .header {
+    background: var(--bg-header);
+    padding: 8px 20px 16px;
+    position: sticky;
+    top: 54px;
+    z-index: 99;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .header-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .date-badge {
+    width: 36px;
+    height: 34px;
+    background: #E8E3DA;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text-primary);
+  }
+
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+  }
+
+  .header-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(0,0,0,0.06);
+    border-radius: 50%;
+    font-size: 16px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ---- Date Picker ---- */
+  .date-picker {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+  .date-picker::-webkit-scrollbar { display: none; }
+
+  .date-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 12px;
+    min-width: 48px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    background: none;
+    font-family: inherit;
+  }
+
+  .date-item .day-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .date-item .day-num {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  .date-item.active {
+    background: var(--text-primary);
+  }
+
+  .date-item.active .day-label,
+  .date-item.active .day-num {
+    color: white;
+  }
+
+  .date-item.has-plan::after {
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--nutrition);
+    margin-top: 3px;
+  }
+
+  .date-item.active.has-plan::after {
+    background: white;
+  }
+
+  /* ---- Progress Bar ---- */
+  .progress-section {
+    padding: 14px 20px 6px;
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+
+  .progress-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .progress-count {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+
+  .progress-bar {
+    height: 6px;
+    background: var(--progress-track);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--progress-fill);
+    border-radius: 10px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* ---- Time Sections ---- */
+  .plan-content {
+    padding: 0 0 100px;
+  }
+
+  .time-section {
+    padding: 0 20px;
+  }
+
+  .time-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 18px 0 10px;
+  }
+
+  .time-header-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    white-space: nowrap;
+  }
+
+  .time-header-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border-light);
+  }
+
+  /* ---- NOW Indicator ---- */
+  .now-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 0;
+    margin: 4px 0;
+  }
+
+  .now-dot {
+    width: 10px;
+    height: 10px;
+    background: var(--now-accent);
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px rgba(255, 140, 66, 0.2);
+    animation: now-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes now-pulse {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(255, 140, 66, 0.2); }
+    50% { box-shadow: 0 0 0 6px rgba(255, 140, 66, 0.1); }
+  }
+
+  .now-line {
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, var(--now-accent), transparent);
+  }
+
+  .now-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--now-accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ---- Cards ---- */
+  .plan-card {
+    border-radius: 14px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+
+  .plan-card.completed {
+    opacity: var(--completed-opacity);
+    transform: scale(0.98);
+  }
+
+  .plan-card.completed .card-inner {
+    background: #F0EDE8 !important;
+    border-color: #DDD8CF !important;
+  }
+
+  .plan-card.completed .card-title,
+  .plan-card.completed .card-subtitle {
+    color: var(--text-muted) !important;
+  }
+
+  .plan-card.next-up {
+    transform: scale(1.01);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  .plan-card.next-up .card-inner {
+    border-width: 2px;
+  }
+
+  .card-inner {
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1.5px solid transparent;
+    position: relative;
+  }
+
+  /* Color variants */
+  .card-hydration .card-inner { background: var(--hydration); border-color: var(--hydration-border); }
+  .card-nutrition .card-inner { background: var(--nutrition); border-color: var(--nutrition-border); }
+  .card-activity .card-inner { background: var(--activity); border-color: var(--activity-border); }
+  .card-recovery .card-inner { background: var(--recovery); border-color: var(--recovery-border); }
+
+  .card-hydration .card-inner,
+  .card-nutrition .card-inner,
+  .card-activity .card-inner,
+  .card-recovery .card-inner {
+    color: white;
+  }
+
+  /* Nudge variant - softer, outline style */
+  .plan-card.nudge .card-inner {
+    background: var(--bg-card);
+    border: 1.5px solid;
+  }
+  .plan-card.nudge.card-hydration .card-inner { border-color: var(--hydration); color: var(--hydration); }
+  .plan-card.nudge.card-recovery .card-inner { border-color: var(--recovery); color: var(--recovery); }
+
+  .plan-card.nudge .card-title { color: var(--text-primary); }
+  .plan-card.nudge .card-subtitle { color: var(--text-secondary); }
+  .plan-card.nudge .card-time { color: var(--text-muted); }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .card-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: white;
+  }
+
+  .card-subtitle {
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.85);
+    margin-top: 2px;
+    line-height: 1.3;
+  }
+
+  .card-time {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.75);
+    margin-top: 4px;
+  }
+
+  .card-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    margin-left: 12px;
+  }
+
+  /* ---- State Badge ---- */
+  .state-badge {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+
+  .state-badge.upcoming { display: none; }
+  .state-badge.next { background: rgba(255,140,66,0.15); color: var(--now-accent); }
+  .state-badge.done { background: rgba(255,255,255,0.25); color: white; }
+  .plan-card.completed .state-badge.done { background: rgba(0,0,0,0.08); color: var(--text-muted); }
+
+  /* ---- Completion Check ---- */
+  .card-check {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.5);
+    background: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    color: transparent;
+    font-size: 13px;
+  }
+
+  .card-check:hover {
+    border-color: rgba(255,255,255,0.8);
+    background: rgba(255,255,255,0.1);
+  }
+
+  .card-check.checked {
+    background: rgba(255,255,255,0.3);
+    border-color: rgba(255,255,255,0.6);
+    color: white;
+  }
+
+  .plan-card.completed .card-check {
+    background: rgba(0,0,0,0.1);
+    border-color: rgba(0,0,0,0.15);
+    color: var(--text-muted);
+  }
+
+  .plan-card.nudge .card-check {
+    border-color: var(--border-light);
+  }
+
+  /* ---- Expandable Detail ---- */
+  .card-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .card-detail.open {
+    max-height: 300px;
+  }
+
+  .card-detail-inner {
+    padding-top: 10px;
+    margin-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.9);
+  }
+
+  .plan-card.nudge .card-detail-inner {
+    border-color: var(--border-light);
+    color: var(--text-secondary);
+  }
+
+  .expand-toggle {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+  }
+
+  .expand-toggle .arrow {
+    transition: transform 0.2s;
+    font-size: 10px;
+  }
+
+  .expand-toggle.open .arrow {
+    transform: rotate(180deg);
+  }
+
+  .plan-card.nudge .expand-toggle { color: var(--text-muted); }
+
+  /* ---- Quick Actions on Card ---- */
+  .card-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .card-action-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+
+  .card-action-btn.primary {
+    background: rgba(255,255,255,0.25);
+    color: white;
+  }
+
+  .card-action-btn.primary:hover {
+    background: rgba(255,255,255,0.35);
+  }
+
+  .card-action-btn.secondary {
+    background: none;
+    color: rgba(255,255,255,0.7);
+  }
+
+  .plan-card.nudge .card-action-btn.primary {
+    background: var(--bg-header);
+    color: var(--text-primary);
+  }
+
+  /* ---- Next Up Highlight ---- */
+  .next-up-label {
+    display: none;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--now-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+  }
+
+  .plan-card.next-up .next-up-label {
+    display: block;
+  }
+
+  /* ---- Coach Bridge ---- */
+  .coach-bridge {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: var(--text-primary);
+    color: white;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+    border: none;
+    font-family: inherit;
+    transition: all 0.2s;
+    z-index: 200;
+  }
+
+  .coach-bridge:hover {
+    transform: translateX(-50%) scale(1.03);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  }
+
+  .coach-bridge-icon {
+    font-size: 18px;
+  }
+
+  /* ---- Adjusted Badge ---- */
+  .adjusted-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.7);
+    margin-top: 4px;
+  }
+
+  .adjusted-badge .icon { font-size: 10px; }
+
+  .plan-card.nudge .adjusted-badge { color: var(--text-muted); }
+
+  /* ---- Tooltip / Coach Note ---- */
+  .coach-note {
+    background: rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin-top: 8px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.85);
+    font-style: italic;
+  }
+
+  .plan-card.nudge .coach-note {
+    background: var(--bg-header);
+    color: var(--text-secondary);
+  }
+
+  /* ---- Empty Section ---- */
+  .section-empty {
+    text-align: center;
+    padding: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  /* ---- Daily Summary ---- */
+  .daily-summary {
+    margin: 0 20px 8px;
+    padding: 16px;
+    background: var(--bg-card);
+    border-radius: 14px;
+    border: 1.5px solid var(--border-light);
+  }
+
+  .summary-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .summary-item {
+    flex: 1;
+    text-align: center;
+  }
+
+  .summary-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+  }
+
+  .summary-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .summary-unit {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+
+  /* ---- Morning message from coach ---- */
+  .coach-morning {
+    margin: 12px 20px 4px;
+    padding: 14px 16px;
+    background: var(--bg-card);
+    border-radius: 14px;
+    border: 1.5px solid var(--border-light);
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .coach-morning strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .coach-avatar {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+
+  .coach-avatar-dot {
+    width: 18px;
+    height: 18px;
+    background: linear-gradient(135deg, #4AC39F, #75A6FF);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    color: white;
+  }
+</style>
+</head>
+<body>
+
+<!-- Version Navigation -->
+<nav class="version-nav">
+  <a href="v1-coach-plan.html" class="active">V1<span>Horizontal Nav</span></a>
+  <a href="v2-schedule-scroll.html">V2<span>Vertical Nav</span></a>
+  <a href="v3-icons-exploration.html">V3<span>Icons & Cards</span></a>
+  <a href="v4-engaging-content.html">V4<span>Engaging Content</span></a>
+  <a href="v5-energy-line.html">V5<span>Energy Line</span></a>
+  <a href="v6-muted-palette.html">V6<span>Muted Palette</span></a>
+  <a href="v7-palette-b.html">V7<span>Palette B</span></a>
+  <a href="v8-accessible.html">V8<span>Accessible</span></a>
+  <a href="v9-now-at-card.html">V9<span>Now at Card</span></a>
+  <a href="v10-empty-state.html">V10<span>Empty State</span></a>
+  <a href="v11-day-banner.html">V11<span>Day Banner</span></a>
+  <a href="v12-daily-goals.html">V12<span>Daily Goals</span></a>
+  <a href="v13-barlow.html">V13<span>Barlow</span></a>
+  <a href="v14-claude-design.html">V14<span>Claude Design</span></a>
+  <a href="v15-next-animation.html">V15<span>Next Animation</span></a>
+</nav>
+
+<div class="phone-frame">
+  <div class="screen" id="screen">
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span class="status-time">9:41</span>
+      <span class="status-icons">
+        <svg width="16" height="12" viewBox="0 0 16 12"><rect x="0" y="3" width="3" height="9" rx="1" fill="#333" opacity="0.4"/><rect x="4.5" y="2" width="3" height="10" rx="1" fill="#333" opacity="0.6"/><rect x="9" y="1" width="3" height="11" rx="1" fill="#333" opacity="0.8"/><rect x="13.5" y="0" width="3" height="12" rx="1" fill="#333"/></svg>
+        <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 3C10.7 3 13.1 4.1 14.8 6L16 4.8C13.9 2.4 11.1 1 8 1S2.1 2.4 0 4.8L1.2 6C2.9 4.1 5.3 3 8 3Z" fill="#333"/><path d="M8 7C9.5 7 10.9 7.6 11.9 8.5L13.1 7.3C11.8 6.1 10 5.3 8 5.3S4.2 6.1 2.9 7.3L4.1 8.5C5.1 7.6 6.5 7 8 7Z" fill="#333"/><circle cx="8" cy="11" r="1.5" fill="#333"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0.5" y="0.5" width="22" height="11" rx="3" stroke="#333" stroke-opacity="0.35" fill="none"/><rect x="23.5" y="3.5" width="1.5" height="5" rx="0.75" fill="#333" opacity="0.4"/><rect x="2" y="2" width="19" height="8" rx="2" fill="#333"/></svg>
+      </span>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+      <div class="header-top">
+        <div class="header-title-row">
+          <div class="date-badge">10</div>
+          <h1>Plan for today</h1>
+        </div>
+        <button class="header-close">✕</button>
+      </div>
+
+      <!-- Date Picker -->
+      <div class="date-picker">
+        <button class="date-item has-plan">
+          <span class="day-label">Sat</span>
+          <span class="day-num">8</span>
+        </button>
+        <button class="date-item has-plan">
+          <span class="day-label">Sun</span>
+          <span class="day-num">9</span>
+        </button>
+        <button class="date-item active has-plan" id="today-btn">
+          <span class="day-label">Mon</span>
+          <span class="day-num">10</span>
+        </button>
+        <button class="date-item has-plan">
+          <span class="day-label">Tue</span>
+          <span class="day-num">11</span>
+        </button>
+        <button class="date-item has-plan">
+          <span class="day-label">Wed</span>
+          <span class="day-num">12</span>
+        </button>
+        <button class="date-item">
+          <span class="day-label">Thu</span>
+          <span class="day-num">13</span>
+        </button>
+        <button class="date-item">
+          <span class="day-label">Fri</span>
+          <span class="day-num">14</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-section">
+      <div class="progress-header">
+        <span class="progress-label">Today's progress</span>
+        <span class="progress-count" id="progress-text">3 of 9 completed</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width: 33%"></div>
+      </div>
+    </div>
+
+    <!-- Coach Morning Note -->
+    <div class="coach-morning">
+      <div class="coach-avatar">
+        <span class="coach-avatar-dot">O</span>
+        Coach
+      </div>
+      Your sleep was solid — 7.4h, HRV up 12% from last week. Keeping today's run as planned. I shifted lunch earlier since you have a busy afternoon.
+    </div>
+
+    <!-- Plan Content -->
+    <div class="plan-content">
+
+      <!-- MORNING -->
+      <div class="time-section">
+        <div class="time-header">
+          <span class="time-header-label">Morning</span>
+          <div class="time-header-line"></div>
+        </div>
+
+        <!-- Hydration - Completed -->
+        <div class="plan-card card-hydration completed" data-trackable="true">
+          <div class="card-inner">
+            <div class="card-top">
+              <div class="card-content">
+                <div class="card-title">💧 Hydration: 300 ml water</div>
+                <div class="card-time">7:00</div>
+              </div>
+              <div class="card-right">
+                <button class="card-check checked" onclick="toggleCheck(this)">✓</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Activity - Completed -->
+        <div class="plan-card card-activity completed" data-trackable="true">
+          <div class="card-inner">
+            <div class="card-top">
+              <div class="card-content">
+                <div class="card-title">🏃 Easy run: 30 minutes</div>
+                <div class="card-subtitle">Zone 2 • Recovery pace</div>
+                <div class="card-time">7:30</div>
+              </div>
+              <div class="card-right">
+                <span class="state-badge done">✓ Synced</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Breakfast - Completed -->
+        <div class="plan-card card-nutrition completed" data-trackable="true">
+          <div class="card-inner">
+            <div class="card-top">
+              <div class="card-content">
+                <div class="card-title">🥣 Breakfast: Yogurt bowl</div>
+                <div class="card-subtitle">~300 kcal • 28g protein</div>
+                <div class="card-time">8:00</div>
+              </div>
+              <div class="card-right">
+                <button class="card-check checked" onclick="toggleCheck(this)">✓</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- NOW INDICATOR -->
+      <div class="time-section">
+        <div class="now-indicator">
+          <div class="now-dot"></div>
+          <div class="now-line"></div>
+          <span class="now-label">Now 9:41</span>
+        </div>
+      </div>
+
+      <!-- MIDDAY -->
+      <div class="time-section">
+        <div class="time-header">
+          <span class="time-header-label">Midday</span>
+          <div class="time-header-line"></div>
+        </div>
+
+        <!-- Lunch - NEXT UP -->
+        <div class="plan-card card-nutrition next-up" data-trackable="true">
+          <div class="next-up-label">↑ Up next</div>
+          <div class="card-inner">
+            <div class="card-top">
+              <div class="card-content">
+                <div class="card-title">🥗 Lunch: Chicken Salad</div>
+                <div class="card-subtitle">~500 kcal • 42g protein</div>
+                <div class="card-time">12:00</div>
+                <div class="adjusted-badge">
+                  <span class="icon">↻</span> Moved earlier — busy afternoon
+                </div>
+              </div>
+              <div class="card-right">
+                <button class="card-check" onclick="toggleCheck(this)">✓</button>
+              </div>
+            </div>
+            <button class="expand-toggle" onclick="toggleExpand(this)">
+              See ingredients <span class="arrow">▾</span>
+            </button>
+            <div class="card-detail">
+              <div class="card-detail-inner">
+                • 120g grilled chicken breast<br>
+                • 2 cups mixed greens<br>
+                • ½ avocado<br>
+                • 6–8 cherry tomatoes<br>
+                • ½ cucumber<br>
+                • 1 tsp olive oil + lemon
+              </div>
+            </div>
+            <div class="card-actions">
+              <button class="card-action-btn primary" onclick="logItem(this)">Log meal</button>
+              <button class="card-action-btn secondary">Ask coach</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hydration -->
+        <div class="plan-card card-hydration" data-trackable="true">
+          <div class="card-inner">
+            <div class="card-top">
+              <div class="card-content">
+                <div class="card-title">💧 Hydration: +300 ml water</div>
+                <div class="card-subtitle">Running total: ~900 ml of 2.5L</div>
+                <div class="card-time">13:00</div>
+              </div>
+              <div class="card-right">
+                <button class="card-check" onclick="toggleCheck(this)">✓</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AFTERNOON -->
+      <div class="time-section">
+        <div class="time-header">
+          <span class="time-header-label">Afternoon</span>
+          <div class="time-header-line"></div>
+        </div>
+
+        <!-- Recovery NUDGE -->
+        <div class="plan-card card-recovery nudge">
+          <div class="card-inner">
+            <div class="card-top">
+              <div class="card-content">
+                <div class="card-title">🧘 Take a break — stretch or walk</div>
+                <div class="card-subtitle">Your energy dips around this time</div>
+                <div class="card-time">15:00</div>
+              </div>
+            </div>
+            <div class="coach-note">
+              Based on your patterns, a 10-min walk after lunch improves your afternoon focus.
+            </div>
+          </div>
+        </div>
+
+        <!-- Snack -->
+        <div class="plan-card card-nutrition" data-trackable="true">
+          <div class="card-inner">
+            <div class="card-top">
+              <div class="card-content">
+                <div class="card-title">🍎 Snack: Nuts + fruit</div>
+                <div class="card-subtitle">~200 kcal • 8g protein</div>
+                <div class="card-time">16:00</div>
+              </div>
+              <div class="card-right">
+                <button class="card-check" onclick="toggleCheck(this)">✓</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hydration -->
+        <div class="plan-card card-hydration" data-trackable="true">
+          <div class="card-inner">
+            <div class="card-top">
+              <div class="card-content">
+                <div class="card-title">💧 Hydration: +300 ml</div>
+                <div class="card-time">16:30</div>
+              </div>
+              <div class="card-right">
+                <button class="card-check" onclick="toggleCheck(this)">✓</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EVENING -->
+      <div class="time-section">
+        <div class="time-header">
+          <span class="time-header-label">Evening</span>
+          <div class="time-header-line"></div>
+        </div>
+
+        <!-- Dinner -->
+        <div class="plan-card card-nutrition" data-trackable="true">
+          <div class="card-inner">
+            <div class="card-top">
+              <div class="card-content">
+                <div class="card-title">🥗 Dinner: Fish & quinoa</div>
+                <div class="card-subtitle">~400 kcal • 35g protein</div>
+                <div class="card-time">18:30</div>
+              </div>
+              <div class="card-right">
+                <button class="card-check" onclick="toggleCheck(this)">✓</button>
+              </div>
+            </div>
+            <button class="expand-toggle" onclick="toggleExpand(this)">
+              See details <span class="arrow">▾</span>
+            </button>
+            <div class="card-detail">
+              <div class="card-detail-inner">
+                • 150g grilled salmon fillet<br>
+                • ¾ cup cooked quinoa<br>
+                • Steamed broccoli + green beans<br>
+                • 1 tsp olive oil drizzle
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Final Hydration -->
+        <div class="plan-card card-hydration" data-trackable="true">
+          <div class="card-inner">
+            <div class="card-top">
+              <div class="card-content">
+                <div class="card-title">💧 Final hydration: +300 ml</div>
+                <div class="card-subtitle">Goal: reach 2.5L today</div>
+                <div class="card-time">20:00</div>
+              </div>
+              <div class="card-right">
+                <button class="card-check" onclick="toggleCheck(this)">✓</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wind down NUDGE -->
+        <div class="plan-card card-recovery nudge">
+          <div class="card-inner">
+            <div class="card-top">
+              <div class="card-content">
+                <div class="card-title">😴 Start winding down</div>
+                <div class="card-subtitle">No screens 30 min before bed</div>
+                <div class="card-time">21:30</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Daily Macro Summary -->
+      <div style="padding-top: 16px;">
+        <div class="daily-summary">
+          <div class="summary-title">Today's nutrition target</div>
+          <div class="summary-row">
+            <div class="summary-item">
+              <div class="summary-value">1400 <span class="summary-unit">kcal</span></div>
+              <div class="summary-label">Planned</div>
+            </div>
+            <div class="summary-item">
+              <div class="summary-value">300 <span class="summary-unit">kcal</span></div>
+              <div class="summary-label">Logged</div>
+            </div>
+            <div class="summary-item">
+              <div class="summary-value">113 <span class="summary-unit">g</span></div>
+              <div class="summary-label">Protein target</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /plan-content -->
+
+  </div><!-- /screen -->
+
+  <!-- Coach Bridge Button -->
+  <button class="coach-bridge" onclick="openChat()">
+    <span class="coach-bridge-icon">💬</span>
+    Talk to coach
+  </button>
+
+</div><!-- /phone-frame -->
+
+<script>
+  // Toggle card completion
+  function toggleCheck(btn) {
+    const card = btn.closest('.plan-card');
+    const isCompleted = card.classList.toggle('completed');
+    btn.classList.toggle('checked');
+    updateProgress();
+  }
+
+  // Toggle expandable detail
+  function toggleExpand(btn) {
+    const detail = btn.nextElementSibling;
+    detail.classList.toggle('open');
+    btn.classList.toggle('open');
+    const arrow = btn.querySelector('.arrow');
+    btn.textContent = detail.classList.contains('open') ? 'Hide details ' : btn.textContent;
+    if (detail.classList.contains('open')) {
+      btn.innerHTML = 'Hide details <span class="arrow" style="transform:rotate(180deg)">▾</span>';
+    } else {
+      const label = btn.closest('.card-nutrition') ? 'See ingredients' : 'See details';
+      btn.innerHTML = label + ' <span class="arrow">▾</span>';
+    }
+  }
+
+  // Update progress bar
+  function updateProgress() {
+    const trackable = document.querySelectorAll('.plan-card[data-trackable="true"]');
+    const completed = document.querySelectorAll('.plan-card[data-trackable="true"].completed');
+    const total = trackable.length;
+    const done = completed.length;
+    const pct = Math.round((done / total) * 100);
+
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-text').textContent = done + ' of ' + total + ' completed';
+  }
+
+  // Log item (simulates logging a meal)
+  function logItem(btn) {
+    const card = btn.closest('.plan-card');
+    const check = card.querySelector('.card-check');
+    if (check && !card.classList.contains('completed')) {
+      toggleCheck(check);
+    }
+    btn.textContent = '✓ Logged';
+    btn.style.background = 'rgba(255,255,255,0.35)';
+    btn.disabled = true;
+  }
+
+  // Placeholder for chat bridge
+  function openChat() {
+    alert('Opens Ottavia chat with coach context:\n\n"Hey — anything you want to adjust in today\'s plan?"');
+  }
+
+  // Scroll to NOW indicator on load
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      const now = document.querySelector('.now-indicator');
+      if (now) {
+        now.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 300);
+  });
+
+  // Date picker interaction
+  document.querySelectorAll('.date-item').forEach(item => {
+    item.addEventListener('click', function() {
+      document.querySelectorAll('.date-item').forEach(d => d.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
