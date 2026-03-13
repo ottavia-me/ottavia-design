@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ottavia Design</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/style.min.css" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,7 +14,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #000;
             color: #fff;
             height: 100vh;
@@ -31,17 +33,24 @@
             position: fixed;
             left: 0;
             top: 0;
+            z-index: 100;
         }
 
         .logo {
-            padding: 0 24px;
-            margin-bottom: 48px;
-            font-size: 15px;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: #fff;
-            opacity: 0.9;
+            padding: 10px 24px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            border-left: 2px solid transparent;
+            text-decoration: none;
+            display: block;
+        }
+
+        .logo:hover {
+            color: #ccc;
+            background: #111;
         }
 
         .nav-items {
@@ -94,40 +103,373 @@
             font-size: 14px;
             letter-spacing: 0.05em;
         }
+
+        .home-gradient {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #A8BDD0, #D6CBAB, #C4A08E);
+        }
+
+        .playground-page {
+            padding: 32px;
+            background: #000;
+            height: 100%;
+            position: relative;
+        }
+
+        .sub-card {
+            padding: 12px 20px;
+            border: 1px solid #222;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .sub-card:hover {
+            border-color: #444;
+            color: #fff;
+            background: #111;
+        }
+
+        /* Comment button */
+        .comment-btn {
+            position: absolute;
+            top: 32px;
+            right: 32px;
+            padding: 8px 16px;
+            border: 1px solid #222;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: none;
+            font-family: inherit;
+        }
+
+        .comment-btn:hover {
+            border-color: #444;
+            color: #fff;
+            background: #111;
+        }
+
+        /* Comment panel */
+        .comment-panel {
+            position: fixed;
+            top: 0;
+            right: -380px;
+            width: 380px;
+            height: 100vh;
+            background: #0a0a0a;
+            border-left: 1px solid #1a1a1a;
+            transition: right 0.25s ease;
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .comment-panel.open {
+            right: 0;
+        }
+
+        .comment-panel-header {
+            padding: 24px;
+            border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .comment-panel-header span {
+            font-size: 14px;
+            color: #fff;
+        }
+
+        .comment-panel-close {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+
+        .comment-panel-close:hover {
+            color: #fff;
+        }
+
+        .comment-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 24px;
+        }
+
+        .comment-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #111;
+        }
+
+        .comment-author {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .comment-body {
+            font-size: 13px;
+            color: #ccc;
+            line-height: 1.5;
+        }
+
+        .comment-empty {
+            color: #333;
+            font-size: 13px;
+            padding: 24px 0;
+        }
+
+        .comment-add-link {
+            padding: 16px 24px;
+            border-top: 1px solid #1a1a1a;
+        }
+
+        .comment-form {
+            padding: 16px 24px;
+            border-top: 1px solid #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .comment-form input,
+        .comment-form textarea {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 6px;
+            color: #fff;
+            padding: 8px 12px;
+            font-size: 13px;
+            font-family: inherit;
+            outline: none;
+            resize: none;
+        }
+
+        .comment-form input:focus,
+        .comment-form textarea:focus {
+            border-color: #444;
+        }
+
+        .comment-form button {
+            padding: 8px 16px;
+            border: 1px solid #222;
+            border-radius: 6px;
+            background: #fff;
+            color: #000;
+            font-size: 13px;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .comment-form button:hover {
+            background: #ccc;
+        }
+
+        .comment-form button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            nav {
+                width: 100%;
+                min-width: 100%;
+                height: auto;
+                position: fixed;
+                top: 0;
+                left: 0;
+                padding: 16px 0;
+                flex-direction: row;
+                align-items: center;
+                overflow-x: auto;
+                border-right: none;
+                border-bottom: 1px solid #1a1a1a;
+            }
+
+            .logo {
+                margin-bottom: 0;
+                padding: 8px 16px;
+                border-left: none;
+                white-space: nowrap;
+            }
+
+            .nav-items {
+                flex-direction: row;
+                gap: 0;
+            }
+
+            .nav-item {
+                padding: 8px 16px;
+                border-left: none;
+                white-space: nowrap;
+            }
+
+            .nav-item.active {
+                border-left-color: transparent;
+                border-bottom: 2px solid #fff;
+            }
+
+            .content {
+                margin-left: 0;
+                margin-top: 52px;
+                height: calc(100vh - 52px);
+            }
+
+            .playground-page {
+                padding: 20px;
+            }
+
+            .comment-btn {
+                top: 20px;
+                right: 20px;
+            }
+
+            .comment-panel {
+                width: 100%;
+                right: -100%;
+            }
+        }
     </style>
 </head>
 <body>
     <nav>
-        <div class="logo">Ottavia</div>
+        <a class="logo" onclick="navigate(this, 'home')">ottavia hub</a>
         <div class="nav-items">
             <a class="nav-item" data-page="playground" onclick="navigate(this, 'playground')">Design Playground</a>
             <a class="nav-item" data-page="design-system" onclick="navigate(this, 'design-system')">Design System</a>
-            <a class="nav-item" data-page="about" onclick="navigate(this, 'about')">About Ottavia</a>
+            <a class="nav-item" data-page="tools" onclick="navigate(this, 'tools')">Tools</a>
         </div>
     </nav>
 
     <main class="content" id="content">
-        <div class="content-placeholder">Select a section</div>
+        <div class="home-gradient"></div>
     </main>
+
+    <div class="comment-panel" id="commentPanel">
+        <div class="comment-panel-header">
+            <span>Comments</span>
+            <button class="comment-panel-close" onclick="toggleComments()">&times;</button>
+        </div>
+        <div class="comment-list" id="commentList">
+            <div class="comment-empty">Loading...</div>
+        </div>
+        <div class="comment-form">
+            <input type="text" id="commentName" placeholder="Your name" />
+            <textarea id="commentText" rows="3" placeholder="Write a comment..."></textarea>
+            <button onclick="submitComment()">Post</button>
+        </div>
+    </div>
 
     <script>
         const pages = {
-            'playground': 'v14-claude-design.html',
             'design-system': 'design-system.html',
-            'about': null
+            'tools': 'color-generator.html',
         };
 
+        const inlinePages = {
+            'home': '<div class="home-gradient"></div>',
+            'playground': `<div class="playground-page">
+                <a class="sub-card" onclick="openPage('v14-claude-design.html')">Calendar · ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</a>
+                <button class="comment-btn" onclick="toggleComments()">Comments</button>
+            </div>`,
+        };
+
+        const COMMENTS_API = 'https://jsonblob.com/api/jsonBlob/019ce877-1093-7328-b1c3-349d34de0f58';
+
+        function openPage(src) {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <div style="position:relative;height:100%">
+                    <iframe src="${src}" style="width:100%;height:100%;border:none"></iframe>
+                    <button class="comment-btn" onclick="toggleComments()" style="position:fixed;z-index:150">Comments</button>
+                </div>`;
+        }
+
+        function toggleComments() {
+            const panel = document.getElementById('commentPanel');
+            panel.classList.toggle('open');
+            if (panel.classList.contains('open')) loadComments();
+        }
+
+        async function loadComments() {
+            const list = document.getElementById('commentList');
+            try {
+                const res = await fetch(COMMENTS_API);
+                const data = await res.json();
+                if (!data.comments || !data.comments.length) {
+                    list.innerHTML = '<div class="comment-empty">No comments yet</div>';
+                    return;
+                }
+                list.innerHTML = data.comments.slice().reverse().map(c => `
+                    <div class="comment-item">
+                        <div class="comment-author">${c.name} · ${c.date}</div>
+                        <div class="comment-body">${c.text}</div>
+                    </div>
+                `).join('');
+            } catch (e) {
+                list.innerHTML = '<div class="comment-empty">Could not load comments</div>';
+            }
+        }
+
+        async function submitComment() {
+            const nameEl = document.getElementById('commentName');
+            const textEl = document.getElementById('commentText');
+            const name = nameEl.value.trim();
+            const text = textEl.value.trim();
+            if (!name || !text) return;
+
+            const btn = document.querySelector('.comment-form button');
+            btn.disabled = true;
+            btn.textContent = 'Posting...';
+
+            try {
+                const res = await fetch(COMMENTS_API);
+                const data = await res.json();
+                data.comments.push({
+                    name,
+                    text,
+                    date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+                });
+                await fetch(COMMENTS_API, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                nameEl.value = '';
+                textEl.value = '';
+                loadComments();
+            } catch (e) {
+                alert('Could not post comment');
+            }
+            btn.disabled = false;
+            btn.textContent = 'Post';
+        }
+
         function navigate(el, page) {
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            document.querySelectorAll('.nav-item, .logo').forEach(item => item.classList.remove('active'));
             el.classList.add('active');
+            document.getElementById('commentPanel').classList.remove('open');
 
             const content = document.getElementById('content');
-            const src = pages[page];
 
-            if (src) {
-                content.innerHTML = `<iframe src="${src}"></iframe>`;
-            } else {
-                content.innerHTML = `<div class="content-placeholder">Coming soon</div>`;
+            if (pages[page]) {
+                content.innerHTML = `<iframe src="${pages[page]}"></iframe>`;
+            } else if (inlinePages[page]) {
+                content.innerHTML = inlinePages[page];
             }
         }
     </script>
