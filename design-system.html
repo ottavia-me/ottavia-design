@@ -1,0 +1,4227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ottavia Design System</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+      background: #F8F7F5;
+      color: #1a1a1a;
+      line-height: 1.5;
+    }
+
+    /* ===== LAYOUT ===== */
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      width: 260px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      background: #FFFFFF;
+      border-right: 1px solid #E5E0D8;
+      overflow-y: auto;
+      padding: 24px 0;
+      z-index: 100;
+    }
+    .sidebar-logo {
+      padding: 0 20px 20px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #433E36;
+      letter-spacing: -0.3px;
+      border-bottom: 1px solid #F0EBE4;
+      margin-bottom: 12px;
+    }
+    .sidebar-logo span {
+      font-size: 11px;
+      font-weight: 500;
+      color: #A8A297;
+      display: block;
+      margin-top: 2px;
+      letter-spacing: 0;
+    }
+
+    .nav-section {
+      padding: 12px 20px 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #A8A297;
+    }
+    .nav-link {
+      display: block;
+      padding: 6px 20px 6px 32px;
+      font-size: 14px;
+      color: #6B665D;
+      text-decoration: none;
+      transition: all 0.12s;
+      border-left: 2px solid transparent;
+    }
+    .nav-link:hover {
+      color: #433E36;
+      background: #F8F7F5;
+      border-left-color: #CBAC9B;
+    }
+    .nav-link.top-level {
+      padding-left: 20px;
+      font-weight: 500;
+    }
+    .nav-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 3px;
+      margin-left: 6px;
+      vertical-align: 1px;
+    }
+    .nav-badge-new { background: #CCE5FF; color: #1A5FB4; }
+    .nav-badge-stub { background: #F0EBE4; color: #A8A297; }
+
+    /* ===== MAIN CONTENT ===== */
+    .main {
+      margin-left: 260px;
+      flex: 1;
+      max-width: 1100px;
+      padding: 40px 48px 80px;
+    }
+
+    /* ===== PAGE HEADER ===== */
+    .page-header {
+      padding: 20px 0 32px;
+      border-bottom: 1px solid #E5E0D8;
+      margin-bottom: 48px;
+    }
+    .page-header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #433E36;
+      margin-bottom: 8px;
+    }
+    .page-header p {
+      font-size: 16px;
+      color: #6B665D;
+      max-width: 600px;
+    }
+
+    /* ===== STATUS BADGES ===== */
+    .badge {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .badge-section { background: #E5E0D8; color: #6B665D; }
+
+    .status {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .status-figma { background: #E8DEF8; color: #6B42C4; }
+    .status-code { background: #D4EDDA; color: #2D6A3F; }
+    .status-gap { background: #FFE0CC; color: #B35C1E; }
+    .status-new { background: #CCE5FF; color: #1A5FB4; }
+    .status-updated { background: #D0F0E0; color: #1A7A5A; }
+
+    /* ===== LEGEND ===== */
+    .legend {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #6B665D;
+    }
+
+    /* ===== SECTION ===== */
+    .section {
+      margin-bottom: 64px;
+      scroll-margin-top: 24px;
+    }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .section-header h2 {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: #433E36;
+    }
+    .section-description {
+      font-size: 14px;
+      color: #6B665D;
+      margin-bottom: 24px;
+      max-width: 600px;
+    }
+    .subsection-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #433E36;
+      margin: 28px 0 16px;
+    }
+
+    /* ===== DIVIDER ===== */
+    .section-divider {
+      border: none;
+      border-top: 1px solid #E5E0D8;
+      margin: 48px 0;
+    }
+
+    /* ===== TOKEN TABLE ===== */
+    .token-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .token-table thead th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #9B9590;
+      padding: 0 16px 10px;
+      border-bottom: 1px solid #E5E0D8;
+    }
+    .token-table tbody tr {
+      border-bottom: 1px solid #F0EBE4;
+      transition: background 0.1s;
+    }
+    .token-table tbody tr:hover { background: #F0EBE4; }
+    .token-table td {
+      padding: 14px 16px;
+      font-size: 14px;
+      vertical-align: middle;
+    }
+
+    /* ===== SWATCHES ===== */
+    .swatch-cell { display: flex; align-items: center; gap: 12px; }
+    .swatch {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 1px solid rgba(0,0,0,0.08);
+      flex-shrink: 0;
+    }
+
+    /* ===== TOKEN NAME ===== */
+    .token-name {
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      color: #433E36;
+    }
+    .hex {
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 13px;
+      color: #9B9590;
+    }
+    .token-desc { color: #6B665D; font-size: 13px; }
+
+    /* ===== SWATCH CARDS (Figma style) ===== */
+    .swatch-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .swatch-card {
+      width: 122px;
+      background: white;
+      border-radius: 6px;
+      padding: 8px 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      position: relative;
+    }
+    .swatch-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    }
+    .swatch-card-color {
+      width: 108px;
+      height: 47px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+    .swatch-card-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: #0A0A0A;
+      line-height: 18px;
+      margin-bottom: 2px;
+    }
+    .swatch-card-hex {
+      font-size: 12px;
+      font-weight: 500;
+      color: #989B9D;
+      line-height: 16px;
+      font-family: 'SF Mono', monospace;
+    }
+
+    /* ===== COPY TO CLIPBOARD ===== */
+    [data-copy] {
+      cursor: pointer;
+      position: relative;
+    }
+    [data-copy]:hover {
+      opacity: 0.8;
+    }
+    [data-copy]::after {
+      content: 'Click to copy';
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2D2A29;
+      color: white;
+      font-size: 11px;
+      font-weight: 500;
+      font-family: -apple-system, sans-serif;
+      padding: 4px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s;
+      z-index: 10;
+    }
+    [data-copy]:hover::after {
+      opacity: 1;
+    }
+    [data-copy].copied::after {
+      content: 'Copied!';
+      background: #2D6A3F;
+    }
+    /* Table cell copy — tooltip to the right to avoid clipping */
+    .token-table [data-copy]::after,
+    .spec-table [data-copy]::after {
+      bottom: auto;
+      top: 50%;
+      left: calc(100% + 8px);
+      transform: translateY(-50%);
+    }
+    /* Swatch card copies the hex */
+    .swatch-card::after {
+      content: 'Copy hex';
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: #2D2A29;
+      color: white;
+      font-size: 10px;
+      font-weight: 600;
+      font-family: -apple-system, sans-serif;
+      padding: 3px 7px;
+      border-radius: 4px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s;
+      z-index: 10;
+    }
+    .swatch-card:hover::after {
+      opacity: 1;
+    }
+    .swatch-card.copied::after {
+      content: 'Copied!';
+      background: #2D6A3F;
+    }
+
+    /* ===== TYPE PREVIEW ===== */
+    .type-preview {
+      background: white;
+      border: 1px solid #F0EBE4;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 8px;
+    }
+
+    /* ===== SPACING PREVIEW ===== */
+    .spacing-preview {
+      display: flex;
+      align-items: flex-end;
+      gap: 16px;
+      padding: 24px;
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #F0EBE4;
+      margin-bottom: 24px;
+    }
+    .spacing-box {
+      background: #CBAC9B;
+      border-radius: 4px;
+      opacity: 0.6;
+    }
+    .spacing-label {
+      font-size: 11px;
+      color: #9B9590;
+      text-align: center;
+      margin-top: 6px;
+      font-family: 'SF Mono', monospace;
+    }
+
+    /* ===== INFO BOX ===== */
+    .info-box {
+      background: #FFF9F0;
+      border: 1px solid #F0E4D0;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin: 16px 0 24px;
+      font-size: 14px;
+      color: #6B665D;
+    }
+    .info-box strong { color: #433E36; }
+
+    /* ===== PHONE PREVIEW ===== */
+    .phone-frame {
+      width: 390px;
+      background: #F5F1EA;
+      border-radius: 32px;
+      border: 6px solid #2D2A29;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+      margin: 16px 0;
+    }
+    .phone-status-bar {
+      background: #F5F1EA;
+      padding: 10px 20px 6px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      color: #2D2A29;
+    }
+    .phone-chat {
+      padding: 8px 16px 20px;
+    }
+
+    /* Chat markdown styles for previews */
+    .chat-md { color: #433E36; }
+    .chat-md p {
+      font-size: 18px;
+      line-height: 28px;
+      letter-spacing: 0.2px;
+      margin-top: 0;
+      margin-bottom: 12px;
+    }
+    .chat-md p:last-child { margin-bottom: 0; }
+    .chat-md h2 {
+      font-size: 24px;
+      line-height: 32px;
+      font-weight: 600;
+      margin-top: 14px;
+      margin-bottom: 6px;
+      letter-spacing: 0;
+    }
+    .chat-md h3 {
+      font-size: 22px;
+      line-height: 31px;
+      font-weight: 600;
+      margin-top: 10px;
+      margin-bottom: 6px;
+      letter-spacing: 0;
+    }
+    .chat-md h4, .chat-md h5, .chat-md h6 {
+      font-size: 18px;
+      line-height: 28px;
+      font-weight: 600;
+      margin-top: 8px;
+      margin-bottom: 4px;
+      letter-spacing: 0;
+    }
+    .chat-md strong {
+      font-weight: 600;
+      color: #433E36;
+    }
+    .chat-md ul {
+      margin-top: 2px;
+      margin-bottom: 12px;
+      padding-left: 8px;
+      list-style: none;
+    }
+    .chat-md ul li {
+      margin-bottom: 6px;
+      display: flex;
+      align-items: flex-start;
+      font-size: 18px;
+      line-height: 28px;
+      letter-spacing: 0.2px;
+    }
+    .chat-md ul li::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #C2BCB2;
+      margin-right: 10px;
+      margin-top: 10px;
+      flex-shrink: 0;
+    }
+    .chat-md ol {
+      margin-top: 2px;
+      margin-bottom: 12px;
+      padding-left: 8px;
+      list-style: none;
+      counter-reset: ol-counter;
+    }
+    .chat-md ol li {
+      margin-bottom: 6px;
+      display: flex;
+      align-items: flex-start;
+      font-size: 18px;
+      line-height: 28px;
+      letter-spacing: 0.2px;
+      counter-increment: ol-counter;
+    }
+    .chat-md ol li::before {
+      content: counter(ol-counter) ".";
+      color: #A8A297;
+      font-size: 18px;
+      line-height: 28px;
+      margin-right: 8px;
+      flex-shrink: 0;
+    }
+    .chat-md hr {
+      background: #DBD6CD;
+      height: 1px;
+      border: none;
+      margin: 14px 20px 16px;
+    }
+    .chat-md mark {
+      background: #FCE7B5;
+      color: #433E36;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .chat-md table {
+      margin: 16px 0;
+      border: 1px solid #C2BCB2;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    .chat-md thead { background: #DBD6CD; }
+    .chat-md th {
+      font-weight: 600;
+      color: #433E36;
+      padding: 8px;
+      text-align: left;
+      font-size: 18px;
+    }
+    .chat-md td {
+      padding: 8px;
+      font-size: 18px;
+      color: #433E36;
+      border-bottom: 1px solid #C2BCB2;
+      font-variant-numeric: tabular-nums;
+    }
+    .chat-md blockquote {
+      border-left: 3px solid #C2BCB2;
+      padding-left: 14px;
+      margin: 12px 0;
+    }
+
+    /* ===== MARGIN VISUALIZATION ===== */
+    .preview-pair {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      margin: 16px 0;
+    }
+    .preview-pair .phone-frame {
+      margin: 0;
+      flex-shrink: 0;
+    }
+    .margin-viz {
+      flex-shrink: 0;
+      width: 390px;
+      background: #F5F1EA;
+      border-radius: 32px;
+      border: 6px solid #2D2A29;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+    }
+    .margin-viz .phone-status-bar {
+      background: #F5F1EA;
+      padding: 10px 20px 6px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      color: #2D2A29;
+    }
+    .margin-viz .viz-chat {
+      padding: 8px 16px 20px;
+    }
+    /* Margin-top band (blue) */
+    .mt-band {
+      background: rgba(66, 126, 247, 0.18);
+      border-top: 1px dashed rgba(66, 126, 247, 0.5);
+      border-bottom: 1px dashed rgba(66, 126, 247, 0.5);
+      position: relative;
+      font-size: 10px;
+      font-weight: 600;
+      color: #427EF7;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+      font-family: 'SF Mono', monospace;
+    }
+    /* Margin-bottom band (orange) */
+    .mb-band {
+      background: rgba(228, 118, 58, 0.15);
+      border-top: 1px dashed rgba(228, 118, 58, 0.5);
+      border-bottom: 1px dashed rgba(228, 118, 58, 0.5);
+      position: relative;
+      font-size: 10px;
+      font-weight: 600;
+      color: #E4763A;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+      font-family: 'SF Mono', monospace;
+    }
+    .viz-element {
+      color: #433E36;
+      padding: 0 4px;
+    }
+    .margin-legend {
+      display: flex;
+      gap: 16px;
+      margin: 8px 0 20px;
+      font-size: 12px;
+      color: #6B665D;
+    }
+    .margin-legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+      display: inline-block;
+      vertical-align: -2px;
+      margin-right: 4px;
+    }
+
+    /* User bubble in previews */
+    .user-bubble-preview {
+      align-self: flex-end;
+      margin-left: auto;
+      margin-right: 12px;
+      background: #FFFFFF;
+      max-width: 302px;
+      border-radius: 22px;
+      padding: 10px 16px;
+      font-size: 18px;
+      line-height: 26px;
+      letter-spacing: 0.2px;
+      color: #433E36;
+    }
+
+    /* ===== SPEC TABLE (compact) ===== */
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+    }
+    .spec-table th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #9B9590;
+      padding: 0 12px 8px;
+      border-bottom: 1px solid #E5E0D8;
+    }
+    .spec-table td {
+      padding: 8px 12px;
+      font-size: 13px;
+      border-bottom: 1px solid #F0EBE4;
+      vertical-align: top;
+    }
+    .spec-table td:first-child {
+      font-weight: 500;
+      color: #433E36;
+      white-space: nowrap;
+    }
+    .spec-table td:nth-child(2) {
+      font-family: 'SF Mono', monospace;
+      font-size: 12px;
+      color: #6B665D;
+    }
+
+
+    /* ===== STUB SECTION ===== */
+    .stub-box {
+      background: #F0EBE4;
+      border: 1px dashed #C2BCB2;
+      border-radius: 12px;
+      padding: 32px;
+      text-align: center;
+      color: #A8A297;
+      font-size: 14px;
+    }
+
+    /* ===== RADIUS PREVIEW ===== */
+    .radius-preview {
+      display: flex;
+      gap: 24px;
+      padding: 24px;
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #F0EBE4;
+      align-items: flex-end;
+      margin-bottom: 24px;
+    }
+
+    /* ===== DO/DONT ===== */
+    .do-dont {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 16px 0;
+    }
+    .do-card, .dont-card {
+      border-radius: 10px;
+      padding: 16px;
+      font-size: 13px;
+      color: #433E36;
+    }
+    .do-card {
+      background: #E1F9EB;
+      border: 1px solid #B8E6CC;
+    }
+    .dont-card {
+      background: #FFF3ED;
+      border: 1px solid #FFDAC5;
+    }
+    .do-card strong { color: #2D6A3F; }
+    .dont-card strong { color: #B35C1E; }
+
+    /* ===== COMPONENT PREVIEW ===== */
+    .comp-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+      margin: 20px 0 32px;
+    }
+    .comp-card {
+      background: #FFFFFF;
+      border: 1px solid #E5E0D8;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .comp-preview {
+      background: #F5F1EA;
+      padding: 24px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 80px;
+    }
+    .comp-info {
+      padding: 14px 18px;
+      border-top: 1px solid #F0EBE4;
+    }
+    .comp-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #433E36;
+      margin-bottom: 2px;
+    }
+    .comp-desc {
+      font-size: 12px;
+      color: #9B9590;
+    }
+    .comp-variants {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .comp-variant-tag {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 3px;
+      background: #F0EBE4;
+      color: #6B665D;
+    }
+    .comp-category {
+      margin-bottom: 48px;
+      scroll-margin-top: 24px;
+    }
+    .comp-category-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #433E36;
+      margin-bottom: 4px;
+    }
+    .comp-category-desc {
+      font-size: 13px;
+      color: #6B665D;
+      margin-bottom: 16px;
+    }
+
+    /* Mini component renderings */
+    .mini-header {
+      width: 280px;
+      height: 52px;
+      background: linear-gradient(180deg, #F5F1EA 0%, rgba(245,241,234,0) 100%);
+      border-radius: 0;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 0 16px 8px;
+    }
+    .mini-header-icon {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      border: 1.5px solid #433E36;
+    }
+    .mini-composer {
+      width: 280px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px;
+    }
+    .mini-composer-input {
+      flex: 1;
+      height: 36px;
+      border-radius: 40px;
+      border: 1px solid #DBD6CD;
+      background: #FFF;
+    }
+    .mini-composer-icon {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: #E5E0D8;
+    }
+    .mini-bubble {
+      background: #FFFFFF;
+      border-radius: 22px;
+      padding: 8px 14px;
+      font-family: -apple-system, 'SF Pro Display', sans-serif;
+      font-size: 14px;
+      color: #433F35;
+      max-width: 200px;
+    }
+    .mini-bubble-user { margin-left: auto; }
+    .mini-timestamp {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.9);
+      border: 0.5px solid #DBD6CD;
+      border-radius: 58px;
+      padding: 2px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #5C564D;
+    }
+    .mini-new-msg {
+      background: #E1DCD3;
+      text-align: center;
+      padding: 3px 0;
+      font-size: 11px;
+      font-weight: 600;
+      color: #2D2A29;
+      width: 200px;
+    }
+    .mini-shimmer {
+      font-family: -apple-system, 'SF Pro Display', sans-serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: 500;
+      background: linear-gradient(90deg, #433E36, #F5F1EA);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .mini-chip {
+      display: inline-flex;
+      align-items: center;
+      background: #FFF;
+      border: 1px solid #C2BCB2;
+      border-radius: 24px;
+      padding: 6px 14px;
+      font-size: 13px;
+      color: #766F64;
+    }
+    .mini-chip em { color: #433E36; font-style: italic; }
+    .mini-pill {
+      background: #FFF;
+      border: 1px solid #F6EFE3;
+      border-radius: 24px;
+      padding: 10px 10px;
+      font-size: 14px;
+      color: #453F33;
+      width: 260px;
+      text-align: left;
+    }
+    .mini-log-chip {
+      width: 260px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 12px;
+      color: #FFF;
+    }
+    .mini-log-chip-title { font-size: 13px; font-weight: 600; }
+    .mini-log-chip-time { font-size: 11px; opacity: 0.85; }
+    .mini-memory {
+      font-size: 13px;
+      font-weight: 600;
+      color: #958E80;
+    }
+    .mini-memory a {
+      color: #958E80;
+      text-decoration: underline;
+    }
+    .mini-toggle {
+      width: 48px; height: 26px;
+      border-radius: 50px;
+      position: relative;
+      cursor: pointer;
+    }
+    .mini-toggle-knob {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: #FFF;
+      position: absolute;
+      top: 2px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .mini-toggle.on { background: #4B4740; }
+    .mini-toggle.on .mini-toggle-knob { right: 2px; }
+    .mini-toggle.off { background: #D8CDBA; }
+    .mini-toggle.off .mini-toggle-knob { left: 2px; }
+    .mini-day-picker {
+      display: flex;
+      gap: 4px;
+    }
+    .mini-day-seg {
+      width: 32px; height: 34px;
+      border-radius: 10px;
+      border: 1px solid #CDC2AF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: #4B4740;
+    }
+    .mini-day-seg.active { background: #EAE3D7; font-weight: 600; }
+    .mini-date-picker {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid #CDC2AF;
+      border-radius: 12px;
+      padding: 6px 10px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #4B4740;
+    }
+    .mini-date-arrow { color: #CDC2AF; font-size: 10px; }
+    .mini-tag-pill {
+      border-radius: 28px;
+      padding: 8px 14px;
+      font-size: 14px;
+      display: inline-block;
+    }
+    .mini-tag-active {
+      background: #F6EFE3;
+      border: 1.5px solid #958E80;
+      color: #433F35;
+      font-weight: 500;
+    }
+    .mini-tag-inactive {
+      background: #FFF;
+      border: 1px solid #ECE4D6;
+      color: #0A0A0A;
+    }
+    .mini-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #4C4C49;
+    }
+    .mini-check-circle {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      border: 1.5px solid #C2BCB2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: #FFF;
+      flex-shrink: 0;
+    }
+    .mini-check-circle.checked {
+      background: #4C4C49;
+      border-color: #4C4C49;
+    }
+    .mini-tip {
+      background: #FFF;
+      border: 1px solid #DFD6C4;
+      border-radius: 18px;
+      padding: 16px;
+      display: flex;
+      gap: 10px;
+      width: 260px;
+    }
+    .mini-tip-text {
+      font-size: 12px;
+      color: #3D3F40;
+      line-height: 1.4;
+    }
+    .mini-tip-link {
+      font-size: 11px;
+      font-weight: 500;
+      color: #0A0A0A;
+      text-decoration: underline;
+      margin-top: 4px;
+      display: inline-block;
+    }
+    .mini-macros {
+      background: #FFF;
+      border-radius: 20px;
+      padding: 14px 16px;
+      width: 260px;
+    }
+    .mini-macros-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #ACA391;
+      margin-bottom: 10px;
+    }
+    .mini-macros-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #F0EBE4;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .mini-macros-row:last-child { border: none; }
+    .mini-macros-label { color: #292929; }
+    .mini-macros-val { color: #56B683; }
+    .mini-progress-chip {
+      width: 110px;
+      height: 44px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      gap: 6px;
+    }
+    .mini-progress-emoji { font-size: 20px; }
+    .mini-progress-data { text-align: right; flex: 1; }
+    .mini-progress-val { font-size: 14px; font-weight: 700; }
+    .mini-progress-label { font-size: 10px; font-weight: 600; }
+    .mini-pref-card {
+      background: #FFF;
+      border-bottom: 1px solid #DFD6C4;
+      padding: 10px 0;
+      width: 260px;
+    }
+    .mini-pref-top { display: flex; justify-content: space-between; font-size: 12px; color: #000; }
+    .mini-pref-delete { font-weight: 500; }
+    .mini-pref-text { font-size: 13px; color: #9B877B; margin-top: 2px; }
+    .mini-back-btn {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: #FFF;
+      box-shadow: 0 2px 6px #DAD5C7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: #433E36;
+    }
+    .mini-photo {
+      width: 120px;
+      height: 160px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #E1DCD3 0%, #C2BCB2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #9B9590;
+      font-size: 20px;
+    }
+    .mini-progress-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mini-progress-bar-track {
+      width: 160px; height: 3px;
+      background: #E9E1D5;
+      border-radius: 20px;
+      position: relative;
+    }
+    .mini-progress-bar-fill {
+      height: 3px;
+      background: #4C4C49;
+      border-radius: 20px;
+      position: absolute;
+      top: 0; left: 0;
+    }
+    .mini-progress-bar-pct {
+      font-size: 11px;
+      font-weight: 500;
+      color: #A6A297;
+    }
+
+    /* Mini: Data Viz Card */
+    .mini-data-viz {
+      background: #FFF;
+      border: 1px solid #F0EBE4;
+      border-radius: 18px;
+      padding: 14px 16px;
+      width: 260px;
+    }
+    .mini-data-viz-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .mini-data-viz-title { color: #292929; }
+    .mini-data-viz-date { color: #A8A297; font-weight: 400; }
+    .mini-data-viz-value {
+      font-size: 22px;
+      font-weight: 600;
+      color: #56B683;
+      margin-bottom: 8px;
+    }
+    .mini-data-viz-bar {
+      height: 20px;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .mini-data-viz-fill {
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      color: #FFF;
+    }
+    .mini-data-viz-remaining {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 8px;
+      color: #56B683;
+      font-weight: 500;
+    }
+    /* Mini: Stat Grid */
+    .mini-stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      width: 260px;
+    }
+    .mini-stat-cell {
+      border-radius: 14px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .mini-stat-emoji { font-size: 18px; }
+    .mini-stat-data {}
+    .mini-stat-val { font-size: 18px; font-weight: 700; }
+    .mini-stat-label { font-size: 10px; }
+    /* Mini: Data Row */
+    .mini-data-list {
+      width: 240px;
+      background: #FFF;
+      border-radius: 16px;
+      padding: 12px 16px;
+    }
+    .mini-data-list-title {
+      font-size: 11px;
+      color: #ACA391;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .mini-data-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #F0EBE4;
+      font-size: 12px;
+    }
+    .mini-data-row:last-of-type { border: none; }
+    .mini-data-row-name { font-weight: 600; color: #292929; }
+    .mini-data-row-val { color: #427EF7; }
+    .mini-data-link {
+      text-align: center;
+      font-size: 11px;
+      color: #427EF7;
+      margin-top: 6px;
+    }
+    /* Mini: Meal Logged Card */
+    .mini-meal-card {
+      background: #FFF;
+      border: 1px solid #F0EBE4;
+      border-radius: 18px;
+      padding: 14px;
+      width: 260px;
+    }
+    .mini-meal-top {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .mini-meal-thumb {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: #E5E0D8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    .mini-meal-name { font-size: 13px; font-weight: 600; color: #292929; }
+    .mini-meal-ingredients { font-size: 11px; color: #9B9590; margin-bottom: 8px; }
+    .mini-meal-macros {
+      display: flex;
+      gap: 6px;
+    }
+    .mini-meal-macro {
+      flex: 1;
+      border-top: 1px solid #F0EBE4;
+      padding-top: 6px;
+      font-size: 10px;
+    }
+    .mini-meal-macro-label { color: #9B9590; }
+    .mini-meal-macro-val { font-size: 13px; font-weight: 700; color: #292929; }
+    /* Mini: Screen Header */
+    .mini-screen-header {
+      display: flex;
+      align-items: center;
+      width: 280px;
+      padding: 8px 0;
+    }
+    .mini-screen-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #292929;
+      flex: 1;
+    }
+    /* Mini: Back / Close buttons */
+    .mini-circle-btn {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: #F0EBE4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #433E36;
+      flex-shrink: 0;
+    }
+    .mini-x-btn {
+      width: 28px; height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #433E36;
+      flex-shrink: 0;
+    }
+    /* Mini: Settings Card */
+    .mini-settings-group {
+      background: #FFF;
+      border-radius: 18px;
+      overflow: hidden;
+      width: 260px;
+    }
+    .mini-settings-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-bottom: 1px solid #F5F1EA;
+    }
+    .mini-settings-row:last-child { border: none; }
+    .mini-settings-icon {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: #F5F1EA;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+    .mini-settings-text { flex: 1; }
+    .mini-settings-title { font-size: 13px; font-weight: 600; color: #292929; }
+    .mini-settings-sub { font-size: 10px; color: #9B9590; }
+    .mini-settings-chevron { color: #C2BCB2; font-size: 12px; }
+    /* Mini: Onboarding */
+    .mini-onboard-bar {
+      display: flex;
+      gap: 3px;
+      width: 200px;
+    }
+    .mini-onboard-seg {
+      flex: 1;
+      height: 3px;
+      border-radius: 2px;
+    }
+    .mini-onboard-seg.done { background: #433E36; }
+    .mini-onboard-seg.todo { background: #E5E0D8; }
+    .mini-text-input {
+      width: 240px;
+    }
+    .mini-text-input-label {
+      font-size: 11px;
+      color: #6B665D;
+      margin-bottom: 4px;
+    }
+    .mini-text-input-field {
+      width: 100%;
+      height: 38px;
+      border: 1px solid #CDC2AF;
+      border-radius: 40px;
+      background: #FFF;
+    }
+    .mini-gender-pills {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 240px;
+    }
+    .mini-gender-pill {
+      height: 40px;
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .mini-gender-active {
+      background: #F6EFE3;
+      border: 1.5px solid #CDC2AF;
+      color: #433E36;
+    }
+    .mini-gender-inactive {
+      background: #FFF;
+      border: 1px solid #E5E0D8;
+      color: #6B665D;
+    }
+    /* Mini: Buttons */
+    .mini-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      border-radius: 40px;
+      font-size: 14px;
+      font-weight: 600;
+      width: 240px;
+    }
+    .mini-btn-primary {
+      background: #FFF;
+      color: #433E36;
+      border: none;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .mini-btn-secondary {
+      background: transparent;
+      color: #433E36;
+      border: 1.5px solid #CDC2AF;
+    }
+    .mini-btn-destructive {
+      background: #FFF;
+      color: #F76642;
+      border: 1px solid #F76642;
+    }
+    .mini-btn-muted {
+      background: #E5E0D8;
+      color: #9B9590;
+      border: none;
+    }
+    .mini-action-link {
+      font-size: 12px;
+      font-weight: 500;
+      text-align: center;
+    }
+    /* Mini: Bottom Sheet */
+    .mini-bottom-sheet {
+      width: 280px;
+      background: #F5F1EA;
+      border-radius: 20px 20px 0 0;
+      padding: 10px 16px 16px;
+    }
+    .mini-sheet-handle {
+      width: 36px;
+      height: 4px;
+      border-radius: 2px;
+      background: #C2BCB2;
+      margin: 0 auto 10px;
+    }
+    .mini-sheet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .mini-sheet-title { font-size: 14px; font-weight: 700; color: #292929; }
+    .mini-sheet-link { font-size: 12px; color: #292929; }
+    .mini-sheet-photos {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .mini-sheet-photo {
+      width: 52px; height: 52px;
+      border-radius: 10px;
+      background: #E5E0D8;
+    }
+    .mini-sheet-camera {
+      width: 52px; height: 52px;
+      border-radius: 10px;
+      background: #FFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #6B665D;
+    }
+    .mini-sheet-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      font-size: 13px;
+      font-weight: 600;
+      color: #292929;
+    }
+    .mini-sheet-row-icon {
+      width: 20px; height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    /* Mini: Composer with Photo */
+    .mini-composer-open {
+      background: #FFF;
+      border-radius: 18px;
+      border: 1px solid #DBD6CD;
+      padding: 8px 10px;
+      width: 260px;
+    }
+    .mini-composer-photo-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+    .mini-composer-thumb {
+      width: 50px; height: 50px;
+      border-radius: 8px;
+      background: #E5E0D8;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .mini-composer-thumb-x {
+      position: absolute;
+      top: -4px; right: -4px;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: #6B665D;
+      color: #FFF;
+      font-size: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .mini-composer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .mini-composer-text {
+      font-size: 12px;
+      color: #6B665D;
+    }
+    .mini-composer-send {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: #433E36;
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+    /* Mini: Wearable Row */
+    .mini-wearable-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 260px;
+      padding: 8px 0;
+    }
+    .mini-wearable-icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .mini-wearable-name {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 500;
+      color: #292929;
+    }
+    /* Mini: Meal list row */
+    .mini-meal-list {
+      width: 260px;
+    }
+    .mini-meal-list-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #F0EBE4;
+      font-size: 12px;
+    }
+    .mini-meal-list-name { color: #292929; font-weight: 500; }
+    .mini-meal-list-kcal { color: #56B683; font-weight: 500; }
+
+    /* ===== FOOTER ===== */
+    .page-footer {
+      border-top: 1px solid #E5E0D8;
+      padding-top: 24px;
+      margin-top: 48px;
+      font-size: 13px;
+      color: #9B9590;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+
+    <!-- ============================== -->
+    <!-- SIDEBAR NAVIGATION             -->
+    <!-- ============================== -->
+    <nav class="sidebar">
+      <div class="sidebar-logo">
+        Ottavia Design System
+        <span>v1.0 — March 2026</span>
+      </div>
+
+      <a class="nav-link top-level" href="#get-started">Get started</a>
+
+      <div class="nav-section">Foundations</div>
+      <a class="nav-link" href="#color">Color</a>
+      <a class="nav-link" href="#typography">Typography</a>
+      <a class="nav-link" href="#spacing">Spacing</a>
+      <a class="nav-link" href="#border">Border</a>
+      <a class="nav-link" href="#iconography">Iconography <span class="nav-badge nav-badge-stub">Stub</span></a>
+      <a class="nav-link" href="#elevation">Elevation <span class="nav-badge nav-badge-stub">Stub</span></a>
+
+      <div class="nav-section">Components</div>
+      <a class="nav-link" href="#comp-nav">Navigation & Chrome</a>
+      <a class="nav-link" href="#comp-messages">Messages</a>
+      <a class="nav-link" href="#comp-suggestions">Suggestions</a>
+      <a class="nav-link" href="#comp-logging">Logging Chips</a>
+      <a class="nav-link" href="#comp-memory">Memory & Context</a>
+      <a class="nav-link" href="#comp-data">Data Display</a>
+      <a class="nav-link" href="#comp-forms">Form Controls</a>
+      <a class="nav-link" href="#comp-buttons">Buttons</a>
+      <a class="nav-link" href="#comp-cards">Cards & Notices</a>
+      <a class="nav-link" href="#comp-surfaces">Surfaces</a>
+
+      <div class="nav-section">Chat</div>
+      <a class="nav-link" href="#chat-markdown">Markdown</a>
+      <a class="nav-link" href="#chat-spacing">Spacing rules</a>
+      <a class="nav-link" href="#chat-user-bubble">User bubble</a>
+
+      <div class="nav-section">Design Examples</div>
+      <a class="nav-link" href="#design-examples">Screen gallery <span class="nav-badge nav-badge-new">New</span></a>
+
+      <div class="nav-section">Status</div>
+      <a class="nav-link" href="#figma-vs-code">Figma vs Code</a>
+    </nav>
+
+    <!-- ============================== -->
+    <!-- MAIN CONTENT                   -->
+    <!-- ============================== -->
+    <main class="main">
+
+      <header class="page-header">
+        <h1>Ottavia Design System</h1>
+        <p>The single source of truth for visual design decisions. Every color, type style, spacing value, and chat rendering rule — from Figma variables to React Native code.</p>
+      </header>
+
+      <div class="legend">
+        <div class="legend-item"><span class="status status-figma">Figma</span> Defined in Figma</div>
+        <div class="legend-item"><span class="status status-code">Code</span> Exists in code</div>
+        <div class="legend-item"><span class="status status-gap">Gap</span> Mismatch</div>
+        <div class="legend-item"><span class="status status-new">New</span> Proposed</div>
+        <div class="legend-item"><span class="status status-updated">Updated</span> Recently changed</div>
+      </div>
+
+
+      <!-- ============================================================ -->
+      <!-- GET STARTED                                                   -->
+      <!-- ============================================================ -->
+      <section class="section" id="get-started">
+        <div class="section-header">
+          <h2>Get started</h2>
+        </div>
+        <p class="section-description">
+          This reference documents every visual decision in Ottavia. Use it to align Figma designs with React Native code.
+        </p>
+
+        <div class="info-box">
+          <strong>How to use this page:</strong> Navigate via the sidebar. Each section has visual references, token tables, and (where applicable) live previews. Status badges indicate where each token lives today and what gaps remain between design and code.
+        </div>
+
+        <h3 class="subsection-title">What's covered</h3>
+        <table class="token-table">
+          <thead>
+            <tr><th>Area</th><th>Status</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="token-desc">Color palette + semantic tokens</span></td>
+              <td><span class="status status-figma">Figma</span> <span class="status status-code">Code</span></td>
+              <td><span class="token-desc">Neutrals, blue, green, purple, orange, yellow + 5 semantic groups</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-desc">Typography (8 text styles)</span></td>
+              <td><span class="status status-updated">Updated</span></td>
+              <td><span class="token-desc">Figma-ready text styles with SF Pro Display + Menlo</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-desc">Spacing (8-value scale)</span></td>
+              <td><span class="status status-code">Code</span></td>
+              <td><span class="token-desc">4px grid, xs through 4xl</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-desc">Border (3 colors + 5 radii)</span></td>
+              <td><span class="status status-code">Code</span></td>
+              <td><span class="token-desc">Consolidating from 5+ code values to 3 tokens</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-desc">Chat markdown rendering</span></td>
+              <td><span class="status status-new">New</span></td>
+              <td><span class="token-desc">Full spec with live previews for every element</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-desc">Chat spacing rules</span></td>
+              <td><span class="status status-new">New</span></td>
+              <td><span class="token-desc">Gap math between markdown elements</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-desc">Chat user bubble</span></td>
+              <td><span class="status status-new">New</span></td>
+              <td><span class="token-desc">Proposed spec for user message styling</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-desc">Elevation / shadows</span></td>
+              <td><span class="status status-gap">Gap</span></td>
+              <td><span class="token-desc">Coming soon</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <hr class="section-divider">
+
+
+      <!-- ============================================================ -->
+      <!-- COLOR                                                         -->
+      <!-- ============================================================ -->
+      <section class="section" id="color">
+        <div class="section-header">
+          <h2>Color</h2>
+          <span class="badge badge-section">Foundations</span>
+        </div>
+        <p class="section-description">
+          The Ottavia palette is warm and neutral-anchored. Raw palette values are the ingredients; semantic tokens tell engineers which to use where.
+        </p>
+
+        <!-- Base color -->
+        <h3 class="subsection-title">Base color</h3>
+        <div class="swatch-grid">
+          <div class="swatch-card" data-hex="#433E36" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#433E36"></div>
+            <div class="swatch-card-name">Neutral/80</div>
+            <div class="swatch-card-hex">#433E36</div>
+          </div>
+          <div class="swatch-card" data-hex="#5C564D" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#5C564D"></div>
+            <div class="swatch-card-name">Neutral/70</div>
+            <div class="swatch-card-hex">#5C564D</div>
+          </div>
+          <div class="swatch-card" data-hex="#766F64" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#766F64"></div>
+            <div class="swatch-card-name">Neutral/60</div>
+            <div class="swatch-card-hex">#766F64</div>
+          </div>
+          <div class="swatch-card" data-hex="#8F897D" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#8F897D"></div>
+            <div class="swatch-card-name">Neutral/50</div>
+            <div class="swatch-card-hex">#8F897D</div>
+          </div>
+          <div class="swatch-card" data-hex="#A8A297" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#A8A297"></div>
+            <div class="swatch-card-name">Neutral/40</div>
+            <div class="swatch-card-hex">#A8A297</div>
+          </div>
+          <div class="swatch-card" data-hex="#C2BCB2" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#C2BCB2"></div>
+            <div class="swatch-card-name">Neutral/30</div>
+            <div class="swatch-card-hex">#C2BCB2</div>
+          </div>
+          <div class="swatch-card" data-hex="#DBD6CD" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#DBD6CD"></div>
+            <div class="swatch-card-name">Neutral/20</div>
+            <div class="swatch-card-hex">#DBD6CD</div>
+          </div>
+          <div class="swatch-card" data-hex="#F5F1EA" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#F5F1EA"></div>
+            <div class="swatch-card-name">Neutral/10</div>
+            <div class="swatch-card-hex">#F5F1EA</div>
+          </div>
+          <div class="swatch-card" data-hex="#FFFFFF" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#FFFFFF; border:1px solid #E5E0D8"></div>
+            <div class="swatch-card-name">Neutral/0</div>
+            <div class="swatch-card-hex">#FFFFFF</div>
+          </div>
+        </div>
+
+        <!-- Data colors -->
+        <h3 class="subsection-title">Data colors</h3>
+
+        <h4 style="font-size:14px; font-weight:600; color:#6B665D; margin:0 0 12px;">Blue</h4>
+        <div class="swatch-grid">
+          <div class="swatch-card" data-hex="#427EF7" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#427EF7"></div>
+            <div class="swatch-card-name">Blue/60</div>
+            <div class="swatch-card-hex">#427EF7</div>
+          </div>
+          <div class="swatch-card" data-hex="#A3C4FF" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#A3C4FF"></div>
+            <div class="swatch-card-name">Blue/40</div>
+            <div class="swatch-card-hex">#A3C4FF</div>
+          </div>
+          <div class="swatch-card" data-hex="#E4EEFF" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#E4EEFF"></div>
+            <div class="swatch-card-name">Blue/10</div>
+            <div class="swatch-card-hex">#E4EEFF</div>
+          </div>
+        </div>
+
+        <h4 style="font-size:14px; font-weight:600; color:#6B665D; margin:0 0 12px;">Green</h4>
+        <div class="swatch-grid">
+          <div class="swatch-card" data-hex="#56B683" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#56B683"></div>
+            <div class="swatch-card-name">Green/60</div>
+            <div class="swatch-card-hex">#56B683</div>
+          </div>
+          <div class="swatch-card" data-hex="#9DD8B8" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#9DD8B8"></div>
+            <div class="swatch-card-name">Green/30</div>
+            <div class="swatch-card-hex">#9DD8B8</div>
+          </div>
+          <div class="swatch-card" data-hex="#E1F9EB" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#E1F9EB"></div>
+            <div class="swatch-card-name">Green/10</div>
+            <div class="swatch-card-hex">#E1F9EB</div>
+          </div>
+        </div>
+
+        <h4 style="font-size:14px; font-weight:600; color:#6B665D; margin:0 0 12px;">Purple</h4>
+        <div class="swatch-grid">
+          <div class="swatch-card" data-hex="#A280FF" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#A280FF"></div>
+            <div class="swatch-card-name">Purple/60</div>
+            <div class="swatch-card-hex">#A280FF</div>
+          </div>
+          <div class="swatch-card" data-hex="#CDBCFF" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#CDBCFF"></div>
+            <div class="swatch-card-name">Purple/30</div>
+            <div class="swatch-card-hex">#CDBCFF</div>
+          </div>
+          <div class="swatch-card" data-hex="#F9EDFE" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#F9EDFE"></div>
+            <div class="swatch-card-name">Purple/10</div>
+            <div class="swatch-card-hex">#F9EDFE</div>
+          </div>
+        </div>
+
+        <h4 style="font-size:14px; font-weight:600; color:#6B665D; margin:0 0 12px;">Red</h4>
+        <div class="swatch-grid">
+          <div class="swatch-card" data-hex="#F76642" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#F76642"></div>
+            <div class="swatch-card-name">Red/60</div>
+            <div class="swatch-card-hex">#F76642</div>
+          </div>
+          <div class="swatch-card" data-hex="#FBA88E" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#FBA88E"></div>
+            <div class="swatch-card-name">Red/30</div>
+            <div class="swatch-card-hex">#FBA88E</div>
+          </div>
+          <div class="swatch-card" data-hex="#FFE5E5" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#FFE5E5"></div>
+            <div class="swatch-card-name">Red/10</div>
+            <div class="swatch-card-hex">#FFE5E5</div>
+          </div>
+        </div>
+
+        <h4 style="font-size:14px; font-weight:600; color:#6B665D; margin:0 0 12px;">Yellow</h4>
+        <div class="swatch-grid">
+          <div class="swatch-card" data-hex="#FCE7B5" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#FCE7B5"></div>
+            <div class="swatch-card-name">Yellow/30</div>
+            <div class="swatch-card-hex">#FCE7B5</div>
+          </div>
+          <div class="swatch-card" data-hex="#FEF6E3" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#FEF6E3"></div>
+            <div class="swatch-card-name">Yellow/10</div>
+            <div class="swatch-card-hex">#FEF6E3</div>
+          </div>
+        </div>
+
+        <h4 style="font-size:14px; font-weight:600; color:#6B665D; margin:0 0 12px;">Orange</h4>
+        <div class="swatch-grid">
+          <div class="swatch-card" data-hex="#E4763A" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#E4763A"></div>
+            <div class="swatch-card-name">Orange/80</div>
+            <div class="swatch-card-hex">#E4763A</div>
+          </div>
+          <div class="swatch-card" data-hex="#FF8C4E" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#FF8C4E"></div>
+            <div class="swatch-card-name">Orange/70</div>
+            <div class="swatch-card-hex">#FF8C4E</div>
+          </div>
+          <div class="swatch-card" data-hex="#FFA676" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#FFA676"></div>
+            <div class="swatch-card-name">Orange/60</div>
+            <div class="swatch-card-hex">#FFA676</div>
+          </div>
+          <div class="swatch-card" data-hex="#FFC09E" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#FFC09E"></div>
+            <div class="swatch-card-name">Orange/50</div>
+            <div class="swatch-card-hex">#FFC09E</div>
+          </div>
+          <div class="swatch-card" data-hex="#FFDAC5" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#FFDAC5"></div>
+            <div class="swatch-card-name">Orange/40</div>
+            <div class="swatch-card-hex">#FFDAC5</div>
+          </div>
+          <div class="swatch-card" data-hex="#FFF3ED" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#FFF3ED"></div>
+            <div class="swatch-card-name">Orange/20</div>
+            <div class="swatch-card-hex">#FFF3ED</div>
+          </div>
+        </div>
+
+        <!-- Semantic: Text -->
+        <h3 class="subsection-title" id="color-text">Semantic — Text Colors</h3>
+        <table class="token-table">
+          <thead><tr><th style="width:40px">Preview</th><th>Token</th><th>Value</th><th>Usage</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="swatch" style="background:#433E36"></div></td>
+              <td><span class="token-name">text.primary</span></td>
+              <td><span class="hex">#433E36</span></td>
+              <td><span class="token-desc">Headings, body text, primary content</span></td>
+              <td><span class="status status-figma">Figma</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#A8A297"></div></td>
+              <td><span class="token-name">text.secondary</span></td>
+              <td><span class="hex">#A8A297</span></td>
+              <td><span class="token-desc">Labels, subtitles, metadata, dates</span></td>
+              <td><span class="status status-figma">Figma</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#8F897D"></div></td>
+              <td><span class="token-name">text.muted</span></td>
+              <td><span class="hex">#8F897D</span></td>
+              <td><span class="token-desc">Body/Muted text style, de-emphasized content</span></td>
+              <td><span class="status status-updated">Updated</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#C2BCB2"></div></td>
+              <td><span class="token-name">text.tertiary</span></td>
+              <td><span class="hex">#C2BCB2</span></td>
+              <td><span class="token-desc">Placeholders, disabled text, hints</span></td>
+              <td><span class="status status-new">New</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#FFFFFF;border:1px solid #ddd"></div></td>
+              <td><span class="token-name">text.inverse</span></td>
+              <td><span class="hex">#FFFFFF</span></td>
+              <td><span class="token-desc">Text on dark backgrounds</span></td>
+              <td><span class="status status-new">New</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#427EF7"></div></td>
+              <td><span class="token-name">text.link</span></td>
+              <td><span class="hex">#427EF7</span></td>
+              <td><span class="token-desc">Clickable links, interactive text</span></td>
+              <td><span class="status status-gap">Gap</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="info-box">
+          <strong>Gap note:</strong> Code uses #000000 for primary text in many components instead of #433E36. Links use #0078FF / #007AFF instead of #427EF7. Need to unify.
+        </div>
+
+        <!-- Semantic: Surfaces -->
+        <h3 class="subsection-title" id="color-surfaces">Semantic — Surface Colors</h3>
+        <table class="token-table">
+          <thead><tr><th style="width:40px">Preview</th><th>Token</th><th>Value</th><th>Usage</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="swatch" style="background:#F5F1EA"></div></td>
+              <td><span class="token-name">surface.background</span></td>
+              <td><span class="hex">#F5F1EA</span></td>
+              <td><span class="token-desc">Main app background (cream)</span></td>
+              <td><span class="status status-code">Code</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#FFFFFF;border:1px solid #ddd"></div></td>
+              <td><span class="token-name">surface.card</span></td>
+              <td><span class="hex">#FFFFFF</span></td>
+              <td><span class="token-desc">Card backgrounds, elevated content</span></td>
+              <td><span class="status status-code">Code</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#F0EBE2"></div></td>
+              <td><span class="token-name">surface.subtle</span></td>
+              <td><span class="hex">#F0EBE2</span></td>
+              <td><span class="token-desc">Table headers, section backgrounds</span></td>
+              <td><span class="status status-new">New</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#8F897D"></div></td>
+              <td><span class="token-name">surface.dark</span></td>
+              <td><span class="hex">#8F897D</span></td>
+              <td><span class="token-desc">Dark headers, overlays</span></td>
+              <td><span class="status status-figma">Figma</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:rgba(0,0,0,0.5)"></div></td>
+              <td><span class="token-name">surface.overlay</span></td>
+              <td><span class="hex">rgba(0,0,0,0.5)</span></td>
+              <td><span class="token-desc">Modal overlays, loading screens</span></td>
+              <td><span class="status status-code">Code</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Semantic: Data -->
+        <h3 class="subsection-title" id="color-data">Semantic — Data Colors</h3>
+        <table class="token-table">
+          <thead><tr><th style="width:40px">Preview</th><th>Token</th><th>Value</th><th>Usage</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="swatch" style="background:#427EF7"></div></td>
+              <td><span class="token-name">data.blue</span></td>
+              <td><span class="hex">#427EF7</span></td>
+              <td><span class="token-desc">Charts, bar fills, line graphs</span></td>
+              <td><span class="status status-figma">Figma</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#E4EEFF"></div></td>
+              <td><span class="token-name">data.blue.subtle</span></td>
+              <td><span class="hex">#E4EEFF</span></td>
+              <td><span class="token-desc">Chart backgrounds, empty bar fills</span></td>
+              <td><span class="status status-figma">Figma</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#56B683"></div></td>
+              <td><span class="token-name">data.green</span></td>
+              <td><span class="hex">#56B683</span></td>
+              <td><span class="token-desc">Progress, nutrition, positive metrics</span></td>
+              <td><span class="status status-figma">Figma</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#E1F9EB"></div></td>
+              <td><span class="token-name">data.green.subtle</span></td>
+              <td><span class="hex">#E1F9EB</span></td>
+              <td><span class="token-desc">Stat card backgrounds</span></td>
+              <td><span class="status status-figma">Figma</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#A280FF"></div></td>
+              <td><span class="token-name">data.purple</span></td>
+              <td><span class="hex">#A280FF</span></td>
+              <td><span class="token-desc">Third data series, alternative category</span></td>
+              <td><span class="status status-figma">Figma</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#F9EDFE"></div></td>
+              <td><span class="token-name">data.purple.subtle</span></td>
+              <td><span class="hex">#F9EDFE</span></td>
+              <td><span class="token-desc">Purple surface, category background</span></td>
+              <td><span class="status status-figma">Figma</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="info-box">
+          <strong>Gap note:</strong> Code uses #75A6FF for charts instead of Figma's #427EF7. Also uses #6793E1 for bar borders — not in Figma.
+        </div>
+
+        <!-- Semantic: Status -->
+        <h3 class="subsection-title" id="color-status">Semantic — Status Colors</h3>
+        <table class="token-table">
+          <thead><tr><th style="width:40px">Preview</th><th>Token</th><th>Value</th><th>Usage</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="swatch" style="background:#56B683"></div></td>
+              <td><span class="token-name">status.success</span></td>
+              <td><span class="hex">#56B683</span></td>
+              <td><span class="token-desc">Positive states, on-track</span></td>
+              <td><span class="status status-code">Code</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#E1F9EB"></div></td>
+              <td><span class="token-name">status.success.subtle</span></td>
+              <td><span class="hex">#E1F9EB</span></td>
+              <td><span class="token-desc">Success background, achievement chips</span></td>
+              <td><span class="status status-code">Code</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#E4763A"></div></td>
+              <td><span class="token-name">status.warning</span></td>
+              <td><span class="hex">#E4763A</span></td>
+              <td><span class="token-desc">Chronic conditions, attention needed</span></td>
+              <td><span class="status status-figma">Figma</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#FFD1B8"></div></td>
+              <td><span class="token-name">status.warning.subtle</span></td>
+              <td><span class="hex">#FFD1B8</span></td>
+              <td><span class="token-desc">Warning background, condition chips</span></td>
+              <td><span class="status status-code">Code</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#FF755D"></div></td>
+              <td><span class="token-name">status.error</span></td>
+              <td><span class="hex">#FF755D</span></td>
+              <td><span class="token-desc">Delete actions, destructive states</span></td>
+              <td><span class="status status-code">Code</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#FCE7B5"></div></td>
+              <td><span class="token-name">status.highlight</span></td>
+              <td><span class="hex">#FCE7B5</span></td>
+              <td><span class="token-desc">Chat highlights, ==mark== in markdown</span></td>
+              <td><span class="status status-figma">Figma</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Semantic: Border Colors -->
+        <h3 class="subsection-title" id="color-border">Semantic — Border Colors</h3>
+        <table class="token-table">
+          <thead><tr><th style="width:40px">Preview</th><th>Token</th><th>Value</th><th>Usage</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="swatch" style="background:#E7DFD0"></div></td>
+              <td><span class="token-name">border.default</span></td>
+              <td><span class="hex">#E7DFD0</span></td>
+              <td><span class="token-desc">Card borders, chart borders</span></td>
+              <td><span class="status status-code">Code</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#F0EBE4"></div></td>
+              <td><span class="token-name">border.subtle</span></td>
+              <td><span class="hex">#F0EBE4</span></td>
+              <td><span class="token-desc">Dividers, light separators</span></td>
+              <td><span class="status status-new">New</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#CBAC9B"></div></td>
+              <td><span class="token-name">border.strong</span></td>
+              <td><span class="hex">#CBAC9B</span></td>
+              <td><span class="token-desc">Active borders, selected states</span></td>
+              <td><span class="status status-code">Code</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="info-box">
+          <strong>Gap note:</strong> Code uses 5 different border colors (#F1F1F1, #f2f2f2, #E7DFD0, #DFD6C4, #CDC2AF) — consolidate to these 3 tokens.
+        </div>
+      </section>
+
+      <hr class="section-divider">
+
+
+      <!-- ============================================================ -->
+      <!-- TYPOGRAPHY                                                    -->
+      <!-- ============================================================ -->
+      <section class="section" id="typography">
+        <div class="section-header">
+          <h2>Typography</h2>
+          <span class="badge badge-section">Foundations</span>
+        </div>
+        <p class="section-description">
+          Two font families, 8 text styles, 3 weights. These are the Figma-ready styles that map directly to React Native.
+        </p>
+
+        <!-- Font Families -->
+        <h3 class="subsection-title">Font families</h3>
+        <table class="token-table">
+          <thead><tr><th>Token</th><th>Value</th><th>Usage</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="token-name">font.primary</span></td>
+              <td><span class="hex">SF Pro Display</span></td>
+              <td><span class="token-desc">All UI text — headings, body, labels, metrics</span></td>
+              <td><span class="status status-updated">Updated</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="info-box">
+          <strong>Decision:</strong> SF Pro Display is the single UI font. Poppins has been dropped. Code currently uses 3 names (SFProDisplay, SFUIDisplay, SFPro) — consolidate to one reference per weight.
+        </div>
+
+        <!-- 8 Text Styles -->
+        <h3 class="subsection-title">Text styles (8)</h3>
+        <div class="type-preview">
+          <div style="font-size:24px; font-weight:600; line-height:32px; color:#433E36; margin-bottom:12px;">Heading/H2 — The quick brown fox</div>
+          <div style="font-size:22px; font-weight:600; line-height:31px; color:#433E36; margin-bottom:12px;">Heading/H3 — The quick brown fox</div>
+          <div style="font-size:18px; font-weight:600; line-height:28px; color:#433E36; margin-bottom:12px;">Heading/H4 — The quick brown fox</div>
+          <div style="font-size:18px; line-height:28px; letter-spacing:0.2px; color:#433E36; margin-bottom:12px;">Body/Regular — The quick brown fox jumps over the lazy dog</div>
+          <div style="font-size:18px; font-weight:600; line-height:28px; letter-spacing:0.2px; color:#433E36; margin-bottom:12px;">Body/Bold — The quick brown fox jumps over</div>
+          <div style="font-size:18px; line-height:28px; letter-spacing:0.2px; color:#8F897D;">Body/Muted — The quick brown fox jumps over</div>
+        </div>
+
+        <table class="token-table">
+          <thead>
+            <tr><th>Style Name</th><th>Font</th><th>Size</th><th>Line Height</th><th>Letter Spacing</th><th>Color</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="token-name">Body/Regular</span></td>
+              <td><span class="hex">SF Pro Display Regular</span></td>
+              <td><span class="hex">18</span></td>
+              <td><span class="hex">28</span></td>
+              <td><span class="hex">0.2</span></td>
+              <td><span class="hex">#433E36</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">Body/Bold</span></td>
+              <td><span class="hex">SF Pro Display Semibold</span></td>
+              <td><span class="hex">18</span></td>
+              <td><span class="hex">28</span></td>
+              <td><span class="hex">0.2</span></td>
+              <td><span class="hex">#433E36</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">Body/Muted</span></td>
+              <td><span class="hex">SF Pro Display Regular</span></td>
+              <td><span class="hex">18</span></td>
+              <td><span class="hex">28</span></td>
+              <td><span class="hex">0.2</span></td>
+              <td><span class="hex">#8F897D</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">Heading/H2</span></td>
+              <td><span class="hex">SF Pro Display Semibold</span></td>
+              <td><span class="hex">24</span></td>
+              <td><span class="hex">32</span></td>
+              <td><span class="hex">0</span></td>
+              <td><span class="hex">#433E36</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">Heading/H3</span></td>
+              <td><span class="hex">SF Pro Display Semibold</span></td>
+              <td><span class="hex">22</span></td>
+              <td><span class="hex">31</span></td>
+              <td><span class="hex">0</span></td>
+              <td><span class="hex">#433E36</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">Heading/H4</span></td>
+              <td><span class="hex">SF Pro Display Semibold</span></td>
+              <td><span class="hex">18</span></td>
+              <td><span class="hex">28</span></td>
+              <td><span class="hex">0</span></td>
+              <td><span class="hex">#433E36</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Font Weights -->
+        <h3 class="subsection-title">Font weights</h3>
+        <table class="token-table">
+          <thead><tr><th>Token</th><th>Value</th><th>SF Pro File</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="token-name">weight.regular</span></td>
+              <td><span class="hex">400</span></td>
+              <td><span class="hex">SFProDisplay-Regular</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">weight.medium</span></td>
+              <td><span class="hex">500</span></td>
+              <td><span class="hex">SFProDisplay-Medium</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">weight.semibold</span></td>
+              <td><span class="hex">600</span></td>
+              <td><span class="hex">SFProDisplay-Semibold</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <hr class="section-divider">
+
+
+      <!-- ============================================================ -->
+      <!-- SPACING                                                       -->
+      <!-- ============================================================ -->
+      <section class="section" id="spacing">
+        <div class="section-header">
+          <h2>Spacing</h2>
+          <span class="badge badge-section">Foundations</span>
+        </div>
+        <p class="section-description">
+          Consistent spacing scale based on a 4px grid. Applied via responsive scaling (widthRatio / heightRatio) in React Native.
+        </p>
+
+        <div class="spacing-preview">
+          <div style="text-align:center">
+            <div class="spacing-box" style="width:4px; height:4px; margin:0 auto;"></div>
+            <div class="spacing-label">xs<br>4px</div>
+          </div>
+          <div style="text-align:center">
+            <div class="spacing-box" style="width:8px; height:8px; margin:0 auto;"></div>
+            <div class="spacing-label">sm<br>8px</div>
+          </div>
+          <div style="text-align:center">
+            <div class="spacing-box" style="width:12px; height:12px; margin:0 auto;"></div>
+            <div class="spacing-label">md<br>12px</div>
+          </div>
+          <div style="text-align:center">
+            <div class="spacing-box" style="width:16px; height:16px; margin:0 auto;"></div>
+            <div class="spacing-label">lg<br>16px</div>
+          </div>
+          <div style="text-align:center">
+            <div class="spacing-box" style="width:20px; height:20px; margin:0 auto;"></div>
+            <div class="spacing-label">xl<br>20px</div>
+          </div>
+          <div style="text-align:center">
+            <div class="spacing-box" style="width:24px; height:24px; margin:0 auto;"></div>
+            <div class="spacing-label">2xl<br>24px</div>
+          </div>
+          <div style="text-align:center">
+            <div class="spacing-box" style="width:32px; height:32px; margin:0 auto;"></div>
+            <div class="spacing-label">3xl<br>32px</div>
+          </div>
+          <div style="text-align:center">
+            <div class="spacing-box" style="width:48px; height:48px; margin:0 auto;"></div>
+            <div class="spacing-label">4xl<br>48px</div>
+          </div>
+        </div>
+
+        <table class="token-table">
+          <thead><tr><th>Token</th><th>Value</th><th>Usage</th></tr></thead>
+          <tbody>
+            <tr><td><span class="token-name">spacing.xs</span></td><td><span class="hex">4px</span></td><td><span class="token-desc">Tight gaps, icon padding</span></td></tr>
+            <tr><td><span class="token-name">spacing.sm</span></td><td><span class="hex">8px</span></td><td><span class="token-desc">Related items, chip padding</span></td></tr>
+            <tr><td><span class="token-name">spacing.md</span></td><td><span class="hex">12px</span></td><td><span class="token-desc">Default internal padding</span></td></tr>
+            <tr><td><span class="token-name">spacing.lg</span></td><td><span class="hex">16px</span></td><td><span class="token-desc">Card padding, list item padding</span></td></tr>
+            <tr><td><span class="token-name">spacing.xl</span></td><td><span class="hex">20px</span></td><td><span class="token-desc">Screen horizontal padding, section gaps</span></td></tr>
+            <tr><td><span class="token-name">spacing.2xl</span></td><td><span class="hex">24px</span></td><td><span class="token-desc">Section separation</span></td></tr>
+            <tr><td><span class="token-name">spacing.3xl</span></td><td><span class="hex">32px</span></td><td><span class="token-desc">Major section gaps</span></td></tr>
+            <tr><td><span class="token-name">spacing.4xl</span></td><td><span class="hex">48px</span></td><td><span class="token-desc">Screen top/bottom padding</span></td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <hr class="section-divider">
+
+
+      <!-- ============================================================ -->
+      <!-- BORDER                                                        -->
+      <!-- ============================================================ -->
+      <section class="section" id="border">
+        <div class="section-header">
+          <h2>Border</h2>
+          <span class="badge badge-section">Foundations</span>
+        </div>
+        <p class="section-description">
+          Border colors and radius tokens. Consolidated from 5+ code values to a clean, small set.
+        </p>
+
+        <h3 class="subsection-title">Border radius</h3>
+        <div class="radius-preview">
+          <div style="text-align:center;">
+            <div style="width:48px; height:48px; background:#CBAC9B; border-radius:4px; opacity:0.5;"></div>
+            <div class="spacing-label" style="margin-top:8px">sm<br>4px</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="width:48px; height:48px; background:#CBAC9B; border-radius:8px; opacity:0.5;"></div>
+            <div class="spacing-label" style="margin-top:8px">md<br>8px</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="width:48px; height:48px; background:#CBAC9B; border-radius:12px; opacity:0.5;"></div>
+            <div class="spacing-label" style="margin-top:8px">lg<br>12px</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="width:80px; height:48px; background:#CBAC9B; border-radius:24px; opacity:0.5;"></div>
+            <div class="spacing-label" style="margin-top:8px">xl<br>24px</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="width:80px; height:48px; background:#CBAC9B; border-radius:9999px; opacity:0.5;"></div>
+            <div class="spacing-label" style="margin-top:8px">full<br>9999px</div>
+          </div>
+        </div>
+
+        <table class="token-table">
+          <thead><tr><th>Token</th><th>Value</th><th>Usage</th></tr></thead>
+          <tbody>
+            <tr><td><span class="token-name">radius.sm</span></td><td><span class="hex">4px</span></td><td><span class="token-desc">Color swatches, inline code, small elements</span></td></tr>
+            <tr><td><span class="token-name">radius.md</span></td><td><span class="hex">8px</span></td><td><span class="token-desc">Buttons, inputs, code blocks, small cards</span></td></tr>
+            <tr><td><span class="token-name">radius.lg</span></td><td><span class="hex">12px</span></td><td><span class="token-desc">Date pickers, medium containers</span></td></tr>
+            <tr><td><span class="token-name">radius.xl</span></td><td><span class="hex">24px</span></td><td><span class="token-desc">Cards, bottom sheets, modals</span></td></tr>
+            <tr><td><span class="token-name">radius.full</span></td><td><span class="hex">9999px</span></td><td><span class="token-desc">Pills, chips, toggles, avatars</span></td></tr>
+          </tbody>
+        </table>
+
+        <div class="info-box">
+          <strong>Gap note:</strong> Code uses 12 different radius values (6-200px). This consolidates to 5.
+        </div>
+      </section>
+
+      <hr class="section-divider">
+
+
+      <!-- ============================================================ -->
+      <!-- ICONOGRAPHY (STUB)                                            -->
+      <!-- ============================================================ -->
+      <section class="section" id="iconography">
+        <div class="section-header">
+          <h2>Iconography</h2>
+          <span class="badge badge-section">Foundations</span>
+        </div>
+        <p class="section-description">
+          Icon style, sizes, and usage guidelines for Ottavia surfaces. Coming soon.
+        </p>
+        <div class="info-box">
+          <strong>Planned:</strong> Icon inventory, size tokens (16/18/20/24/30px), stroke weight, color rules, and Figma source links. Currently icons are sourced from various sets — needs consolidation.
+        </div>
+      </section>
+
+      <hr class="section-divider">
+
+
+      <!-- ============================================================ -->
+      <!-- ELEVATION (STUB)                                              -->
+      <!-- ============================================================ -->
+      <section class="section" id="elevation">
+        <div class="section-header">
+          <h2>Elevation</h2>
+          <span class="badge badge-section">Foundations</span>
+        </div>
+        <p class="section-description">
+          Shadow and elevation tokens for layered surfaces. Cards, modals, and floating elements.
+        </p>
+        <div class="stub-box">
+          Coming soon — shadow tokens are not yet defined in Figma or codified in code. Planned for the next design system iteration.
+        </div>
+      </section>
+
+      <hr class="section-divider">
+
+
+      <!-- ============================================================ -->
+      <!-- CHAT — MARKDOWN RENDERING                                     -->
+      <!-- ============================================================ -->
+      <section class="section" id="chat-markdown">
+        <div class="section-header">
+          <h2>Chat — Markdown rendering</h2>
+          <span class="badge badge-section">Chat</span>
+          <span class="status status-new" style="margin-left:4px">New</span>
+        </div>
+        <p class="section-description">
+          Complete rendering spec for every markdown element in the chat interface. Each element shows a live preview and its exact style properties.
+        </p>
+
+        <div class="margin-legend">
+          <span><span class="margin-legend-dot" style="background:rgba(66,126,247,0.3)"></span> margin-top</span>
+          <span><span class="margin-legend-dot" style="background:rgba(228,118,58,0.3)"></span> margin-bottom</span>
+        </div>
+
+        <!-- Paragraph -->
+        <h3 class="subsection-title">Paragraph</h3>
+        <div class="preview-pair">
+          <div class="phone-frame">
+            <div class="phone-status-bar"><span>9:41</span><span></span></div>
+            <div class="phone-chat chat-md">
+              <p>Your HRV dropped to <strong>30</strong> last night — down from <strong>41</strong> two days ago. This is the lowest reading in three weeks.</p>
+              <p>Sleep stress came back POOR despite 8h40m duration.</p>
+            </div>
+          </div>
+          <div class="margin-viz">
+            <div class="phone-status-bar"><span>Margins</span><span></span></div>
+            <div class="viz-chat">
+              <div class="viz-element" style="font-size:18px; line-height:28px; letter-spacing:0.2px;">Your HRV dropped to <strong>30</strong> last night — down from <strong>41</strong> two days ago.</div>
+              <div class="mb-band" style="height:12px">mb 12</div>
+              <div class="viz-element" style="font-size:18px; line-height:28px; letter-spacing:0.2px;">Sleep stress came back POOR.</div>
+              <div class="mb-band" style="height:12px">mb 12</div>
+            </div>
+          </div>
+        </div>
+        <table class="spec-table">
+          <tr><th>Property</th><th>Value</th></tr>
+          <tr><td>Font</td><td>SF Pro Display Regular, 18px</td></tr>
+          <tr><td>Line Height</td><td>28px</td></tr>
+          <tr><td>Letter Spacing</td><td>0.2px</td></tr>
+          <tr><td>Color</td><td>#433E36</td></tr>
+          <tr><td>Margin Top</td><td>0</td></tr>
+          <tr><td>Margin Bottom</td><td>12px</td></tr>
+        </table>
+
+        <!-- H2 -->
+        <h3 class="subsection-title">Heading H2</h3>
+        <div class="preview-pair">
+          <div class="phone-frame">
+            <div class="phone-status-bar"><span>9:41</span><span></span></div>
+            <div class="phone-chat chat-md">
+              <p>Your recovery is lagging.</p>
+              <h2>Why not train</h2>
+              <p>Sleep stress came back POOR despite good duration.</p>
+            </div>
+          </div>
+          <div class="margin-viz">
+            <div class="phone-status-bar"><span>Margins</span><span></span></div>
+            <div class="viz-chat">
+              <div class="viz-element" style="font-size:18px; line-height:28px;">Your recovery is lagging.</div>
+              <div class="mb-band" style="height:12px">mb 12</div>
+              <div class="mt-band" style="height:14px">mt 14</div>
+              <div class="viz-element" style="font-size:24px; font-weight:600; line-height:32px;">Why not train</div>
+              <div class="mb-band" style="height:6px">mb 6</div>
+              <div class="viz-element" style="font-size:18px; line-height:28px;">Sleep stress came back POOR.</div>
+              <div class="mb-band" style="height:12px">mb 12</div>
+            </div>
+          </div>
+        </div>
+        <table class="spec-table">
+          <tr><th>Property</th><th>Value</th></tr>
+          <tr><td>Font</td><td>SF Pro Display Semibold, 24px</td></tr>
+          <tr><td>Line Height</td><td>32px</td></tr>
+          <tr><td>Letter Spacing</td><td>0</td></tr>
+          <tr><td>Color</td><td>#433E36</td></tr>
+          <tr><td>Margin Top</td><td>14px</td></tr>
+          <tr><td>Margin Bottom</td><td>6px</td></tr>
+        </table>
+
+        <!-- H3 -->
+        <h3 class="subsection-title">Heading H3</h3>
+        <div class="preview-pair">
+          <div class="phone-frame">
+            <div class="phone-status-bar"><span>9:41</span><span></span></div>
+            <div class="phone-chat chat-md">
+              <p>Your metrics show a clear pattern.</p>
+              <h3>Recovery markers</h3>
+              <p>Resting HR is elevated at 54 bpm.</p>
+            </div>
+          </div>
+          <div class="margin-viz">
+            <div class="phone-status-bar"><span>Margins</span><span></span></div>
+            <div class="viz-chat">
+              <div class="viz-element" style="font-size:18px; line-height:28px;">Your metrics show a clear pattern.</div>
+              <div class="mb-band" style="height:12px">mb 12</div>
+              <div class="mt-band" style="height:10px">mt 10</div>
+              <div class="viz-element" style="font-size:22px; font-weight:600; line-height:31px;">Recovery markers</div>
+              <div class="mb-band" style="height:6px">mb 6</div>
+              <div class="viz-element" style="font-size:18px; line-height:28px;">Resting HR is elevated at 54 bpm.</div>
+              <div class="mb-band" style="height:12px">mb 12</div>
+            </div>
+          </div>
+        </div>
+        <table class="spec-table">
+          <tr><th>Property</th><th>Value</th></tr>
+          <tr><td>Font</td><td>SF Pro Display Semibold, 22px</td></tr>
+          <tr><td>Line Height</td><td>31px</td></tr>
+          <tr><td>Margin Top</td><td>10px</td></tr>
+          <tr><td>Margin Bottom</td><td>6px</td></tr>
+        </table>
+
+        <!-- H4-H6 -->
+        <h3 class="subsection-title">Heading H4-H6</h3>
+        <div class="preview-pair">
+          <div class="phone-frame">
+            <div class="phone-status-bar"><span>9:41</span><span></span></div>
+            <div class="phone-chat chat-md">
+              <h4>Small heading</h4>
+              <p>All three (H4, H5, H6) render identically at body size, Semibold weight.</p>
+            </div>
+          </div>
+          <div class="margin-viz">
+            <div class="phone-status-bar"><span>Margins</span><span></span></div>
+            <div class="viz-chat">
+              <div class="mt-band" style="height:8px">mt 8</div>
+              <div class="viz-element" style="font-size:18px; font-weight:600; line-height:28px;">Small heading</div>
+              <div class="mb-band" style="height:4px">mb 4</div>
+              <div class="viz-element" style="font-size:18px; line-height:28px;">All three render identically.</div>
+              <div class="mb-band" style="height:12px">mb 12</div>
+            </div>
+          </div>
+        </div>
+        <table class="spec-table">
+          <tr><th>Property</th><th>Value</th></tr>
+          <tr><td>Font</td><td>SF Pro Display Semibold, 18px</td></tr>
+          <tr><td>Line Height</td><td>28px</td></tr>
+          <tr><td>Margin Top</td><td>8px</td></tr>
+          <tr><td>Margin Bottom</td><td>4px</td></tr>
+        </table>
+
+        <!-- Strong -->
+        <h3 class="subsection-title">Strong (bold)</h3>
+        <div class="preview-pair">
+          <div class="phone-frame">
+            <div class="phone-status-bar"><span>9:41</span><span></span></div>
+            <div class="phone-chat chat-md">
+              <p>Your HRV was <strong>45</strong> last night — up from <strong>38</strong> two days ago.</p>
+            </div>
+          </div>
+          <div class="margin-viz">
+            <div class="phone-status-bar"><span>Margins</span><span></span></div>
+            <div class="viz-chat">
+              <div class="viz-element" style="font-size:18px; line-height:28px;">Your HRV was <strong>45</strong> — up from <strong>38</strong>.</div>
+              <div class="mb-band" style="height:12px">mb 12</div>
+              <div style="font-size:11px; color:#6B665D; padding:8px 0;">Inline — no extra margins. Inherits parent &lt;p&gt; spacing.</div>
+            </div>
+          </div>
+        </div>
+        <table class="spec-table">
+          <tr><th>Property</th><th>Value</th></tr>
+          <tr><td>Font</td><td>SFProDisplay-Semibold (weight 600)</td></tr>
+          <tr><td>Color</td><td>#433E36 (inherits)</td></tr>
+        </table>
+
+        <!-- Bullet list -->
+        <h3 class="subsection-title">Bullet list</h3>
+        <div class="preview-pair">
+          <div class="phone-frame">
+            <div class="phone-status-bar"><span>9:41</span><span></span></div>
+            <div class="phone-chat chat-md">
+              <h2>What to do</h2>
+              <ul>
+                <li>No running today</li>
+                <li>Walk 20-30 min if you want movement</li>
+                <li>Aim for <strong>2,200+ kcal</strong> and <strong>130g+ protein</strong></li>
+              </ul>
+            </div>
+          </div>
+          <div class="margin-viz">
+            <div class="phone-status-bar"><span>Margins</span><span></span></div>
+            <div class="viz-chat">
+              <div class="viz-element" style="font-size:24px; font-weight:600; line-height:32px;">What to do</div>
+              <div class="mb-band" style="height:6px">mb 6</div>
+              <div class="mt-band" style="height:2px">mt 2</div>
+              <div class="viz-element" style="font-size:14px; line-height:22px; padding:2px 4px;">
+                <span style="color:#C2BCB2;">&#9679;</span> No running today
+              </div>
+              <div class="mb-band" style="height:6px">mb 6</div>
+              <div class="viz-element" style="font-size:14px; line-height:22px; padding:2px 4px;">
+                <span style="color:#C2BCB2;">&#9679;</span> Walk 20-30 min
+              </div>
+              <div class="mb-band" style="height:6px">mb 6</div>
+              <div class="viz-element" style="font-size:14px; line-height:22px; padding:2px 4px;">
+                <span style="color:#C2BCB2;">&#9679;</span> Aim for 2,200+ kcal
+              </div>
+              <div class="mb-band" style="height:12px">mb 12 (list)</div>
+            </div>
+          </div>
+        </div>
+        <table class="spec-table">
+          <tr><th>Property</th><th>Value</th></tr>
+          <tr><td>List Margin Top</td><td>2px</td></tr>
+          <tr><td>List Margin Bottom</td><td>12px</td></tr>
+          <tr><td>Bullet Dot</td><td>7px circle, #C2BCB2</td></tr>
+          <tr><td>Item Margin Bottom</td><td>6px</td></tr>
+          <tr><td>Item Font</td><td>18px / 28px / 0.2 letter-spacing</td></tr>
+        </table>
+
+        <!-- Ordered list -->
+        <h3 class="subsection-title">Ordered list</h3>
+        <div class="preview-pair">
+          <div class="phone-frame">
+            <div class="phone-status-bar"><span>9:41</span><span></span></div>
+            <div class="phone-chat chat-md">
+              <ol>
+                <li>Rest days between hard training blocks</li>
+                <li>Consistent bedtime: <strong>22:00-23:00</strong></li>
+                <li>Track HRV trends, not single nights</li>
+              </ol>
+            </div>
+          </div>
+          <div class="margin-viz">
+            <div class="phone-status-bar"><span>Margins</span><span></span></div>
+            <div class="viz-chat">
+              <div class="mt-band" style="height:2px">mt 2</div>
+              <div class="viz-element" style="font-size:14px; line-height:22px; padding:2px 4px;">
+                <span style="color:#A8A297;">1.</span> Rest days between blocks
+              </div>
+              <div class="mb-band" style="height:6px">mb 6</div>
+              <div class="viz-element" style="font-size:14px; line-height:22px; padding:2px 4px;">
+                <span style="color:#A8A297;">2.</span> Consistent bedtime
+              </div>
+              <div class="mb-band" style="height:6px">mb 6</div>
+              <div class="viz-element" style="font-size:14px; line-height:22px; padding:2px 4px;">
+                <span style="color:#A8A297;">3.</span> Track HRV trends
+              </div>
+              <div class="mb-band" style="height:12px">mb 12 (list)</div>
+            </div>
+          </div>
+        </div>
+        <table class="spec-table">
+          <tr><th>Property</th><th>Value</th></tr>
+          <tr><td>List Margin Top</td><td>2px</td></tr>
+          <tr><td>List Margin Bottom</td><td>12px</td></tr>
+          <tr><td>Number Color</td><td>#A8A297, 18px</td></tr>
+          <tr><td>Item Margin Bottom</td><td>6px</td></tr>
+        </table>
+
+        <!-- HR -->
+        <h3 class="subsection-title">Horizontal rule</h3>
+        <div class="preview-pair">
+          <div class="phone-frame">
+            <div class="phone-status-bar"><span>9:41</span><span></span></div>
+            <div class="phone-chat chat-md">
+              <p>Your recovery metrics are improving.</p>
+              <hr>
+              <p>Next section after a divider.</p>
+            </div>
+          </div>
+          <div class="margin-viz">
+            <div class="phone-status-bar"><span>Margins</span><span></span></div>
+            <div class="viz-chat">
+              <div class="viz-element" style="font-size:18px; line-height:28px;">Your recovery metrics are improving.</div>
+              <div class="mb-band" style="height:12px">mb 12</div>
+              <div class="mt-band" style="height:14px">mt 14</div>
+              <div style="height:1px; background:#DBD6CD; margin:0 20px;"></div>
+              <div class="mb-band" style="height:16px">mb 16</div>
+              <div class="viz-element" style="font-size:18px; line-height:28px;">Next section after a divider.</div>
+              <div class="mb-band" style="height:12px">mb 12</div>
+            </div>
+          </div>
+        </div>
+        <table class="spec-table">
+          <tr><th>Property</th><th>Value</th></tr>
+          <tr><td>Height</td><td>1px</td></tr>
+          <tr><td>Color</td><td>#DBD6CD</td></tr>
+          <tr><td>Margin Top</td><td>14px</td></tr>
+          <tr><td>Margin Bottom</td><td>16px</td></tr>
+          <tr><td>Margin Horizontal</td><td>20px</td></tr>
+        </table>
+
+        <!-- Mark / Highlight -->
+        <h3 class="subsection-title">Mark (highlight)</h3>
+        <div class="preview-pair">
+          <div class="phone-frame">
+            <div class="phone-status-bar"><span>9:41</span><span></span></div>
+            <div class="phone-chat chat-md">
+              <p>Your recovery is lagging after three consecutive training days.</p>
+              <p><mark>take a rest day and eat 2,200+ kcal today</mark></p>
+            </div>
+          </div>
+          <div class="margin-viz">
+            <div class="phone-status-bar"><span>Margins</span><span></span></div>
+            <div class="viz-chat">
+              <div class="viz-element" style="font-size:18px; line-height:28px;">Your recovery is lagging.</div>
+              <div class="mb-band" style="height:12px">mb 12</div>
+              <div class="viz-element" style="font-size:18px; line-height:28px;"><span style="background:#FCE7B5; padding:2px 6px; border-radius:4px;">take a rest day</span></div>
+              <div class="mb-band" style="height:12px">mb 12</div>
+              <div style="font-size:11px; color:#6B665D; padding:8px 0;">Inline — inherits &lt;p&gt; spacing. ph:6, borderRadius:4.</div>
+            </div>
+          </div>
+        </div>
+        <table class="spec-table">
+          <tr><th>Property</th><th>Value</th></tr>
+          <tr><td>Background</td><td>#FCE7B5</td></tr>
+          <tr><td>Padding Horizontal</td><td>6px</td></tr>
+          <tr><td>Border Radius</td><td>4px</td></tr>
+          <tr><td>Color</td><td>#433E36 (inherits)</td></tr>
+        </table>
+
+        <!-- Table -->
+        <h3 class="subsection-title">Table</h3>
+        <div class="preview-pair">
+          <div class="phone-frame">
+            <div class="phone-status-bar"><span>9:41</span><span></span></div>
+            <div class="phone-chat chat-md">
+              <table>
+                <thead><tr><th>Calories</th><th>Protein</th><th>Carbs</th><th>Fat</th></tr></thead>
+                <tbody><tr><td>373</td><td>22g</td><td>38g</td><td>18g</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="margin-viz">
+            <div class="phone-status-bar"><span>Margins</span><span></span></div>
+            <div class="viz-chat">
+              <div class="mt-band" style="height:16px">mt 16</div>
+              <div class="viz-element" style="font-size:14px; line-height:22px; padding:6px 4px; border:1px solid #C2BCB2; border-radius:4px;">Table content</div>
+              <div class="mb-band" style="height:16px">mb 16</div>
+            </div>
+          </div>
+        </div>
+        <table class="spec-table">
+          <tr><th>Property</th><th>Value</th></tr>
+          <tr><td>Margin</td><td>16px vertical</td></tr>
+          <tr><td>Cell Font</td><td>18px</td></tr>
+          <tr><td>Cell Padding</td><td>8px</td></tr>
+          <tr><td>Border</td><td>1px #C2BCB2</td></tr>
+          <tr><td>Header Background</td><td>#DBD6CD</td></tr>
+          <tr><td>Font Variant</td><td>tabular-nums</td></tr>
+        </table>
+
+        <!-- Blockquote -->
+        <h3 class="subsection-title">Blockquote</h3>
+        <div class="preview-pair">
+          <div class="phone-frame">
+            <div class="phone-status-bar"><span>9:41</span><span></span></div>
+            <div class="phone-chat chat-md">
+              <p>Your sleep pattern shows a clear trend:</p>
+              <blockquote>
+                <p>Best nights cluster around 22:00-23:00 bedtimes. Variability hurts more than late nights.</p>
+              </blockquote>
+            </div>
+          </div>
+          <div class="margin-viz">
+            <div class="phone-status-bar"><span>Margins</span><span></span></div>
+            <div class="viz-chat">
+              <div class="viz-element" style="font-size:18px; line-height:28px;">Your sleep pattern shows a clear trend:</div>
+              <div class="mb-band" style="height:12px">mb 12</div>
+              <div class="mt-band" style="height:12px">mt 12</div>
+              <div class="viz-element" style="font-size:14px; line-height:22px; border-left:3px solid #C2BCB2; padding-left:14px;">Best nights cluster around 22:00-23:00.</div>
+              <div class="mb-band" style="height:12px">mb 12</div>
+            </div>
+          </div>
+        </div>
+        <table class="spec-table">
+          <tr><th>Property</th><th>Value</th></tr>
+          <tr><td>Border Left</td><td>3px solid #C2BCB2</td></tr>
+          <tr><td>Padding Left</td><td>14px</td></tr>
+          <tr><td>Margin</td><td>12px vertical</td></tr>
+        </table>
+      </section>
+
+      <hr class="section-divider">
+
+
+      <!-- ============================================================ -->
+      <!-- CHAT — SPACING RULES                                          -->
+      <!-- ============================================================ -->
+      <section class="section" id="chat-spacing">
+        <div class="section-header">
+          <h2>Chat — Spacing rules</h2>
+          <span class="badge badge-section">Chat</span>
+          <span class="status status-new" style="margin-left:4px">New</span>
+        </div>
+        <p class="section-description">
+          How vertical gaps between markdown elements are calculated. Each element has a marginBottom and marginTop — the gap is the sum of the bottom element's marginBottom and the top element's marginTop.
+        </p>
+
+        <table class="token-table">
+          <thead>
+            <tr><th>Pair</th><th>Math</th><th>Gap</th><th>Role</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="token-name">body → body</span></td>
+              <td><span class="hex">12 + 0</span></td>
+              <td><span class="hex">12px</span></td>
+              <td><span class="token-desc">Paragraph rhythm</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">body → H2</span></td>
+              <td><span class="hex">12 + 14</span></td>
+              <td><span class="hex">26px</span></td>
+              <td><span class="token-desc">Section break</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">body → H3</span></td>
+              <td><span class="hex">12 + 10</span></td>
+              <td><span class="hex">22px</span></td>
+              <td><span class="token-desc">Subsection break</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">H2 → body</span></td>
+              <td><span class="hex">6 + 0</span></td>
+              <td><span class="hex">6px</span></td>
+              <td><span class="token-desc">Tight anchor</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">H3 → body</span></td>
+              <td><span class="hex">6 + 0</span></td>
+              <td><span class="hex">6px</span></td>
+              <td><span class="token-desc">Tight anchor</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">body → bullets</span></td>
+              <td><span class="hex">12 + 2</span></td>
+              <td><span class="hex">14px</span></td>
+              <td><span class="token-desc">List intro</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">H2 → bullets</span></td>
+              <td><span class="hex">6 + 2</span></td>
+              <td><span class="hex">8px</span></td>
+              <td><span class="token-desc">Heading to list</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">bullets → H2</span></td>
+              <td><span class="hex">12 + 14</span></td>
+              <td><span class="hex">26px</span></td>
+              <td><span class="token-desc">Section break</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">bullets → body</span></td>
+              <td><span class="hex">12 + 0</span></td>
+              <td><span class="hex">12px</span></td>
+              <td><span class="token-desc">List to text</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">body → HR</span></td>
+              <td><span class="hex">12 + 14</span></td>
+              <td><span class="hex">26px</span></td>
+              <td><span class="token-desc">Above line</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">HR → H2</span></td>
+              <td><span class="hex">16 + 14</span></td>
+              <td><span class="hex">30px</span></td>
+              <td><span class="token-desc">Line to section</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">HR → body</span></td>
+              <td><span class="hex">16 + 0</span></td>
+              <td><span class="hex">16px</span></td>
+              <td><span class="token-desc">Line to text</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">bullets → HR</span></td>
+              <td><span class="hex">12 + 14</span></td>
+              <td><span class="hex">26px</span></td>
+              <td><span class="token-desc">List to line</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="info-box">
+          <strong>How to read this:</strong> "body → H2 = 12 + 14 = 26px" means a paragraph's marginBottom (12) plus H2's marginTop (14) creates a 26px gap. This additive model means spacing is predictable regardless of which elements appear in sequence.
+        </div>
+      </section>
+
+      <hr class="section-divider">
+
+
+      <!-- ============================================================ -->
+      <!-- CHAT — USER BUBBLE                                            -->
+      <!-- ============================================================ -->
+      <section class="section" id="chat-user-bubble">
+        <div class="section-header">
+          <h2>Chat — User bubble</h2>
+          <span class="badge badge-section">Chat</span>
+          <span class="status status-new" style="margin-left:4px">New</span>
+        </div>
+        <p class="section-description">
+          Proposed spec for user message bubbles. Fixes the cramped padding (was 2px) and adjusts font size to 18px to match the new body text style.
+        </p>
+
+        <!-- Preview -->
+        <div class="phone-frame">
+          <div class="phone-status-bar"><span>8:15</span><span></span></div>
+          <div class="phone-chat" style="display:flex; flex-direction:column; gap:16px;">
+            <div class="chat-md" style="margin-left:12px; width:calc(100% - 52px);">
+              Good morning. You slept <strong>7.5 hours</strong> with an HRV of <strong>42 ms</strong>.
+            </div>
+            <div class="user-bubble-preview">How did I sleep last night?</div>
+            <div class="chat-md" style="margin-left:12px; width:calc(100% - 52px);">
+              Recovery looks solid. Resting heart rate was <strong>52 bpm</strong>.
+            </div>
+            <div class="user-bubble-preview">What about my heart rate?</div>
+            <div class="user-bubble-preview">Ok thanks</div>
+          </div>
+        </div>
+
+        <h3 class="subsection-title">Spec</h3>
+        <table class="token-table">
+          <thead><tr><th>Property</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td><span class="token-name">Background</span></td><td><span class="hex">#FFFFFF</span></td></tr>
+            <tr><td><span class="token-name">Max Width</span></td><td><span class="hex">302px</span></td></tr>
+            <tr><td><span class="token-name">Border Radius</span></td><td><span class="hex">22px (fixed)</span></td></tr>
+            <tr><td><span class="token-name">Padding</span></td><td><span class="hex">10px 16px</span></td></tr>
+            <tr><td><span class="token-name">Font Size</span></td><td><span class="hex">18px</span></td></tr>
+            <tr><td><span class="token-name">Line Height</span></td><td><span class="hex">26px</span></td></tr>
+            <tr><td><span class="token-name">Letter Spacing</span></td><td><span class="hex">0.2px</span></td></tr>
+            <tr><td><span class="token-name">Margin Right</span></td><td><span class="hex">12px</span></td></tr>
+            <tr><td><span class="token-name">Bubble Gap</span></td><td><span class="hex">16px</span></td></tr>
+          </tbody>
+        </table>
+
+        <div class="do-dont">
+          <div class="do-card">
+            <strong>What changed (vs current):</strong><br>
+            Padding: 2px → 10px vertical<br>
+            Font size: 20px → 18px<br>
+            Line height: 30px → 26px<br>
+            Letter spacing: 0.4 → 0.2<br>
+            Border radius: ~23px → 22px fixed<br>
+            Bubble gap: 20px → 16px
+          </div>
+          <div class="dont-card">
+            <strong>Why:</strong><br>
+            2px padding made text touch the bubble edge. 20px font in 302px max-width caused aggressive line wrapping on longer messages. The new spec feels more breathable and proportional.
+          </div>
+        </div>
+      </section>
+
+      <hr class="section-divider">
+
+
+      <!-- ============================================================ -->
+      <!-- CHAT — COMPONENTS                                             -->
+      <!-- ============================================================ -->
+      <!-- ============================================================ -->
+      <!-- COMPONENTS — FULL INVENTORY                                  -->
+      <!-- Source: Figma node 21:8506 (Chat components page)            -->
+      <!-- ============================================================ -->
+
+      <!-- ===== NAVIGATION & CHROME ===== -->
+      <section class="comp-category" id="comp-nav">
+        <div class="section-header">
+          <h2>Components</h2>
+          <span class="badge badge-section">UI Library</span>
+          <span class="status status-new" style="margin-left:4px">New</span>
+        </div>
+        <p class="section-description">
+          Full component inventory from Figma — used across chat, profile, settings, and all app surfaces.
+          Sourced from <a href="https://www.figma.com/design/Zci1tnQn86cVDQC09Lj66r/Ottavia-mobile-app?node-id=21-8506" style="color:#427EF7" target="_blank">Figma &rarr; Chat components</a>.
+        </p>
+
+        <h3 class="comp-category-title">Navigation & Chrome</h3>
+        <p class="comp-category-desc">Top-level navigation, status bar, and persistent screen chrome.</p>
+
+        <div class="comp-grid">
+          <!-- App Header -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-header">
+                <div class="mini-header-icon" style="border:0;width:22px;height:22px;background:#E5E0D8;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:9px;color:#433E36;">&#9783;</div>
+                <div style="font-size:13px;font-weight:600;color:#433E36;">9:41</div>
+                <div class="mini-header-icon" style="background:#E5E0D8;"></div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">App Header</div>
+              <div class="comp-desc">Status bar + calendar icon + profile icon. Blur-for-scroll gradient.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Production</span>
+                <span class="comp-variant-tag">Figma mock</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Composer -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-composer">
+                <div class="mini-composer-icon" style="width:22px;height:22px;border-radius:2px;background:none;display:flex;align-items:center;justify-content:center;"><span style="font-size:16px;color:#433F35;font-weight:700;">+</span></div>
+                <div class="mini-composer-input"></div>
+                <div class="mini-composer-icon" style="background:#E5E0D8;border-radius:50%;"></div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Composer</div>
+              <div class="comp-desc">Text input (50px, pill border), plus button, camera icon. Bottom safe area.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Collapsed</span>
+                <span class="comp-variant-tag">Open</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Back to Start -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-back-btn">&darr;</div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Back to Start</div>
+              <div class="comp-desc">Scroll-to-bottom FAB. 34px circle, white, shadow: 0 2px 6px #DAD5C7.</div>
+            </div>
+          </div>
+
+          <!-- Back Button -->
+          <div class="comp-card">
+            <div class="comp-preview" style="gap:20px;">
+              <div class="mini-circle-btn">&lsaquo;</div>
+              <div class="mini-circle-btn" style="background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,0.08);">&lsaquo;</div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Back Button</div>
+              <div class="comp-desc">30px circle with chevron. Used on all sub-screens (Meals, Movement, Recovery, Settings). Cream bg on cream screens, white bg on white screens.</div>
+            </div>
+          </div>
+
+          <!-- Close Button -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-x-btn">&times;</div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Close Button (X)</div>
+              <div class="comp-desc">Dismiss button for modals, Profile screen, bottom sheets. 30px hit area, #433E36 icon.</div>
+            </div>
+          </div>
+
+          <!-- Screen Header -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-screen-header">
+                <div class="mini-circle-btn" style="margin-right:10px;">&lsaquo;</div>
+                <div class="mini-screen-title">Meals</div>
+                <div class="mini-date-picker" style="font-size:11px;padding:4px 8px;"><span class="mini-date-arrow">&#9664;</span> Yesterday <span class="mini-date-arrow">&#9654;</span></div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Screen Header</div>
+              <div class="comp-desc">Back button + title (bold) + optional right element (date picker or X). Used on all detail screens.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== MESSAGES ===== -->
+      <section class="comp-category" id="comp-messages">
+        <h3 class="comp-category-title">Messages</h3>
+        <p class="comp-category-desc">All message types that appear in the chat timeline.</p>
+
+        <div class="comp-grid">
+          <!-- User Bubble -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div style="width:260px;">
+                <div class="mini-bubble mini-bubble-user">How did I sleep?</div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">User Bubble</div>
+              <div class="comp-desc">White bg, right-aligned. 20px text, #433F35, border-radius 24px, padding 10px 14px.</div>
+            </div>
+          </div>
+
+          <!-- Timestamp -->
+          <div class="comp-card">
+            <div class="comp-preview" style="gap:16px;flex-direction:column;">
+              <div class="mini-timestamp">Yesterday</div>
+              <div class="mini-timestamp" style="background:#FFF;border:none;box-shadow:0 1px 4px rgba(0,0,0,0.08);">Yesterday</div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Timestamp</div>
+              <div class="comp-desc">Day separator pill. 14px Semibold #5C564D, border-radius 58px.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Normal</span>
+                <span class="comp-variant-tag">On Scroll</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- New Message Banner -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;gap:8px;">
+              <div class="mini-new-msg">New message</div>
+              <div class="mini-new-msg">2 new messages</div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">New Message Banner</div>
+              <div class="comp-desc">Full-width bar, bg #E1DCD3, 14px Semibold #2D2A29.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">1 message</span>
+                <span class="comp-variant-tag">2 messages</span>
+                <span class="comp-variant-tag">3 messages</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Loading Answer -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-shimmer">Let me look at your data...</div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Loading Answer</div>
+              <div class="comp-desc">Shimmer gradient text. SF Pro Display Medium Italic 20px, fades from black to cream.</div>
+            </div>
+          </div>
+
+          <!-- Photo Message -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-photo">&#128247;</div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Photo Message</div>
+              <div class="comp-desc">User-sent image. Border-radius 27px, max-width ~189px. Right-aligned in chat.</div>
+            </div>
+          </div>
+
+          <!-- Composer with Photo -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-composer-open">
+                <div class="mini-composer-photo-row">
+                  <div class="mini-composer-thumb">
+                    <div class="mini-composer-thumb-x">&times;</div>
+                  </div>
+                </div>
+                <div class="mini-composer-bottom">
+                  <span class="mini-composer-text">Add this</span>
+                  <div class="mini-composer-send">&uarr;</div>
+                </div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Composer with Photo</div>
+              <div class="comp-desc">Extended composer: attached photo with X remove, text input, send button (filled circle arrow). White bg, radius 18px.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SUGGESTIONS ===== -->
+      <section class="comp-category" id="comp-suggestions">
+        <h3 class="comp-category-title">Suggestions</h3>
+        <p class="comp-category-desc">Tappable prompts shown below agent responses or during onboarding.</p>
+
+        <div class="comp-grid">
+          <!-- Suggestion Chip -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-chip">Show me my <em>&nbsp;patterns</em></div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Suggestion Chip</div>
+              <div class="comp-desc">White bg, 1px #C2BCB2 border, radius 24px. Barlow Medium 18px. Italic highlight for key word.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Single</span>
+                <span class="comp-variant-tag">Grid 2-col</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pill Stack -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;gap:6px;">
+              <div class="mini-pill">&#128302; Show me more patterns in my data</div>
+              <div class="mini-pill" style="width:220px;">&#128211; Teach me what I can do here</div>
+              <div class="mini-pill" style="width:240px;">&#127919; I have a goal &mdash; let's build a plan</div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Pill Stack</div>
+              <div class="comp-desc">Full-width emoji pills for onboarding/welcome. SF Pro Display Regular 22px, #453F33. Stacked with 8px gap.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== LOGGING CHIPS ===== -->
+      <section class="comp-category" id="comp-logging">
+        <h3 class="comp-category-title">Logging Chips</h3>
+        <p class="comp-category-desc">Colored cards for quick-logging actions in chat. Each has title + timestamp.</p>
+
+        <div class="comp-grid">
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;gap:8px;">
+              <div class="mini-log-chip" style="background:#75A6FF;border:1px solid #75A6FF;">
+                <span class="mini-log-chip-title">&#128167; Hydration chip</span>
+                <span class="mini-log-chip-time">7:00</span>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Hydration Chip</div>
+              <div class="comp-desc">White bg + blue border variant. Blue #75A6FF text. 18px Semibold title, 16px Regular time.</div>
+            </div>
+          </div>
+
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-log-chip" style="background:#ECBD69;">
+                <span class="mini-log-chip-title">&#128095; Activity chip</span>
+                <span class="mini-log-chip-time">7:00</span>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Activity Chip</div>
+              <div class="comp-desc">Yellow #ECBD69 background, white text, radius 10px.</div>
+            </div>
+          </div>
+
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-log-chip" style="background:#4AC39F;">
+                <span class="mini-log-chip-title">&#129367; Meal / Snack chip</span>
+                <span class="mini-log-chip-time">7:00</span>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Meal / Snack Chip</div>
+              <div class="comp-desc">Green #4AC39F bg, shadow 0 1px 5px rgba(0,0,0,0.19), radius 10px.</div>
+            </div>
+          </div>
+
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-log-chip" style="background:#C470D0;">
+                <span class="mini-log-chip-title">&#128716;&#65039; Rest chip</span>
+                <span class="mini-log-chip-time">7:00</span>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Rest Chip</div>
+              <div class="comp-desc">Purple #C470D0 background, white text, radius 10px.</div>
+            </div>
+          </div>
+
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-log-chip" style="background:#D0A370;">
+                <span class="mini-log-chip-title">&#9749; Coffee chip</span>
+                <span class="mini-log-chip-time">7:00</span>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Coffee Chip</div>
+              <div class="comp-desc">Brown #D0A370 bg, border 1px #C0935E, white text.</div>
+            </div>
+          </div>
+
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-log-chip" style="background:#67C8D7;border:1px solid #53B4C3;">
+                <span class="mini-log-chip-title">&#128138; Supplement chip</span>
+                <span class="mini-log-chip-time">7:00</span>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Supplement Chip</div>
+              <div class="comp-desc">Teal #67C8D7 bg, border 1px #53B4C3, white text.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== MEMORY & CONTEXT ===== -->
+      <section class="comp-category" id="comp-memory">
+        <h3 class="comp-category-title">Memory & Context</h3>
+        <p class="comp-category-desc">Inline indicators showing when Ottavia saves information to long-term memory categories.</p>
+
+        <div class="comp-grid">
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;gap:6px;align-items:flex-start;padding-left:32px;">
+              <div class="mini-memory">&#9881;&#65039; Saved in <a href="#">Preferences</a></div>
+              <div class="mini-memory">&#128203; Saved in <a href="#">Conditions</a></div>
+              <div class="mini-memory">&#127860; Saved in <a href="#">Meals</a></div>
+              <div class="mini-memory">&#128197; Added to <a href="#">Calendar</a></div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Memory Event</div>
+              <div class="comp-desc">18px SF Pro Display Semibold, #958E80. Category name is underlined link. Icon prefix per category.</div>
+            </div>
+          </div>
+
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;gap:6px;align-items:flex-start;padding-left:32px;">
+              <div class="mini-memory">&#9881;&#65039; Added to <a href="#">Preferences</a></div>
+              <div class="mini-memory">&#128203; Added to <a href="#">Conditions</a></div>
+              <div class="mini-memory">&#127860; Added to <a href="#">Meals</a></div>
+              <div class="mini-memory">&#128197; Added to <a href="#">Calendar</a></div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Saved-in Labels</div>
+              <div class="comp-desc">Compact variant with category icons. Same styling, used in bot messages to confirm data was stored.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== DATA DISPLAY ===== -->
+      <section class="comp-category" id="comp-data">
+        <h3 class="comp-category-title">Data Display</h3>
+        <p class="comp-category-desc">Components for showing user health and nutrition data.</p>
+
+        <div class="comp-grid">
+          <!-- Macros Card -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-macros">
+                <div class="mini-macros-title">Macros today</div>
+                <div class="mini-macros-row"><span class="mini-macros-label">&#129385; Protein</span><span class="mini-macros-val">79.8g</span></div>
+                <div class="mini-macros-row"><span class="mini-macros-label">&#127838; Carbs</span><span class="mini-macros-val">79.8g</span></div>
+                <div class="mini-macros-row"><span class="mini-macros-label">&#129480; Fats</span><span class="mini-macros-val">79.8g</span></div>
+                <div class="mini-macros-row"><span class="mini-macros-label">&#129352; Fiber</span><span class="mini-macros-val">79.8g</span></div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Macros Card</div>
+              <div class="comp-desc">White card, radius 28px. Title 18px Semibold #ACA391. Rows: 16px Semibold, values in #56B683. Progress bar optional.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Default</span>
+                <span class="comp-variant-tag">Simple list</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Macro Tag Row -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;gap:4px;">
+              <div style="display:flex;justify-content:space-between;width:220px;padding:6px 0;border-bottom:1px solid #F0EBE4;font-size:12px;font-weight:600;">
+                <span style="color:#292929;">&#129385; Name</span>
+                <span style="color:#56B683;">79.8g</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;width:220px;padding:6px 0;border-bottom:1px solid #F0EBE4;font-size:12px;font-weight:600;">
+                <span style="color:#292929;">&#129385; Name</span>
+                <span><span style="color:#56B683;">56</span><span style="color:#DFD6C4">/65g</span></span>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Macro Tag</div>
+              <div class="comp-desc">Individual nutrient row. 16px Semibold #292929, value #56B683. Optional goal denominator in #DFD6C4.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">No goal</span>
+                <span class="comp-variant-tag">With goal</span>
+                <span class="comp-variant-tag">No bar</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chip Progress -->
+          <div class="comp-card">
+            <div class="comp-preview" style="gap:8px;">
+              <div class="mini-progress-chip" style="background:#E1F9EB;">
+                <span class="mini-progress-emoji">&#127940;</span>
+                <div class="mini-progress-data">
+                  <div class="mini-progress-val" style="color:#3E7C5B;">0</div>
+                  <div class="mini-progress-label" style="color:#3E7C5B;">Label</div>
+                </div>
+              </div>
+              <div class="mini-progress-chip" style="background:#E4EEFF;">
+                <span class="mini-progress-emoji">&#127940;</span>
+                <div class="mini-progress-data">
+                  <div class="mini-progress-val" style="color:#427EF7;">0</div>
+                  <div class="mini-progress-label" style="color:#427EF7;">Label</div>
+                </div>
+              </div>
+              <div class="mini-progress-chip" style="background:#F9EDFE;">
+                <span class="mini-progress-emoji">&#127940;</span>
+                <div class="mini-progress-data">
+                  <div class="mini-progress-val" style="color:#A280FF;">0</div>
+                  <div class="mini-progress-label" style="color:#A280FF;">Recovery</div>
+                </div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Chip Progress</div>
+              <div class="comp-desc">162px wide, 60px tall, radius 14px. Emoji + value 22px Bold + label 14px Semibold. Color per domain.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag" style="background:#E1F9EB;color:#3E7C5B;">Meals</span>
+                <span class="comp-variant-tag" style="background:#E4EEFF;color:#427EF7;">Movement</span>
+                <span class="comp-variant-tag" style="background:#F9EDFE;color:#A280FF;">Recovery</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress Bar + Task List -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;gap:10px;align-items:flex-start;padding-left:32px;">
+              <div class="mini-check">
+                <div class="mini-check-circle checked">&#10003;</div>
+                Garmin sync
+              </div>
+              <div>
+                <div class="mini-check">
+                  <div class="mini-check-circle" style="background:#E9E1D5;border-color:#E9E1D5;"></div>
+                  Building your profile
+                </div>
+                <div class="mini-progress-bar" style="margin-left:28px;margin-top:4px;">
+                  <div class="mini-progress-bar-track"><div class="mini-progress-bar-fill" style="width:72%;"></div></div>
+                  <span class="mini-progress-bar-pct">71%</span>
+                </div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Progress Bar + Task List</div>
+              <div class="comp-desc">Checklist with check marks (24px circle, checked = #4C4C49). Progress bar: track #E9E1D5, fill #4C4C49, 4px tall, radius 20px. Percentage 14px Medium #A6A297.</div>
+            </div>
+          </div>
+
+          <!-- Data Visualization Card -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-data-viz">
+                <div class="mini-data-viz-top">
+                  <span class="mini-data-viz-title">Cholesterol today</span>
+                  <span class="mini-data-viz-date">13 Oct</span>
+                </div>
+                <div class="mini-data-viz-value">126 mg</div>
+                <div class="mini-data-viz-bar" style="background:#E1F9EB;">
+                  <div class="mini-data-viz-fill" style="background:#56B683;width:72%;">126 g</div>
+                  <div class="mini-data-viz-remaining">150 limit</div>
+                </div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Data Visualization Card</div>
+              <div class="comp-desc">Inline data card in chat. Title + date, big value (green), progress bar with fill + limit. White bg, radius 18px, border #F0EBE4.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Cholesterol</span>
+                <span class="comp-variant-tag">Calories</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stat Grid -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-stat-grid">
+                <div class="mini-stat-cell" style="background:#E1F9EB;">
+                  <span class="mini-stat-emoji">&#129367;</span>
+                  <div class="mini-stat-data">
+                    <div class="mini-stat-val" style="color:#3E7C5B;">1,250</div>
+                    <div class="mini-stat-label" style="color:#3E7C5B;">Kcal today</div>
+                  </div>
+                </div>
+                <div class="mini-stat-cell" style="background:#E1F9EB;">
+                  <span class="mini-stat-emoji">&#129385;</span>
+                  <div class="mini-stat-data">
+                    <div class="mini-stat-val" style="color:#3E7C5B;">15g</div>
+                    <div class="mini-stat-label" style="color:#3E7C5B;">Protein</div>
+                  </div>
+                </div>
+                <div class="mini-stat-cell" style="background:#E1F9EB;">
+                  <span class="mini-stat-emoji">&#129480;</span>
+                  <div class="mini-stat-data">
+                    <div class="mini-stat-val" style="color:#3E7C5B;">7.5</div>
+                    <div class="mini-stat-label" style="color:#3E7C5B;">Fat</div>
+                  </div>
+                </div>
+                <div class="mini-stat-cell" style="background:#E1F9EB;">
+                  <span class="mini-stat-emoji">&#127838;</span>
+                  <div class="mini-stat-data">
+                    <div class="mini-stat-val" style="color:#3E7C5B;">200</div>
+                    <div class="mini-stat-label" style="color:#3E7C5B;">Carbs</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Stat Grid (2&times;2)</div>
+              <div class="comp-desc">Summary card with 4 colored cells. Emoji + big value + label. Each domain has its own palette: green (Meals), blue (Movement), purple (Recovery).</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag" style="background:#E1F9EB;color:#3E7C5B;">Meals</span>
+                <span class="comp-variant-tag" style="background:#E4EEFF;color:#427EF7;">Movement</span>
+                <span class="comp-variant-tag" style="background:#F9EDFE;color:#A280FF;">Recovery</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Data Row / Detail List -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-data-list">
+                <div class="mini-data-list-title">&#127939; Moncucco Torinese Running</div>
+                <div class="mini-data-row"><span class="mini-data-row-name">Distance</span><span class="mini-data-row-val">20,01km</span></div>
+                <div class="mini-data-row"><span class="mini-data-row-name">Avg Heart Rate</span><span class="mini-data-row-val">148 bmp</span></div>
+                <div class="mini-data-row"><span class="mini-data-row-name">Total Time</span><span class="mini-data-row-val">1:45:34</span></div>
+                <div class="mini-data-link">See all stats</div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Data Row / Detail List</div>
+              <div class="comp-desc">Metric name (left, bold) + colored value (right). Section title above, "See all stats" link below. Used on Movement, Recovery, Meals detail.</div>
+            </div>
+          </div>
+
+          <!-- Meal Logged Card -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-meal-card">
+                <div class="mini-meal-top">
+                  <div class="mini-meal-thumb">&#127858;</div>
+                  <div>
+                    <div class="mini-meal-name">Greek yogurt bowl with granola</div>
+                  </div>
+                </div>
+                <div class="mini-meal-ingredients">Granola 0.5 cup, Raspberries 15g, Peanut butter, cup of Greek yogurt</div>
+                <div class="mini-meal-macros">
+                  <div class="mini-meal-macro"><div class="mini-meal-macro-label">&#128293; Calories</div><div class="mini-meal-macro-val">312</div></div>
+                  <div class="mini-meal-macro"><div class="mini-meal-macro-label">&#129385; Protein</div><div class="mini-meal-macro-val">18g</div></div>
+                  <div class="mini-meal-macro"><div class="mini-meal-macro-label">&#127838; Carbs</div><div class="mini-meal-macro-val">22g</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Meal Logged Card</div>
+              <div class="comp-desc">Rich card in chat: photo thumbnail (circle), meal name bold, ingredients list, 3 macro chips with emoji. White bg, radius 18px.</div>
+            </div>
+          </div>
+
+          <!-- Meal List Row -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-meal-list">
+                <div class="mini-meal-list-row"><span class="mini-meal-list-name">French toast</span><span class="mini-meal-list-kcal">250 kcal</span></div>
+                <div class="mini-meal-list-row"><span class="mini-meal-list-name">Avocado toast</span><span class="mini-meal-list-kcal">350 kcal</span></div>
+                <div class="mini-meal-list-row"><span class="mini-meal-list-name">Breaded chicken, salad, potato</span><span class="mini-meal-list-kcal">580 kcal</span></div>
+                <div class="mini-data-link" style="margin-top:6px;">+ 8 meals</div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Meal List Row</div>
+              <div class="comp-desc">Meal name + kcal value (green, right-aligned). Separator lines. "What did you eat" section title above. "+ N meals" expand link below.</div>
+            </div>
+          </div>
+
+          <!-- Section Title (Muted) -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;gap:8px;align-items:flex-start;padding-left:32px;">
+              <div style="font-size:13px;font-weight:600;color:#ACA391;">Nutrition</div>
+              <div style="font-size:13px;font-weight:600;color:#ACA391;">What did you eat</div>
+              <div style="font-size:13px;font-weight:600;color:#ACA391;">Macros</div>
+              <div style="font-size:13px;font-weight:600;color:#ACA391;">Sleep</div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Section Title (Muted)</div>
+              <div class="comp-desc">Light muted header inside data cards. 18px Semibold #ACA391. Used on Meals, Movement, Recovery, Macros card.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== FORM CONTROLS ===== -->
+      <section class="comp-category" id="comp-forms">
+        <h3 class="comp-category-title">Form Controls</h3>
+        <p class="comp-category-desc">Interactive controls used across settings, profile, onboarding, and data screens.</p>
+
+        <div class="comp-grid">
+          <!-- Toggle -->
+          <div class="comp-card">
+            <div class="comp-preview" style="gap:20px;">
+              <div class="mini-toggle on"><div class="mini-toggle-knob"></div></div>
+              <div class="mini-toggle off"><div class="mini-toggle-knob"></div></div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Toggle</div>
+              <div class="comp-desc">62x34px, radius 50px. On: #4B4740, Off: #D8CDBA. Knob 30px white circle with check icon.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">On</span>
+                <span class="comp-variant-tag">Off</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Day Picker -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-day-picker">
+                <div class="mini-day-seg">1m</div>
+                <div class="mini-day-seg active">7d</div>
+                <div class="mini-day-seg">1d</div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Day Picker</div>
+              <div class="comp-desc">Segmented control: 38x44px per segment, radius 12px, border #CDC2AF. Active: bg #EAE3D7 + Semibold. 16px text.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">1 day</span>
+                <span class="comp-variant-tag">7 days</span>
+                <span class="comp-variant-tag">1 month</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Date Picker -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;gap:8px;">
+              <div class="mini-date-picker"><span class="mini-date-arrow">&#9664;</span> Today <span class="mini-date-arrow">&#9654;</span></div>
+              <div class="mini-date-picker"><span class="mini-date-arrow">&#9664;</span> Yesterday <span class="mini-date-arrow">&#9654;</span></div>
+              <div class="mini-date-picker"><span class="mini-date-arrow">&#9664;</span> Sun, 28 Jan <span class="mini-date-arrow">&#9654;</span></div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Date Picker</div>
+              <div class="comp-desc">155x44px, radius 12px, border #CDC2AF. 18px Medium #4B4740 center text. Arrow icons on each side.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Today</span>
+                <span class="comp-variant-tag">Yesterday</span>
+                <span class="comp-variant-tag">Date format</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tag Metrix (Unit Selector) -->
+          <div class="comp-card">
+            <div class="comp-preview" style="gap:10px;">
+              <div class="mini-tag-pill mini-tag-active">kg</div>
+              <div class="mini-tag-pill mini-tag-inactive">pounds</div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Tag Metrix</div>
+              <div class="comp-desc">100px pill, radius 28px, 18px text. Active: bg #F6EFE3 + 1.5px #958E80 + Medium. Inactive: white + 1px #ECE4D6.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Active</span>
+                <span class="comp-variant-tag">Inactive</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Check Mark -->
+          <div class="comp-card">
+            <div class="comp-preview" style="gap:20px;">
+              <div class="mini-check">
+                <div class="mini-check-circle checked">&#10003;</div>
+                Done
+              </div>
+              <div class="mini-check">
+                <div class="mini-check-circle"></div>
+                Pending
+              </div>
+              <div class="mini-check">
+                <div class="mini-check-circle" style="background:#E9E1D5;border-color:#E9E1D5;"></div>
+                In progress
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Check Mark</div>
+              <div class="comp-desc">28px container, 24px circle. Checked: bg #4C4C49 + white check. Unchecked: border #C2BCB2. In-progress: bg #E9E1D5. Label 18px Regular #4C4C49.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Checked</span>
+                <span class="comp-variant-tag">Unchecked</span>
+                <span class="comp-variant-tag">In progress</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Text Input -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;gap:12px;">
+              <div class="mini-text-input">
+                <div class="mini-text-input-label">Your name or nickname</div>
+                <div class="mini-text-input-field"></div>
+              </div>
+              <div class="mini-text-input">
+                <div class="mini-text-input-label">Your date of birth</div>
+                <div class="mini-text-input-field"></div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Text Input</div>
+              <div class="comp-desc">Pill-shaped input with label above. Border 1px #CDC2AF, radius 40px, white bg. Used in onboarding (name, DOB) and personal details.</div>
+            </div>
+          </div>
+
+          <!-- Gender Selector -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-gender-pills">
+                <div class="mini-gender-pill mini-gender-active">Female</div>
+                <div class="mini-gender-pill mini-gender-inactive">Male</div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Gender Selector</div>
+              <div class="comp-desc">Large pill buttons. Active: #F6EFE3 fill + 1.5px #CDC2AF border. Inactive: white + 1px #E5E0D8. Used in onboarding.</div>
+            </div>
+          </div>
+
+          <!-- Onboarding Progress Bar -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;gap:12px;">
+              <div class="mini-onboard-bar">
+                <div class="mini-onboard-seg done"></div>
+                <div class="mini-onboard-seg done"></div>
+                <div class="mini-onboard-seg todo"></div>
+                <div class="mini-onboard-seg todo"></div>
+                <div class="mini-onboard-seg todo"></div>
+              </div>
+              <div class="mini-onboard-bar">
+                <div class="mini-onboard-seg done"></div>
+                <div class="mini-onboard-seg done"></div>
+                <div class="mini-onboard-seg done"></div>
+                <div class="mini-onboard-seg done"></div>
+                <div class="mini-onboard-seg todo"></div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Onboarding Progress Bar</div>
+              <div class="comp-desc">Segmented bar at top of onboarding steps. Done: #433E36, Todo: #E5E0D8. 3px tall segments with 3px gap, full width.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== BUTTONS ===== -->
+      <section class="comp-category" id="comp-buttons">
+        <h3 class="comp-category-title">Buttons</h3>
+        <p class="comp-category-desc">Interactive buttons and action triggers across all surfaces.</p>
+
+        <div class="comp-grid">
+          <!-- Primary Button -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-btn mini-btn-primary">Let's go</div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Primary Button</div>
+              <div class="comp-desc">Dark fill (#433E36), white text, radius 100px, height 56px, full width. 18px Semibold. Main CTA on screens.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Full width</span>
+                <span class="comp-variant-tag">Enabled</span>
+                <span class="comp-variant-tag">Disabled</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Secondary Button -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-btn mini-btn-secondary">Maybe later</div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Secondary Button</div>
+              <div class="comp-desc">Transparent bg, 1px #C2BCB2 border, #433E36 text, radius 100px, height 56px. 18px Semibold. Secondary actions.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Outline</span>
+                <span class="comp-variant-tag">Full width</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Destructive Button -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-btn mini-btn-destructive">Delete account</div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Destructive Button</div>
+              <div class="comp-desc">Red fill (#E74C3C), white text, radius 100px, height 56px. 18px Semibold. Irreversible actions like delete.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Danger</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Muted / Disabled Button -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-btn mini-btn-muted">Continue</div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Muted Button</div>
+              <div class="comp-desc">Light fill (#E5E0D8), muted text (#A8A297), radius 100px, height 56px. 18px Semibold. Disabled or inactive state.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Disabled</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Link -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;gap:8px;align-items:flex-start;padding-left:24px;">
+              <div class="mini-action-link">Edit profile</div>
+              <div class="mini-action-link" style="color:#E74C3C;">Log out</div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Action Link</div>
+              <div class="comp-desc">Text-only tappable action. 18px Medium, underlined. Default #433E36, destructive variant #E74C3C. Used in settings rows.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Default</span>
+                <span class="comp-variant-tag">Destructive</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Skip Link -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div style="font-size:14px;font-weight:500;color:#A8A297;text-decoration:underline;">Skip for now</div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Skip Link</div>
+              <div class="comp-desc">Muted underlined text for skippable steps. 16px Medium #A8A297. Used in onboarding to bypass optional steps.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Onboarding</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== CARDS & NOTICES ===== -->
+      <section class="comp-category" id="comp-cards">
+        <h3 class="comp-category-title">Cards & Notices</h3>
+        <p class="comp-category-desc">Informational cards, tips, and list items used across surfaces.</p>
+
+        <div class="comp-grid">
+          <!-- Tip / Note -->
+          <div class="comp-card">
+            <div class="comp-preview">
+              <div class="mini-tip">
+                <span style="font-size:16px;">&#128161;</span>
+                <div>
+                  <div class="mini-tip-text">Tip: Ottavia is like your private assistant, you can tell her in chat what to change.</div>
+                  <a href="#" class="mini-tip-link">Learn more</a>
+                </div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Tip / Note</div>
+              <div class="comp-desc">White card, 1px #DFD6C4 border, radius 24px, padding 24px. 16px Regular #3D3F40. "Learn more" link 14px Medium underlined.</div>
+            </div>
+          </div>
+
+          <!-- Preferences Card -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;gap:0;">
+              <div class="mini-pref-card">
+                <div class="mini-pref-top"><span>Dec 13, 2025</span><span class="mini-pref-delete">Delete</span></div>
+                <div class="mini-pref-text">Short preferences</div>
+              </div>
+              <div class="mini-pref-card">
+                <div class="mini-pref-top"><span>Dec 13, 2025</span><span class="mini-pref-delete">Delete</span></div>
+                <div class="mini-pref-text">Carbohydrate intake rate for long runs: 60-90 g/hour</div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Preferences Card</div>
+              <div class="comp-desc">White bg, bottom border #DFD6C4. Date 16px Regular, Delete 16px Medium. Value 20px Medium #9B877B.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Short</span>
+                <span class="comp-variant-tag">Long text</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- System Message Labels -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;gap:6px;align-items:flex-start;padding-left:32px;">
+              <div style="font-size:13px;font-weight:600;color:#958E80;">&#9881;&#65039; Saved in <span style="text-decoration:underline;">Preferences</span></div>
+              <div style="font-size:13px;font-weight:600;color:#958E80;">&#128203; Updated in <span style="text-decoration:underline;">Conditions</span></div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">System Message</div>
+              <div class="comp-desc">Inline status showing which memory category was updated. 18px Semibold #958E80 with icon + underlined category name.</div>
+            </div>
+          </div>
+
+          <!-- Settings Card (Grouped) -->
+          <div class="comp-card">
+            <div class="comp-preview" style="padding:8px;">
+              <div class="mini-settings-group">
+                <div class="mini-settings-row">
+                  <span>Units</span><span style="color:#A8A297;">Metric &rsaquo;</span>
+                </div>
+                <div class="mini-settings-row">
+                  <span>Notifications</span><span style="color:#A8A297;">On &rsaquo;</span>
+                </div>
+                <div class="mini-settings-row" style="border:none;">
+                  <span>Language</span><span style="color:#A8A297;">English &rsaquo;</span>
+                </div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Settings Card (Grouped)</div>
+              <div class="comp-desc">White card, radius 16px, grouped rows with 1px #E5E0D8 dividers. Label 18px Regular #433E36, value 18px Regular #A8A297 with chevron.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Profile</span>
+                <span class="comp-variant-tag">Settings</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Settings Row (Single) -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;gap:0;padding:8px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:#fff;border-bottom:1px solid #E5E0D8;">
+                <span style="font-size:13px;color:#433E36;">Connected wearables</span>
+                <span style="font-size:11px;color:#A8A297;">&rsaquo;</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:#fff;">
+                <span style="font-size:13px;color:#E74C3C;">Delete account</span>
+                <span style="font-size:11px;color:#E74C3C;">&rsaquo;</span>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Settings Row</div>
+              <div class="comp-desc">Full-width row, white bg, 1px bottom border. Label 18px Regular, chevron right. Destructive variant uses #E74C3C text.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Default</span>
+                <span class="comp-variant-tag">Destructive</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Wearable Row -->
+          <div class="comp-card">
+            <div class="comp-preview" style="padding:8px;">
+              <div class="mini-wearable-row">
+                <div style="width:28px;height:28px;background:#E5E0D8;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;">G</div>
+                <div style="flex:1;">
+                  <div style="font-size:13px;font-weight:600;color:#433E36;">Garmin</div>
+                  <div style="font-size:11px;color:#A8A297;">Connected</div>
+                </div>
+                <div style="font-size:10px;color:#34A853;font-weight:600;">&#9679;</div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Wearable Row</div>
+              <div class="comp-desc">Device icon (28px, radius 6px), name 18px Semibold, status 14px Regular #A8A297. Green dot when connected. White card bg.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Connected</span>
+                <span class="comp-variant-tag">Disconnected</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SURFACES ===== -->
+      <section class="comp-category" id="comp-surfaces">
+        <h3 class="comp-category-title">Surfaces</h3>
+        <p class="comp-category-desc">Overlay containers and sheet-style surfaces for secondary content and actions.</p>
+
+        <div class="comp-grid">
+          <!-- Bottom Sheet -->
+          <div class="comp-card">
+            <div class="comp-preview" style="padding:0;position:relative;min-height:160px;background:#00000020;">
+              <div class="mini-bottom-sheet">
+                <div class="mini-bottom-sheet-handle"></div>
+                <div style="font-size:13px;font-weight:600;color:#433E36;margin-bottom:8px;">Actions</div>
+                <div style="display:flex;flex-direction:column;gap:4px;">
+                  <div style="font-size:12px;color:#433E36;padding:6px 0;border-bottom:1px solid #E5E0D8;">Take a photo</div>
+                  <div style="font-size:12px;color:#433E36;padding:6px 0;border-bottom:1px solid #E5E0D8;">Choose from library</div>
+                  <div style="font-size:12px;color:#E74C3C;padding:6px 0;">Cancel</div>
+                </div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Bottom Sheet</div>
+              <div class="comp-desc">White bg, radius 24px (top only), 4px handle bar centered (#C2BCB2). Title 20px Semibold. Rows 18px Regular with 1px dividers. Cancel in red.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Actions</span>
+                <span class="comp-variant-tag">Picker</span>
+                <span class="comp-variant-tag">Confirm</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal Overlay -->
+          <div class="comp-card">
+            <div class="comp-preview" style="padding:0;position:relative;min-height:140px;background:#00000030;display:flex;align-items:center;justify-content:center;">
+              <div style="background:#fff;border-radius:16px;padding:20px;width:80%;text-align:center;">
+                <div style="font-size:14px;font-weight:600;color:#433E36;margin-bottom:4px;">Delete account?</div>
+                <div style="font-size:11px;color:#A8A297;margin-bottom:12px;">This cannot be undone.</div>
+                <div style="display:flex;gap:8px;justify-content:center;">
+                  <div style="font-size:11px;padding:6px 16px;border-radius:100px;background:#E5E0D8;color:#433E36;">Cancel</div>
+                  <div style="font-size:11px;padding:6px 16px;border-radius:100px;background:#E74C3C;color:#fff;">Delete</div>
+                </div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Confirmation Dialog</div>
+              <div class="comp-desc">Centered card on dimmed overlay (#00000040). White bg, radius 16px, padding 24px. Title 20px Semibold, body 16px Regular. Two-button footer.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Destructive</span>
+                <span class="comp-variant-tag">Informational</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="section-divider">
+
+
+      <!-- ============================================================ -->
+      <!-- DESIGN EXAMPLES                                               -->
+      <!-- ============================================================ -->
+      <section class="section" id="design-examples">
+        <div class="section-header">
+          <h2>Design Examples</h2>
+          <span class="badge badge-section">Gallery</span>
+          <span class="status status-new" style="margin-left:4px">New</span>
+        </div>
+        <p class="section-description">
+          Screen-level examples showing how components, typography, and color tokens come together in production. Use these as reference when building new screens or reviewing implementation.
+        </p>
+
+        <div class="info-box">
+          <strong>Coming next:</strong> Annotated screenshots from Figma showing key screens — chat conversation, onboarding flow, profile, meals overview, daily summary, settings. Each will include token callouts and spacing annotations.
+        </div>
+
+        <h3 class="subsection-title">Screens to document</h3>
+        <table class="token-table">
+          <thead><tr><th>Screen</th><th>Key components used</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="token-name">Chat — conversation</span></td>
+              <td><span class="token-desc">User bubble, bot markdown, suggestion chips, composer, timestamp, memory events</span></td>
+              <td><span class="status status-gap">Planned</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">Chat — onboarding</span></td>
+              <td><span class="token-desc">Pill stack, check list, progress bar, loading shimmer</span></td>
+              <td><span class="status status-gap">Planned</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">Profile</span></td>
+              <td><span class="token-desc">App header, settings cards, toggle, preferences list</span></td>
+              <td><span class="status status-gap">Planned</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">Meals overview</span></td>
+              <td><span class="token-desc">Macros card, macro tag rows, chip progress, date picker, day picker</span></td>
+              <td><span class="status status-gap">Planned</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">Daily summary</span></td>
+              <td><span class="token-desc">Chip progress, tip/note card, data charts</span></td>
+              <td><span class="status status-gap">Planned</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">Settings</span></td>
+              <td><span class="token-desc">Toggle, tag metrix, check mark, preferences card</span></td>
+              <td><span class="status status-gap">Planned</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">Garmin connect</span></td>
+              <td><span class="token-desc">App header, check list, progress bar</span></td>
+              <td><span class="status status-gap">Planned</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <hr class="section-divider">
+
+
+      <!-- ============================================================ -->
+      <!-- FIGMA VS CODE GAPS                                            -->
+      <!-- ============================================================ -->
+      <section class="section" id="figma-vs-code">
+        <div class="section-header">
+          <h2>Figma vs Code</h2>
+          <span class="badge badge-section">Status</span>
+        </div>
+        <p class="section-description">
+          Key mismatches between what's designed and what's built. Each row needs a decision.
+        </p>
+
+        <table class="token-table">
+          <thead>
+            <tr><th>Category</th><th>Issue</th><th>Figma</th><th>Code</th><th>Decision</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="token-desc">Text</span></td>
+              <td><span class="token-desc">Primary text color mismatch</span></td>
+              <td><span class="hex">#433E36</span></td>
+              <td><span class="hex">#000000</span></td>
+              <td><span class="status status-updated">Use Figma</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-desc">Link</span></td>
+              <td><span class="token-desc">Link color inconsistency</span></td>
+              <td><span class="hex">#427EF7</span></td>
+              <td><span class="hex">#0078FF / #007AFF</span></td>
+              <td><span class="status status-gap">Choose one</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-desc">Data</span></td>
+              <td><span class="token-desc">Chart blue mismatch</span></td>
+              <td><span class="hex">#427EF7</span></td>
+              <td><span class="hex">#75A6FF</span></td>
+              <td><span class="status status-gap">Choose one</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-desc">Fonts</span></td>
+              <td><span class="token-desc">3 names for same font family</span></td>
+              <td><span class="hex">SF Pro Display</span></td>
+              <td><span class="hex">SFProDisplay / SFUIDisplay / SFPro</span></td>
+              <td><span class="status status-updated">Consolidate to SFProDisplay</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-desc">Fonts</span></td>
+              <td><span class="token-desc">Poppins used as secondary font</span></td>
+              <td><span class="hex">Not in Figma</span></td>
+              <td><span class="hex">Poppins-Regular / Bold</span></td>
+              <td><span class="status status-updated">Drop Poppins</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-desc">Type</span></td>
+              <td><span class="token-desc">Body font size mismatch</span></td>
+              <td><span class="hex">18px / 28 / 0.2</span></td>
+              <td><span class="hex">20px / 30 / 0.4</span></td>
+              <td><span class="status status-updated">Use 18px spec</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-desc">Borders</span></td>
+              <td><span class="token-desc">5 different border colors</span></td>
+              <td><span class="hex">Not defined</span></td>
+              <td><span class="hex">#F1F1F1, #f2f2f2, #E7DFD0, #DFD6C4, #CDC2AF</span></td>
+              <td><span class="status status-gap">Reduce to 3</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-desc">Type</span></td>
+              <td><span class="token-desc">11 font sizes in code</span></td>
+              <td><span class="hex">6 defined</span></td>
+              <td><span class="hex">13-34px (11 values)</span></td>
+              <td><span class="status status-gap">Reduce to 8 styles</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-desc">Radius</span></td>
+              <td><span class="token-desc">12 radius values in code</span></td>
+              <td><span class="hex">5 defined</span></td>
+              <td><span class="hex">6-200px (12 values)</span></td>
+              <td><span class="status status-gap">Reduce to 5</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-desc">User Bubble</span></td>
+              <td><span class="token-desc">Padding too tight</span></td>
+              <td><span class="hex">10px 16px (proposed)</span></td>
+              <td><span class="hex">2px 14px</span></td>
+              <td><span class="status status-new">Apply proposed</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-desc">Chat Body</span></td>
+              <td><span class="token-desc">Muted text color</span></td>
+              <td><span class="hex">#8F897D</span></td>
+              <td><span class="hex">#A8A297</span></td>
+              <td><span class="status status-updated">Use #8F897D</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="info-box">
+          <strong>Decisions made in recent sessions:</strong> Primary text → #433E36 (Figma wins). Font → SF Pro Display only (drop Poppins). Body text → 18/28/0.2 (new spec). Muted text → #8F897D. Font naming → consolidate to SFProDisplay-[Weight].
+        </div>
+      </section>
+
+
+      <!-- ============================================================ -->
+      <!-- FOOTER                                                        -->
+      <!-- ============================================================ -->
+      <footer class="page-footer">
+        <p>Ottavia Design System v1.0 — Updated 2026-03-10</p>
+        <p style="margin-top:4px;">Source: Figma + ottavia-client codebase + design sessions. Previous version: <a href="tokens.html" style="color:#427EF7">tokens.html (v0.1)</a></p>
+      </footer>
+
+    </main>
+  </div>
+  <script>
+    // Copy hex from swatch card
+    function copyHex(card) {
+      const hex = card.dataset.hex;
+      navigator.clipboard.writeText(hex).then(() => {
+        card.classList.add('copied');
+        setTimeout(() => card.classList.remove('copied'), 1200);
+      });
+    }
+
+    // Copy any element with data-copy attribute
+    function copyValue(el) {
+      const val = el.dataset.copy;
+      navigator.clipboard.writeText(val).then(() => {
+        el.classList.add('copied');
+        setTimeout(() => el.classList.remove('copied'), 1200);
+      });
+    }
+
+    // Auto-attach data-copy to all .hex and .token-name spans
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.hex, .token-name').forEach(el => {
+        const text = el.textContent.trim();
+        if (!text) return;
+        el.setAttribute('data-copy', text);
+        el.addEventListener('click', () => copyValue(el));
+      });
+      // Also make swatch divs in token tables clickable
+      document.querySelectorAll('.token-table .swatch').forEach(el => {
+        const row = el.closest('tr');
+        if (!row) return;
+        const hexEl = row.querySelector('.hex');
+        if (!hexEl) return;
+        const hex = hexEl.textContent.trim();
+        el.style.cursor = 'pointer';
+        el.setAttribute('data-copy', hex);
+        el.addEventListener('click', () => copyValue(el));
+      });
+      // Make spec-table values copyable
+      document.querySelectorAll('.spec-table td:nth-child(2)').forEach(el => {
+        const text = el.textContent.trim();
+        if (!text) return;
+        el.setAttribute('data-copy', text);
+        el.addEventListener('click', () => copyValue(el));
+      });
+    });
+  </script>
+</body>
+</html>
