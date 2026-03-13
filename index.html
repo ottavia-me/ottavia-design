@@ -283,73 +283,81 @@
             cursor: not-allowed;
         }
 
-        /* Mobile */
+        /* Mobile nav dropdown */
+        .mobile-nav {
+            display: none;
+        }
+
+        .mobile-select {
+            width: 100%;
+            background: #0a0a0a;
+            color: #fff;
+            border: none;
+            border-bottom: 1px solid #1a1a1a;
+            padding: 14px 16px;
+            font-size: 14px;
+            font-family: inherit;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            outline: none;
+        }
+
+        /* Mobile bottom bar */
+        .mobile-bottom {
+            display: none;
+        }
+
         @media (max-width: 768px) {
             body {
                 flex-direction: column;
             }
 
             nav {
-                width: 100%;
-                min-width: 100%;
-                height: 44px;
+                display: none;
+            }
+
+            .mobile-nav {
+                display: block;
                 position: fixed;
                 top: 0;
                 left: 0;
-                padding: 0;
-                flex-direction: row;
-                align-items: stretch;
-                overflow-x: auto;
-                overflow-y: hidden;
-                border-right: none;
-                border-bottom: 1px solid #1a1a1a;
-                -webkit-overflow-scrolling: touch;
+                width: 100%;
+                z-index: 100;
             }
 
-            .logo {
-                margin-bottom: 0;
+            .mobile-bottom {
+                display: flex;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                z-index: 100;
+                background: #0a0a0a;
+                border-top: 1px solid #1a1a1a;
                 padding: 12px 16px;
-                border-left: none;
-                white-space: nowrap;
-                font-size: 13px;
-                display: flex;
-                align-items: center;
             }
 
-            .nav-items {
-                flex-direction: row;
-                gap: 0;
-            }
-
-            .nav-item {
-                padding: 12px 14px;
-                border-left: none;
-                white-space: nowrap;
-                font-size: 13px;
-                display: flex;
-                align-items: center;
-            }
-
-            .nav-item.active {
-                border-left-color: transparent;
-                border-bottom: 2px solid #fff;
-                background: transparent;
+            .mobile-bottom .comment-btn {
+                position: static;
+                width: 100%;
+                text-align: center;
             }
 
             .content {
                 margin-left: 0;
-                margin-top: 44px;
-                height: calc(100vh - 44px);
+                margin-top: 48px;
+                height: calc(100vh - 48px);
+            }
+
+            .content.has-bottom-bar {
+                height: calc(100vh - 48px - 52px);
             }
 
             .playground-page {
                 padding: 16px;
-            }
-
-            .comment-btn {
-                position: static;
-                margin-left: 12px;
-                display: inline-block;
             }
 
             .comment-panel {
@@ -368,6 +376,19 @@
             <a class="nav-item" data-page="tools" onclick="navigate(this, 'tools')">Tools</a>
         </div>
     </nav>
+
+    <div class="mobile-nav">
+        <select class="mobile-select" id="mobileSelect" onchange="mobileNavigate(this.value)">
+            <option value="home">ottavia hub</option>
+            <option value="playground">Design Playground</option>
+            <option value="design-system">Design System</option>
+            <option value="tools">Tools</option>
+        </select>
+    </div>
+
+    <div class="mobile-bottom" id="mobileBottom" style="display:none">
+        <button class="comment-btn" onclick="toggleComments()">Comments</button>
+    </div>
 
     <main class="content" id="content">
         <div class="home-gradient"></div>
@@ -404,15 +425,35 @@
 
         const COMMENTS_API = 'https://jsonblob.com/api/jsonBlob/019ce877-1093-7328-b1c3-349d34de0f58';
 
+        const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
+
+        function showBottomBar(show) {
+            const bar = document.getElementById('mobileBottom');
+            const content = document.getElementById('content');
+            if (isMobile()) {
+                bar.style.display = show ? 'flex' : 'none';
+                content.className = show ? 'content has-bottom-bar' : 'content';
+            }
+        }
+
+        function mobileNavigate(page) {
+            navigate(null, page);
+        }
+
         function openPage(src) {
             const content = document.getElementById('content');
-            content.innerHTML = `
-                <div style="display:flex;flex-direction:column;height:100%">
-                    <div style="padding:12px 16px;display:flex;justify-content:flex-end;background:#000;flex-shrink:0">
-                        <button class="comment-btn" onclick="toggleComments()" style="position:static">Comments</button>
-                    </div>
-                    <iframe src="${src}" style="width:100%;flex:1;border:none"></iframe>
-                </div>`;
+            if (isMobile()) {
+                content.innerHTML = `<iframe src="${src}" style="width:100%;height:100%;border:none"></iframe>`;
+                showBottomBar(true);
+            } else {
+                content.innerHTML = `
+                    <div style="display:flex;flex-direction:column;height:100%">
+                        <div style="padding:12px 16px;display:flex;justify-content:flex-end;background:#000;flex-shrink:0">
+                            <button class="comment-btn" onclick="toggleComments()" style="position:static">Comments</button>
+                        </div>
+                        <iframe src="${src}" style="width:100%;flex:1;border:none"></iframe>
+                    </div>`;
+            }
         }
 
         function toggleComments() {
@@ -477,8 +518,12 @@
 
         function navigate(el, page) {
             document.querySelectorAll('.nav-item, .logo').forEach(item => item.classList.remove('active'));
-            el.classList.add('active');
+            if (el) el.classList.add('active');
             document.getElementById('commentPanel').classList.remove('open');
+            showBottomBar(false);
+
+            // Sync mobile select
+            document.getElementById('mobileSelect').value = page;
 
             const content = document.getElementById('content');
 
@@ -486,6 +531,9 @@
                 content.innerHTML = `<iframe src="${pages[page]}"></iframe>`;
             } else if (inlinePages[page]) {
                 content.innerHTML = inlinePages[page];
+                if (page === 'playground' && isMobile()) {
+                    showBottomBar(true);
+                }
             }
         }
     </script>
