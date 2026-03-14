@@ -343,6 +343,23 @@
   }
   .today-jump:hover { opacity: 0.9; }
   .today-jump.visible { display: block; }
+
+  /* Mobile: version nav becomes dropdown */
+  .version-dropdown { display: none; }
+  .version-dropdown select {
+    width: 100%; background: #1a1a1a; color: #fff; border: none;
+    border-bottom: 1px solid #333; padding: 14px 16px; font-size: 14px;
+    font-family: inherit; appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 16px center; outline: none;
+  }
+  @media (max-width: 768px) {
+    .version-nav { display: none !important; }
+    .version-dropdown { display: block; position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; }
+    body { padding: 0; padding-top: 48px; }
+    .phone-frame { width: 100%; height: calc(100vh - 48px); border-radius: 0; box-shadow: none; }
+  }
+
 </style>
 </head>
 <body>
@@ -364,6 +381,26 @@
   <a href="v14-claude-design.html">V14<span>Claude Design</span></a>
   <a href="v15-next-animation.html">V15<span>Next Animation</span></a>
 </nav>
+
+<div class="version-dropdown">
+  <select onchange="window.location.href=this.value">
+    <option value="v1-coach-plan.html">V1 — Horizontal Nav</option>
+    <option value="v2-schedule-scroll.html">V2 — Vertical Nav</option>
+    <option value="v3-icons-exploration.html">V3 — Icons & Cards</option>
+    <option value="v4-engaging-content.html">V4 — Engaging Content</option>
+    <option value="v5-energy-line.html">V5 — Energy Line</option>
+    <option value="v6-muted-palette.html">V6 — Muted Palette</option>
+    <option value="v7-palette-b.html">V7 — Palette B</option>
+    <option value="v8-accessible.html" selected>V8 — Accessible</option>
+    <option value="v9-now-at-card.html">V9 — Now at Card</option>
+    <option value="v10-empty-state.html">V10 — Empty State</option>
+    <option value="v11-day-banner.html">V11 — Day Banner</option>
+    <option value="v12-daily-goals.html">V12 — Daily Goals</option>
+    <option value="v13-barlow.html">V13 — Barlow</option>
+    <option value="v14-claude-design.html">V14 — Claude Design</option>
+    <option value="v15-next-animation.html">V15 — Next Animation</option>
+  </select>
+</div>
 
 <div class="phone-frame">
   <div class="screen" id="screen">
