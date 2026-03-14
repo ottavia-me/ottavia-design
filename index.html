@@ -6,6 +6,9 @@
     <title>Ottavia Design</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/style.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Sixtyfour+Convergence&family=Bitcount+Grid+Single&family=Coral+Pixels&family=Jacquarda+Bastarda+9&family=Rubik+Pixels&family=Datatype&family=Faster+One&family=Moirai+One&family=Silkscreen&family=Nabla&family=Bungee+Shade&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,7 +17,7 @@
         }
 
         body {
-            font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Archivo', 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #000;
             color: #fff;
             height: 100vh;
@@ -107,7 +110,61 @@
         .home-gradient {
             width: 100%;
             height: 100%;
-            background: linear-gradient(to bottom, #A8BDD0, #D6CBAB, #C4A08E);
+            background: #000;
+        }
+
+        .home-hero {
+            display: flex;
+            flex-direction: column;
+            padding: 48px;
+        }
+
+        .home-line {
+            font-family: 'Archivo', sans-serif;
+            font-size: clamp(48px, 10vw, 160px);
+            line-height: 0.95;
+            letter-spacing: -0.03em;
+        }
+
+        .home-line-bold {
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .home-line-light {
+            font-weight: 300;
+            color: #555;
+            margin-top: 4px;
+        }
+
+        .f-sixtyfour { font-family: 'Sixtyfour Convergence', sans-serif; }
+        .f-bitcount { font-family: 'Bitcount Grid Single', sans-serif; }
+        .f-coral { font-family: 'Coral Pixels', sans-serif; }
+        .f-jacquarda { font-family: 'Jacquarda Bastarda 9', sans-serif; }
+        .f-rubik { font-family: 'Rubik Pixels', sans-serif; }
+        .f-datatype { font-family: 'Datatype', sans-serif; }
+        .f-faster { font-family: 'Faster One', sans-serif; }
+        .f-moirai { font-family: 'Moirai One', sans-serif; }
+        .f-silkscreen { font-family: 'Silkscreen', sans-serif; }
+        .f-nabla { font-family: 'Nabla', sans-serif; }
+        .f-bungee { font-family: 'Bungee Shade', sans-serif; }
+
+        .home-highlight {
+            display: inline;
+            padding: 1px 6px;
+            border-radius: 4px;
+            background: #fff;
+            color: #000;
+            font-weight: 700;
+        }
+
+        .home-line-light .home-highlight-soft {
+            display: inline;
+            padding: 1px 6px;
+            border-radius: 4px;
+            background: #1a1a1a;
+            color: #fff;
+            font-weight: 400;
         }
 
         .playground-page {
@@ -391,7 +448,10 @@
     </div>
 
     <main class="content" id="content">
-        <div class="home-gradient"></div>
+        <div class="home-gradient"><div class="home-hero">
+            <div class="home-line home-line-bold"><span class="f-silkscreen" style="color:#A8BDD0">you</span> <span class="f-bitcount">may</span> <span class="f-coral">know</span><br><span class="f-jacquarda" style="color:#D4839B">how</span> <span class="f-rubik" style="color:#D6CBAB">to</span> <span class="f-bungee" style="color:#C4A08E">code</span></div>
+            <div class="home-line home-line-light"><span class="f-faster" style="color:#E4763A">but</span> <span class="f-moirai" style="color:#8292D5">can</span> <span class="f-sixtyfour">you</span> <span class="f-nabla" style="color:#83BD96">imagine?</span></div>
+        </div></div>
     </main>
 
     <div class="comment-panel" id="commentPanel">
@@ -416,7 +476,10 @@
         };
 
         const inlinePages = {
-            'home': '<div class="home-gradient"></div>',
+            'home': `<div class="home-gradient"><div class="home-hero">
+                <div class="home-line home-line-bold">you may know<br>how to code</div>
+                <div class="home-line home-line-light">but can you imagine?</div>
+            </div></div>`,
             'playground': `<div class="playground-page">
                 <a class="sub-card" onclick="openPage('v14-claude-design.html')">Calendar · ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</a>
                 <button class="comment-btn" onclick="toggleComments()">Comments</button>
