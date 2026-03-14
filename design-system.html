@@ -2444,15 +2444,43 @@
       <!-- ============================================================ -->
       <section class="section" id="elevation">
         <div class="section-header">
-          <h2>Elevation</h2>
+          <h2>Shadow</h2>
           <span class="badge badge-section">Foundations</span>
         </div>
         <p class="section-description">
-          Shadow and elevation tokens for layered surfaces. Cards, modals, and floating elements.
+          Shadow and elevation tokens for layered surfaces. Extracted from the codebase (React Native shadow properties).
         </p>
-        <div class="stub-box">
-          Coming soon — shadow tokens are not yet defined in Figma or codified in code. Planned for the next design system iteration.
-        </div>
+
+        <h3 class="subsection-title">Effect Styles</h3>
+        <table class="token-table">
+          <thead><tr><th>Style name</th><th>Properties</th><th style="width:100px">Sample</th><th>Usage</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="token-name">shadow.card</span></td>
+              <td><span class="token-desc">shadowColor: #000, offset: 0 0, opacity: 0.1, radius: 5, elevation: 2</span></td>
+              <td><div style="width:64px;height:40px;background:#fff;border-radius:8px;box-shadow:0px 0px 5px rgba(0,0,0,0.1)"></div></td>
+              <td><span class="token-desc">Logging cards, detail cards</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">shadow.elevated</span></td>
+              <td><span class="token-desc">shadowColor: #000, offset: 0 2px, opacity: 0.1, radius: 3, elevation: 3</span></td>
+              <td><div style="width:64px;height:40px;background:#fff;border-radius:8px;box-shadow:0px 2px 3px rgba(0,0,0,0.1)"></div></td>
+              <td><span class="token-desc">Content panels, version info</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">shadow.scroll</span></td>
+              <td><span class="token-desc">shadowColor: #DAD5C7, offset: 0 2px, opacity: 1, radius: 4, elevation: 4</span></td>
+              <td><div style="width:64px;height:40px;background:#fff;border-radius:8px;box-shadow:0px 2px 4px #DAD5C7"></div></td>
+              <td><span class="token-desc">Scroll-to-bottom button in chat</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">shadow.action</span></td>
+              <td><span class="token-desc">shadowColor: #007AFF, offset: 0 2px, opacity: 0.2, radius: 3, elevation: 3</span></td>
+              <td><div style="width:64px;height:40px;background:#fff;border-radius:8px;box-shadow:0px 2px 3px rgba(0,122,255,0.2)"></div></td>
+              <td><span class="token-desc">Action buttons (copy, CTA)</span></td>
+            </tr>
+          </tbody>
+        </table>
       </section>
 
       <hr class="section-divider">
