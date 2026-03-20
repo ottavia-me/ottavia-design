@@ -472,7 +472,6 @@
     <script>
         const pages = {
             'design-system': 'design-system.html',
-            'tools': 'color-generator.html',
         };
 
         const inlinePages = {
@@ -481,8 +480,17 @@
                 <div class="home-line home-line-light"><span class="f-faster" style="color:#E4763A">but</span> <span class="f-moirai" style="color:#8292D5">can</span> <span class="f-sixtyfour">you</span> <span class="f-nabla" style="color:#83BD96">imagine?</span></div>
             </div></div>`,
             'playground': `<div class="playground-page">
-                <a class="sub-card" onclick="openPage('v14-claude-design.html')">Calendar · ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</a>
-                <button class="comment-btn" onclick="toggleComments()">Comments</button>
+                <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-start;">
+                    <a class="sub-card" onclick="openPage('v14-claude-design.html')">Calendar · ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</a>
+                    <a class="sub-card" onclick="openPage('viz-v1.html')">Data Visualization · ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</a>
+                    <a class="sub-card" onclick="openPage('ai-consent.html')">AI Consent · ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</a>
+                </div>
+            </div>`,
+            'tools': `<div class="playground-page">
+                <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-start;">
+                    <a class="sub-card" onclick="openTool('agent-simulator.html')">Agent Routing Simulator</a>
+                    <a class="sub-card" onclick="openTool('color-generator.html')">Color Generator</a>
+                </div>
             </div>`,
         };
 
@@ -503,6 +511,11 @@
             navigate(null, page);
         }
 
+        function openTool(src) {
+            const content = document.getElementById('content');
+            content.innerHTML = `<iframe src="${src}" style="width:100%;height:100%;border:none"></iframe>`;
+        }
+
         function openPage(src) {
             const content = document.getElementById('content');
             if (isMobile()) {
@@ -510,11 +523,10 @@
                 showBottomBar(true);
             } else {
                 content.innerHTML = `
-                    <div style="display:flex;flex-direction:column;height:100%">
-                        <div style="padding:12px 16px;display:flex;justify-content:flex-end;background:#000;flex-shrink:0">
-                            <button class="comment-btn" onclick="toggleComments()" style="position:static">Comments</button>
+                    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;background:#000;position:relative;">
+                        <div style="width:390px;height:844px;border-radius:44px;overflow:hidden;box-shadow:0 25px 80px rgba(0,0,0,0.5);border:6px solid #1a1a1a;position:relative;">
+                            <iframe src="${src}${src.includes('?') ? '&' : '?'}embed=1" style="width:100%;height:100%;border:none;"></iframe>
                         </div>
-                        <iframe src="${src}" style="width:100%;flex:1;border:none"></iframe>
                     </div>`;
             }
         }

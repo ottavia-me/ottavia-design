@@ -897,6 +897,89 @@
     }
     .mini-log-chip-title { font-size: 13px; font-weight: 600; }
     .mini-log-chip-time { font-size: 11px; opacity: 0.85; }
+
+    /* Mini Coach Card (calendar) */
+    .mini-coach-card {
+      width: 280px;
+      border-radius: 16px;
+      border: 1.5px solid;
+      padding: 12px 40px 12px 14px;
+      position: relative;
+    }
+    .mini-coach-card-title { font-size: 13px; font-weight: 600; line-height: 1.3; margin-bottom: 1px; }
+    .mini-coach-card-sub { font-size: 11px; font-weight: 400; line-height: 1.3; }
+    .mini-coach-card-time { font-size: 10px; font-weight: 600; margin-top: 4px; }
+    .mini-coach-card-check {
+      width: 20px; height: 20px; border-radius: 50%;
+      border: 1.5px solid; position: absolute; top: 10px; right: 10px;
+    }
+    .mini-coach-card.hydration { background: #DBEFFA; border-color: #92B7CE; }
+    .mini-coach-card.hydration .mini-coach-card-title { color: #3A647E; }
+    .mini-coach-card.hydration .mini-coach-card-sub { color: #689BBB; }
+    .mini-coach-card.hydration .mini-coach-card-time { color: #689BBB; }
+    .mini-coach-card.hydration .mini-coach-card-check { border-color: #92B7CE; }
+    .mini-coach-card.activity { background: #F9EFE0; border-color: #E2C191; }
+    .mini-coach-card.activity .mini-coach-card-title { color: #C08A48; }
+    .mini-coach-card.activity .mini-coach-card-sub { color: #D4A163; }
+    .mini-coach-card.activity .mini-coach-card-time { color: #D4A163; }
+    .mini-coach-card.activity .mini-coach-card-check { border-color: #E2C191; }
+    .mini-coach-card.nutrition { background: #D7F4E8; border-color: #83BD96; }
+    .mini-coach-card.nutrition .mini-coach-card-title { color: #4B8F61; }
+    .mini-coach-card.nutrition .mini-coach-card-sub { color: #58A471; }
+    .mini-coach-card.nutrition .mini-coach-card-time { color: #58A471; }
+    .mini-coach-card.nutrition .mini-coach-card-check { border-color: #83BD96; }
+    .mini-coach-card.recovery { background: #E7EBFF; border-color: #8292D5; }
+    .mini-coach-card.recovery .mini-coach-card-title { color: #58669D; }
+    .mini-coach-card.recovery .mini-coach-card-sub { color: #8292D5; }
+    .mini-coach-card.recovery .mini-coach-card-time { color: #8292D5; }
+    .mini-coach-card.recovery .mini-coach-card-check { border-color: #8292D5; }
+    .mini-coach-card.nudge { border-style: dashed; }
+
+    /* Mini Coach Card expanded detail */
+    .mini-coach-card-detail {
+      margin-top: 8px; padding-top: 8px;
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+    .mini-coach-card-detail-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 2px; }
+    .mini-coach-card-detail-items { font-size: 10px; line-height: 1.6; }
+    .mini-coach-card-detail-coach { font-size: 10px; font-style: italic; line-height: 1.4; margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(0,0,0,0.04); }
+
+    /* Mini Coach Reminder (chat) */
+    .mini-coach-reminder {
+      width: 240px;
+      border-radius: 12px;
+      border: 1.5px solid;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mini-reminder-body { flex: 1; min-width: 0; }
+    .mini-reminder-title { font-size: 11px; font-weight: 600; line-height: 1.3; }
+    .mini-reminder-detail { font-size: 10px; font-weight: 400; line-height: 1.3; }
+    .mini-reminder-time { font-size: 9px; font-weight: 600; flex-shrink: 0; }
+    .mini-reminder-arrow {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: rgba(255,255,255,0.6); display: flex;
+      align-items: center; justify-content: center; flex-shrink: 0;
+      font-size: 8px; color: #666;
+    }
+    .mini-coach-reminder.hydration { background: #DBEFFA; border-color: #92B7CE; }
+    .mini-coach-reminder.hydration .mini-reminder-title { color: #3A647E; }
+    .mini-coach-reminder.hydration .mini-reminder-detail { color: #689BBB; }
+    .mini-coach-reminder.hydration .mini-reminder-time { color: #689BBB; }
+    .mini-coach-reminder.activity { background: #F9EFE0; border-color: #E2C191; }
+    .mini-coach-reminder.activity .mini-reminder-title { color: #C08A48; }
+    .mini-coach-reminder.activity .mini-reminder-detail { color: #D4A163; }
+    .mini-coach-reminder.activity .mini-reminder-time { color: #D4A163; }
+    .mini-coach-reminder.nutrition { background: #D7F4E8; border-color: #83BD96; }
+    .mini-coach-reminder.nutrition .mini-reminder-title { color: #4B8F61; }
+    .mini-coach-reminder.nutrition .mini-reminder-detail { color: #58A471; }
+    .mini-coach-reminder.nutrition .mini-reminder-time { color: #58A471; }
+    .mini-coach-reminder.recovery { background: #E7EBFF; border-color: #8292D5; }
+    .mini-coach-reminder.recovery .mini-reminder-title { color: #58669D; }
+    .mini-coach-reminder.recovery .mini-reminder-detail { color: #8292D5; }
+    .mini-coach-reminder.recovery .mini-reminder-time { color: #8292D5; }
     .mini-memory {
       font-size: 13px;
       font-weight: 600;
@@ -1569,16 +1652,18 @@
       <a class="nav-link" href="#typography">Typography</a>
       <a class="nav-link" href="#spacing">Spacing</a>
       <a class="nav-link" href="#border">Border</a>
-      <a class="nav-link" href="#iconography">Iconography <span class="nav-badge nav-badge-stub">Stub</span></a>
+      <a class="nav-link" href="#iconography">Iconography</a>
       <a class="nav-link" href="#elevation">Elevation <span class="nav-badge nav-badge-stub">Stub</span></a>
 
       <div class="nav-section">Components</div>
       <a class="nav-link" href="#comp-nav">Navigation & Chrome</a>
       <a class="nav-link" href="#comp-messages">Messages</a>
       <a class="nav-link" href="#comp-suggestions">Suggestions</a>
-      <a class="nav-link" href="#comp-logging">Logging Chips</a>
+      <a class="nav-link" href="#comp-coach-cards">Coach Cards</a>
+      <a class="nav-link" href="#comp-coach-reminders">Coach Reminders</a>
       <a class="nav-link" href="#comp-memory">Memory & Context</a>
       <a class="nav-link" href="#comp-data">Data Display</a>
+      <a class="nav-link" href="#comp-dataviz">Data Viz Examples</a>
       <a class="nav-link" href="#comp-forms">Form Controls</a>
       <a class="nav-link" href="#comp-buttons">Buttons</a>
       <a class="nav-link" href="#comp-cards">Cards & Notices</a>
@@ -2429,10 +2514,144 @@
           <span class="badge badge-section">Foundations</span>
         </div>
         <p class="section-description">
-          Icon style, sizes, and usage guidelines for Ottavia surfaces. Coming soon.
+          Icon inventory for Ottavia. Line-style, 2px stroke, rounded caps/joins. Default color #433E36, secondary #A8A297. Destructive #C0392B.
+          Sourced from <a href="https://www.figma.com/design/Zci1tnQn86cVDQC09Lj66r/Ottavia-mobile-app?node-id=62-9365" style="color:#427EF7" target="_blank">Figma &rarr; Iconography</a>.
+          Icons via <a href="https://lucide.dev" style="color:#427EF7" target="_blank">Lucide</a>.
         </p>
+
+        <style>
+          .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+            margin-bottom: 32px;
+          }
+          .icon-cell {
+            background: #fff;
+            border: 1px solid #E5E0D8;
+            border-radius: 12px;
+            padding: 20px 12px 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+          }
+          .icon-cell img {
+            width: 28px;
+            height: 28px;
+            /* Tint to #433E36 using CSS filter — closest match */
+            filter: brightness(0) saturate(100%) invert(22%) sepia(8%) saturate(1089%) hue-rotate(13deg) brightness(97%) contrast(89%);
+          }
+          .icon-cell.destructive img {
+            filter: brightness(0) saturate(100%) invert(27%) sepia(72%) saturate(2125%) hue-rotate(346deg) brightness(82%) contrast(93%);
+          }
+          .icon-cell-label {
+            font-size: 11px;
+            color: #6B665D;
+            text-align: center;
+            line-height: 1.3;
+          }
+          .icon-cell.destructive .icon-cell-label { color: #C0392B; }
+        </style>
+
+        <h3 class="subsection-title">Core Chat Icons</h3>
+        <p style="font-size:13px;color:#6B665D;margin-bottom:16px;">Icons used in the chat header, composer, and navigation chrome.</p>
+
+        <div class="icon-grid">
+          <div class="icon-cell">
+            <img src="icons/calendar.svg" alt="Calendar">
+            <div class="icon-cell-label">Calendar chat</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/circle-user-round.svg" alt="Profile">
+            <div class="icon-cell-label">Profile chat</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/camera.svg" alt="Camera">
+            <div class="icon-cell-label">Camera chat</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/plus.svg" alt="More">
+            <div class="icon-cell-label">More chat</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/file-text.svg" alt="Feedback">
+            <div class="icon-cell-label">Feedback chat</div>
+          </div>
+        </div>
+
+        <h3 class="subsection-title">Profile & Settings</h3>
+        <p style="font-size:13px;color:#6B665D;margin-bottom:16px;">Icons used across profile, settings, and detail screens.</p>
+
+        <div class="icon-grid">
+          <div class="icon-cell">
+            <img src="icons/user-round.svg" alt="Profile details">
+            <div class="icon-cell-label">Profile details</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/sliders-horizontal.svg" alt="My preferences">
+            <div class="icon-cell-label">My preferences</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/clipboard-list.svg" alt="Conditions">
+            <div class="icon-cell-label">Conditions</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/utensils-crossed.svg" alt="Nutrition">
+            <div class="icon-cell-label">Nutrition</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/activity.svg" alt="Movement">
+            <div class="icon-cell-label">Movement</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/leaf.svg" alt="Recovery">
+            <div class="icon-cell-label">Recovery</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/smartphone.svg" alt="Connected devices">
+            <div class="icon-cell-label">Connected devices</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/ruler.svg" alt="Units">
+            <div class="icon-cell-label">Units of Measurement</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/circle-help.svg" alt="Help">
+            <div class="icon-cell-label">How to use Ottavia</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/scroll-text.svg" alt="Terms">
+            <div class="icon-cell-label">Terms & Conditions</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/shield.svg" alt="Privacy">
+            <div class="icon-cell-label">Privacy & Policy</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/message-circle.svg" alt="Feedback">
+            <div class="icon-cell-label">Feedback & support</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/database.svg" alt="Data management">
+            <div class="icon-cell-label">Data management</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/settings.svg" alt="Version">
+            <div class="icon-cell-label">Version</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/x.svg" alt="Close">
+            <div class="icon-cell-label">X (Close)</div>
+          </div>
+          <div class="icon-cell destructive">
+            <img src="icons/trash-2.svg" alt="Delete">
+            <div class="icon-cell-label">Delete</div>
+          </div>
+        </div>
+
         <div class="info-box">
-          <strong>Planned:</strong> Icon inventory, size tokens (16/18/20/24/30px), stroke weight, color rules, and Figma source links. Currently icons are sourced from various sets — needs consolidation.
+          <strong>Style rules:</strong> Line-style, 2px stroke, rounded caps/joins. Default color #433E36. Destructive actions use #C0392B. Size tokens: 24px (default), 20px (compact lists), 28px (settings headers). Background variant: cream circle (#F0EBE2) behind the icon for elevated surfaces.
         </div>
       </section>
 
@@ -3282,87 +3501,248 @@
         </div>
       </section>
 
-      <!-- ===== LOGGING CHIPS ===== -->
-      <section class="comp-category" id="comp-logging">
-        <h3 class="comp-category-title">Logging Chips</h3>
-        <p class="comp-category-desc">Colored cards for quick-logging actions in chat. Each has title + timestamp.</p>
+      <!-- ===== COACH CARDS (Calendar) ===== -->
+      <section class="comp-category" id="comp-coach-cards">
+        <h3 class="comp-category-title">Coach Cards</h3>
+        <p class="comp-category-desc">Calendar event cards with expandable detail. Pastel backgrounds, 2px border, check button. Used in the Plan/Calendar screen. v14 design tokens.</p>
 
         <div class="comp-grid">
+          <!-- Hydration Coach Card -->
           <div class="comp-card">
             <div class="comp-preview" style="flex-direction:column;gap:8px;">
-              <div class="mini-log-chip" style="background:#75A6FF;border:1px solid #75A6FF;">
-                <span class="mini-log-chip-title">&#128167; Hydration chip</span>
-                <span class="mini-log-chip-time">7:00</span>
+              <div class="mini-coach-card hydration">
+                <div class="mini-coach-card-title">Rise and hydrate</div>
+                <div class="mini-coach-card-sub">300 ml — wake up your system</div>
+                <div class="mini-coach-card-time">7:00 AM</div>
+                <div class="mini-coach-card-check"></div>
               </div>
             </div>
             <div class="comp-info">
-              <div class="comp-name">Hydration Chip</div>
-              <div class="comp-desc">White bg + blue border variant. Blue #75A6FF text. 18px Semibold title, 16px Regular time.</div>
+              <div class="comp-name">Hydration Coach Card</div>
+              <div class="comp-desc">Border #92B7CE, bg #DBEFFA, title #3A647E, text #689BBB. 20px radius, 2px border.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Collapsed</span>
+                <span class="comp-variant-tag">Expanded</span>
+              </div>
             </div>
           </div>
 
+          <!-- Activity Coach Card -->
           <div class="comp-card">
-            <div class="comp-preview">
-              <div class="mini-log-chip" style="background:#ECBD69;">
-                <span class="mini-log-chip-title">&#128095; Activity chip</span>
-                <span class="mini-log-chip-time">7:00</span>
+            <div class="comp-preview" style="flex-direction:column;gap:8px;">
+              <div class="mini-coach-card activity">
+                <div class="mini-coach-card-title">Easy run — keep it conversational</div>
+                <div class="mini-coach-card-sub">30 min · Zone 2 · Recovery pace</div>
+                <div class="mini-coach-card-time">7:30 AM</div>
+                <div class="mini-coach-card-check"></div>
               </div>
             </div>
             <div class="comp-info">
-              <div class="comp-name">Activity Chip</div>
-              <div class="comp-desc">Yellow #ECBD69 background, white text, radius 10px.</div>
+              <div class="comp-name">Activity Coach Card</div>
+              <div class="comp-desc">Border #E2C191, bg #F9EFE0, title #C08A48, text #D4A163. Expandable with workout plan.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Collapsed</span>
+                <span class="comp-variant-tag">Expanded</span>
+              </div>
             </div>
           </div>
 
+          <!-- Nutrition Coach Card -->
           <div class="comp-card">
-            <div class="comp-preview">
-              <div class="mini-log-chip" style="background:#4AC39F;">
-                <span class="mini-log-chip-title">&#129367; Meal / Snack chip</span>
-                <span class="mini-log-chip-time">7:00</span>
+            <div class="comp-preview" style="flex-direction:column;gap:8px;">
+              <div class="mini-coach-card nutrition">
+                <div class="mini-coach-card-title">Lunch — lean protein + greens</div>
+                <div class="mini-coach-card-sub">Chicken salad · ~500 kcal · 42g protein</div>
+                <div class="mini-coach-card-time">12:00 PM</div>
+                <div class="mini-coach-card-check"></div>
               </div>
             </div>
             <div class="comp-info">
-              <div class="comp-name">Meal / Snack Chip</div>
-              <div class="comp-desc">Green #4AC39F bg, shadow 0 1px 5px rgba(0,0,0,0.19), radius 10px.</div>
+              <div class="comp-name">Nutrition Coach Card</div>
+              <div class="comp-desc">Border #83BD96, bg #D7F4E8, title #4B8F61, text #58A471. Expands with ingredients + coach note.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Collapsed</span>
+                <span class="comp-variant-tag">Expanded</span>
+              </div>
             </div>
           </div>
 
+          <!-- Recovery Coach Card (nudge) -->
           <div class="comp-card">
-            <div class="comp-preview">
-              <div class="mini-log-chip" style="background:#C470D0;">
-                <span class="mini-log-chip-title">&#128716;&#65039; Rest chip</span>
-                <span class="mini-log-chip-time">7:00</span>
+            <div class="comp-preview" style="flex-direction:column;gap:8px;">
+              <div class="mini-coach-card recovery nudge">
+                <div class="mini-coach-card-title">Time to wind down</div>
+                <div class="mini-coach-card-sub">Phone away, lights low — you've earned the rest</div>
+                <div class="mini-coach-card-time">9:30 PM</div>
               </div>
             </div>
             <div class="comp-info">
-              <div class="comp-name">Rest Chip</div>
-              <div class="comp-desc">Purple #C470D0 background, white text, radius 10px.</div>
+              <div class="comp-name">Recovery Coach Card</div>
+              <div class="comp-desc">Border #8292D5, bg #E7EBFF, title #58669D, text #8292D5. Nudge variant uses dashed border, no check.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag">Standard</span>
+                <span class="comp-variant-tag">Nudge (dashed)</span>
+              </div>
             </div>
           </div>
 
+          <!-- Expanded Coach Card example -->
           <div class="comp-card">
-            <div class="comp-preview">
-              <div class="mini-log-chip" style="background:#D0A370;">
-                <span class="mini-log-chip-title">&#9749; Coffee chip</span>
-                <span class="mini-log-chip-time">7:00</span>
+            <div class="comp-preview" style="flex-direction:column;gap:8px;">
+              <div class="mini-coach-card nutrition">
+                <div class="mini-coach-card-title">Lunch — lean protein + greens</div>
+                <div class="mini-coach-card-sub">Chicken salad · ~500 kcal</div>
+                <div class="mini-coach-card-detail">
+                  <div class="mini-coach-card-detail-label" style="color:#4B8F61;">What to make</div>
+                  <div class="mini-coach-card-detail-items" style="color:#4B8F61;">120g chicken breast<br>2 cups mixed greens<br>1/2 avocado · tomatoes</div>
+                  <div class="mini-coach-card-detail-coach" style="color:#58A471;">This combo keeps energy steady all afternoon.</div>
+                </div>
+                <div class="mini-coach-card-time">12:00 PM</div>
+                <div class="mini-coach-card-check"></div>
               </div>
             </div>
             <div class="comp-info">
-              <div class="comp-name">Coffee Chip</div>
-              <div class="comp-desc">Brown #D0A370 bg, border 1px #C0935E, white text.</div>
+              <div class="comp-name">Coach Card — Expanded</div>
+              <div class="comp-desc">Detail section: label (10px uppercase), items (13px), coach note (12px italic). Divider 1px rgba(0,0,0,0.08).</div>
             </div>
           </div>
 
+          <!-- Completed Coach Card -->
           <div class="comp-card">
-            <div class="comp-preview">
-              <div class="mini-log-chip" style="background:#67C8D7;border:1px solid #53B4C3;">
-                <span class="mini-log-chip-title">&#128138; Supplement chip</span>
-                <span class="mini-log-chip-time">7:00</span>
+            <div class="comp-preview" style="flex-direction:column;gap:8px;">
+              <div class="mini-coach-card hydration" style="opacity:0.55;">
+                <div class="mini-coach-card-title" style="text-decoration:line-through;">Rise and hydrate</div>
+                <div class="mini-coach-card-sub">300 ml — wake up your system</div>
+                <div class="mini-coach-card-time">7:00 AM</div>
+                <div class="mini-coach-card-check" style="background:rgba(255,255,255,0.5);"></div>
               </div>
             </div>
             <div class="comp-info">
-              <div class="comp-name">Supplement Chip</div>
-              <div class="comp-desc">Teal #67C8D7 bg, border 1px #53B4C3, white text.</div>
+              <div class="comp-name">Coach Card — Completed</div>
+              <div class="comp-desc">55% opacity on inner card. Title gets line-through. Check button filled with white 50% opacity.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== COACH REMINDERS (Chat) ===== -->
+      <section class="comp-category" id="comp-coach-reminders">
+        <h3 class="comp-category-title">Coach Reminders <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;padding:2px 8px;border-radius:8px;background:#FFF3E0;color:#E6A643;margin-left:6px;vertical-align:middle;">WIP</span></h3>
+        <p class="comp-category-desc">Compact inline reminders in chat. Same events as Coach Cards but optimized for conversation context. Tapping navigates to the full Coach Card in calendar. No check button, no expand.</p>
+
+        <div class="comp-grid">
+          <!-- Hydration Reminder -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;gap:8px;">
+              <div class="mini-coach-reminder hydration">
+                <div class="mini-reminder-body">
+                  <div class="mini-reminder-title">Rise and hydrate</div>
+                  <div class="mini-reminder-detail">300 ml — wake up your system</div>
+                </div>
+                <span class="mini-reminder-time">7:00</span>
+                <div class="mini-reminder-arrow">&rsaquo;</div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Hydration Reminder</div>
+              <div class="comp-desc">Border #92B7CE, bg #DBEFFA. 16px radius, 1.5px border, max-width 85%. Arrow navigates to calendar.</div>
+            </div>
+          </div>
+
+          <!-- Activity Reminder -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;gap:8px;">
+              <div class="mini-coach-reminder activity">
+                <div class="mini-reminder-body">
+                  <div class="mini-reminder-title">Easy run — conversational</div>
+                  <div class="mini-reminder-detail">30 min · Zone 2</div>
+                </div>
+                <span class="mini-reminder-time">7:30</span>
+                <div class="mini-reminder-arrow">&rsaquo;</div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Activity Reminder</div>
+              <div class="comp-desc">Border #E2C191, bg #F9EFE0. Title 14px semibold, detail 12.5px regular, time 11px semibold.</div>
+            </div>
+          </div>
+
+          <!-- Nutrition Reminder -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;gap:8px;">
+              <div class="mini-coach-reminder nutrition">
+                <div class="mini-reminder-body">
+                  <div class="mini-reminder-title">Lunch — protein + greens</div>
+                  <div class="mini-reminder-detail">Chicken salad · ~500 kcal</div>
+                </div>
+                <span class="mini-reminder-time">12:00</span>
+                <div class="mini-reminder-arrow">&rsaquo;</div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Nutrition Reminder</div>
+              <div class="comp-desc">Border #83BD96, bg #D7F4E8. Appears below coach chat bubble with meal context.</div>
+            </div>
+          </div>
+
+          <!-- Recovery Reminder -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;gap:8px;">
+              <div class="mini-coach-reminder recovery">
+                <div class="mini-reminder-body">
+                  <div class="mini-reminder-title">Time to wind down</div>
+                  <div class="mini-reminder-detail">Phone away, lights low</div>
+                </div>
+                <span class="mini-reminder-time">21:00</span>
+                <div class="mini-reminder-arrow">&rsaquo;</div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Recovery Reminder</div>
+              <div class="comp-desc">Border #8292D5, bg #E7EBFF. Recovery nudges in chat for wind-down, sleep, stretching.</div>
+            </div>
+          </div>
+
+          <!-- Reminder in chat context -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;gap:6px;align-items:flex-start;padding-left:20px;">
+              <div style="background:#F0EBE2;border-radius:12px 12px 12px 3px;padding:8px 12px;font-size:11px;color:#433E36;max-width:220px;line-height:1.4;">Good morning! Let's start with water</div>
+              <div class="mini-coach-reminder hydration" style="width:220px;">
+                <div class="mini-reminder-body">
+                  <div class="mini-reminder-title">Rise and hydrate</div>
+                  <div class="mini-reminder-detail">300 ml</div>
+                </div>
+                <span class="mini-reminder-time">7:00</span>
+                <div class="mini-reminder-arrow">&rsaquo;</div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Reminder in Chat Context</div>
+              <div class="comp-desc">Appears directly below coach bubble. Same left-alignment as bubble. Padding 12px 16px, gap 6px from bubble.</div>
+            </div>
+          </div>
+
+          <!-- Card vs Reminder comparison -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;gap:10px;">
+              <div class="mini-coach-card nutrition" style="width:240px;">
+                <div class="mini-coach-card-title" style="font-size:12px;">Lunch — protein + greens</div>
+                <div class="mini-coach-card-sub" style="font-size:10px;">~500 kcal · 42g protein</div>
+                <div class="mini-coach-card-time" style="font-size:9px;">12:00 PM</div>
+                <div class="mini-coach-card-check" style="width:16px;height:16px;top:8px;right:8px;"></div>
+              </div>
+              <div class="mini-coach-reminder nutrition" style="width:240px;">
+                <div class="mini-reminder-body">
+                  <div class="mini-reminder-title">Lunch — protein + greens</div>
+                  <div class="mini-reminder-detail">~500 kcal · 42g protein</div>
+                </div>
+                <span class="mini-reminder-time">12:00</span>
+                <div class="mini-reminder-arrow">&rsaquo;</div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Card vs Reminder</div>
+              <div class="comp-desc">Same content, different density. Card: 20px radius, check, expandable. Reminder: 16px radius, arrow, inline.</div>
             </div>
           </div>
         </div>
@@ -3652,6 +4032,365 @@
               <div class="comp-desc">Light muted header inside data cards. 18px Semibold #ACA391. Used on Meals, Movement, Recovery, Macros card.</div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <!-- ===== DATA VISUALIZATION EXAMPLES ===== -->
+      <section class="comp-category" id="comp-dataviz">
+        <h3 class="comp-category-title">Data Visualization Examples</h3>
+        <p class="comp-category-desc">Chart patterns for answering user health questions. Each uses domain-specific calendar card colors.</p>
+
+        <div class="comp-grid">
+
+          <!-- Progress Bar — Hydration -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;align-items:stretch;padding:20px 24px;">
+              <div style="font-size:11px;font-weight:600;color:#689BBB;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Hydration</div>
+              <div style="font-size:13px;font-weight:600;color:#3A647E;margin-bottom:4px;">"How much water did I drink today?"</div>
+              <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:10px;">
+                <span style="font-size:28px;font-weight:700;color:#3A647E;">1.8L</span>
+                <span style="font-size:13px;color:#689BBB;">/ 2.5L goal</span>
+              </div>
+              <div style="background:#DBEFFA;border-radius:20px;height:10px;overflow:hidden;">
+                <div style="background:#3A647E;height:100%;width:72%;border-radius:20px;"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:11px;color:#689BBB;">
+                <span>72%</span>
+                <span>700ml remaining</span>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Progress Bar — Hydration</div>
+              <div class="comp-desc">Linear progress toward daily water goal. Track: hydration.bg (#DBEFFA), fill: hydration.title (#3A647E). Big value + remaining.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag" style="background:#DBEFFA;color:#3A647E;">Hydration</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress Bar — Nutrition -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;align-items:stretch;padding:20px 24px;">
+              <div style="font-size:11px;font-weight:600;color:#58A471;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Nutrition</div>
+              <div style="font-size:13px;font-weight:600;color:#4B8F61;margin-bottom:4px;">"How much protein did I eat today?"</div>
+              <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:10px;">
+                <span style="font-size:28px;font-weight:700;color:#4B8F61;">82g</span>
+                <span style="font-size:13px;color:#58A471;">/ 120g goal</span>
+              </div>
+              <div style="background:#D7F4E8;border-radius:20px;height:10px;overflow:hidden;">
+                <div style="background:#4B8F61;height:100%;width:68%;border-radius:20px;"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:11px;color:#58A471;">
+                <span>68%</span>
+                <span>38g remaining</span>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Progress Bar — Nutrition</div>
+              <div class="comp-desc">Protein intake progress. Track: nutrition.bg (#D7F4E8), fill: nutrition.title (#4B8F61). Same layout as hydration.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag" style="background:#D7F4E8;color:#4B8F61;">Nutrition</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bar Chart — Activity (Weekly) -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;align-items:stretch;padding:20px 24px;">
+              <div style="font-size:11px;font-weight:600;color:#D4A163;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Activity</div>
+              <div style="font-size:13px;font-weight:600;color:#C08A48;margin-bottom:4px;">"How active was I this week?"</div>
+              <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:14px;">
+                <span style="font-size:28px;font-weight:700;color:#C08A48;">4,820</span>
+                <span style="font-size:13px;color:#D4A163;">avg steps / day</span>
+              </div>
+              <div style="display:flex;align-items:flex-end;gap:6px;height:80px;">
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
+                  <div style="background:#C08A48;width:100%;height:60px;border-radius:4px 4px 0 0;"></div>
+                  <span style="font-size:9px;color:#D4A163;font-weight:600;">Mon</span>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
+                  <div style="background:#C08A48;width:100%;height:45px;border-radius:4px 4px 0 0;"></div>
+                  <span style="font-size:9px;color:#D4A163;font-weight:600;">Tue</span>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
+                  <div style="background:#C08A48;width:100%;height:72px;border-radius:4px 4px 0 0;"></div>
+                  <span style="font-size:9px;color:#D4A163;font-weight:600;">Wed</span>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
+                  <div style="background:#C08A48;width:100%;height:38px;border-radius:4px 4px 0 0;"></div>
+                  <span style="font-size:9px;color:#D4A163;font-weight:600;">Thu</span>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
+                  <div style="background:#C08A48;width:100%;height:55px;border-radius:4px 4px 0 0;"></div>
+                  <span style="font-size:9px;color:#D4A163;font-weight:600;">Fri</span>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
+                  <div style="background:#F9EFE0;border:1.5px solid #E2C191;width:100%;height:68px;border-radius:4px 4px 0 0;"></div>
+                  <span style="font-size:9px;color:#D4A163;font-weight:600;">Sat</span>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
+                  <div style="background:#F9EFE0;border:1.5px solid #E2C191;width:100%;height:20px;border-radius:4px 4px 0 0;"></div>
+                  <span style="font-size:9px;color:#D4A163;font-weight:600;">Sun</span>
+                </div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Bar Chart — Weekly Activity</div>
+              <div class="comp-desc">7-day step count bars. Past days: solid activity.title (#C08A48). Future days: activity.bg (#F9EFE0) + activity.border (#E2C191) outline. Rounded top corners.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag" style="background:#F9EFE0;color:#C08A48;">Activity</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bar Chart — Nutrition (Macros) -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;align-items:stretch;padding:20px 24px;">
+              <div style="font-size:11px;font-weight:600;color:#58A471;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Nutrition</div>
+              <div style="font-size:13px;font-weight:600;color:#4B8F61;margin-bottom:4px;">"Show me today's macros breakdown"</div>
+              <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:14px;">
+                <span style="font-size:28px;font-weight:700;color:#4B8F61;">1,450</span>
+                <span style="font-size:13px;color:#58A471;">kcal logged</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span style="font-size:11px;font-weight:600;color:#4B8F61;width:48px;">Protein</span>
+                  <div style="flex:1;background:#D7F4E8;border-radius:20px;height:14px;overflow:hidden;">
+                    <div style="background:#4B8F61;height:100%;width:68%;border-radius:20px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;">
+                      <span style="font-size:8px;font-weight:700;color:#fff;">82g</span>
+                    </div>
+                  </div>
+                  <span style="font-size:10px;color:#83BD96;width:32px;text-align:right;">120g</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span style="font-size:11px;font-weight:600;color:#4B8F61;width:48px;">Carbs</span>
+                  <div style="flex:1;background:#D7F4E8;border-radius:20px;height:14px;overflow:hidden;">
+                    <div style="background:#58A471;height:100%;width:55%;border-radius:20px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;">
+                      <span style="font-size:8px;font-weight:700;color:#fff;">138g</span>
+                    </div>
+                  </div>
+                  <span style="font-size:10px;color:#83BD96;width:32px;text-align:right;">250g</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span style="font-size:11px;font-weight:600;color:#4B8F61;width:48px;">Fats</span>
+                  <div style="flex:1;background:#D7F4E8;border-radius:20px;height:14px;overflow:hidden;">
+                    <div style="background:#83BD96;height:100%;width:78%;border-radius:20px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;">
+                      <span style="font-size:8px;font-weight:700;color:#fff;">55g</span>
+                    </div>
+                  </div>
+                  <span style="font-size:10px;color:#83BD96;width:32px;text-align:right;">70g</span>
+                </div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Bar Chart — Macros Breakdown</div>
+              <div class="comp-desc">Horizontal stacked bars for macro nutrients. Labels left, goals right. Tracks: nutrition.bg, fills: graduated nutrition greens. Values inside bars.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag" style="background:#D7F4E8;color:#4B8F61;">Nutrition</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Line Chart — Recovery (Sleep) -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;align-items:stretch;padding:20px 24px;">
+              <div style="font-size:11px;font-weight:600;color:#8292D5;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Recovery</div>
+              <div style="font-size:13px;font-weight:600;color:#58669D;margin-bottom:4px;">"How well did I sleep this week?"</div>
+              <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:14px;">
+                <span style="font-size:28px;font-weight:700;color:#58669D;">7.2h</span>
+                <span style="font-size:13px;color:#8292D5;">avg / night</span>
+              </div>
+              <svg viewBox="0 0 280 80" style="width:100%;height:80px;">
+                <!-- Grid lines -->
+                <line x1="0" y1="20" x2="280" y2="20" stroke="#E7EBFF" stroke-width="1" stroke-dasharray="4,4"/>
+                <line x1="0" y1="40" x2="280" y2="40" stroke="#E7EBFF" stroke-width="1" stroke-dasharray="4,4"/>
+                <line x1="0" y1="60" x2="280" y2="60" stroke="#E7EBFF" stroke-width="1" stroke-dasharray="4,4"/>
+                <!-- Area fill -->
+                <polygon points="0,35 47,28 94,42 141,20 188,32 235,38 280,25 280,75 0,75" fill="#E7EBFF" opacity="0.5"/>
+                <!-- Line -->
+                <polyline points="0,35 47,28 94,42 141,20 188,32 235,38 280,25" fill="none" stroke="#58669D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Dots -->
+                <circle cx="0" cy="35" r="3.5" fill="#58669D"/>
+                <circle cx="47" cy="28" r="3.5" fill="#58669D"/>
+                <circle cx="94" cy="42" r="3.5" fill="#58669D"/>
+                <circle cx="141" cy="20" r="3.5" fill="#58669D"/>
+                <circle cx="188" cy="32" r="3.5" fill="#58669D"/>
+                <circle cx="235" cy="38" r="3.5" fill="#58669D"/>
+                <circle cx="280" cy="25" r="3.5" fill="#58669D"/>
+                <!-- Day labels -->
+                <text x="0" y="75" font-size="9" fill="#8292D5" font-weight="600">Mon</text>
+                <text x="40" y="75" font-size="9" fill="#8292D5" font-weight="600">Tue</text>
+                <text x="84" y="75" font-size="9" fill="#8292D5" font-weight="600">Wed</text>
+                <text x="131" y="75" font-size="9" fill="#8292D5" font-weight="600">Thu</text>
+                <text x="181" y="75" font-size="9" fill="#8292D5" font-weight="600">Fri</text>
+                <text x="228" y="75" font-size="9" fill="#8292D5" font-weight="600">Sat</text>
+                <text x="271" y="75" font-size="9" fill="#8292D5" font-weight="600">Sun</text>
+              </svg>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Line Chart — Weekly Sleep</div>
+              <div class="comp-desc">7-day sleep trend. Line: recovery.title (#58669D), area fill: recovery.bg (#E7EBFF) at 50% opacity. Dots on data points, dashed grid lines.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag" style="background:#E7EBFF;color:#58669D;">Recovery</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Line Chart — Hydration (Weekly) -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;align-items:stretch;padding:20px 24px;">
+              <div style="font-size:11px;font-weight:600;color:#689BBB;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Hydration</div>
+              <div style="font-size:13px;font-weight:600;color:#3A647E;margin-bottom:4px;">"Am I drinking enough water this week?"</div>
+              <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:14px;">
+                <span style="font-size:28px;font-weight:700;color:#3A647E;">2.1L</span>
+                <span style="font-size:13px;color:#689BBB;">avg / day</span>
+              </div>
+              <svg viewBox="0 0 280 80" style="width:100%;height:80px;">
+                <!-- Goal line -->
+                <line x1="0" y1="22" x2="280" y2="22" stroke="#92B7CE" stroke-width="1" stroke-dasharray="6,3"/>
+                <text x="282" y="25" font-size="8" fill="#92B7CE">2.5L</text>
+                <!-- Grid -->
+                <line x1="0" y1="40" x2="280" y2="40" stroke="#DBEFFA" stroke-width="1" stroke-dasharray="4,4"/>
+                <line x1="0" y1="58" x2="280" y2="58" stroke="#DBEFFA" stroke-width="1" stroke-dasharray="4,4"/>
+                <!-- Area fill -->
+                <polygon points="0,32 47,28 94,38 141,30 188,45 235,26 280,34 280,70 0,70" fill="#DBEFFA" opacity="0.6"/>
+                <!-- Line -->
+                <polyline points="0,32 47,28 94,38 141,30 188,45 235,26 280,34" fill="none" stroke="#3A647E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Dots -->
+                <circle cx="0" cy="32" r="3.5" fill="#3A647E"/>
+                <circle cx="47" cy="28" r="3.5" fill="#3A647E"/>
+                <circle cx="94" cy="38" r="3.5" fill="#3A647E"/>
+                <circle cx="141" cy="30" r="3.5" fill="#3A647E"/>
+                <circle cx="188" cy="45" r="3.5" fill="#3A647E"/>
+                <circle cx="235" cy="26" r="3.5" fill="#fff" stroke="#3A647E" stroke-width="2"/>
+                <circle cx="280" cy="34" r="3.5" fill="#fff" stroke="#3A647E" stroke-width="2"/>
+                <!-- Day labels -->
+                <text x="0" y="70" font-size="9" fill="#689BBB" font-weight="600">Mon</text>
+                <text x="40" y="70" font-size="9" fill="#689BBB" font-weight="600">Tue</text>
+                <text x="84" y="70" font-size="9" fill="#689BBB" font-weight="600">Wed</text>
+                <text x="131" y="70" font-size="9" fill="#689BBB" font-weight="600">Thu</text>
+                <text x="181" y="70" font-size="9" fill="#689BBB" font-weight="600">Fri</text>
+                <text x="228" y="70" font-size="9" fill="#689BBB" font-weight="600">Sat</text>
+                <text x="271" y="70" font-size="9" fill="#689BBB" font-weight="600">Sun</text>
+              </svg>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Line Chart — Weekly Hydration</div>
+              <div class="comp-desc">Water intake trend with goal line (dashed). Line: hydration.title (#3A647E), area: hydration.bg (#DBEFFA). Open dots = future/projected.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag" style="background:#DBEFFA;color:#3A647E;">Hydration</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress Bar — Recovery -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;align-items:stretch;padding:20px 24px;">
+              <div style="font-size:11px;font-weight:600;color:#8292D5;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Recovery</div>
+              <div style="font-size:13px;font-weight:600;color:#58669D;margin-bottom:4px;">"What's my recovery score today?"</div>
+              <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:10px;">
+                <span style="font-size:28px;font-weight:700;color:#58669D;">78</span>
+                <span style="font-size:13px;color:#8292D5;">/ 100</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <div>
+                  <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:#58669D;margin-bottom:3px;">
+                    <span>Sleep quality</span><span>85%</span>
+                  </div>
+                  <div style="background:#E7EBFF;border-radius:20px;height:8px;overflow:hidden;">
+                    <div style="background:#58669D;height:100%;width:85%;border-radius:20px;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:#8292D5;margin-bottom:3px;">
+                    <span>HRV</span><span>72%</span>
+                  </div>
+                  <div style="background:#E7EBFF;border-radius:20px;height:8px;overflow:hidden;">
+                    <div style="background:#8292D5;height:100%;width:72%;border-radius:20px;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:#8292D5;margin-bottom:3px;">
+                    <span>Resting HR</span><span>68%</span>
+                  </div>
+                  <div style="background:#E7EBFF;border-radius:20px;height:8px;overflow:hidden;">
+                    <div style="background:#8292D5;height:100%;width:68%;border-radius:20px;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Progress Bars — Recovery Score</div>
+              <div class="comp-desc">Multi-metric recovery breakdown. Each sub-metric has its own bar. Track: recovery.bg (#E7EBFF), fill: recovery.title (#58669D) for primary, recovery.text (#8292D5) for secondary.</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag" style="background:#E7EBFF;color:#58669D;">Recovery</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bar Chart — Activity (Calories burned) -->
+          <div class="comp-card">
+            <div class="comp-preview" style="flex-direction:column;align-items:stretch;padding:20px 24px;">
+              <div style="font-size:11px;font-weight:600;color:#D4A163;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Activity</div>
+              <div style="font-size:13px;font-weight:600;color:#C08A48;margin-bottom:4px;">"How many calories did I burn this week?"</div>
+              <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:14px;">
+                <span style="font-size:28px;font-weight:700;color:#C08A48;">2,340</span>
+                <span style="font-size:13px;color:#D4A163;">kcal total</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-size:10px;font-weight:600;color:#C08A48;width:30px;">Mon</span>
+                  <div style="flex:1;background:#F9EFE0;border-radius:20px;height:12px;overflow:hidden;">
+                    <div style="background:#C08A48;height:100%;width:70%;border-radius:20px;"></div>
+                  </div>
+                  <span style="font-size:10px;color:#D4A163;width:36px;text-align:right;">420</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-size:10px;font-weight:600;color:#C08A48;width:30px;">Tue</span>
+                  <div style="flex:1;background:#F9EFE0;border-radius:20px;height:12px;overflow:hidden;">
+                    <div style="background:#C08A48;height:100%;width:55%;border-radius:20px;"></div>
+                  </div>
+                  <span style="font-size:10px;color:#D4A163;width:36px;text-align:right;">330</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-size:10px;font-weight:600;color:#C08A48;width:30px;">Wed</span>
+                  <div style="flex:1;background:#F9EFE0;border-radius:20px;height:12px;overflow:hidden;">
+                    <div style="background:#C08A48;height:100%;width:90%;border-radius:20px;"></div>
+                  </div>
+                  <span style="font-size:10px;color:#D4A163;width:36px;text-align:right;">540</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-size:10px;font-weight:600;color:#C08A48;width:30px;">Thu</span>
+                  <div style="flex:1;background:#F9EFE0;border-radius:20px;height:12px;overflow:hidden;">
+                    <div style="background:#C08A48;height:100%;width:45%;border-radius:20px;"></div>
+                  </div>
+                  <span style="font-size:10px;color:#D4A163;width:36px;text-align:right;">280</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-size:10px;font-weight:600;color:#C08A48;width:30px;">Fri</span>
+                  <div style="flex:1;background:#F9EFE0;border-radius:20px;height:12px;overflow:hidden;">
+                    <div style="background:#C08A48;height:100%;width:82%;border-radius:20px;"></div>
+                  </div>
+                  <span style="font-size:10px;color:#D4A163;width:36px;text-align:right;">490</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-size:10px;font-weight:600;color:#D4A163;width:30px;">Sat</span>
+                  <div style="flex:1;background:#F9EFE0;border-radius:20px;height:12px;overflow:hidden;border:1px solid #E2C191;">
+                    <div style="background:#E2C191;height:100%;width:47%;border-radius:20px;"></div>
+                  </div>
+                  <span style="font-size:10px;color:#D4A163;width:36px;text-align:right;">280</span>
+                </div>
+              </div>
+            </div>
+            <div class="comp-info">
+              <div class="comp-name">Horizontal Bars — Weekly Calories</div>
+              <div class="comp-desc">Horizontal bar chart for daily calories burned. Past days: solid activity.title (#C08A48). Current day: lighter activity.border (#E2C191). Track: activity.bg (#F9EFE0).</div>
+              <div class="comp-variants">
+                <span class="comp-variant-tag" style="background:#F9EFE0;color:#C08A48;">Activity</span>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 

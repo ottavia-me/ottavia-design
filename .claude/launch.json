@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ottavia-design",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-l", "8090", "/Users/vikafinkeldaniel/Documents/Github/ottavia-design"],
+      "port": 8090
+    }
+  ]
+}

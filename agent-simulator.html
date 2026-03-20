@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ottavia — Agent Routing Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Archivo', -apple-system, sans-serif;
+    background: #000;
+    color: #fff;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Input Area ─────────────────────────────── */
+  .input-area {
+    padding: 32px 32px 0;
+    flex-shrink: 0;
+  }
+
+  /* ── Suggest Bar ────────────────────────────── */
+  .suggest-bar {
+    display: flex;
+    gap: 6px;
+    padding: 10px 32px 0;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+  .suggest-btn {
+    padding: 4px 12px;
+    border: 1px solid #1e1e1e;
+    border-radius: 20px;
+    background: none;
+    color: #555;
+    font-size: 11px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+  .suggest-btn:hover {
+    border-color: #00ff88;
+    color: #00ff88;
+  }
+  .suggest-btn.active-category {
+    border-color: #00ff8840;
+    color: #00ff8888;
+  }
+
+  .input-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 10px;
+  }
+
+  .input-row input {
+    flex: 1;
+    background: #0a0a0a;
+    border: 1px solid #222;
+    border-radius: 8px;
+    color: #fff;
+    padding: 14px 18px;
+    font-size: 15px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .input-row input:focus {
+    border-color: #444;
+  }
+
+  .input-row input::placeholder {
+    color: #666;
+  }
+
+  .input-row button {
+    background: #fff;
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 28px;
+    font-size: 14px;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .input-row button:hover {
+    background: #ddd;
+  }
+
+  .input-row button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  /* ── Canvas Area ────────────────────────────── */
+  .canvas-wrap {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* ── Canvas Overlay (top-left, grows downward) ── */
+  .canvas-overlay {
+    position: absolute;
+    top: 20px;
+    left: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+    max-width: 460px;
+  }
+
+  /* ── Info Panel ──────────────────────────────── */
+  .info-panel {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .info-badge {
+    padding: 8px 16px;
+    border: 1px solid #444;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #999;
+    background: rgba(0,0,0,0.8);
+    transition: all 0.4s;
+  }
+
+  .info-badge.active {
+    border-color: #00ff88;
+    color: #00ff88;
+  }
+
+  .info-badge .label {
+    color: #777;
+    margin-right: 6px;
+  }
+
+  /* ── Route Log ──────────────────────────────── */
+  .route-log {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .route-log-item {
+    font-size: 14px;
+    color: #999;
+    margin-bottom: 6px;
+    opacity: 0;
+    transform: translateY(8px);
+    animation: logAppear 0.3s forwards;
+  }
+
+  .route-log-item .step-num {
+    color: #00ff88;
+    margin-right: 6px;
+  }
+
+  @keyframes logAppear {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Reset Button ───────────────────────────── */
+  .reset-btn {
+    position: absolute;
+    top: 16px;
+    right: 32px;
+    padding: 6px 14px;
+    border: 1px solid #222;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #999;
+    background: none;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    pointer-events: auto;
+  }
+
+  .reset-btn:hover {
+    border-color: #666;
+    color: #fff;
+  }
+
+  /* ── Mode Toggle ────────────────────────────── */
+  .mode-toggle {
+    display: flex;
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 8px;
+    padding: 3px;
+    gap: 0;
+    flex-shrink: 0;
+  }
+  .mode-btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    background: none;
+    color: #aaa;
+    font-size: 13px;
+    font-family: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .mode-btn.active { background: #00ff88; color: #000; }
+  .mode-btn:not(.active):hover { color: #bbb; }
+
+  /* ── Config Gear ────────────────────────────── */
+  .config-btn {
+    padding: 8px 12px;
+    border: 1px solid #222;
+    border-radius: 8px;
+    background: none;
+    color: #555;
+    font-size: 15px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .config-btn:hover { border-color: #444; color: #bbb; }
+
+  /* ── Main Content ───────────────────────────── */
+  .main-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ── Response Panel ─────────────────────────── */
+  .response-panel {
+    width: 320px;
+    flex-shrink: 0;
+    border-left: 1px solid #1a1a1a;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    background: #050505;
+  }
+  .mode-live .response-panel { display: flex; }
+
+  .panel-header {
+    padding: 12px 16px 10px;
+    border-bottom: 1px solid #1a1a1a;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: #444;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .panel-agent-tag { font-size: 11px; color: #00ff88; letter-spacing: 0; text-transform: none; font-weight: 600; }
+
+  .panel-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 16px;
+    font-size: 13px;
+    line-height: 1.65;
+    color: #bbb;
+    scrollbar-width: thin;
+    scrollbar-color: #222 transparent;
+  }
+  .panel-body::-webkit-scrollbar { width: 4px; }
+  .panel-body::-webkit-scrollbar-thumb { background: #222; border-radius: 2px; }
+
+  .response-placeholder { color: #2a2a2a; font-style: italic; font-size: 12px; }
+
+  /* Markdown */
+  .response-body h2 { color: #e8e8e8; font-size: 13px; font-weight: 700; margin: 14px 0 5px; }
+  .response-body h3, .response-body h4 { color: #e8e8e8; font-size: 13px; font-weight: 600; margin: 10px 0 4px; }
+  .response-body strong { color: #e8e8e8; font-weight: 600; }
+  .response-body mark { background: #00ff8815; color: #00ff88; padding: 1px 5px; border-radius: 3px; border: 1px solid #00ff8830; font-weight: 500; }
+  .response-body ul { margin: 4px 0 6px 16px; }
+  .response-body li { margin-bottom: 2px; color: #aaa; }
+  .response-body p { margin: 0 0 8px; }
+  .response-body table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 8px 0; }
+  .response-body th, .response-body td { padding: 4px 8px; border: 1px solid #1e1e1e; text-align: left; color: #999; }
+  .response-body th { color: #666; font-weight: 400; font-size: 10px; }
+  .status-line { font-size: 11px; color: #00ff88; letter-spacing: 0.04em; margin-bottom: 10px; font-weight: 600; }
+
+  /* Suggestions */
+  .suggestions-section { border-top: 1px solid #111; padding: 12px 16px; flex-shrink: 0; }
+  .suggestions-title { font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .suggestion-item { font-size: 11px; color: #777; margin-bottom: 8px; line-height: 1.5; padding-left: 8px; border-left: 2px solid #1e1e1e; }
+  .suggestion-item.instruction { border-color: #44aaff30; }
+  .suggestion-item.infra { border-color: #ffcc0030; }
+  .suggestion-label { font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase; display: block; margin-bottom: 2px; }
+  .suggestion-item.instruction .suggestion-label { color: #44aaff66; }
+  .suggestion-item.infra .suggestion-label { color: #ffcc0066; }
+  .suggestion-text { color: #888; }
+
+  /* ── Eval Panel ─────────────────────────────── */
+  .eval-panel {
+    width: 250px;
+    flex-shrink: 0;
+    border-left: 1px solid #1a1a1a;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    background: #030303;
+  }
+  .mode-live .eval-panel { display: flex; }
+
+  .eval-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 12px;
+    scrollbar-width: thin;
+    scrollbar-color: #1a1a1a transparent;
+  }
+  .eval-body::-webkit-scrollbar { width: 4px; }
+  .eval-body::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 2px; }
+
+  .eval-placeholder { color: #222; font-style: italic; font-size: 11px; }
+  .eval-dim { margin-bottom: 10px; }
+  .eval-dim-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; }
+  .eval-dim-name { font-size: 11px; color: #666; text-transform: capitalize; }
+  .eval-dim-score { font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .eval-bar-track { height: 3px; background: #0e0e0e; border-radius: 2px; overflow: hidden; margin-bottom: 2px; }
+  .eval-bar { height: 100%; border-radius: 2px; transition: width 0.8s ease; }
+  .eval-dim-rationale { font-size: 10px; color: #333; line-height: 1.4; }
+
+  .eval-voice-gate { margin-bottom: 12px; padding: 7px 9px; border-radius: 5px; font-size: 11px; }
+  .eval-voice-gate.pass { background: #00ff8806; border: 1px solid #00ff8820; color: #00ff8866; }
+  .eval-voice-gate.fail { background: #ff444406; border: 1px solid #ff444420; color: #ff4444aa; }
+  .eval-voice-gate-title { font-weight: 600; margin-bottom: 3px; }
+  .eval-violation { opacity: 0.7; font-size: 10px; margin-top: 1px; }
+
+  /* ── Config Panel ───────────────────────────── */
+  .config-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; display: none; }
+  .config-overlay.open { display: block; }
+  .config-panel {
+    position: fixed; top: 0; right: 0; width: 320px; height: 100vh;
+    background: #080808; border-left: 1px solid #1a1a1a;
+    z-index: 201; transform: translateX(100%); transition: transform 0.25s ease;
+    display: flex; flex-direction: column;
+  }
+  .config-panel.open { transform: translateX(0); }
+  .config-panel-header { padding: 18px 20px 14px; border-bottom: 1px solid #1a1a1a; display: flex; justify-content: space-between; align-items: center; }
+  .config-panel-title { font-size: 14px; font-weight: 600; color: #ccc; }
+  .config-close-btn { background: none; border: none; color: #444; font-size: 18px; cursor: pointer; padding: 4px; font-family: inherit; transition: color 0.2s; }
+  .config-close-btn:hover { color: #fff; }
+  .config-panel-body { flex: 1; padding: 18px 20px; overflow-y: auto; }
+  .config-field { margin-bottom: 18px; }
+  .config-label { font-size: 10px; color: #555; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; display: block; }
+  .config-input, .config-select {
+    width: 100%; background: #0e0e0e; border: 1px solid #1e1e1e; border-radius: 6px;
+    color: #ccc; padding: 9px 11px; font-size: 13px; font-family: inherit; outline: none;
+    box-sizing: border-box; transition: border-color 0.2s;
+  }
+  .config-input:focus, .config-select:focus { border-color: #333; }
+  .config-select { appearance: none; -webkit-appearance: none; padding-right: 28px;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23555' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-repeat: no-repeat; background-position: right 8px center; background-size: 14px; cursor: pointer; }
+  .config-select option { background: #0e0e0e; }
+  .config-hint { font-size: 10px; color: #333; margin-top: 5px; }
+  .config-status { margin-top: 12px; padding: 8px 11px; border-radius: 5px; font-size: 11px; display: none; }
+  .config-status.ok { background: #00ff8806; border: 1px solid #00ff8820; color: #00ff8877; display: block; }
+  .config-status.err { background: #ff444406; border: 1px solid #ff444420; color: #ff4444aa; display: block; }
+  .config-test-btn { width: 100%; padding: 9px; background: #0e0e0e; border: 1px solid #1e1e1e; border-radius: 6px; color: #666; font-size: 12px; font-family: inherit; cursor: pointer; transition: all 0.2s; margin-top: 6px; }
+  .config-test-btn:hover { border-color: #333; color: #aaa; }
+
+  @keyframes dots { 0%,20%{content:'.'} 40%{content:'..'} 60%,100%{content:'...'} }
+  .thinking::after { content: '.'; animation: dots 1.2s steps(1) infinite; }
+</style>
+</head>
+<body>
+
+<div class="input-area">
+  <div class="input-label">Ask Ottavia anything</div>
+  <div class="input-row">
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="modeSimulate" onclick="switchMode('simulate')">Simulate</button>
+      <button class="mode-btn" id="modeLive" onclick="switchMode('live')">Live</button>
+    </div>
+    <input type="text" id="questionInput" placeholder="e.g. How was my sleep last night?" autofocus />
+    <button id="sendBtn" onclick="handleSend()">Send</button>
+    <button class="config-btn" onclick="openConfig()" title="Configure">⚙</button>
+  </div>
+</div>
+
+<div class="suggest-bar">
+  <button class="suggest-btn" onclick="suggest('food')">Food</button>
+  <button class="suggest-btn" onclick="suggest('workout')">Workout</button>
+  <button class="suggest-btn" onclick="suggest('sleep')">Sleep</button>
+  <button class="suggest-btn" onclick="suggest('health')">Health</button>
+  <button class="suggest-btn" onclick="suggest('wellbeing')">Wellbeing</button>
+  <button class="suggest-btn" onclick="suggest('ottavia')">Ottavia</button>
+  <button class="suggest-btn" onclick="suggest('action')">Log / Action</button>
+  <button class="suggest-btn" onclick="suggest('plan')">Plan / Change</button>
+</div>
+
+<div class="main-content" id="mainContent">
+  <div class="canvas-wrap">
+    <canvas id="canvas"></canvas>
+    <button class="reset-btn" id="resetBtn" onclick="resetSimulation()" style="display:none">Reset</button>
+    <div class="canvas-overlay">
+      <div class="info-panel" id="infoPanel"></div>
+      <div class="route-log" id="routeLog"></div>
+    </div>
+  </div>
+
+  <!-- Response Panel (Live mode only) -->
+  <div class="response-panel" id="responsePanel">
+    <div class="panel-header">
+      <span>Response</span>
+      <span class="panel-agent-tag" id="responseAgentTag"></span>
+    </div>
+    <div class="panel-body" id="responsePanelBody">
+      <div class="response-placeholder">Run a Live simulation to see the real agent response here.</div>
+    </div>
+    <div class="suggestions-section" id="suggestionsSection" style="display:none">
+      <div class="suggestions-title">Improvement suggestions</div>
+      <div id="suggestionsList"></div>
+    </div>
+  </div>
+
+  <!-- Eval Panel (Live mode only) -->
+  <div class="eval-panel" id="evalPanel">
+    <div class="panel-header">Eval scores</div>
+    <div class="eval-body" id="evalBody">
+      <div class="eval-placeholder">Scores appear after the agent responds.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Config Panel -->
+<div class="config-overlay" id="configOverlay" onclick="closeConfig()"></div>
+<div class="config-panel" id="configPanel">
+  <div class="config-panel-header">
+    <span class="config-panel-title">Live Mode Config</span>
+    <button class="config-close-btn" onclick="closeConfig()">✕</button>
+  </div>
+  <div class="config-panel-body">
+    <div class="config-field">
+      <label class="config-label">OpenAI API Key</label>
+      <input type="password" class="config-input" id="cfgApiKey" placeholder="sk-..." oninput="saveConfig()" autocomplete="off" />
+      <div class="config-hint">Stored in localStorage only. Never sent to any third party.</div>
+    </div>
+    <div class="config-field">
+      <label class="config-label">User ID (MongoDB)</label>
+      <input type="text" class="config-input" id="cfgUserId" placeholder="user_abc123" oninput="saveConfig()" />
+      <div class="config-hint">Your Ottavia user_id for live data queries.</div>
+    </div>
+    <div class="config-field">
+      <label class="config-label">Agent Model</label>
+      <select class="config-select" id="cfgModel" onchange="saveConfig()">
+        <option value="gpt-4o-mini">gpt-4o-mini (default)</option>
+        <option value="gpt-4o">gpt-4o</option>
+        <option value="gpt-5-nano">gpt-5-nano</option>
+        <option value="gpt-5.4-nano">gpt-5.4-nano</option>
+      </select>
+      <div class="config-hint">Model used for agents. Router always uses gpt-4o-mini.</div>
+    </div>
+    <div class="config-field">
+      <label class="config-label">Sim Server URL</label>
+      <input type="text" class="config-input" id="cfgServer" placeholder="http://localhost:3002" oninput="saveConfig()" />
+      <div class="config-hint">Run: <code style="color:#555">node sim-server.js</code></div>
+    </div>
+    <button class="config-test-btn" onclick="testConnection()">Test connection</button>
+    <div class="config-status" id="cfgStatus"></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+// AGENT DEFINITIONS — mirrors real ottavia-backend/src/agent/
+// ══════════════════════════════════════════════════════════════
+
+const AGENTS = [
+  {
+    id: 'nutrition',
+    name: 'Nutrition',
+    desc: 'Food/drink logging, meal edits, macro tracking',
+    keywords: ['eat', 'ate', 'food', 'meal', 'lunch', 'dinner', 'breakfast', 'snack', 'calories', 'calorie', 'protein', 'carb', 'carbs', 'fat', 'fats', 'macro', 'macros', 'drink', 'drank', 'water', 'coffee', 'tea', 'juice', 'smoothie', 'eggs', 'egg', 'chicken', 'rice', 'bread', 'pasta', 'pizza', 'salad', 'fruit', 'vegetables', 'cake', 'cookie', 'sugar', 'nutrition', 'hydration', 'log food', 'food logging', 'hydration logging', 'hungry', 'thirsty', 'portion', 'serving', 'gram', 'grams', 'ounce', 'bowl', 'plate', 'cup'],
+  },
+  {
+    id: 'condition',
+    name: 'Condition',
+    desc: 'Health symptoms, conditions, injuries',
+    keywords: ['headache', 'pain', 'sore', 'ache', 'injury', 'sick', 'ill', 'symptom', 'condition', 'fever', 'cold', 'flu', 'nausea', 'dizzy', 'fatigue', 'tired', 'inflammation', 'swelling', 'sprain', 'strain', 'knee', 'back pain', 'shoulder', 'ankle', 'achilles', 'muscle', 'cramp', 'allergy', 'rash', 'condition logging', 'hurt', 'bruise'],
+  },
+  {
+    id: 'preference',
+    name: 'Preference',
+    desc: 'Goals, targets, dietary restrictions',
+    keywords: ['goal', 'goals', 'target', 'set', 'want to', 'aim', 'restrict', 'restriction', 'avoid', 'allergy', 'allergies', 'vegan', 'vegetarian', 'keto', 'gluten', 'lactose', 'dairy', 'preference', 'limit', 'constraint', 'goals logging', 'change goal', 'update goal', 'delete goal', 'remove goal'],
+  },
+  {
+    id: 'general',
+    name: 'General',
+    desc: 'Insights, analysis, cross-domain synthesis, Q&A',
+    keywords: ['how', 'why', 'what', 'should', 'am i', 'is my', 'enough', 'recommend', 'advice', 'suggest', 'analyze', 'analysis', 'insight', 'trend', 'compare', 'improve', 'better', 'worse', 'doing', 'track', 'on track', 'sleep', 'activity', 'hrv', 'heart rate', 'vo2', 'body composition', 'blood pressure', 'recovery', 'readiness', 'stress', 'energy', 'performance', 'weight', 'bmi', 'steps', 'workout', 'exercise', 'training', 'run', 'walk'],
+  },
+  {
+    id: 'visualization',
+    name: 'Visualization',
+    desc: 'Charts, graphs, progress tracking (JSON)',
+    keywords: ['chart', 'graph', 'plot', 'show me', 'visualize', 'visualization', 'progress', 'trend chart', 'bar chart', 'line chart', 'track my', 'this week', 'this month', 'over time'],
+  },
+  {
+    id: 'coach_cue',
+    name: 'Coach',
+    desc: 'Personalized coaching, reminders, training plans',
+    keywords: ['remind', 'reminder', 'nudge', 'cue', 'schedule', 'plan', 'training plan', 'workout plan', 'coach', 'coaching', 'motivation', 'accountability'],
+  },
+];
+
+// ── Intent classification (mirrors router.ts ROUTER_SYSTEM_PROMPT) ───
+
+const INTENTS = {
+  PURE_LOGGING: { label: 'Pure Logging', color: '#00ff88', desc: 'Reporting/logging data' },
+  DATA_LOOKUP: { label: 'Data Lookup', color: '#44aaff', desc: 'Retrieving stored values' },
+  INSIGHT_OR_ADVICE: { label: 'Insight / Advice', color: '#ff8844', desc: 'Assessment & recommendations' },
+  VISUALIZATION: { label: 'Visualization', color: '#cc66ff', desc: 'Charts & graphs' },
+  SYSTEM_EVENT_LABEL: { label: 'System Event', color: '#ffcc00', desc: 'UI navigation shorthand' },
+  AMBIGUOUS: { label: 'Ambiguous', color: '#ff4444', desc: 'Unclear — needs clarification' },
+};
+
+// ── Client-side classifier (mirrors real router rules) ───────
+
+function classifyMessage(msg) {
+  const lower = msg.toLowerCase().trim();
+
+  // System event labels (1-3 word exact matches)
+  const systemLabels = {
+    'food logging': { intent: 'SYSTEM_EVENT_LABEL', agents: ['nutrition'] },
+    'hydration logging': { intent: 'SYSTEM_EVENT_LABEL', agents: ['nutrition'] },
+    'goals logging': { intent: 'SYSTEM_EVENT_LABEL', agents: ['preference'] },
+    'condition logging': { intent: 'SYSTEM_EVENT_LABEL', agents: ['condition'] },
+    'sleep': { intent: 'SYSTEM_EVENT_LABEL', agents: ['general'] },
+    'activity': { intent: 'SYSTEM_EVENT_LABEL', agents: ['general'] },
+    'body composition': { intent: 'SYSTEM_EVENT_LABEL', agents: ['general'] },
+    'blood pressure': { intent: 'SYSTEM_EVENT_LABEL', agents: ['general'] },
+  };
+
+  if (systemLabels[lower]) return systemLabels[lower];
+
+  // Visualization keywords
+  const vizWords = ['chart', 'graph', 'plot', 'visualize', 'visualization', 'trend chart', 'bar chart', 'line chart'];
+  const showTrackPattern = /\b(show|track|plot|chart|trend|progress)\b.*\b(my|me|protein|calories|sleep|steps|weight|activity|macro|hydration|nutrition)\b/i;
+  if (vizWords.some(w => lower.includes(w)) || showTrackPattern.test(lower)) {
+    const agents = ['visualization'];
+    // Also include domain agent if logging + viz
+    if (AGENTS[0].keywords.some(k => lower.includes(k))) agents.push('nutrition');
+    return { intent: 'VISUALIZATION', agents };
+  }
+
+  // Pure logging detection — casual food mentions
+  const casualFoodPattern = /^\d+\s*(eggs?|chicken|rice|bread|pasta|pizza|salad|fruit|cup|bowl|glass|slice|piece|gram|g\b|oz\b|ml\b)/i;
+  if (casualFoodPattern.test(lower)) {
+    return { intent: 'PURE_LOGGING', agents: ['nutrition'] };
+  }
+
+  // Goal setting with concrete value
+  const goalPattern = /\b(set|change|update|delete|remove)\b.*\b(goal|target|limit)\b/i;
+  if (goalPattern.test(lower)) {
+    return { intent: 'PURE_LOGGING', agents: ['preference'] };
+  }
+
+  // Reminder/nudge
+  const reminderPattern = /\b(remind|reminder|nudge|cue)\b/i;
+  if (reminderPattern.test(lower)) {
+    return { intent: 'PURE_LOGGING', agents: ['coach_cue'] };
+  }
+
+  // Insight/advice patterns
+  const insightPatterns = [
+    /\b(how|why|should|am i|is my|enough|recommend|advice|suggest|analyze|improve|better|worse|doing|on track)\b/i,
+    /\?$/,
+  ];
+  if (insightPatterns.some(p => p.test(lower))) {
+    const agents = ['general'];
+    // Check if also involves condition
+    if (AGENTS[1].keywords.some(k => lower.includes(k) && k.length > 3)) agents.push('condition');
+    return { intent: 'INSIGHT_OR_ADVICE', agents };
+  }
+
+  // Multi-intent detection
+  const matchedAgents = [];
+  for (const agent of AGENTS) {
+    const score = agent.keywords.filter(k => lower.includes(k)).length;
+    if (score > 0) matchedAgents.push({ id: agent.id, score });
+  }
+  matchedAgents.sort((a, b) => b.score - a.score);
+
+  if (matchedAgents.length === 0) {
+    return { intent: 'AMBIGUOUS', agents: [] };
+  }
+
+  // If top match is food-related with no question marks, it's logging
+  if (matchedAgents[0].id === 'nutrition' && !lower.includes('?')) {
+    const agents = ['nutrition'];
+    if (matchedAgents.length > 1 && matchedAgents[1].score > 1) {
+      agents.push(matchedAgents[1].id);
+    }
+    return { intent: 'PURE_LOGGING', agents };
+  }
+
+  // If top match is condition with no question, it's logging
+  if (matchedAgents[0].id === 'condition' && !lower.includes('?')) {
+    return { intent: 'PURE_LOGGING', agents: ['condition'] };
+  }
+
+  // Default: top scoring agent with insight intent
+  const agents = [matchedAgents[0].id];
+  if (matchedAgents.length > 1 && matchedAgents[1].score > 1 && matchedAgents[1].id !== matchedAgents[0].id) {
+    agents.push(matchedAgents[1].id);
+  }
+  return { intent: 'INSIGHT_OR_ADVICE', agents };
+}
+
+
+// ══════════════════════════════════════════════════════════════
+// CANVAS RENDERING
+// ══════════════════════════════════════════════════════════════
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+let W, H, dpr;
+let nodes = [];        // { x, y, r, id, name, desc, type }
+let connections = [];   // { from, to, path }
+let animState = null;  // animation state
+
+function resize() {
+  const wrap = canvas.parentElement;
+  dpr = window.devicePixelRatio || 1;
+  W = wrap.clientWidth;
+  H = wrap.clientHeight;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  layoutNodes();
+}
+
+function layoutNodes() {
+  nodes = [];
+  connections = [];
+
+  const cx = W / 2;
+  const topY = 50;
+
+  // ── Router node
+  const routerNode = { x: cx, y: topY + 30, r: 20, id: 'router', name: 'Router', desc: 'LLM Intent Classifier (gpt-5-nano)', type: 'router' };
+  nodes.push(routerNode);
+
+  // ── Manager node
+  const managerNode = { x: cx, y: topY + 130, r: 26, id: 'manager', name: 'Manager', desc: 'Orchestrator — routes to sub-agents', type: 'manager' };
+  nodes.push(managerNode);
+
+  // ── Connection: Router → Manager
+  connections.push({ from: 'router', to: 'manager' });
+
+  // ── Agent nodes in a spread arc
+  const agentCount = AGENTS.length;
+  const availableWidth = Math.min(W - 120, 900);
+  const agentY = topY + 280;
+  const startX = cx - availableWidth / 2;
+  const gap = availableWidth / (agentCount - 1);
+
+  AGENTS.forEach((agent, i) => {
+    const x = agentCount === 1 ? cx : startX + i * gap;
+    nodes.push({
+      x, y: agentY, r: 18,
+      id: agent.id, name: agent.name, desc: agent.desc, type: 'agent',
+    });
+    connections.push({ from: 'manager', to: agent.id });
+  });
+
+  // ── MCP / Data node (below agents)
+  const mcpY = agentY + 140;
+  const mcpNode = { x: cx, y: mcpY, r: 14, id: 'mcp', name: 'MCP / MongoDB', desc: 'Data layer — all agents query through MCP', type: 'data' };
+  nodes.push(mcpNode);
+
+  // Connect each agent to MCP
+  AGENTS.forEach(agent => {
+    connections.push({ from: agent.id, to: 'mcp' });
+  });
+}
+
+function getNode(id) {
+  return nodes.find(n => n.id === id);
+}
+
+// ── Drawing ──────────────────────────────────────────────────
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  const activeAgents = animState ? animState.targetAgents : [];
+  const phase = animState ? animState.phase : 'idle';
+  const pulseProgress = animState ? animState.pulseProgress : 0;
+
+  // Draw connections
+  for (const conn of connections) {
+    const fromNode = getNode(conn.from);
+    const toNode = getNode(conn.to);
+    if (!fromNode || !toNode) continue;
+
+    const isActive = isConnectionActive(conn, activeAgents, phase);
+    const isDataConn = toNode.type === 'data' || fromNode.type === 'data';
+
+    ctx.beginPath();
+    ctx.moveTo(fromNode.x, fromNode.y);
+
+    // Curved lines for agent→MCP
+    if (isDataConn) {
+      const midY = (fromNode.y + toNode.y) / 2;
+      ctx.bezierCurveTo(fromNode.x, midY, toNode.x, midY, toNode.x, toNode.y);
+    } else {
+      ctx.lineTo(toNode.x, toNode.y);
+    }
+
+    if (isActive) {
+      ctx.strokeStyle = '#00ff8855';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      // Glow
+      ctx.strokeStyle = '#00ff8822';
+      ctx.lineWidth = 8;
+      ctx.stroke();
+
+      // Bright core
+      ctx.strokeStyle = '#00ff88';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    } else {
+      ctx.strokeStyle = '#3a3a3a';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+  }
+
+  // Draw pulse dots on active paths
+  if (animState && animState.phase !== 'idle' && animState.phase !== 'done') {
+    drawPulses();
+  }
+
+  // Draw nodes
+  for (const node of nodes) {
+    const isActive = activeAgents.includes(node.id) ||
+      (phase !== 'idle' && (node.id === 'router' || node.id === 'manager')) ||
+      (phase === 'data' && node.id === 'mcp');
+
+    // Node glow
+    if (isActive) {
+      const glow = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, node.r * 3);
+      glow.addColorStop(0, node.type === 'data' ? 'rgba(68,170,255,0.15)' : 'rgba(0,255,136,0.15)');
+      glow.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, node.r * 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Node circle
+    ctx.beginPath();
+    ctx.arc(node.x, node.y, node.r, 0, Math.PI * 2);
+
+    if (isActive) {
+      ctx.fillStyle = node.type === 'data' ? '#44aaff' : '#00ff88';
+      ctx.strokeStyle = node.type === 'data' ? '#44aaff' : '#00ff88';
+    } else {
+      ctx.fillStyle = '#1a1a1a';
+      ctx.strokeStyle = '#555';
+    }
+    ctx.lineWidth = 1.5;
+    ctx.fill();
+    ctx.stroke();
+
+    // Node label
+    ctx.fillStyle = isActive ? '#fff' : '#999';
+    ctx.font = `${isActive ? '600' : '400'} 12px Archivo, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText(node.name, node.x, node.y + node.r + 18);
+
+    // Node description (only for active agents)
+    if (isActive && node.type === 'agent') {
+      ctx.fillStyle = '#00ff8888';
+      ctx.font = '400 10px Archivo, sans-serif';
+      ctx.fillText(node.desc, node.x, node.y + node.r + 34);
+    }
+
+    // Inner dot for inactive
+    if (!isActive) {
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, 3, 0, Math.PI * 2);
+      ctx.fillStyle = '#666';
+      ctx.fill();
+    }
+
+    // Inner icon for active
+    if (isActive) {
+      ctx.fillStyle = '#000';
+      ctx.font = 'bold 11px Archivo, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const icons = { router: 'R', manager: 'M', mcp: 'D' };
+      const agentIcons = { nutrition: 'N', condition: 'C', preference: 'P', general: 'G', visualization: 'V', coach_cue: 'Co' };
+      ctx.fillText(icons[node.id] || agentIcons[node.id] || '', node.x, node.y);
+      ctx.textBaseline = 'alphabetic';
+    }
+  }
+
+  requestAnimationFrame(draw);
+}
+
+function isConnectionActive(conn, activeAgents, phase) {
+  if (phase === 'idle') return false;
+
+  // Router → Manager always active during animation
+  if (conn.from === 'router' && conn.to === 'manager' && phase !== 'idle') return true;
+
+  // Manager → Agent
+  if (conn.from === 'manager' && activeAgents.includes(conn.to) &&
+    (phase === 'agents' || phase === 'data' || phase === 'done')) return true;
+
+  // Agent → MCP
+  if (activeAgents.includes(conn.from) && conn.to === 'mcp' && phase === 'data') return true;
+
+  return false;
+}
+
+// ── Pulse Animation ──────────────────────────────────────────
+
+function drawPulses() {
+  if (!animState) return;
+  const { phase, pulseProgress, targetAgents } = animState;
+
+  const drawPulseDot = (x, y, size) => {
+    // Outer glow
+    const glow = ctx.createRadialGradient(x, y, 0, x, y, size * 4);
+    glow.addColorStop(0, 'rgba(0,255,136,0.6)');
+    glow.addColorStop(0.5, 'rgba(0,255,136,0.15)');
+    glow.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(x, y, size * 4, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Core
+    ctx.beginPath();
+    ctx.arc(x, y, size, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+  };
+
+  if (phase === 'router') {
+    const router = getNode('router');
+    const manager = getNode('manager');
+    const t = pulseProgress;
+    const x = router.x + (manager.x - router.x) * t;
+    const y = router.y + (manager.y - router.y) * t;
+    drawPulseDot(x, y, 5);
+  }
+
+  if (phase === 'agents') {
+    const manager = getNode('manager');
+    for (const agentId of targetAgents) {
+      const agent = getNode(agentId);
+      if (!agent) continue;
+      const t = pulseProgress;
+      const x = manager.x + (agent.x - manager.x) * t;
+      const y = manager.y + (agent.y - manager.y) * t;
+      drawPulseDot(x, y, 5);
+    }
+  }
+
+  if (phase === 'data') {
+    const mcp = getNode('mcp');
+    for (const agentId of targetAgents) {
+      const agent = getNode(agentId);
+      if (!agent) continue;
+      const t = pulseProgress;
+      const midY = (agent.y + mcp.y) / 2;
+      // Follow bezier
+      const bx = bezierPoint(agent.x, agent.x, mcp.x, mcp.x, t);
+      const by = bezierPoint(agent.y, midY, midY, mcp.y, t);
+      drawPulseDot(bx, by, 4);
+    }
+  }
+}
+
+function bezierPoint(p0, p1, p2, p3, t) {
+  const u = 1 - t;
+  return u*u*u*p0 + 3*u*u*t*p1 + 3*u*t*t*p2 + t*t*t*p3;
+}
+
+// ══════════════════════════════════════════════════════════════
+// SIMULATION LOGIC
+// ══════════════════════════════════════════════════════════════
+
+let isAnimating = false;
+
+function simulateRoute() {
+  const input = document.getElementById('questionInput');
+  const msg = input.value.trim();
+  if (!msg || isAnimating) return;
+
+  isAnimating = true;
+  document.getElementById('sendBtn').disabled = true;
+  document.getElementById('resetBtn').style.display = 'block';
+
+  const result = classifyMessage(msg);
+  const intentInfo = INTENTS[result.intent] || INTENTS.AMBIGUOUS;
+
+  // Clear previous log
+  document.getElementById('routeLog').innerHTML = '';
+  document.getElementById('infoPanel').innerHTML = '';
+
+  // Run animation sequence
+  runAnimation(result, intentInfo, msg);
+}
+
+async function runAnimation(result, intentInfo, msg) {
+  const { intent, agents } = result;
+
+  // Phase 1: Router classification
+  animState = { phase: 'router', pulseProgress: 0, targetAgents: agents };
+  addLogStep(1, `Message received: "${msg.length > 50 ? msg.slice(0, 50) + '...' : msg}"`);
+
+  await animatePulse('router', 600);
+
+  addLogStep(2, `Router classifies intent: ${intentInfo.label}`);
+  updateInfoPanel(intentInfo, agents);
+
+  await sleep(400);
+
+  // Phase 2: Manager → Agents
+  if (agents.length === 0) {
+    animState.phase = 'done';
+    addLogStep(3, 'Ambiguous — Manager asks clarifying question');
+    isAnimating = false;
+    document.getElementById('sendBtn').disabled = false;
+    return;
+  }
+
+  animState.phase = 'agents';
+  animState.pulseProgress = 0;
+  addLogStep(3, `Manager routes to: ${agents.map(a => AGENTS.find(ag => ag.id === a)?.name || a).join(', ')}`);
+
+  await animatePulse('agents', 700);
+  await sleep(300);
+
+  // Phase 3: Agents → Data (MCP)
+  animState.phase = 'data';
+  animState.pulseProgress = 0;
+  addLogStep(4, `${agents.length > 1 ? 'Agents query' : 'Agent queries'} MCP / MongoDB for user data`);
+
+  await animatePulse('data', 600);
+  await sleep(200);
+
+  // Phase 4: Done
+  animState.phase = 'done';
+  const agentNames = agents.map(a => AGENTS.find(ag => ag.id === a)?.name || a).join(' + ');
+  addLogStep(5, `${agentNames} ${agents.length > 1 ? 'compose' : 'composes'} response → Manager synthesizes`);
+
+  isAnimating = false;
+  document.getElementById('sendBtn').disabled = false;
+}
+
+function animatePulse(phase, duration) {
+  return new Promise(resolve => {
+    const start = performance.now();
+    function tick(now) {
+      const t = Math.min((now - start) / duration, 1);
+      // Ease out cubic
+      animState.pulseProgress = 1 - Math.pow(1 - t, 3);
+      if (t < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        resolve();
+      }
+    }
+    requestAnimationFrame(tick);
+  });
+}
+
+function sleep(ms) {
+  return new Promise(r => setTimeout(r, ms));
+}
+
+function addLogStep(num, text) {
+  const log = document.getElementById('routeLog');
+  const el = document.createElement('div');
+  el.className = 'route-log-item';
+  el.innerHTML = `<span class="step-num">${num}.</span>${text}`;
+  log.appendChild(el);
+}
+
+function updateInfoPanel(intentInfo, agents) {
+  const panel = document.getElementById('infoPanel');
+  let html = `<div class="info-badge active" style="border-color:${intentInfo.color};color:${intentInfo.color}"><span class="label">Intent:</span>${intentInfo.label}</div>`;
+
+  if (agents.length > 0) {
+    const names = agents.map(a => AGENTS.find(ag => ag.id === a)?.name || a).join(', ');
+    html += `<div class="info-badge active"><span class="label">Agents:</span>${names}</div>`;
+  }
+
+  if (agents.length > 1) {
+    html += `<div class="info-badge active" style="border-color:#ffcc00;color:#ffcc00"><span class="label">Multi-agent</span>parallel execution</div>`;
+  }
+
+  panel.innerHTML = html;
+}
+
+function resetSimulation() {
+  animState = null;
+  isAnimating = false;
+  document.getElementById('sendBtn').disabled = false;
+  document.getElementById('resetBtn').style.display = 'none';
+  document.getElementById('routeLog').innerHTML = '';
+  document.getElementById('infoPanel').innerHTML = '';
+  document.getElementById('questionInput').value = '';
+  document.getElementById('questionInput').focus();
+}
+
+// ── Input handling ───────────────────────────────────────────
+
+document.getElementById('questionInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') handleSend();
+});
+
+// ── Mode management ───────────────────────────────────────────
+
+let currentMode = 'simulate';
+
+function switchMode(mode) {
+  currentMode = mode;
+  document.getElementById('modeSimulate').classList.toggle('active', mode === 'simulate');
+  document.getElementById('modeLive').classList.toggle('active', mode === 'live');
+  document.getElementById('mainContent').classList.toggle('mode-live', mode === 'live');
+  if (mode === 'simulate') {
+    document.getElementById('sendBtn').textContent = 'Send';
+  } else {
+    document.getElementById('sendBtn').textContent = 'Run';
+  }
+  // Trigger resize so canvas adjusts to new layout
+  setTimeout(resize, 50);
+}
+
+function handleSend() {
+  if (currentMode === 'live') {
+    runLiveSimulation();
+  } else {
+    simulateRoute();
+  }
+}
+
+// ── Config panel ──────────────────────────────────────────────
+
+function openConfig() {
+  loadConfig();
+  document.getElementById('configOverlay').classList.add('open');
+  document.getElementById('configPanel').classList.add('open');
+}
+
+function closeConfig() {
+  document.getElementById('configOverlay').classList.remove('open');
+  document.getElementById('configPanel').classList.remove('open');
+}
+
+function loadConfig() {
+  document.getElementById('cfgApiKey').value = localStorage.getItem('sim_api_key') || '';
+  document.getElementById('cfgUserId').value = localStorage.getItem('sim_user_id') || '';
+  document.getElementById('cfgModel').value = localStorage.getItem('sim_model') || 'gpt-4o-mini';
+  document.getElementById('cfgServer').value = localStorage.getItem('sim_server') || 'http://localhost:3002';
+}
+
+function saveConfig() {
+  localStorage.setItem('sim_api_key', document.getElementById('cfgApiKey').value);
+  localStorage.setItem('sim_user_id', document.getElementById('cfgUserId').value);
+  localStorage.setItem('sim_model', document.getElementById('cfgModel').value);
+  localStorage.setItem('sim_server', document.getElementById('cfgServer').value);
+}
+
+async function testConnection() {
+  const server = document.getElementById('cfgServer').value || 'http://localhost:3002';
+  const statusEl = document.getElementById('cfgStatus');
+  statusEl.className = 'config-status';
+  statusEl.textContent = 'Testing...';
+  statusEl.style.display = 'block';
+  try {
+    const res = await fetch(`${server}/sim/health`, { signal: AbortSignal.timeout(5000) });
+    const data = await res.json();
+    statusEl.className = 'config-status ok';
+    statusEl.textContent = `Connected — MongoDB: ${data.mongo}`;
+  } catch (e) {
+    statusEl.className = 'config-status err';
+    statusEl.textContent = `Failed: ${e.message}`;
+  }
+}
+
+// ── Markdown renderer ─────────────────────────────────────────
+
+function renderMarkdown(text) {
+  if (!text) return '';
+  let html = text;
+
+  // Escape HTML first
+  html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  // Tables: | ... |
+  html = html.replace(/^(\|.+\|\n?)+/gm, (block) => {
+    const rows = block.trim().split('\n');
+    let tableHtml = '<table>';
+    rows.forEach((row, i) => {
+      if (/^\|[-|:\s]+\|$/.test(row.trim())) return; // separator row
+      const cells = row.split('|').filter((_, idx) => idx > 0 && idx < row.split('|').length - 1);
+      const tag = i === 0 ? 'th' : 'td';
+      tableHtml += '<tr>' + cells.map(c => `<${tag}>${c.trim()}</${tag}>`).join('') + '</tr>';
+    });
+    tableHtml += '</table>';
+    return tableHtml;
+  });
+
+  // Headers
+  html = html.replace(/^###\s+(.+)$/gm, '<h4>$1</h4>');
+  html = html.replace(/^##\s+(.+)$/gm, '<h2>$1</h2>');
+
+  // Bold
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+  // Highlight ==text==
+  html = html.replace(/==(.+?)==/g, '<mark>$1</mark>');
+
+  // Bullet lists
+  html = html.replace(/((?:^- .+\n?)+)/gm, (block) => {
+    const items = block.trim().split('\n').map(l => `<li>${l.replace(/^- /, '')}</li>`).join('');
+    return '<ul>' + items + '</ul>';
+  });
+
+  // Status lines ::Saved in #X#::
+  html = html.replace(/^::(.+?)::$/gm, '<div class="status-line">::$1::</div>');
+
+  // Paragraph breaks
+  html = html.replace(/\n\n/g, '</p><p>');
+  html = html.replace(/\n/g, '<br>');
+  html = '<p>' + html + '</p>';
+
+  // Clean up empty paragraphs
+  html = html.replace(/<p><\/p>/g, '').replace(/<p><br>/g, '<p>');
+
+  return html;
+}
+
+// ── Eval rendering ────────────────────────────────────────────
+
+const EVAL_DIM_LABELS = {
+  accuracy: 'Accuracy', logging: 'Logging', value: 'Value', insight: 'Insight',
+  grounding: 'Grounding', dimensionality: 'Dimensionality', temporality: 'Temporality',
+  candor: 'Candor', attribution: 'Attribution', concision: 'Concision',
+  presentation: 'Presentation', tone: 'Tone', tooling: 'Tooling', context: 'Context',
+};
+
+function scoreColor(score) {
+  if (score >= 70) return '#00ff88';
+  if (score >= 40) return '#ffcc00';
+  return '#ff4444';
+}
+
+function renderEval(scores, violations) {
+  const body = document.getElementById('evalBody');
+  let html = '';
+
+  // Voice gate
+  const hasViolations = violations && violations.length > 0;
+  if (hasViolations) {
+    html += `<div class="eval-voice-gate fail">
+      <div class="eval-voice-gate-title">⚠ Voice violations</div>
+      ${violations.map(v => `<div class="eval-violation">• ${escHtml(v)}</div>`).join('')}
+    </div>`;
+  } else {
+    html += `<div class="eval-voice-gate pass"><div class="eval-voice-gate-title">✓ Voice compliance</div></div>`;
+  }
+
+  // Score bars
+  Object.entries(EVAL_DIM_LABELS).forEach(([key, label]) => {
+    const dim = scores[key] || { score: 0, rationale: '' };
+    const score = dim.score || 0;
+    const color = scoreColor(score);
+    html += `<div class="eval-dim">
+      <div class="eval-dim-header">
+        <span class="eval-dim-name">${label}</span>
+        <span class="eval-dim-score" style="color:${color}">${score}</span>
+      </div>
+      <div class="eval-bar-track">
+        <div class="eval-bar" style="width:${score}%;background:${color}"></div>
+      </div>
+      <div class="eval-dim-rationale">${escHtml(dim.rationale || '')}</div>
+    </div>`;
+  });
+
+  body.innerHTML = html;
+}
+
+function renderSuggestions(suggestions) {
+  if (!suggestions) return;
+  const list = document.getElementById('suggestionsList');
+  const section = document.getElementById('suggestionsSection');
+  let html = '';
+
+  (suggestions.instruction_improvements || []).forEach(s => {
+    html += `<div class="suggestion-item instruction">
+      <span class="suggestion-label">📝 ${escHtml(s.agent || 'Instructions')}</span>
+      <span class="suggestion-text">${escHtml(s.suggestion || s.issue || '')}</span>
+    </div>`;
+  });
+
+  (suggestions.infra_improvements || []).forEach(s => {
+    html += `<div class="suggestion-item infra">
+      <span class="suggestion-label">🔧 ${escHtml(s.area || 'Infra')}</span>
+      <span class="suggestion-text">${escHtml(s.suggestion || s.issue || '')}</span>
+    </div>`;
+  });
+
+  if (html) {
+    list.innerHTML = html;
+    section.style.display = 'block';
+  }
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── Live simulation ───────────────────────────────────────────
+
+let liveAbortController = null;
+
+async function runLiveSimulation() {
+  const input = document.getElementById('questionInput');
+  const msg = input.value.trim();
+  if (!msg || isAnimating) return;
+
+  const apiKey = localStorage.getItem('sim_api_key') || '';
+  const userId = localStorage.getItem('sim_user_id') || '';
+  const model = localStorage.getItem('sim_model') || 'gpt-4o-mini';
+  const server = localStorage.getItem('sim_server') || 'http://localhost:3002';
+
+  if (!apiKey) {
+    openConfig();
+    const st = document.getElementById('cfgStatus');
+    st.className = 'config-status err';
+    st.textContent = 'Add your OpenAI API key first.';
+    return;
+  }
+  if (!userId) {
+    openConfig();
+    const st = document.getElementById('cfgStatus');
+    st.className = 'config-status err';
+    st.textContent = 'Add your User ID first.';
+    return;
+  }
+
+  isAnimating = true;
+  document.getElementById('sendBtn').disabled = true;
+  document.getElementById('resetBtn').style.display = 'block';
+
+  // Clear previous state
+  document.getElementById('routeLog').innerHTML = '';
+  document.getElementById('infoPanel').innerHTML = '';
+  document.getElementById('responsePanelBody').innerHTML = '<div class="response-placeholder thinking">Routing</div>';
+  document.getElementById('evalBody').innerHTML = '<div class="eval-placeholder thinking">Scoring</div>';
+  document.getElementById('suggestionsSection').style.display = 'none';
+  document.getElementById('responseAgentTag').textContent = '';
+
+  const accumulatedText = [];
+
+  try {
+    if (liveAbortController) liveAbortController.abort();
+    liveAbortController = new AbortController();
+
+    const res = await fetch(`${server}/sim/run`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question: msg, userId, model, openaiKey: apiKey }),
+      signal: liveAbortController.signal,
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: res.statusText }));
+      throw new Error(err.error || res.statusText);
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+
+      const eventBlocks = buffer.split('\n\n');
+      buffer = eventBlocks.pop() || '';
+
+      for (const block of eventBlocks) {
+        if (!block.trim()) continue;
+        const lines = block.split('\n');
+        const eventLine = lines.find(l => l.startsWith('event:'));
+        const dataLine = lines.find(l => l.startsWith('data:'));
+        if (!eventLine || !dataLine) continue;
+
+        const eventType = eventLine.replace('event:', '').trim();
+        let data = {};
+        try { data = JSON.parse(dataLine.replace('data:', '').trim()); } catch (_) {}
+
+        handleLiveEvent(eventType, data, msg, accumulatedText);
+      }
+    }
+  } catch (err) {
+    if (err.name !== 'AbortError') {
+      document.getElementById('responsePanelBody').innerHTML =
+        `<div style="color:#ff4444;font-size:12px">Error: ${escHtml(err.message)}<br><br>Is the sim server running?<br><code style="color:#555">node sim-server.js</code></div>`;
+    }
+  } finally {
+    isAnimating = false;
+    document.getElementById('sendBtn').disabled = false;
+  }
+}
+
+function handleLiveEvent(type, data, question, accumulatedText) {
+  switch (type) {
+    case 'router_start':
+      addLogStep(1, `Routing: "${question.length > 50 ? question.slice(0, 50) + '…' : question}"`);
+      animState = { phase: 'router', pulseProgress: 0, targetAgents: [] };
+      animatePulse('router', 500);
+      break;
+
+    case 'router_done': {
+      const intentInfo = INTENTS[data.intent] || INTENTS.AMBIGUOUS;
+      const agents = data.agents || [];
+      animState = { phase: 'router', pulseProgress: 1, targetAgents: agents };
+      addLogStep(2, `Intent: ${intentInfo.label} → ${agents.map(a => AGENTS.find(ag=>ag.id===a)?.name||a).join(', ')}`);
+      updateInfoPanel(intentInfo, agents);
+      // Trigger agents phase
+      setTimeout(() => {
+        animState.phase = 'agents';
+        animState.pulseProgress = 0;
+        animatePulse('agents', 600);
+      }, 300);
+      break;
+    }
+
+    case 'agent_start':
+      addLogStep(3, `${data.agent} agent running (${data.model})`);
+      document.getElementById('responseAgentTag').textContent = data.agent;
+      document.getElementById('responsePanelBody').innerHTML =
+        `<div class="response-placeholder thinking">Agent ${escHtml(data.agent)} thinking</div>`;
+      break;
+
+    case 'tool_call':
+      addLogStep(null, `  ↳ ${data.agent}: ${data.tool}()`);
+      // Trigger data phase
+      if (animState) {
+        animState.phase = 'data';
+        animState.pulseProgress = 0;
+        animatePulse('data', 500);
+      }
+      break;
+
+    case 'tool_result':
+      addLogStep(null, `  ↳ ${data.tool}: ${data.rows ?? '?'} records`);
+      break;
+
+    case 'agent_done':
+      if (data.text) accumulatedText.push(data.text);
+      if (animState) animState.phase = 'done';
+      renderAgentResponse(data.agent, accumulatedText);
+      addLogStep(4, `${data.agent} responded → Manager synthesizes`);
+      break;
+
+    case 'visualization_payload':
+      addLogStep(null, '  ↳ Visualization data received');
+      break;
+
+    case 'eval_start':
+      addLogStep(5, 'Evaluating on 14 dimensions…');
+      document.getElementById('evalBody').innerHTML = '<div class="eval-placeholder thinking">Scoring</div>';
+      break;
+
+    case 'eval_done':
+      if (data.scores) renderEval(data.scores, data.voice_violations || []);
+      if (data.suggestions) renderSuggestions(data.suggestions);
+      addLogStep(null, '✓ Eval complete');
+      break;
+
+    case 'error':
+      document.getElementById('responsePanelBody').innerHTML =
+        `<div style="color:#ff4444;font-size:12px">Pipeline error: ${escHtml(data.message || '')}</div>`;
+      break;
+
+    case 'done':
+      if (animState) animState.phase = 'done';
+      break;
+  }
+}
+
+function renderAgentResponse(agentId, textParts) {
+  const body = document.getElementById('responsePanelBody');
+  const combined = textParts.join('\n\n');
+  body.innerHTML = `<div class="response-body">${renderMarkdown(combined)}</div>`;
+}
+
+// ── Question bank ────────────────────────────────────────────
+
+const QUESTION_BANK = {
+  food: [
+    "Am I hitting my protein targets this week?",
+    "How many calories did I eat today?",
+    "I just had eggs and avocado toast for breakfast",
+    "Am I fueling enough for my training load?",
+    "What should I eat before my long run tomorrow?",
+    "I had a protein shake and a banana after my workout",
+    "How's my nutrition been this week?",
+    "Am I getting enough carbs on heavy training days?",
+    "I had pizza for dinner — how does that fit my macros?",
+    "Log: I ate a bowl of oatmeal with berries this morning",
+    "Am I eating enough to support muscle gain?",
+    "How's my calorie balance this week given my training?",
+  ],
+  workout: [
+    "How was my workout today?",
+    "Am I training too hard right now?",
+    "Is my VO2 max trending up?",
+    "Should I train today or take a rest day?",
+    "Why is my pace slower than usual?",
+    "How's my training load this week?",
+    "Should I taper before my race next weekend?",
+    "My heart rate was unusually high during today's run — why?",
+    "How many kilometers did I run this week?",
+    "Am I overtraining?",
+    "Is it smart to do a 15k today?",
+    "What's my aerobic training effect been this month?",
+    "How is my training load compared to last month?",
+  ],
+  sleep: [
+    "How was my sleep last night?",
+    "Why did I sleep so badly?",
+    "How's my recovery looking this week?",
+    "My HRV has been low all week — what does that mean?",
+    "I've been tired despite sleeping 8 hours — any insight?",
+    "How's my body battery recovering overnight?",
+    "My sleep score dropped this week — why?",
+    "Is my sleep affecting my training performance?",
+    "How much deep sleep am I getting on average?",
+    "I woke up at 3am and couldn't fall back asleep",
+    "My resting heart rate has been elevated this week",
+    "Am I getting enough recovery between hard sessions?",
+  ],
+  health: [
+    "My knee has been sore after long runs",
+    "I have a headache today",
+    "I've been feeling bloated this week",
+    "I had GI issues during my run this morning",
+    "My resting HR is higher than usual — should I be worried?",
+    "Log: I have mild lower back pain today, severity 3/10",
+    "I've been getting cramps during my runs",
+    "I feel a cold coming on — should I still train?",
+    "My blood pressure reading was 130/85 this morning",
+    "I've been feeling lightheaded after workouts",
+    "Log: I have a tight hamstring, started yesterday",
+  ],
+  wellbeing: [
+    "What's the one thing I should focus on today?",
+    "I'm feeling burnt out — what do you see in my data?",
+    "How am I doing overall this week?",
+    "My energy levels have been really low",
+    "I'm stressed and not sleeping well — any patterns?",
+    "Am I on track with my goals?",
+    "What should I prioritize this week — training or recovery?",
+    "I want to lose 5kg by summer — am I on track?",
+    "My goal is to run a half marathon in April — where do I stand?",
+    "I feel like I'm spinning my wheels — what does my data say?",
+    "How balanced is my training, nutrition, and recovery right now?",
+  ],
+  ottavia: [
+    "What data can you see about me?",
+    "What do you know about my fitness level?",
+    "How does Ottavia use my Garmin data?",
+    "What's my training history look like?",
+    "What are my current goals?",
+    "Can you summarize my last 7 days?",
+    "What patterns do you notice in my health data?",
+    "What's my body composition trend?",
+    "How long have I been tracking with Ottavia?",
+    "What's my biggest area for improvement right now?",
+  ],
+  action: [
+    "Log: I have a mild headache today, severity 3/10",
+    "Log: sore left knee after yesterday's long run",
+    "I'm lactose intolerant — add that as a condition",
+    "I don't eat gluten — please remember that",
+    "My goal is to lose 4kg by end of April",
+    "I prefer training in the mornings",
+    "I want to run a half marathon in 10 weeks — set that as a goal",
+    "Update: my lower back pain is gone",
+    "I no longer want to track calories — change my preference",
+    "Set my target weight to 74kg",
+    "Log: I felt nauseous during my run this morning",
+    "I'm vegetarian — add that to my profile",
+    "Remove my muscle gain goal — I changed my focus",
+    "I want to prioritize sleep over training intensity this month",
+  ],
+  plan: [
+    "Can you build me a 4-week training plan toward my goal?",
+    "I want to increase my weekly running distance by 10% — help me plan",
+    "Help me plan my taper week before the race",
+    "What should my training look like for the next 6 weeks?",
+    "I want to switch to a lower-carb diet — what should change?",
+    "Plan my meals for tomorrow given my training load",
+    "I want to change my goal from weight loss to performance",
+    "How should I adjust my nutrition on rest days?",
+    "I'm training for a triathlon — help me balance swim, bike, run",
+    "Can you suggest a recovery week schedule?",
+    "I want to add strength training twice a week — how should I fit it in?",
+    "What's a realistic goal for my next 5k given my current fitness?",
+  ],
+};
+
+const _lastIndexByCategory = {};
+
+function suggest(category) {
+  const questions = QUESTION_BANK[category];
+  if (!questions) return;
+
+  // Pick next question round-robin (not random repeat)
+  const last = _lastIndexByCategory[category] ?? -1;
+  const next = (last + 1) % questions.length;
+  _lastIndexByCategory[category] = next;
+
+  const input = document.getElementById('questionInput');
+  input.value = questions[next];
+  input.focus();
+
+  // Flash the pill briefly
+  const btns = document.querySelectorAll('.suggest-btn');
+  btns.forEach(b => b.classList.remove('active-category'));
+  const clicked = [...btns].find(b => b.textContent.toLowerCase() === category);
+  if (clicked) {
+    clicked.classList.add('active-category');
+    setTimeout(() => clicked.classList.remove('active-category'), 800);
+  }
+}
+
+// ── Init ─────────────────────────────────────────────────────
+
+window.addEventListener('resize', resize);
+resize();
+draw();
+// Load saved config on start
+loadConfig();
+</script>
+</body>
+</html>

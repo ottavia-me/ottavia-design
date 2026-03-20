@@ -715,7 +715,12 @@
     .phone-frame { width: 100%; height: calc(100vh - 48px); border-radius: 0; box-shadow: none; }
   }
 
+  .embed body { padding: 0; }
+  .embed .version-nav, .embed .controls, .embed .coach-fab { display: none !important; }
+  .embed .version-dropdown { display: block !important; position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; }
+  .embed .phone-frame { width: 100%; height: calc(100vh - 48px); border-radius: 0; box-shadow: none; margin-top: 48px; }
 </style>
+<script>if(location.search.includes("embed=1"))document.documentElement.classList.add("embed");</script>
 </head>
 <body>
 
@@ -739,7 +744,7 @@
 </nav>
 
 <div class="version-dropdown">
-  <select onchange="window.location.href=this.value">
+  <select onchange="window.location.href=this.value+(location.search.includes('embed=1')?'?embed=1':'')">
     <option value="v1-coach-plan.html">V1 — Horizontal Nav</option>
     <option value="v2-schedule-scroll.html">V2 — Vertical Nav</option>
     <option value="v3-icons-exploration.html" selected>V3 — Icons & Cards</option>
