@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ottavia — Progress Bar States</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --bg-primary: #F5F1EA;
+    --bg-card: #FFFFFF;
+    --text-primary: #433E36;
+    --text-secondary: #A8A297;
+    --border-light: #E7DFD0;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+    background: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  /* ---- Phone Frame (matches viz-v1) ---- */
+  .phone-frame {
+    width: 390px; height: 844px; background: var(--bg-primary);
+    border-radius: 40px; overflow: hidden; position: relative;
+    box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+  }
+  .screen { height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .screen::-webkit-scrollbar { display: none; }
+
+  /* ---- Status Bar ---- */
+  .status-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 24px 0; height: 50px; background: var(--bg-primary);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .status-time { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+
+  /* ---- Header ---- */
+  .top-header {
+    background: var(--bg-primary); padding: 6px 20px 14px;
+    position: sticky; top: 50px; z-index: 99;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .top-header h1 {
+    font-size: 24px; font-weight: 600; color: #8F897D; letter-spacing: 0; line-height: 32px;
+  }
+  .top-header h1 .highlight { color: var(--text-primary); }
+
+  /* ---- Home indicator ---- */
+  .home-indicator {
+    position: sticky; bottom: 0; height: 34px; background: var(--bg-primary);
+    display: flex; justify-content: center; align-items: center; z-index: 100;
+  }
+  .home-indicator-bar { width: 134px; height: 5px; background: var(--text-primary); border-radius: 100px; }
+
+  /* ---- Content ---- */
+  .content-area {
+    padding: 16px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .case-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #988F80;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0 20px;
+    margin-top: 12px;
+    margin-bottom: 4px;
+  }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #766F64;
+    margin: 20px 20px 8px 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #E7DFD0;
+  }
+
+  /* ---- Chart Card (matches chartStyles.ts) ---- */
+  .chart-card {
+    background: #FFFFFF;
+    border-radius: 24px;
+    padding: 16px 16px 20px 16px;
+    margin: 0 20px;
+    border: 2px solid #DBD6CD;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .card-title {
+    flex: 1;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 22px;
+    color: #433E36;
+  }
+
+  .card-date {
+    font-size: 14px;
+    color: #C2BCB2;
+    line-height: 24px;
+    padding-left: 12px;
+    white-space: nowrap;
+  }
+
+  .card-value-row {
+    display: flex;
+    align-items: center;
+    margin-top: 6px;
+  }
+
+  .card-value {
+    font-size: 26px;
+    font-weight: 600;
+  }
+
+  .card-checkmark {
+    font-size: 22px;
+    font-weight: 700;
+    margin-left: 8px;
+  }
+
+  .card-context {
+    font-size: 14px;
+    margin-top: 0;
+    margin-bottom: 12px;
+    opacity: 0.7;
+  }
+
+  /* ---- Progress bar ---- */
+  .progress-track {
+    position: relative;
+    height: 26px;
+    border-radius: 40px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 40px;
+    width: 0;
+    transition: width 0.8s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+
+  .progress-goal {
+    position: absolute;
+    right: 15px;
+    top: 0;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  /* ---- Exceeded: two separate bars ---- */
+  .progress-exceeded-row {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+  }
+
+  .progress-exceeded-goal {
+    position: relative;
+    height: 26px;
+    border-radius: 40px;
+    overflow: hidden;
+    flex: 1;
+    min-width: 80px;
+    transition: flex 0.8s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+
+  .progress-exceeded-overflow {
+    position: relative;
+    height: 26px;
+    border-radius: 40px;
+    overflow: hidden;
+    flex: 0;
+    min-width: 50px;
+    transition: flex 0.6s cubic-bezier(0.33, 1, 0.68, 1) 0.3s;
+  }
+
+  .progress-exceeded-label {
+    position: absolute;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+    right: 15px;
+  }
+
+  .progress-exceeded-overflow-label {
+    position: absolute;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+    right: 10px;
+  }
+
+  /* ---- Multi Progress Bar ---- */
+  .multi-row {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-bottom: 0;
+  }
+
+  .multi-item {}
+
+  .multi-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 5px;
+  }
+
+  .multi-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #433E36;
+  }
+
+  .multi-values {
+    display: flex;
+    gap: 4px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .multi-achieved {
+    font-weight: 600;
+  }
+
+  .multi-separator {
+    color: #C2BCB2;
+  }
+
+  .multi-goal {
+    color: #C2BCB2;
+  }
+
+  .multi-track {
+    position: relative;
+    height: 12px;
+    border-radius: 40px;
+    overflow: hidden;
+  }
+
+  .multi-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 40px;
+    width: 0;
+    transition: width 0.8s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+
+  /* ---- Embed mode ---- */
+  .embed body { padding: 0; }
+  .embed .phone-frame { width: 100%; height: 100vh; border-radius: 0; box-shadow: none; }
+
+  @media (max-width: 768px) {
+    body { padding: 0; }
+    .phone-frame { width: 100%; height: 100vh; border-radius: 0; box-shadow: none; }
+  }
+</style>
+<script>if(location.search.includes("embed=1"))document.documentElement.classList.add("embed");</script>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="screen">
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span class="status-time">12:15</span>
+      <span class="status-icons">
+        <svg width="16" height="12" viewBox="0 0 16 12"><rect x="0" y="3" width="3" height="9" rx="1" fill="#333" opacity="0.4"/><rect x="4.5" y="2" width="3" height="10" rx="1" fill="#333" opacity="0.6"/><rect x="9" y="1" width="3" height="11" rx="1" fill="#333" opacity="0.8"/><rect x="13.5" y="0" width="3" height="12" rx="1" fill="#333"/></svg>
+        <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 3C10.7 3 13.1 4.1 14.8 6L16 4.8C13.9 2.4 11.1 1 8 1S2.1 2.4 0 4.8L1.2 6C2.9 4.1 5.3 3 8 3Z" fill="#333"/><path d="M8 7C9.5 7 10.9 7.6 11.9 8.5L13.1 7.3C11.8 6.1 10 5.3 8 5.3S4.2 6.1 2.9 7.3L4.1 8.5C5.1 7.6 6.5 7 8 7Z" fill="#333"/><circle cx="8" cy="11" r="1.5" fill="#333"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0.5" y="0.5" width="22" height="11" rx="3" stroke="#333" stroke-opacity="0.35" fill="none"/><rect x="23.5" y="3.5" width="1.5" height="5" rx="0.75" fill="#333" opacity="0.4"/><rect x="2" y="2" width="19" height="8" rx="2" fill="#333"/></svg>
+      </span>
+    </div>
+
+    <!-- Header -->
+    <div class="top-header">
+      <h1>Progress Bar <span class="highlight">States</span></h1>
+    </div>
+
+    <div class="content-area" id="cases"></div>
+
+    <!-- Home Indicator -->
+    <div class="home-indicator">
+      <div class="home-indicator-bar"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// Color system (matches chartColors.ts exactly)
+const COLORS = {
+  hydration: {
+    primary: '#3A647E', secondary: '#689BBB', bg: '#DBEFFA',
+    border: '#92B7CE', barEmpty: '#EDF5FA', barEmptyBorder: '#D6E6F0',
+  },
+  activity: {
+    primary: '#9A6E3A', secondary: '#D4A163', bg: '#F9EFE0',
+    border: '#E2C191', barEmpty: '#FBF5EC', barEmptyBorder: '#F0E4D0',
+  },
+  nutrition: {
+    primary: '#3A7A4E', secondary: '#58A471', bg: '#D7F4E8',
+    border: '#83BD96', barEmpty: '#EAF8F0', barEmptyBorder: '#D0ECDB',
+  },
+  recovery: {
+    primary: '#58669D', secondary: '#8292D5', bg: '#E0E2F4',
+    border: '#8B93C6', barEmpty: '#EDEEF8', barEmptyBorder: '#D4D7EC',
+  },
+};
+
+const KEYWORDS = {
+  hydration: ['water', 'hydration', 'fluid', 'drink', 'ml', 'liter'],
+  activity: ['step', 'run', 'walk', 'exercise', 'workout', 'active', 'activity', 'movement', 'training', 'distance', 'pace', 'vo2'],
+  nutrition: ['calor', 'kcal', 'protein', 'carb', 'fat', 'meal', 'food', 'nutriti', 'macro', 'fiber', 'vitamin', 'iron', 'weight', 'sodium'],
+  recovery: ['sleep', 'hrv', 'recover', 'rest', 'stress', 'body battery', 'heart rate', 'rhr', 'spo2', 'respiration'],
+};
+
+function getColors(title) {
+  const lower = (title || '').toLowerCase();
+  for (const [cat, kws] of Object.entries(KEYWORDS)) {
+    if (kws.some(kw => lower.includes(kw))) return COLORS[cat];
+  }
+  return COLORS.activity;
+}
+
+const cases = [
+  { section: 'Value States' },
+  { label: '1. Zero / Empty', data: { title: 'Water Intake', dateRange: 'Today', values: { progressValue: 0, maxVal: 2000, unit: 'ml' } } },
+  { label: '2. Low Progress (10%)', data: { title: 'Water Intake', dateRange: 'Today', values: { progressValue: 200, maxVal: 2000, unit: 'ml' } } },
+  { label: '3. Mid Progress (50%)', data: { title: 'Water Intake', dateRange: 'Today', values: { progressValue: 1000, maxVal: 2000, unit: 'ml' } } },
+  { label: '4. Near Goal (95%)', data: { title: 'Water Intake', dateRange: 'Today', values: { progressValue: 1900, maxVal: 2000, unit: 'ml' } } },
+  { label: '5. Exactly Met (100%)', data: { title: 'Water Intake', dateRange: 'Today', values: { progressValue: 2000, maxVal: 2000, unit: 'ml' } } },
+  { label: '6. Exceeded — Good (125%)', data: { title: 'Water Intake', dateRange: 'Today', values: { progressValue: 2500, maxVal: 2000, unit: 'ml' } } },
+  { label: '7. Exceeded — Bad (sodium)', data: { title: 'Sodium Intake', dateRange: 'Today', values: { progressValue: 2800, maxVal: 2300, unit: 'mg' } } },
+
+  { section: 'Data Edge Cases' },
+  { label: '8. Unit Conversion (litres → ml)', data: { title: 'Water Intake', dateRange: 'Today', values: { progressValue: 1.8, maxVal: 2, unit: 'litre' } } },
+  { label: '9. Very Small Numbers', data: { title: 'Vitamin B12', dateRange: 'Today', values: { progressValue: 0.3, maxVal: 1.2, unit: 'mcg' } } },
+  { label: '10. Very Large Numbers', data: { title: 'Steps', dateRange: 'Today', values: { progressValue: 15000, maxVal: 10000, unit: 'steps' } } },
+  { label: '11. Decimal Values', data: { title: 'Fat Intake', dateRange: 'Today', values: { progressValue: 33.7, maxVal: 65, unit: 'g' } } },
+  { label: '12. Missing unit', data: { title: 'Protein', dateRange: 'Today', values: { progressValue: 45, maxVal: 65 } } },
+  { label: '13. Missing maxVal', data: { title: 'Fiber Intake', dateRange: 'Today', values: { progressValue: 12, unit: 'g' } } },
+  { label: '14. Empty values', data: { title: 'Calories', dateRange: 'Today', values: {} } },
+
+  { section: 'Display Edge Cases' },
+  { label: '15. No Title (color fallback)', data: { title: '', dateRange: 'Today', values: { progressValue: 500, maxVal: 1000, unit: 'kcal' } } },
+  { label: '16. Long Title', data: { title: 'Daily Vitamin B12 Intake Progress Tracking', dateRange: 'Mar 15 - Mar 21', values: { progressValue: 0.8, maxVal: 1.2, unit: 'mcg' } } },
+
+  { section: 'All Categories' },
+  { label: '17. Hydration', data: { title: 'Water Intake', dateRange: 'Today', values: { progressValue: 1500, maxVal: 2000, unit: 'ml' } } },
+  { label: '18. Activity', data: { title: 'Steps Today', dateRange: 'Today', values: { progressValue: 7500, maxVal: 10000, unit: 'steps' } } },
+  { label: '19. Nutrition', data: { title: 'Protein Intake', dateRange: 'Today', values: { progressValue: 45, maxVal: 65, unit: 'g' } } },
+  { label: '20. Recovery', data: { title: 'Sleep Duration', dateRange: 'Last Night', values: { progressValue: 6.5, maxVal: 8, unit: 'hours' } } },
+
+  { section: 'Multi-Bar' },
+  { label: '21. Nutrition Breakdown (4 bars)', multi: true, data: {
+    title: 'Nutrition Today', dateRange: 'Today',
+    values: [
+      { label: 'Protein', progressValue: 45, maxVal: 65, unit: 'g' },
+      { label: 'Carbs', progressValue: 180, maxVal: 250, unit: 'g' },
+      { label: 'Fat', progressValue: 33, maxVal: 65, unit: 'g' },
+      { label: 'Fiber', progressValue: 12, maxVal: 25, unit: 'g' },
+    ]
+  }},
+  { label: '22. Multi with exceeded', multi: true, data: {
+    title: 'Nutrition Today', dateRange: 'Today',
+    values: [
+      { label: 'Protein', progressValue: 72, maxVal: 65, unit: 'g' },
+      { label: 'Carbs', progressValue: 180, maxVal: 250, unit: 'g' },
+      { label: 'Fat', progressValue: 70, maxVal: 65, unit: 'g' },
+      { label: 'Fiber', progressValue: 8, maxVal: 25, unit: 'g' },
+    ]
+  }},
+  { label: '23. Multi — 2 bars only', multi: true, data: {
+    title: 'Macros Today', dateRange: 'Today',
+    values: [
+      { label: 'Protein', progressValue: 45, maxVal: 65, unit: 'g' },
+      { label: 'Carbs', progressValue: 200, maxVal: 250, unit: 'g' },
+    ]
+  }},
+  { label: '24. Multi — all zero', multi: true, data: {
+    title: 'Nutrition Today', dateRange: 'Today',
+    values: [
+      { label: 'Protein', progressValue: 0, maxVal: 65, unit: 'g' },
+      { label: 'Carbs', progressValue: 0, maxVal: 250, unit: 'g' },
+      { label: 'Fat', progressValue: 0, maxVal: 65, unit: 'g' },
+    ]
+  }},
+  { label: '25. Multi — 2 of 4 exceeded', multi: true, data: {
+    title: 'Nutrition Today', dateRange: 'Today',
+    values: [
+      { label: 'Protein', progressValue: 82, maxVal: 65, unit: 'g' },
+      { label: 'Carbs', progressValue: 180, maxVal: 250, unit: 'g' },
+      { label: 'Fat', progressValue: 78, maxVal: 65, unit: 'g' },
+      { label: 'Fiber', progressValue: 18, maxVal: 25, unit: 'g' },
+    ]
+  }},
+  { label: '26. Multi — all exceeded', multi: true, data: {
+    title: 'Nutrition Today', dateRange: 'Today',
+    values: [
+      { label: 'Protein', progressValue: 90, maxVal: 65, unit: 'g' },
+      { label: 'Carbs', progressValue: 280, maxVal: 250, unit: 'g' },
+      { label: 'Fat', progressValue: 72, maxVal: 65, unit: 'g' },
+    ]
+  }},
+  { label: '27. Multi — 1 massively exceeded', multi: true, data: {
+    title: 'Nutrition Today', dateRange: 'Today',
+    values: [
+      { label: 'Protein', progressValue: 45, maxVal: 65, unit: 'g' },
+      { label: 'Carbs', progressValue: 400, maxVal: 250, unit: 'g' },
+      { label: 'Fat', progressValue: 50, maxVal: 65, unit: 'g' },
+      { label: 'Fiber', progressValue: 30, maxVal: 25, unit: 'g' },
+    ]
+  }},
+  { section: 'Cross-Category' },
+  { label: '29A. Mixed — one card, own colors', multi: true, mixedColors: true, data: {
+    title: 'Your Day So Far', dateRange: 'Today',
+    values: [
+      { label: 'Steps', progressValue: 7500, maxVal: 10000, unit: 'steps', colorKey: 'activity' },
+      { label: 'Calories', progressValue: 1650, maxVal: 2000, unit: 'kcal', colorKey: 'nutrition' },
+      { label: 'Protein', progressValue: 45, maxVal: 65, unit: 'g', colorKey: 'nutrition' },
+    ]
+  }},
+  { label: '29B. Mixed — separate cards' },
+  { label: '↳ Steps', data: { title: 'Steps Today', dateRange: 'Today', values: { progressValue: 7500, maxVal: 10000, unit: 'steps' } } },
+  { label: '↳ Calories', data: { title: 'Calories Today', dateRange: 'Today', values: { progressValue: 1650, maxVal: 2000, unit: 'kcal' } } },
+  { label: '↳ Protein', data: { title: 'Protein Intake', dateRange: 'Today', values: { progressValue: 45, maxVal: 65, unit: 'g' } } },
+
+  { label: '28. Activity multi', multi: true, data: {
+    title: 'Activity Today', dateRange: 'Today',
+    values: [
+      { label: 'Steps', progressValue: 7500, maxVal: 10000, unit: 'steps' },
+      { label: 'Active Min', progressValue: 35, maxVal: 60, unit: 'min' },
+      { label: 'Floors', progressValue: 8, maxVal: 10, unit: 'floors' },
+    ]
+  }},
+];
+
+function processValues(values) {
+  let pv = Number(values.progressValue) || 0;
+  let mv = Number(values.maxVal) || 1;
+  let u = values.unit || '';
+
+  const lower = u.toLowerCase();
+  if (['l', 'litre', 'litres', 'liter', 'liters'].includes(lower)) {
+    pv = Math.round(pv * 1000);
+    mv = Math.round(mv * 1000);
+    u = 'ml';
+  }
+
+  const pct = Math.round((pv / mv) * 100);
+  const exceeded = pv > mv;
+
+  let ctx;
+  if (pv === 0) ctx = 'No progress yet';
+  else if (exceeded) ctx = `${Math.round(pv - mv)} ${u} over goal`;
+  else if (pv === mv) ctx = 'Goal reached';
+  else ctx = `${Math.round(mv - pv)} ${u} to go`;
+
+  return { pv: Math.round(pv), mv, u, pct, exceeded, ctx };
+}
+
+function renderCard(data, delay) {
+  const colors = getColors(data.title);
+  const vals = data.values || {};
+  const { pv, mv, u, pct, exceeded, ctx } = processValues(vals);
+  const fillPct = Math.min(pct, 100);
+
+  let barHtml;
+
+  if (exceeded && pv > 0) {
+    // Two separate pill bars: goal + overflow
+    const overAmount = Math.round(pv - mv);
+    const goalFlex = mv;
+    const overflowFlex = overAmount;
+
+    barHtml = `
+      <div class="progress-exceeded-row">
+        <div class="progress-exceeded-goal" style="background:${colors.border}" data-goal-flex="${goalFlex}" data-delay="${delay}">
+          <div class="progress-exceeded-label" style="color:${colors.primary}">${mv} ${u}</div>
+        </div>
+        <div class="progress-exceeded-overflow" style="background:${colors.border}" data-overflow-flex="${overflowFlex}" data-delay="${delay}">
+          <div class="progress-exceeded-overflow-label" style="color:${colors.primary}">+${overAmount}</div>
+        </div>
+      </div>`;
+  } else {
+    barHtml = `
+      <div class="progress-track" style="background:${colors.barEmpty}">
+        ${pv > 0 ? `<div class="progress-fill" style="background:${colors.border}" data-width="${fillPct}" data-delay="${delay}"></div>` : ''}
+        <div class="progress-goal" style="color:${colors.primary}">${mv} ${u}</div>
+      </div>`;
+  }
+
+  return `
+    <div class="chart-card">
+      <div class="card-top">
+        <div class="card-title">${data.title || '(no title)'}</div>
+        <div class="card-date">${data.dateRange}</div>
+      </div>
+      <div class="card-value-row">
+        <div class="card-value" style="color:${colors.secondary}">${pv} ${u}</div>
+      </div>
+      <div class="card-context" style="color:${colors.secondary}">${ctx}</div>
+      ${barHtml}
+    </div>`;
+}
+
+function renderMultiCard(data, baseDelay, mixedColors) {
+  const cardColors = getColors(data.title);
+  const items = data.values || [];
+
+  let rowsHtml = items.map((item, i) => {
+    const colors = mixedColors && item.colorKey ? COLORS[item.colorKey] : cardColors;
+    const pv = Math.round(Number(item.progressValue) || 0);
+    const mv = Number(item.maxVal) || 1;
+    const u = item.unit || '';
+    const pct = Math.min(Math.round((pv / mv) * 100), 100);
+    const exceeded = pv > mv;
+    const overAmount = Math.round(pv - mv);
+
+    let barHtml;
+    if (exceeded && pv > 0) {
+      const goalFlex = mv;
+      const overflowFlex = overAmount;
+      barHtml = `
+        <div class="progress-exceeded-row">
+          <div class="progress-exceeded-goal" style="background:${colors.border};height:12px;min-width:40px" data-goal-flex="${goalFlex}" data-delay="${baseDelay + i * 100}">
+            <div style="position:absolute;height:12px;right:8px;display:flex;align-items:center;font-size:10px;font-weight:600;color:${colors.primary}">${mv}</div>
+          </div>
+          <div class="progress-exceeded-overflow" style="background:${colors.border};height:12px;min-width:30px" data-overflow-flex="${overflowFlex}" data-delay="${baseDelay + i * 100}">
+            <div style="position:absolute;height:12px;right:6px;display:flex;align-items:center;font-size:10px;font-weight:600;color:${colors.primary}">+${overAmount}</div>
+          </div>
+        </div>`;
+    } else {
+      barHtml = `
+        <div class="multi-track" style="background:${colors.barEmpty}">
+          ${pv > 0 ? `<div class="multi-fill" style="background:${colors.border}" data-width="${pct}" data-delay="${baseDelay + i * 100}"></div>` : ''}
+        </div>`;
+    }
+
+    return `
+      <div class="multi-item">
+        <div class="multi-label-row">
+          <span class="multi-label">${item.label}</span>
+          <div class="multi-values">
+            <span class="multi-achieved" style="color:${colors.secondary}">${pv} ${u}</span>
+            <span class="multi-separator">/</span>
+            <span class="multi-goal">${mv} ${u}</span>
+          </div>
+        </div>
+        ${barHtml}
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="chart-card">
+      <div class="card-top">
+        <div class="card-title">${data.title}</div>
+        <div class="card-date">${data.dateRange}</div>
+      </div>
+      <div class="multi-row" style="margin-top:14px">
+        ${rowsHtml}
+      </div>
+    </div>`;
+}
+
+// Render
+const container = document.getElementById('cases');
+let html = '';
+let animDelay = 0;
+
+cases.forEach(c => {
+  if (c.section) {
+    html += `<div class="section-title">${c.section}</div>`;
+  } else if (c.multi) {
+    html += `<div class="case-label">${c.label}</div>${renderMultiCard(c.data, animDelay, c.mixedColors)}`;
+    animDelay += 400;
+  } else if (!c.data) {
+    html += `<div class="case-label">${c.label}</div>`;
+  } else {
+    html += `<div class="case-label">${c.label}</div>${renderCard(c.data, animDelay)}`;
+    animDelay += 80;
+  }
+});
+
+container.innerHTML = html;
+
+// Staggered animation
+setTimeout(() => {
+  document.querySelectorAll('.progress-fill, .multi-fill').forEach(el => {
+    const target = el.dataset.width + '%';
+    const delay = parseInt(el.dataset.delay) || 0;
+    el.style.width = '0%';
+    setTimeout(() => { el.style.width = target; }, 300 + delay);
+  });
+  document.querySelectorAll('.progress-exceeded-goal').forEach(el => {
+    const flex = el.dataset.goalFlex;
+    const delay = parseInt(el.dataset.delay) || 0;
+    setTimeout(() => { el.style.flex = flex; }, 300 + delay);
+  });
+  document.querySelectorAll('.progress-exceeded-overflow').forEach(el => {
+    const flex = el.dataset.overflowFlex;
+    const delay = parseInt(el.dataset.delay) || 0;
+    setTimeout(() => { el.style.flex = flex; }, 600 + delay);
+  });
+}, 50);
+</script>
+</body>
+</html>
