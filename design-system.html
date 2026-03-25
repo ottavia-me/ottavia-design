@@ -4,13 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ottavia Design System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300..900&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --accent: #6161FF;
+      --accent-light: #F0F0FF;
+      --accent-hover: #4A4AD4;
+      --page-bg: #FAFAFE;
+      --sidebar-bg: #FFFFFF;
+      --sidebar-border: #EEEEF2;
+      --text-primary: #1B1B2F;
+      --text-secondary: #6E6E85;
+      --text-tertiary: #A0A0B5;
+      --card-border: #EEEEF2;
+      --card-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
-      background: #F8F7F5;
-      color: #1a1a1a;
+      font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--page-bg);
+      color: var(--text-primary);
       line-height: 1.5;
     }
 
@@ -27,66 +47,95 @@
       top: 0;
       left: 0;
       bottom: 0;
-      background: #FFFFFF;
-      border-right: 1px solid #E5E0D8;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--sidebar-border);
       overflow-y: auto;
       padding: 24px 0;
       z-index: 100;
     }
     .sidebar-logo {
       padding: 0 20px 20px;
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 700;
-      color: #433E36;
+      color: var(--text-primary);
       letter-spacing: -0.3px;
-      border-bottom: 1px solid #F0EBE4;
+      border-bottom: 1px solid var(--sidebar-border);
       margin-bottom: 12px;
     }
     .sidebar-logo span {
       font-size: 11px;
       font-weight: 500;
-      color: #A8A297;
+      color: var(--text-tertiary);
       display: block;
       margin-top: 2px;
       letter-spacing: 0;
     }
 
+    .sidebar-search {
+      padding: 0 12px;
+      margin-bottom: 12px;
+    }
+    .sidebar-search input {
+      width: 100%;
+      padding: 7px 12px 7px 32px;
+      border: 1px solid var(--sidebar-border);
+      border-radius: 20px;
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--text-primary);
+      background: var(--page-bg);
+      outline: none;
+      transition: border-color var(--transition);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23A0A0B5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: 10px center;
+    }
+    .sidebar-search input:focus {
+      border-color: var(--accent);
+      background: #fff;
+    }
+
     .nav-section {
-      padding: 12px 20px 4px;
+      padding: 16px 20px 4px;
       font-size: 11px;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.8px;
-      color: #A8A297;
+      color: var(--text-tertiary);
     }
     .nav-link {
       display: block;
-      padding: 6px 20px 6px 32px;
+      padding: 6px 12px 6px 28px;
+      margin: 1px 8px;
       font-size: 14px;
-      color: #6B665D;
+      color: var(--text-secondary);
       text-decoration: none;
-      transition: all 0.12s;
-      border-left: 2px solid transparent;
+      transition: all var(--transition);
+      border-radius: var(--radius-sm);
     }
     .nav-link:hover {
-      color: #433E36;
-      background: #F8F7F5;
-      border-left-color: #CBAC9B;
+      color: var(--text-primary);
+      background: var(--accent-light);
+    }
+    .nav-link.active {
+      color: var(--accent);
+      background: var(--accent-light);
+      font-weight: 600;
     }
     .nav-link.top-level {
-      padding-left: 20px;
+      padding-left: 12px;
       font-weight: 500;
     }
     .nav-badge {
       font-size: 10px;
       font-weight: 600;
       padding: 1px 6px;
-      border-radius: 3px;
+      border-radius: 10px;
       margin-left: 6px;
       vertical-align: 1px;
     }
-    .nav-badge-new { background: #CCE5FF; color: #1A5FB4; }
-    .nav-badge-stub { background: #F0EBE4; color: #A8A297; }
+    .nav-badge-new { background: var(--accent-light); color: var(--accent); }
+    .nav-badge-stub { background: #F0F0F4; color: var(--text-tertiary); }
 
     /* ===== MAIN CONTENT ===== */
     .main {
@@ -99,19 +148,19 @@
     /* ===== PAGE HEADER ===== */
     .page-header {
       padding: 20px 0 32px;
-      border-bottom: 1px solid #E5E0D8;
+      border-bottom: 1px solid var(--sidebar-border);
       margin-bottom: 48px;
     }
     .page-header h1 {
       font-size: 32px;
       font-weight: 700;
       letter-spacing: -0.5px;
-      color: #433E36;
+      color: var(--text-primary);
       margin-bottom: 8px;
     }
     .page-header p {
       font-size: 16px;
-      color: #6B665D;
+      color: var(--text-secondary);
       max-width: 600px;
     }
 
@@ -122,23 +171,23 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
       padding: 3px 8px;
-      border-radius: 4px;
+      border-radius: 6px;
       white-space: nowrap;
     }
-    .badge-section { background: #E5E0D8; color: #6B665D; }
+    .badge-section { background: #EEEEF2; color: var(--text-secondary); }
 
     .status {
       font-size: 11px;
       font-weight: 600;
       padding: 2px 8px;
-      border-radius: 4px;
+      border-radius: 6px;
       white-space: nowrap;
     }
-    .status-figma { background: #E8DEF8; color: #6B42C4; }
-    .status-code { background: #D4EDDA; color: #2D6A3F; }
-    .status-gap { background: #FFE0CC; color: #B35C1E; }
-    .status-new { background: #CCE5FF; color: #1A5FB4; }
-    .status-updated { background: #D0F0E0; color: #1A7A5A; }
+    .status-figma { background: #F0ECFF; color: #6B42C4; }
+    .status-code { background: #E6F9EE; color: #2D6A3F; }
+    .status-gap { background: #FFF0E6; color: #B35C1E; }
+    .status-new { background: var(--accent-light); color: var(--accent); }
+    .status-updated { background: #E6F9EE; color: #1A7A5A; }
 
     /* ===== LEGEND ===== */
     .legend {
@@ -152,7 +201,7 @@
       align-items: center;
       gap: 6px;
       font-size: 12px;
-      color: #6B665D;
+      color: var(--text-secondary);
     }
 
     /* ===== SECTION ===== */
@@ -168,27 +217,27 @@
     }
     .section-header h2 {
       font-size: 24px;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: -0.3px;
-      color: #433E36;
+      color: var(--text-primary);
     }
     .section-description {
       font-size: 14px;
-      color: #6B665D;
+      color: var(--text-secondary);
       margin-bottom: 24px;
       max-width: 600px;
     }
     .subsection-title {
       font-size: 15px;
       font-weight: 600;
-      color: #433E36;
+      color: var(--text-primary);
       margin: 28px 0 16px;
     }
 
     /* ===== DIVIDER ===== */
     .section-divider {
       border: none;
-      border-top: 1px solid #E5E0D8;
+      border-top: 1px solid var(--sidebar-border);
       margin: 48px 0;
     }
 
@@ -203,15 +252,15 @@
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #9B9590;
+      color: var(--text-tertiary);
       padding: 0 16px 10px;
-      border-bottom: 1px solid #E5E0D8;
+      border-bottom: 1px solid var(--sidebar-border);
     }
     .token-table tbody tr {
-      border-bottom: 1px solid #F0EBE4;
-      transition: background 0.1s;
+      border-bottom: 1px solid #F0F0F4;
+      transition: background var(--transition);
     }
-    .token-table tbody tr:hover { background: #F0EBE4; }
+    .token-table tbody tr:hover { background: var(--accent-light); }
     .token-table td {
       padding: 14px 16px;
       font-size: 14px;
@@ -233,56 +282,55 @@
       font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
       font-size: 13px;
       font-weight: 500;
-      color: #433E36;
+      color: var(--text-primary);
     }
     .hex {
       font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
       font-size: 13px;
-      color: #9B9590;
+      color: var(--text-tertiary);
     }
-    .token-desc { color: #6B665D; font-size: 13px; }
+    .token-desc { color: var(--text-secondary); font-size: 13px; }
 
     /* ===== SWATCH CARDS (Figma style) ===== */
     .swatch-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 10px;
       margin-bottom: 32px;
     }
     .swatch-card {
-      width: 122px;
       background: white;
-      border-radius: 6px;
-      padding: 8px 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      border: 1px solid var(--card-border);
       cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s;
+      transition: transform var(--transition), box-shadow var(--transition);
       position: relative;
     }
     .swatch-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+      box-shadow: 0 4px 16px rgba(97,97,255,0.08), 0 8px 32px rgba(0,0,0,0.06);
     }
     .swatch-card-color {
-      width: 108px;
-      height: 47px;
-      border-radius: 4px;
-      margin-bottom: 8px;
-      border: 1px solid rgba(0,0,0,0.04);
+      width: 100%;
+      height: 56px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
     }
     .swatch-card-name {
-      font-size: 14px;
-      font-weight: 500;
-      color: #0A0A0A;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
       line-height: 18px;
-      margin-bottom: 2px;
+      padding: 8px 10px 2px;
     }
     .swatch-card-hex {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 500;
-      color: #989B9D;
+      color: var(--text-tertiary);
       line-height: 16px;
       font-family: 'SF Mono', monospace;
+      padding: 0 10px 8px;
     }
 
     /* ===== COPY TO CLIPBOARD ===== */
@@ -299,13 +347,13 @@
       bottom: calc(100% + 6px);
       left: 50%;
       transform: translateX(-50%);
-      background: #2D2A29;
+      background: var(--text-primary);
       color: white;
       font-size: 11px;
       font-weight: 500;
-      font-family: -apple-system, sans-serif;
+      font-family: 'Figtree', -apple-system, sans-serif;
       padding: 4px 8px;
-      border-radius: 4px;
+      border-radius: 6px;
       white-space: nowrap;
       opacity: 0;
       pointer-events: none;
@@ -331,15 +379,15 @@
     .swatch-card::after {
       content: 'Copy hex';
       position: absolute;
-      top: 6px;
-      right: 6px;
-      background: #2D2A29;
+      top: 4px;
+      right: 4px;
+      background: rgba(67,62,54,0.85);
       color: white;
       font-size: 10px;
       font-weight: 600;
-      font-family: -apple-system, sans-serif;
+      font-family: 'Figtree', -apple-system, sans-serif;
       padding: 3px 7px;
-      border-radius: 4px;
+      border-radius: 6px;
       white-space: nowrap;
       opacity: 0;
       pointer-events: none;
@@ -357,8 +405,8 @@
     /* ===== TYPE PREVIEW ===== */
     .type-preview {
       background: white;
-      border: 1px solid #F0EBE4;
-      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
       padding: 20px 24px;
       margin-bottom: 8px;
     }
@@ -370,8 +418,8 @@
       gap: 16px;
       padding: 24px;
       background: white;
-      border-radius: 12px;
-      border: 1px solid #F0EBE4;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--card-border);
       margin-bottom: 24px;
     }
     .spacing-box {
@@ -381,7 +429,7 @@
     }
     .spacing-label {
       font-size: 11px;
-      color: #9B9590;
+      color: var(--text-tertiary);
       text-align: center;
       margin-top: 6px;
       font-family: 'SF Mono', monospace;
@@ -389,15 +437,15 @@
 
     /* ===== INFO BOX ===== */
     .info-box {
-      background: #FFF9F0;
-      border: 1px solid #F0E4D0;
-      border-radius: 12px;
+      background: var(--accent-light);
+      border: 1px solid #DDDDF8;
+      border-radius: var(--radius-md);
       padding: 16px 20px;
       margin: 16px 0 24px;
       font-size: 14px;
-      color: #6B665D;
+      color: var(--text-secondary);
     }
-    .info-box strong { color: #433E36; }
+    .info-box strong { color: var(--text-primary); }
 
     /* ===== PHONE PREVIEW ===== */
     .phone-frame {
@@ -656,36 +704,36 @@
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #9B9590;
+      color: var(--text-tertiary);
       padding: 0 12px 8px;
-      border-bottom: 1px solid #E5E0D8;
+      border-bottom: 1px solid var(--sidebar-border);
     }
     .spec-table td {
       padding: 8px 12px;
       font-size: 13px;
-      border-bottom: 1px solid #F0EBE4;
+      border-bottom: 1px solid #F0F0F4;
       vertical-align: top;
     }
     .spec-table td:first-child {
       font-weight: 500;
-      color: #433E36;
+      color: var(--text-primary);
       white-space: nowrap;
     }
     .spec-table td:nth-child(2) {
       font-family: 'SF Mono', monospace;
       font-size: 12px;
-      color: #6B665D;
+      color: var(--text-secondary);
     }
 
 
     /* ===== STUB SECTION ===== */
     .stub-box {
-      background: #F0EBE4;
-      border: 1px dashed #C2BCB2;
-      border-radius: 12px;
+      background: #F0F0F4;
+      border: 1px dashed #D0D0E0;
+      border-radius: var(--radius-md);
       padding: 32px;
       text-align: center;
-      color: #A8A297;
+      color: var(--text-tertiary);
       font-size: 14px;
     }
 
@@ -695,8 +743,8 @@
       gap: 24px;
       padding: 24px;
       background: white;
-      border-radius: 12px;
-      border: 1px solid #F0EBE4;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--card-border);
       align-items: flex-end;
       margin-bottom: 24px;
     }
@@ -709,17 +757,17 @@
       margin: 16px 0;
     }
     .do-card, .dont-card {
-      border-radius: 10px;
+      border-radius: var(--radius-md);
       padding: 16px;
       font-size: 13px;
-      color: #433E36;
+      color: var(--text-primary);
     }
     .do-card {
-      background: #E1F9EB;
+      background: #E6F9EE;
       border: 1px solid #B8E6CC;
     }
     .dont-card {
-      background: #FFF3ED;
+      background: #FFF0E6;
       border: 1px solid #FFDAC5;
     }
     .do-card strong { color: #2D6A3F; }
@@ -734,9 +782,13 @@
     }
     .comp-card {
       background: #FFFFFF;
-      border: 1px solid #E5E0D8;
+      border: 1px solid var(--card-border);
       border-radius: 14px;
       overflow: hidden;
+      transition: box-shadow var(--transition);
+    }
+    .comp-card:hover {
+      box-shadow: 0 4px 16px rgba(97,97,255,0.06), 0 8px 32px rgba(0,0,0,0.04);
     }
     .comp-preview {
       background: #F5F1EA;
@@ -748,17 +800,17 @@
     }
     .comp-info {
       padding: 14px 18px;
-      border-top: 1px solid #F0EBE4;
+      border-top: 1px solid #F0F0F4;
     }
     .comp-name {
       font-size: 14px;
       font-weight: 600;
-      color: #433E36;
+      color: var(--text-primary);
       margin-bottom: 2px;
     }
     .comp-desc {
       font-size: 12px;
-      color: #9B9590;
+      color: var(--text-tertiary);
     }
     .comp-variants {
       display: flex;
@@ -769,9 +821,9 @@
       font-size: 10px;
       font-weight: 600;
       padding: 1px 6px;
-      border-radius: 3px;
-      background: #F0EBE4;
-      color: #6B665D;
+      border-radius: 10px;
+      background: var(--accent-light);
+      color: var(--accent);
     }
     .comp-category {
       margin-bottom: 48px;
@@ -780,12 +832,12 @@
     .comp-category-title {
       font-size: 18px;
       font-weight: 600;
-      color: #433E36;
+      color: var(--text-primary);
       margin-bottom: 4px;
     }
     .comp-category-desc {
       font-size: 13px;
-      color: #6B665D;
+      color: var(--text-secondary);
       margin-bottom: 16px;
     }
 
@@ -919,12 +971,12 @@
     .mini-coach-card.hydration .mini-coach-card-time { color: #689BBB; }
     .mini-coach-card.hydration .mini-coach-card-check { border-color: #92B7CE; }
     .mini-coach-card.activity { background: #F9EFE0; border-color: #E2C191; }
-    .mini-coach-card.activity .mini-coach-card-title { color: #C08A48; }
+    .mini-coach-card.activity .mini-coach-card-title { color: #9A6E3A; }
     .mini-coach-card.activity .mini-coach-card-sub { color: #D4A163; }
     .mini-coach-card.activity .mini-coach-card-time { color: #D4A163; }
     .mini-coach-card.activity .mini-coach-card-check { border-color: #E2C191; }
     .mini-coach-card.nutrition { background: #D7F4E8; border-color: #83BD96; }
-    .mini-coach-card.nutrition .mini-coach-card-title { color: #4B8F61; }
+    .mini-coach-card.nutrition .mini-coach-card-title { color: #3A7A4E; }
     .mini-coach-card.nutrition .mini-coach-card-sub { color: #58A471; }
     .mini-coach-card.nutrition .mini-coach-card-time { color: #58A471; }
     .mini-coach-card.nutrition .mini-coach-card-check { border-color: #83BD96; }
@@ -969,11 +1021,11 @@
     .mini-coach-reminder.hydration .mini-reminder-detail { color: #689BBB; }
     .mini-coach-reminder.hydration .mini-reminder-time { color: #689BBB; }
     .mini-coach-reminder.activity { background: #F9EFE0; border-color: #E2C191; }
-    .mini-coach-reminder.activity .mini-reminder-title { color: #C08A48; }
+    .mini-coach-reminder.activity .mini-reminder-title { color: #9A6E3A; }
     .mini-coach-reminder.activity .mini-reminder-detail { color: #D4A163; }
     .mini-coach-reminder.activity .mini-reminder-time { color: #D4A163; }
     .mini-coach-reminder.nutrition { background: #D7F4E8; border-color: #83BD96; }
-    .mini-coach-reminder.nutrition .mini-reminder-title { color: #4B8F61; }
+    .mini-coach-reminder.nutrition .mini-reminder-title { color: #3A7A4E; }
     .mini-coach-reminder.nutrition .mini-reminder-detail { color: #58A471; }
     .mini-coach-reminder.nutrition .mini-reminder-time { color: #58A471; }
     .mini-coach-reminder.recovery { background: #E7EBFF; border-color: #8292D5; }
@@ -1619,11 +1671,11 @@
 
     /* ===== FOOTER ===== */
     .page-footer {
-      border-top: 1px solid #E5E0D8;
+      border-top: 1px solid var(--sidebar-border);
       padding-top: 24px;
       margin-top: 48px;
       font-size: 13px;
-      color: #9B9590;
+      color: var(--text-tertiary);
     }
 
     /* ===== RESPONSIVE ===== */
@@ -1643,6 +1695,10 @@
       <div class="sidebar-logo">
         Ottavia Design System
         <span>v1.0 — March 2026</span>
+      </div>
+
+      <div class="sidebar-search">
+        <input type="text" placeholder="Search..." id="sidebarSearch" oninput="filterSidebarNav(this.value)" />
       </div>
 
       <a class="nav-link top-level" href="#get-started">Get started</a>
@@ -1870,10 +1926,10 @@
             <div class="swatch-card-name">activity.border</div>
             <div class="swatch-card-hex">#E2C191</div>
           </div>
-          <div class="swatch-card" data-hex="#C08A48" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#C08A48"></div>
+          <div class="swatch-card" data-hex="#9A6E3A" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#9A6E3A"></div>
             <div class="swatch-card-name">activity.title</div>
-            <div class="swatch-card-hex">#C08A48</div>
+            <div class="swatch-card-hex">#9A6E3A</div>
           </div>
           <div class="swatch-card" data-hex="#D4A163" onclick="copyHex(this)">
             <div class="swatch-card-color" style="background:#D4A163"></div>
@@ -1894,10 +1950,10 @@
             <div class="swatch-card-name">nutrition.border</div>
             <div class="swatch-card-hex">#83BD96</div>
           </div>
-          <div class="swatch-card" data-hex="#4B8F61" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#4B8F61"></div>
+          <div class="swatch-card" data-hex="#3A7A4E" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#3A7A4E"></div>
             <div class="swatch-card-name">nutrition.title</div>
-            <div class="swatch-card-hex">#4B8F61</div>
+            <div class="swatch-card-hex">#3A7A4E</div>
           </div>
           <div class="swatch-card" data-hex="#58A471" onclick="copyHex(this)">
             <div class="swatch-card-color" style="background:#58A471"></div>
@@ -2132,9 +2188,9 @@
               <td><span class="status status-updated">Updated</span></td>
             </tr>
             <tr>
-              <td><div class="swatch" style="background:#C08A48"></div></td>
+              <td><div class="swatch" style="background:#9A6E3A"></div></td>
               <td><span class="token-name">data.activity</span></td>
-              <td><span class="hex">#C08A48</span></td>
+              <td><span class="hex">#9A6E3A</span></td>
               <td><span class="token-desc">Activity cards, exercise tracking</span></td>
               <td><span class="status status-updated">Updated</span></td>
             </tr>
@@ -2146,9 +2202,9 @@
               <td><span class="status status-updated">Updated</span></td>
             </tr>
             <tr>
-              <td><div class="swatch" style="background:#4B8F61"></div></td>
+              <td><div class="swatch" style="background:#3A7A4E"></div></td>
               <td><span class="token-name">data.nutrition</span></td>
-              <td><span class="hex">#4B8F61</span></td>
+              <td><span class="hex">#3A7A4E</span></td>
               <td><span class="token-desc">Nutrition cards, meal tracking</span></td>
               <td><span class="status status-updated">Updated</span></td>
             </tr>
@@ -2528,8 +2584,8 @@
           }
           .icon-cell {
             background: #fff;
-            border: 1px solid #E5E0D8;
-            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-md);
             padding: 20px 12px 14px;
             display: flex;
             flex-direction: column;
@@ -2547,7 +2603,7 @@
           }
           .icon-cell-label {
             font-size: 11px;
-            color: #6B665D;
+            color: var(--text-secondary);
             text-align: center;
             line-height: 1.3;
           }
@@ -3539,7 +3595,7 @@
             </div>
             <div class="comp-info">
               <div class="comp-name">Activity Coach Card</div>
-              <div class="comp-desc">Border #E2C191, bg #F9EFE0, title #C08A48, text #D4A163. Expandable with workout plan.</div>
+              <div class="comp-desc">Border #E2C191, bg #F9EFE0, title #9A6E3A, text #D4A163. Expandable with workout plan.</div>
               <div class="comp-variants">
                 <span class="comp-variant-tag">Collapsed</span>
                 <span class="comp-variant-tag">Expanded</span>
@@ -3559,7 +3615,7 @@
             </div>
             <div class="comp-info">
               <div class="comp-name">Nutrition Coach Card</div>
-              <div class="comp-desc">Border #83BD96, bg #D7F4E8, title #4B8F61, text #58A471. Expands with ingredients + coach note.</div>
+              <div class="comp-desc">Border #83BD96, bg #D7F4E8, title #3A7A4E, text #58A471. Expands with ingredients + coach note.</div>
               <div class="comp-variants">
                 <span class="comp-variant-tag">Collapsed</span>
                 <span class="comp-variant-tag">Expanded</span>
@@ -3593,8 +3649,8 @@
                 <div class="mini-coach-card-title">Lunch — lean protein + greens</div>
                 <div class="mini-coach-card-sub">Chicken salad · ~500 kcal</div>
                 <div class="mini-coach-card-detail">
-                  <div class="mini-coach-card-detail-label" style="color:#4B8F61;">What to make</div>
-                  <div class="mini-coach-card-detail-items" style="color:#4B8F61;">120g chicken breast<br>2 cups mixed greens<br>1/2 avocado · tomatoes</div>
+                  <div class="mini-coach-card-detail-label" style="color:#3A7A4E;">What to make</div>
+                  <div class="mini-coach-card-detail-items" style="color:#3A7A4E;">120g chicken breast<br>2 cups mixed greens<br>1/2 avocado · tomatoes</div>
                   <div class="mini-coach-card-detail-coach" style="color:#58A471;">This combo keeps energy steady all afternoon.</div>
                 </div>
                 <div class="mini-coach-card-time">12:00 PM</div>
@@ -4072,13 +4128,13 @@
           <div class="comp-card">
             <div class="comp-preview" style="flex-direction:column;align-items:stretch;padding:20px 24px;">
               <div style="font-size:11px;font-weight:600;color:#58A471;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Nutrition</div>
-              <div style="font-size:13px;font-weight:600;color:#4B8F61;margin-bottom:4px;">"How much protein did I eat today?"</div>
+              <div style="font-size:13px;font-weight:600;color:#3A7A4E;margin-bottom:4px;">"How much protein did I eat today?"</div>
               <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:10px;">
-                <span style="font-size:28px;font-weight:700;color:#4B8F61;">82g</span>
+                <span style="font-size:28px;font-weight:700;color:#3A7A4E;">82g</span>
                 <span style="font-size:13px;color:#58A471;">/ 120g goal</span>
               </div>
               <div style="background:#D7F4E8;border-radius:20px;height:10px;overflow:hidden;">
-                <div style="background:#4B8F61;height:100%;width:68%;border-radius:20px;"></div>
+                <div style="background:#3A7A4E;height:100%;width:68%;border-radius:20px;"></div>
               </div>
               <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:11px;color:#58A471;">
                 <span>68%</span>
@@ -4087,9 +4143,9 @@
             </div>
             <div class="comp-info">
               <div class="comp-name">Progress Bar — Nutrition</div>
-              <div class="comp-desc">Protein intake progress. Track: nutrition.bg (#D7F4E8), fill: nutrition.title (#4B8F61). Same layout as hydration.</div>
+              <div class="comp-desc">Protein intake progress. Track: nutrition.bg (#D7F4E8), fill: nutrition.title (#3A7A4E). Same layout as hydration.</div>
               <div class="comp-variants">
-                <span class="comp-variant-tag" style="background:#D7F4E8;color:#4B8F61;">Nutrition</span>
+                <span class="comp-variant-tag" style="background:#D7F4E8;color:#3A7A4E;">Nutrition</span>
               </div>
             </div>
           </div>
@@ -4098,30 +4154,30 @@
           <div class="comp-card">
             <div class="comp-preview" style="flex-direction:column;align-items:stretch;padding:20px 24px;">
               <div style="font-size:11px;font-weight:600;color:#D4A163;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Activity</div>
-              <div style="font-size:13px;font-weight:600;color:#C08A48;margin-bottom:4px;">"How active was I this week?"</div>
+              <div style="font-size:13px;font-weight:600;color:#9A6E3A;margin-bottom:4px;">"How active was I this week?"</div>
               <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:14px;">
-                <span style="font-size:28px;font-weight:700;color:#C08A48;">4,820</span>
+                <span style="font-size:28px;font-weight:700;color:#9A6E3A;">4,820</span>
                 <span style="font-size:13px;color:#D4A163;">avg steps / day</span>
               </div>
               <div style="display:flex;align-items:flex-end;gap:6px;height:80px;">
                 <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
-                  <div style="background:#C08A48;width:100%;height:60px;border-radius:4px 4px 0 0;"></div>
+                  <div style="background:#9A6E3A;width:100%;height:60px;border-radius:4px 4px 0 0;"></div>
                   <span style="font-size:9px;color:#D4A163;font-weight:600;">Mon</span>
                 </div>
                 <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
-                  <div style="background:#C08A48;width:100%;height:45px;border-radius:4px 4px 0 0;"></div>
+                  <div style="background:#9A6E3A;width:100%;height:45px;border-radius:4px 4px 0 0;"></div>
                   <span style="font-size:9px;color:#D4A163;font-weight:600;">Tue</span>
                 </div>
                 <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
-                  <div style="background:#C08A48;width:100%;height:72px;border-radius:4px 4px 0 0;"></div>
+                  <div style="background:#9A6E3A;width:100%;height:72px;border-radius:4px 4px 0 0;"></div>
                   <span style="font-size:9px;color:#D4A163;font-weight:600;">Wed</span>
                 </div>
                 <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
-                  <div style="background:#C08A48;width:100%;height:38px;border-radius:4px 4px 0 0;"></div>
+                  <div style="background:#9A6E3A;width:100%;height:38px;border-radius:4px 4px 0 0;"></div>
                   <span style="font-size:9px;color:#D4A163;font-weight:600;">Thu</span>
                 </div>
                 <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
-                  <div style="background:#C08A48;width:100%;height:55px;border-radius:4px 4px 0 0;"></div>
+                  <div style="background:#9A6E3A;width:100%;height:55px;border-radius:4px 4px 0 0;"></div>
                   <span style="font-size:9px;color:#D4A163;font-weight:600;">Fri</span>
                 </div>
                 <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
@@ -4136,9 +4192,9 @@
             </div>
             <div class="comp-info">
               <div class="comp-name">Bar Chart — Weekly Activity</div>
-              <div class="comp-desc">7-day step count bars. Past days: solid activity.title (#C08A48). Future days: activity.bg (#F9EFE0) + activity.border (#E2C191) outline. Rounded top corners.</div>
+              <div class="comp-desc">7-day step count bars. Past days: solid activity.title (#9A6E3A). Future days: activity.bg (#F9EFE0) + activity.border (#E2C191) outline. Rounded top corners.</div>
               <div class="comp-variants">
-                <span class="comp-variant-tag" style="background:#F9EFE0;color:#C08A48;">Activity</span>
+                <span class="comp-variant-tag" style="background:#F9EFE0;color:#9A6E3A;">Activity</span>
               </div>
             </div>
           </div>
@@ -4147,23 +4203,23 @@
           <div class="comp-card">
             <div class="comp-preview" style="flex-direction:column;align-items:stretch;padding:20px 24px;">
               <div style="font-size:11px;font-weight:600;color:#58A471;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Nutrition</div>
-              <div style="font-size:13px;font-weight:600;color:#4B8F61;margin-bottom:4px;">"Show me today's macros breakdown"</div>
+              <div style="font-size:13px;font-weight:600;color:#3A7A4E;margin-bottom:4px;">"Show me today's macros breakdown"</div>
               <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:14px;">
-                <span style="font-size:28px;font-weight:700;color:#4B8F61;">1,450</span>
+                <span style="font-size:28px;font-weight:700;color:#3A7A4E;">1,450</span>
                 <span style="font-size:13px;color:#58A471;">kcal logged</span>
               </div>
               <div style="display:flex;flex-direction:column;gap:10px;">
                 <div style="display:flex;align-items:center;gap:10px;">
-                  <span style="font-size:11px;font-weight:600;color:#4B8F61;width:48px;">Protein</span>
+                  <span style="font-size:11px;font-weight:600;color:#3A7A4E;width:48px;">Protein</span>
                   <div style="flex:1;background:#D7F4E8;border-radius:20px;height:14px;overflow:hidden;">
-                    <div style="background:#4B8F61;height:100%;width:68%;border-radius:20px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;">
+                    <div style="background:#3A7A4E;height:100%;width:68%;border-radius:20px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;">
                       <span style="font-size:8px;font-weight:700;color:#fff;">82g</span>
                     </div>
                   </div>
                   <span style="font-size:10px;color:#83BD96;width:32px;text-align:right;">120g</span>
                 </div>
                 <div style="display:flex;align-items:center;gap:10px;">
-                  <span style="font-size:11px;font-weight:600;color:#4B8F61;width:48px;">Carbs</span>
+                  <span style="font-size:11px;font-weight:600;color:#3A7A4E;width:48px;">Carbs</span>
                   <div style="flex:1;background:#D7F4E8;border-radius:20px;height:14px;overflow:hidden;">
                     <div style="background:#58A471;height:100%;width:55%;border-radius:20px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;">
                       <span style="font-size:8px;font-weight:700;color:#fff;">138g</span>
@@ -4172,7 +4228,7 @@
                   <span style="font-size:10px;color:#83BD96;width:32px;text-align:right;">250g</span>
                 </div>
                 <div style="display:flex;align-items:center;gap:10px;">
-                  <span style="font-size:11px;font-weight:600;color:#4B8F61;width:48px;">Fats</span>
+                  <span style="font-size:11px;font-weight:600;color:#3A7A4E;width:48px;">Fats</span>
                   <div style="flex:1;background:#D7F4E8;border-radius:20px;height:14px;overflow:hidden;">
                     <div style="background:#83BD96;height:100%;width:78%;border-radius:20px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;">
                       <span style="font-size:8px;font-weight:700;color:#fff;">55g</span>
@@ -4186,7 +4242,7 @@
               <div class="comp-name">Bar Chart — Macros Breakdown</div>
               <div class="comp-desc">Horizontal stacked bars for macro nutrients. Labels left, goals right. Tracks: nutrition.bg, fills: graduated nutrition greens. Values inside bars.</div>
               <div class="comp-variants">
-                <span class="comp-variant-tag" style="background:#D7F4E8;color:#4B8F61;">Nutrition</span>
+                <span class="comp-variant-tag" style="background:#D7F4E8;color:#3A7A4E;">Nutrition</span>
               </div>
             </div>
           </div>
@@ -4332,44 +4388,44 @@
           <div class="comp-card">
             <div class="comp-preview" style="flex-direction:column;align-items:stretch;padding:20px 24px;">
               <div style="font-size:11px;font-weight:600;color:#D4A163;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Activity</div>
-              <div style="font-size:13px;font-weight:600;color:#C08A48;margin-bottom:4px;">"How many calories did I burn this week?"</div>
+              <div style="font-size:13px;font-weight:600;color:#9A6E3A;margin-bottom:4px;">"How many calories did I burn this week?"</div>
               <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:14px;">
-                <span style="font-size:28px;font-weight:700;color:#C08A48;">2,340</span>
+                <span style="font-size:28px;font-weight:700;color:#9A6E3A;">2,340</span>
                 <span style="font-size:13px;color:#D4A163;">kcal total</span>
               </div>
               <div style="display:flex;flex-direction:column;gap:8px;">
                 <div style="display:flex;align-items:center;gap:8px;">
-                  <span style="font-size:10px;font-weight:600;color:#C08A48;width:30px;">Mon</span>
+                  <span style="font-size:10px;font-weight:600;color:#9A6E3A;width:30px;">Mon</span>
                   <div style="flex:1;background:#F9EFE0;border-radius:20px;height:12px;overflow:hidden;">
-                    <div style="background:#C08A48;height:100%;width:70%;border-radius:20px;"></div>
+                    <div style="background:#9A6E3A;height:100%;width:70%;border-radius:20px;"></div>
                   </div>
                   <span style="font-size:10px;color:#D4A163;width:36px;text-align:right;">420</span>
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;">
-                  <span style="font-size:10px;font-weight:600;color:#C08A48;width:30px;">Tue</span>
+                  <span style="font-size:10px;font-weight:600;color:#9A6E3A;width:30px;">Tue</span>
                   <div style="flex:1;background:#F9EFE0;border-radius:20px;height:12px;overflow:hidden;">
-                    <div style="background:#C08A48;height:100%;width:55%;border-radius:20px;"></div>
+                    <div style="background:#9A6E3A;height:100%;width:55%;border-radius:20px;"></div>
                   </div>
                   <span style="font-size:10px;color:#D4A163;width:36px;text-align:right;">330</span>
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;">
-                  <span style="font-size:10px;font-weight:600;color:#C08A48;width:30px;">Wed</span>
+                  <span style="font-size:10px;font-weight:600;color:#9A6E3A;width:30px;">Wed</span>
                   <div style="flex:1;background:#F9EFE0;border-radius:20px;height:12px;overflow:hidden;">
-                    <div style="background:#C08A48;height:100%;width:90%;border-radius:20px;"></div>
+                    <div style="background:#9A6E3A;height:100%;width:90%;border-radius:20px;"></div>
                   </div>
                   <span style="font-size:10px;color:#D4A163;width:36px;text-align:right;">540</span>
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;">
-                  <span style="font-size:10px;font-weight:600;color:#C08A48;width:30px;">Thu</span>
+                  <span style="font-size:10px;font-weight:600;color:#9A6E3A;width:30px;">Thu</span>
                   <div style="flex:1;background:#F9EFE0;border-radius:20px;height:12px;overflow:hidden;">
-                    <div style="background:#C08A48;height:100%;width:45%;border-radius:20px;"></div>
+                    <div style="background:#9A6E3A;height:100%;width:45%;border-radius:20px;"></div>
                   </div>
                   <span style="font-size:10px;color:#D4A163;width:36px;text-align:right;">280</span>
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;">
-                  <span style="font-size:10px;font-weight:600;color:#C08A48;width:30px;">Fri</span>
+                  <span style="font-size:10px;font-weight:600;color:#9A6E3A;width:30px;">Fri</span>
                   <div style="flex:1;background:#F9EFE0;border-radius:20px;height:12px;overflow:hidden;">
-                    <div style="background:#C08A48;height:100%;width:82%;border-radius:20px;"></div>
+                    <div style="background:#9A6E3A;height:100%;width:82%;border-radius:20px;"></div>
                   </div>
                   <span style="font-size:10px;color:#D4A163;width:36px;text-align:right;">490</span>
                 </div>
@@ -4384,9 +4440,9 @@
             </div>
             <div class="comp-info">
               <div class="comp-name">Horizontal Bars — Weekly Calories</div>
-              <div class="comp-desc">Horizontal bar chart for daily calories burned. Past days: solid activity.title (#C08A48). Current day: lighter activity.border (#E2C191). Track: activity.bg (#F9EFE0).</div>
+              <div class="comp-desc">Horizontal bar chart for daily calories burned. Past days: solid activity.title (#9A6E3A). Current day: lighter activity.border (#E2C191). Track: activity.bg (#F9EFE0).</div>
               <div class="comp-variants">
-                <span class="comp-variant-tag" style="background:#F9EFE0;color:#C08A48;">Activity</span>
+                <span class="comp-variant-tag" style="background:#F9EFE0;color:#9A6E3A;">Activity</span>
               </div>
             </div>
           </div>
@@ -5031,6 +5087,38 @@
         setTimeout(() => el.classList.remove('copied'), 1200);
       });
     }
+
+    // Sidebar search filter
+    function filterSidebarNav(query) {
+      const links = document.querySelectorAll('.sidebar .nav-link');
+      const sections = document.querySelectorAll('.sidebar .nav-section');
+      const q = query.toLowerCase();
+      links.forEach(link => {
+        link.style.display = link.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+      if (q) {
+        sections.forEach(s => s.style.display = 'none');
+      } else {
+        sections.forEach(s => s.style.display = '');
+      }
+    }
+
+    // Active nav link on scroll
+    function updateActiveNav() {
+      const links = document.querySelectorAll('.sidebar .nav-link[href]');
+      let current = '';
+      links.forEach(link => {
+        const id = link.getAttribute('href').slice(1);
+        const section = document.getElementById(id);
+        if (section && section.getBoundingClientRect().top <= 100) {
+          current = id;
+        }
+      });
+      links.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+      });
+    }
+    window.addEventListener('scroll', updateActiveNav, { passive: true });
 
     // Auto-attach data-copy to all .hex and .token-name spans
     document.addEventListener('DOMContentLoaded', () => {
