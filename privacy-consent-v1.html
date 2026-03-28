@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ottavia — Privacy Consent Exploration (Option 1: Popup)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #f0ece6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 40px 20px;
+    }
+
+    .page-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #655044;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .page-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: #999;
+      margin-bottom: 32px;
+    }
+
+    /* Phone Frame */
+    .phone-frame {
+      width: 390px;
+      height: 844px;
+      border-radius: 48px;
+      overflow: hidden;
+      position: relative;
+      box-shadow:
+        0 0 0 2px #1a1a1a,
+        0 0 0 6px #333,
+        0 0 0 8px #1a1a1a,
+        0 25px 60px rgba(0,0,0,0.3);
+      background: #000;
+    }
+
+    /* Landing Screen */
+    .landing-screen {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .landing-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, #AAC3D2 0%, #E0D0B8 52%, #C9A999 100%);
+    }
+
+    .landing-mountains {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 140%;
+      height: 55%;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(160, 130, 110, 0.3) 30%,
+        rgba(130, 100, 80, 0.6) 50%,
+        rgba(100, 75, 60, 0.8) 70%,
+        rgba(80, 60, 45, 0.95) 100%
+      );
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1400 500'%3E%3Cpath d='M0 500V250C50 220 100 180 180 200C250 215 300 160 380 140C450 122 500 170 580 150C650 132 720 100 800 120C870 137 920 90 1000 110C1070 128 1120 80 1200 100C1280 120 1350 160 1400 180V500Z' fill='white'/%3E%3C/svg%3E");
+      mask-size: cover;
+      mask-position: center;
+      opacity: 0.7;
+    }
+
+    .mountain-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 45%;
+      background: linear-gradient(
+        to top,
+        rgba(90, 65, 50, 0.95) 0%,
+        rgba(140, 105, 85, 0.7) 40%,
+        rgba(180, 150, 130, 0.3) 70%,
+        transparent 100%
+      );
+    }
+
+    /* Status Bar */
+    .status-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 32px 0;
+      z-index: 5;
+    }
+
+    .status-time {
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: #000;
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-icons svg {
+      fill: #000;
+    }
+
+    /* Logo + Headline */
+    .landing-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      padding-bottom: 120px;
+    }
+
+    .ottavia-logo {
+      width: 90px;
+      height: 90px;
+      margin-bottom: 24px;
+    }
+
+    .ottavia-logo svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .landing-headline {
+      font-family: 'Lora', 'Georgia', serif;
+      font-size: 44px;
+      font-weight: 600;
+      color: white;
+      text-align: center;
+      line-height: 1.15;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.08);
+    }
+
+    /* Get Started Button */
+    .get-started-btn {
+      position: absolute;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      background: white;
+      border: none;
+      border-radius: 200px;
+      padding: 16px 0;
+      width: 260px;
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: #655044;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    .get-started-btn:hover {
+      transform: translateX(-50%) scale(1.02);
+    }
+
+    .get-started-btn:active {
+      transform: translateX(-50%) scale(0.98);
+      opacity: 0.9;
+    }
+
+    /* Home Indicator */
+    .home-indicator {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 134px;
+      height: 5px;
+      background: #000;
+      border-radius: 100px;
+      z-index: 10;
+    }
+
+    /* ========================================
+       POPUP OVERLAY
+       ======================================== */
+    .popup-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: 20;
+      display: flex;
+      align-items: flex-end;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .popup-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .popup-card {
+      width: 100%;
+      background: #FDFBF8;
+      border-radius: 24px 24px 0 0;
+      padding: 32px 28px 40px;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+    }
+
+    .popup-overlay.active .popup-card {
+      transform: translateY(0);
+    }
+
+    /* Popup Handle */
+    .popup-handle {
+      width: 36px;
+      height: 4px;
+      background: #D5CFC7;
+      border-radius: 100px;
+      margin: 0 auto 28px;
+    }
+
+    /* Popup Content */
+    .popup-headline {
+      font-family: 'Lora', 'Georgia', serif;
+      font-size: 24px;
+      font-weight: 600;
+      color: #1A1A1A;
+      margin-bottom: 16px;
+    }
+
+    .popup-body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: #4A4A4A;
+      margin-bottom: 24px;
+    }
+
+    /* Protections List */
+    .protections {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .protection-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #1A1A1A;
+    }
+
+    .protection-check {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #E8E3DB;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .protection-check svg {
+      width: 11px;
+      height: 11px;
+    }
+
+    /* Divider */
+    .popup-divider {
+      height: 1px;
+      background: #E8E3DB;
+      margin-bottom: 20px;
+    }
+
+    /* Data Categories */
+    .data-label {
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 8px;
+    }
+
+    .data-categories {
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      color: #6B6B6B;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .data-sep {
+      color: #C9C0B5;
+      margin: 0 4px;
+    }
+
+    /* Privacy Policy Link */
+    .pp-link {
+      display: block;
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #8B7B6E;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      margin-bottom: 28px;
+      cursor: pointer;
+    }
+
+    .pp-link:hover {
+      color: #655044;
+    }
+
+    /* Agree Button */
+    .agree-btn {
+      width: 100%;
+      background: #655044;
+      border: none;
+      border-radius: 200px;
+      padding: 16px 0;
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: #FDFBF8;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+
+    .agree-btn:hover {
+      background: #7a6356;
+    }
+
+    .agree-btn:active {
+      background: #564138;
+      transform: scale(0.98);
+    }
+
+    /* ========================================
+       ANNOTATION LABELS
+       ======================================== */
+    .annotation {
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .annotation-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #655044;
+      flex-shrink: 0;
+    }
+
+    .annotation-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      color: #8B7B6E;
+    }
+
+    .controls {
+      margin-top: 24px;
+      display: flex;
+      gap: 12px;
+    }
+
+    .control-btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 8px 20px;
+      border-radius: 100px;
+      border: 1.5px solid #D5CFC7;
+      background: white;
+      color: #655044;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .control-btn:hover {
+      border-color: #655044;
+      background: #655044;
+      color: white;
+    }
+
+    .control-btn.active {
+      border-color: #655044;
+      background: #655044;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-title">Privacy Consent Exploration</div>
+  <div class="page-subtitle">Option 1 — Popup on top of landing screen</div>
+
+  <div class="phone-frame">
+    <div class="landing-screen">
+      <!-- Gradient Background -->
+      <div class="landing-gradient"></div>
+      <div class="mountain-overlay"></div>
+
+      <!-- Status Bar -->
+      <div class="status-bar">
+        <span class="status-time">9:41</span>
+        <div class="status-icons">
+          <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="5" y="2" width="3" height="10" rx="1"/><rect x="10" y="0" width="3" height="12" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1" opacity="0.3"/></svg>
+          <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 3.6C9.8 3.6 11.4 4.3 12.6 5.4L14 4C12.4 2.5 10.3 1.6 8 1.6C5.7 1.6 3.6 2.5 2 4L3.4 5.4C4.6 4.3 6.2 3.6 8 3.6ZM8 7.2C9 7.2 9.9 7.6 10.6 8.2L12 6.8C10.9 5.8 9.5 5.2 8 5.2C6.5 5.2 5.1 5.8 4 6.8L5.4 8.2C6.1 7.6 7 7.2 8 7.2ZM8 10.8C8.7 10.8 9.2 10.3 9.2 9.6C9.2 8.9 8.7 8.4 8 8.4C7.3 8.4 6.8 8.9 6.8 9.6C6.8 10.3 7.3 10.8 8 10.8Z"/></svg>
+          <svg width="28" height="14" viewBox="0 0 28 14"><rect x="0.5" y="0.5" width="22" height="13" rx="3.5" stroke="currentColor" fill="none" opacity="0.35"/><rect x="23.5" y="4.5" width="2" height="5" rx="1" opacity="0.4"/><rect x="2" y="2" width="19" height="10" rx="2"/></svg>
+        </div>
+      </div>
+
+      <!-- Logo + Headline -->
+      <div class="landing-content">
+        <div class="ottavia-logo">
+          <svg viewBox="0 0 103 103" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M51.5 10C28.6 10 10 28.6 10 51.5S28.6 93 51.5 93S93 74.4 93 51.5S74.4 10 51.5 10ZM51.5 80C35.8 80 23 67.2 23 51.5S35.8 23 51.5 23S80 35.8 80 51.5S67.2 80 51.5 80Z" fill="white" fill-opacity="0.9"/>
+          </svg>
+        </div>
+        <div class="landing-headline">
+          Your<br>wellbeing<br>explained
+        </div>
+      </div>
+
+      <!-- Get Started Button -->
+      <button class="get-started-btn" id="getStartedBtn">Get Started</button>
+
+      <!-- Home Indicator -->
+      <div class="home-indicator"></div>
+
+      <!-- ======== POPUP OVERLAY ======== -->
+      <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-card">
+          <div class="popup-handle"></div>
+
+          <h2 class="popup-headline">Your data stays private</h2>
+
+          <p class="popup-body">
+            When Ottavia processes your data through OpenAI, your identity stays completely separate — no names, no identifiers, no way to trace it back to you.
+          </p>
+
+          <div class="protections">
+            <div class="protection-item">
+              <div class="protection-check">
+                <svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#655044" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              Anonymized before leaving your device
+            </div>
+            <div class="protection-item">
+              <div class="protection-check">
+                <svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#655044" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              Never stored by OpenAI
+            </div>
+            <div class="protection-item">
+              <div class="protection-check">
+                <svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#655044" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              Never used to train AI models
+            </div>
+          </div>
+
+          <div class="popup-divider"></div>
+
+          <div class="data-label">Data processed</div>
+          <div class="data-categories">
+            Health & fitness metrics<span class="data-sep">&middot;</span>Nutrition data<span class="data-sep">&middot;</span>Messages<span class="data-sep">&middot;</span>Profile info
+          </div>
+
+          <a class="pp-link" href="#">Read our Privacy Policy</a>
+
+          <button class="agree-btn" id="agreeBtn">Agree & Continue</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button class="control-btn" id="togglePopup" onclick="togglePopup()">Show popup</button>
+    <button class="control-btn" id="resetBtn" onclick="resetView()">Reset</button>
+  </div>
+
+  <div class="annotation">
+    <div class="annotation-dot"></div>
+    <span class="annotation-text">Click "Get Started" or use controls to toggle the privacy popup</span>
+  </div>
+
+  <script>
+    const overlay = document.getElementById('popupOverlay');
+    const getStartedBtn = document.getElementById('getStartedBtn');
+    const agreeBtn = document.getElementById('agreeBtn');
+    const toggleBtn = document.getElementById('togglePopup');
+
+    let isOpen = false;
+
+    function showPopup() {
+      overlay.classList.add('active');
+      isOpen = true;
+      toggleBtn.textContent = 'Hide popup';
+      toggleBtn.classList.add('active');
+    }
+
+    function hidePopup() {
+      overlay.classList.remove('active');
+      isOpen = false;
+      toggleBtn.textContent = 'Show popup';
+      toggleBtn.classList.remove('active');
+    }
+
+    function togglePopup() {
+      isOpen ? hidePopup() : showPopup();
+    }
+
+    function resetView() {
+      hidePopup();
+    }
+
+    getStartedBtn.addEventListener('click', showPopup);
+    agreeBtn.addEventListener('click', hidePopup);
+
+    // Close on overlay tap (outside card)
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) hidePopup();
+    });
+  </script>
+</body>
+</html>
