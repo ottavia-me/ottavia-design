@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Ottavia — Privacy Consent</title>
+  <title>Ottavia — Landing Screen with Consent Text</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -86,7 +86,7 @@
       align-items: center;
       justify-content: center;
       z-index: 2;
-      padding-bottom: 140px;
+      padding-bottom: 200px;
     }
 
     .ottavia-logo {
@@ -109,13 +109,21 @@
       background-clip: text;
     }
 
+    /* Bottom Section */
+    .bottom-section {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 36px 44px;
+    }
+
     /* Get Started */
     .get-started-btn {
-      position: absolute;
-      bottom: 190px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 3;
       background: white;
       border: none;
       border-radius: 200px;
@@ -126,11 +134,25 @@
       font-weight: 600;
       color: #655044;
       cursor: pointer;
-      transition: transform 0.15s ease;
+      margin-bottom: 20px;
     }
 
-    .get-started-btn:active {
-      transform: translateX(-50%) scale(0.97);
+    /* Consent Text */
+    .consent-text {
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 12.5px;
+      font-weight: 400;
+      line-height: 1.55;
+      color: rgba(255, 255, 255, 0.75);
+      text-align: center;
+      max-width: 340px;
+    }
+
+    .consent-text a {
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      text-decoration-color: rgba(255, 255, 255, 0.4);
     }
 
     /* Home Indicator */
@@ -143,177 +165,15 @@
       height: 5px;
       background: #000;
       border-radius: 100px;
-      z-index: 30;
-    }
-
-    /* ===== POPUP OVERLAY ===== */
-    .popup-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.45);
-      z-index: 20;
-      display: flex;
-      align-items: flex-end;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-
-    .popup-overlay.active {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    .popup-card {
-      width: 100%;
-      background: #FDFBF8;
-      border-radius: 28px 28px 0 0;
-      padding: 12px 32px 44px;
-      transform: translateY(100%);
-      transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
-    }
-
-    .popup-overlay.active .popup-card {
-      transform: translateY(0);
-    }
-
-    /* Handle */
-    .popup-handle {
-      width: 36px;
-      height: 4px;
-      background: #D5CFC7;
-      border-radius: 100px;
-      margin: 0 auto 28px;
-    }
-
-    /* Headline */
-    .popup-headline {
-      font-family: 'Lora', 'Georgia', serif;
-      font-size: 26px;
-      font-weight: 600;
-      color: #1A1A1A;
-      margin-bottom: 14px;
-      letter-spacing: -0.3px;
-    }
-
-    /* Body */
-    .popup-body {
-      font-size: 14.5px;
-      font-weight: 400;
-      line-height: 1.6;
-      color: #5A5A5A;
-      margin-bottom: 28px;
-    }
-
-    /* Protections */
-    .protections {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-bottom: 28px;
-    }
-
-    .protection-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 15px;
-      font-weight: 500;
-      color: #1A1A1A;
-    }
-
-    .protection-check {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: #EDE9E3;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .protection-check svg {
-      width: 12px;
-      height: 12px;
-    }
-
-    /* Divider */
-    .popup-divider {
-      height: 1px;
-      background: #E8E3DB;
-      margin-bottom: 22px;
-    }
-
-    /* Data Label */
-    .data-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: #A09890;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      margin-bottom: 8px;
-    }
-
-    .data-categories {
-      font-size: 13.5px;
-      font-weight: 400;
-      color: #7A7A7A;
-      line-height: 1.55;
-      margin-bottom: 28px;
-    }
-
-    .data-sep {
-      color: #C9C0B5;
-      margin: 0 5px;
-    }
-
-    /* Privacy Policy Link */
-    .pp-link {
-      display: block;
-      font-size: 13.5px;
-      font-weight: 500;
-      color: #8B7B6E;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      text-decoration-color: #C9C0B5;
-      margin-bottom: 28px;
-      cursor: pointer;
-    }
-
-    /* Agree Button */
-    .agree-btn {
-      width: 100%;
-      background: #655044;
-      border: none;
-      border-radius: 200px;
-      padding: 18px 0;
-      font-family: 'Inter', -apple-system, sans-serif;
-      font-size: 17px;
-      font-weight: 600;
-      color: #FDFBF8;
-      cursor: pointer;
-      letter-spacing: -0.1px;
-      transition: transform 0.1s ease;
-    }
-
-    .agree-btn:active {
-      transform: scale(0.98);
+      z-index: 10;
     }
 
     /* ===== RESPONSIVE ===== */
     @media (max-height: 932px) {
-      .screen {
-        width: 100vw;
-        height: 100vh;
-      }
+      .screen { width: 100vw; height: 100vh; }
     }
-
     @media (max-width: 430px) {
-      .screen {
-        width: 100vw;
-        height: 100vh;
-      }
+      .screen { width: 100vw; height: 100vh; }
     }
   </style>
 </head>
@@ -342,63 +202,17 @@
       </div>
     </div>
 
-    <!-- Get Started Button -->
-    <button class="get-started-btn" id="getStartedBtn">Get Started</button>
+    <!-- Bottom: Button + Consent Text -->
+    <div class="bottom-section">
+      <button class="get-started-btn">Get Started</button>
+      <div class="consent-text">
+        By tapping Get Started, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>. Ottavia uses OpenAI to process your health and fitness data, nutrition data, messages, and profile information to provide personalized guidance. Your data is de-identified before transmission, never stored by OpenAI, and never used to train AI models.
+      </div>
+    </div>
 
     <!-- Home Indicator -->
     <div class="home-indicator"></div>
-
-    <!-- ===== POPUP ===== -->
-    <div class="popup-overlay" id="popupOverlay">
-      <div class="popup-card">
-        <div class="popup-handle"></div>
-
-        <h2 class="popup-headline">Your data stays private</h2>
-
-        <p class="popup-body">
-          When Ottavia processes your data through OpenAI, your identity stays completely separate — no names, no identifiers, no way to trace it back to you.
-        </p>
-
-        <div class="protections">
-          <div class="protection-item">
-            <div class="protection-check">
-              <svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#655044" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            Anonymized before leaving your device
-          </div>
-          <div class="protection-item">
-            <div class="protection-check">
-              <svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#655044" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            Never stored by OpenAI
-          </div>
-          <div class="protection-item">
-            <div class="protection-check">
-              <svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#655044" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            Never used to train AI models
-          </div>
-        </div>
-
-        <div class="popup-divider"></div>
-
-        <div class="data-label">Data processed</div>
-        <div class="data-categories">
-          Health & fitness metrics<span class="data-sep">&middot;</span>Nutrition data<span class="data-sep">&middot;</span>Messages<span class="data-sep">&middot;</span>Profile info
-        </div>
-
-        <a class="pp-link" href="#">Read our Privacy Policy</a>
-
-        <button class="agree-btn" id="agreeBtn">Agree & Continue</button>
-      </div>
-    </div>
   </div>
 
-  <script>
-    const overlay = document.getElementById('popupOverlay');
-    document.getElementById('getStartedBtn').addEventListener('click', () => overlay.classList.add('active'));
-    document.getElementById('agreeBtn').addEventListener('click', () => overlay.classList.remove('active'));
-    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('active'); });
-  </script>
 </body>
 </html>
