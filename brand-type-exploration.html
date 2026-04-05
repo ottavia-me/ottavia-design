@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OTTAVIA — Type Exploration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&family=Josefin+Sans:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Lexend:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Nunito+Sans:opsz,wght@6..12,300;6..12,400;6..12,500;6..12,600;6..12,700&family=Rubik:wght@300;400;500;600;700&family=Quicksand:wght@300;400;500;600;700&family=Albert+Sans:wght@300;400;500;600;700&family=General+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    color: #e8e8e8;
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+  }
+
+  .header {
+    padding: 80px 60px 40px;
+    border-bottom: 1px solid #1a1a1a;
+  }
+
+  .header h1 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 16px;
+  }
+
+  .header p {
+    font-size: 18px;
+    font-weight: 300;
+    color: #999;
+    max-width: 700px;
+    line-height: 1.6;
+  }
+
+  .direction {
+    padding: 80px 60px;
+    border-bottom: 1px solid #1a1a1a;
+    position: relative;
+  }
+
+  .direction-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #444;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .direction-title {
+    font-size: 16px;
+    color: #888;
+    margin-bottom: 12px;
+    font-weight: 400;
+  }
+
+  .direction-desc {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 60px;
+    max-width: 600px;
+    line-height: 1.6;
+  }
+
+  .specimen-row {
+    display: flex;
+    align-items: baseline;
+    gap: 40px;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+  }
+
+  .specimen-meta {
+    min-width: 160px;
+    flex-shrink: 0;
+  }
+
+  .specimen-meta .font-name {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 4px;
+  }
+
+  .specimen-meta .font-weight-label {
+    font-size: 11px;
+    color: #333;
+  }
+
+  .specimen-word {
+    font-size: 72px;
+    line-height: 1;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+
+  /* Variations */
+  .weight-light { font-weight: 300; }
+  .weight-regular { font-weight: 400; }
+  .weight-medium { font-weight: 500; }
+  .weight-semibold { font-weight: 600; }
+  .weight-bold { font-weight: 700; }
+
+  .spacing-tight { letter-spacing: 0.01em; }
+  .spacing-normal { letter-spacing: 0.04em; }
+  .spacing-wide { letter-spacing: 0.12em; }
+  .spacing-ultra { letter-spacing: 0.2em; }
+
+  /* Hero specimens — larger */
+  .hero-specimen {
+    margin-bottom: 80px;
+  }
+
+  .hero-specimen .specimen-word {
+    font-size: 120px;
+  }
+
+  /* Comparison strip */
+  .comparison-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 40px;
+    margin-top: 40px;
+  }
+
+  .comparison-card {
+    background: #111;
+    border-radius: 16px;
+    padding: 40px 32px;
+    text-align: center;
+  }
+
+  .comparison-card .specimen-word {
+    font-size: 42px;
+    margin-bottom: 16px;
+  }
+
+  .comparison-card .card-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #444;
+  }
+
+  /* Detail section */
+  .detail-row {
+    display: flex;
+    gap: 60px;
+    margin-bottom: 48px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .detail-large {
+    font-size: 96px;
+    line-height: 1;
+    color: #e8e8e8;
+  }
+
+  .detail-small {
+    font-size: 48px;
+    line-height: 1;
+    color: #666;
+  }
+
+  /* Color accent for recommended */
+  .recommended {
+    border-left: 2px solid #4a7c6f;
+  }
+
+  .recommended .direction-label {
+    color: #4a7c6f;
+  }
+
+  .rec-badge {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #4a7c6f;
+    border: 1px solid #2a4a40;
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-left: 12px;
+    vertical-align: middle;
+  }
+
+  /* Case variations section */
+  .case-row {
+    display: flex;
+    gap: 80px;
+    align-items: baseline;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .case-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #333;
+    min-width: 100px;
+  }
+
+  /* On light bg */
+  .light-section {
+    background: #f5f3f0;
+    color: #1a1a1a;
+  }
+
+  .light-section .direction-label { color: #999; }
+  .light-section .direction-title { color: #666; }
+  .light-section .direction-desc { color: #888; }
+  .light-section .specimen-meta .font-name { color: #999; }
+  .light-section .specimen-meta .font-weight-label { color: #bbb; }
+  .light-section .specimen-word { color: #1a1a1a; }
+  .light-section .comparison-card { background: #fff; }
+  .light-section .comparison-card .card-label { color: #bbb; }
+  .light-section .case-label { color: #bbb; }
+  .light-section .detail-large { color: #1a1a1a; }
+  .light-section .detail-small { color: #bbb; }
+
+  /* Reference logos section */
+  .ref-section {
+    padding: 60px 60px;
+    border-bottom: 1px solid #1a1a1a;
+  }
+
+  .ref-grid {
+    display: flex;
+    gap: 60px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+
+  .ref-item {
+    text-align: center;
+  }
+
+  .ref-item .ref-word {
+    font-size: 36px;
+    color: #666;
+    margin-bottom: 8px;
+  }
+
+  .ref-item .ref-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #333;
+  }
+
+  /* Footer */
+  .footer {
+    padding: 60px;
+    text-align: center;
+    color: #333;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Kerning detail */
+  .kern-showcase {
+    display: flex;
+    gap: 80px;
+    align-items: baseline;
+    margin-top: 48px;
+    flex-wrap: wrap;
+  }
+
+  .kern-pair {
+    text-align: center;
+  }
+
+  .kern-pair .pair-letters {
+    font-size: 96px;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .kern-pair .pair-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #333;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 768px) {
+    .header, .direction, .ref-section, .footer { padding: 40px 24px; }
+    .specimen-word { font-size: 42px !important; }
+    .hero-specimen .specimen-word { font-size: 64px !important; }
+    .detail-large { font-size: 56px; }
+    .detail-small { font-size: 32px; }
+    .kern-pair .pair-letters { font-size: 56px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <h1>Ottavia — Type Exploration</h1>
+  <p>Four typographic directions for the Ottavia wordmark, informed by the geometric sans-serif DNA of Garmin, Strava, and Whoop — but shaped for an AI health companion.</p>
+</div>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<!-- DIRECTION 1: Geometric Mono-Linear -->
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<div class="direction">
+  <div class="direction-label">Direction 01</div>
+  <div class="direction-title">Geometric Mono-Linear</div>
+  <div class="direction-desc">Even stroke weight, constructed from circles and straight lines. Clean, calm, premium. The Whoop territory — pure geometry, no warmth needed, letting precision speak.</div>
+
+  <!-- Hero -->
+  <div class="hero-specimen">
+    <div class="specimen-word" style="font-family: 'Jost', sans-serif; font-weight: 500; letter-spacing: 0.08em;">OTTAVIA</div>
+  </div>
+
+  <!-- Jost explorations -->
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Jost</div>
+      <div class="font-weight-label">Light · Wide</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Jost', sans-serif; font-weight: 300; letter-spacing: 0.16em;">OTTAVIA</div>
+  </div>
+
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Jost</div>
+      <div class="font-weight-label">Regular · Normal</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Jost', sans-serif; font-weight: 400; letter-spacing: 0.06em;">OTTAVIA</div>
+  </div>
+
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Jost</div>
+      <div class="font-weight-label">SemiBold · Tight</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Jost', sans-serif; font-weight: 600; letter-spacing: 0.02em;">OTTAVIA</div>
+  </div>
+
+  <!-- Josefin Sans -->
+  <div class="specimen-row" style="margin-top: 64px;">
+    <div class="specimen-meta">
+      <div class="font-name">Josefin Sans</div>
+      <div class="font-weight-label">Light · Wide</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Josefin Sans', sans-serif; font-weight: 300; letter-spacing: 0.16em;">OTTAVIA</div>
+  </div>
+
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Josefin Sans</div>
+      <div class="font-weight-label">Medium · Normal</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Josefin Sans', sans-serif; font-weight: 500; letter-spacing: 0.06em;">OTTAVIA</div>
+  </div>
+
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Josefin Sans</div>
+      <div class="font-weight-label">Bold · Tight</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Josefin Sans', sans-serif; font-weight: 700; letter-spacing: 0.02em;">OTTAVIA</div>
+  </div>
+
+  <!-- Case variations -->
+  <div style="margin-top: 64px; padding-top: 48px; border-top: 1px solid #1a1a1a;">
+    <div class="case-row">
+      <div class="case-label">All Caps</div>
+      <div class="specimen-word" style="font-family: 'Jost', sans-serif; font-weight: 400; letter-spacing: 0.1em; font-size: 48px;">OTTAVIA</div>
+    </div>
+    <div class="case-row">
+      <div class="case-label">Title Case</div>
+      <div class="specimen-word" style="font-family: 'Jost', sans-serif; font-weight: 400; letter-spacing: 0.04em; font-size: 48px;">Ottavia</div>
+    </div>
+    <div class="case-row">
+      <div class="case-label">Lowercase</div>
+      <div class="specimen-word" style="font-family: 'Jost', sans-serif; font-weight: 400; letter-spacing: 0.04em; font-size: 48px;">ottavia</div>
+    </div>
+  </div>
+</div>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<!-- DIRECTION 2: Geometric-Humanist (RECOMMENDED) -->
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<div class="direction recommended light-section">
+  <div class="direction-label">Direction 02 <span class="rec-badge">Recommended</span></div>
+  <div class="direction-title">Geometric-Humanist</div>
+  <div class="direction-desc">Geometric construction with subtle organic corrections. Not cold, not soft — calibrated. Technology that understands humans. The sweet spot for a health AI.</div>
+
+  <!-- Hero -->
+  <div class="hero-specimen">
+    <div class="specimen-word" style="font-family: 'Outfit', sans-serif; font-weight: 500; letter-spacing: 0.06em;">OTTAVIA</div>
+  </div>
+
+  <!-- Outfit explorations -->
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Outfit</div>
+      <div class="font-weight-label">Light · Ultra Wide</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Outfit', sans-serif; font-weight: 300; letter-spacing: 0.2em;">OTTAVIA</div>
+  </div>
+
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Outfit</div>
+      <div class="font-weight-label">Regular · Normal</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Outfit', sans-serif; font-weight: 400; letter-spacing: 0.06em;">OTTAVIA</div>
+  </div>
+
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Outfit</div>
+      <div class="font-weight-label">SemiBold · Tight</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Outfit', sans-serif; font-weight: 600; letter-spacing: 0.02em;">OTTAVIA</div>
+  </div>
+
+  <!-- DM Sans -->
+  <div class="specimen-row" style="margin-top: 64px;">
+    <div class="specimen-meta">
+      <div class="font-name">DM Sans</div>
+      <div class="font-weight-label">Light · Wide</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'DM Sans', sans-serif; font-weight: 300; letter-spacing: 0.14em;">OTTAVIA</div>
+  </div>
+
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">DM Sans</div>
+      <div class="font-weight-label">Medium · Normal</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'DM Sans', sans-serif; font-weight: 500; letter-spacing: 0.06em;">OTTAVIA</div>
+  </div>
+
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">DM Sans</div>
+      <div class="font-weight-label">Bold · Tight</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'DM Sans', sans-serif; font-weight: 700; letter-spacing: 0.02em;">OTTAVIA</div>
+  </div>
+
+  <!-- Lexend -->
+  <div class="specimen-row" style="margin-top: 64px;">
+    <div class="specimen-meta">
+      <div class="font-name">Lexend</div>
+      <div class="font-weight-label">Light · Wide</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Lexend', sans-serif; font-weight: 300; letter-spacing: 0.14em;">OTTAVIA</div>
+  </div>
+
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Lexend</div>
+      <div class="font-weight-label">Medium · Normal</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Lexend', sans-serif; font-weight: 500; letter-spacing: 0.06em;">OTTAVIA</div>
+  </div>
+
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Lexend</div>
+      <div class="font-weight-label">Bold · Tight</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Lexend', sans-serif; font-weight: 700; letter-spacing: 0.02em;">OTTAVIA</div>
+  </div>
+
+  <!-- Case variations -->
+  <div style="margin-top: 64px; padding-top: 48px; border-top: 1px solid #ddd;">
+    <div class="case-row">
+      <div class="case-label">All Caps</div>
+      <div class="specimen-word" style="font-family: 'Outfit', sans-serif; font-weight: 500; letter-spacing: 0.1em; font-size: 48px;">OTTAVIA</div>
+    </div>
+    <div class="case-row">
+      <div class="case-label">Title Case</div>
+      <div class="specimen-word" style="font-family: 'Outfit', sans-serif; font-weight: 500; letter-spacing: 0.04em; font-size: 48px;">Ottavia</div>
+    </div>
+    <div class="case-row">
+      <div class="case-label">Lowercase</div>
+      <div class="specimen-word" style="font-family: 'Outfit', sans-serif; font-weight: 500; letter-spacing: 0.04em; font-size: 48px;">ottavia</div>
+    </div>
+  </div>
+
+  <!-- Key letter pairs -->
+  <div class="kern-showcase">
+    <div class="kern-pair">
+      <div class="pair-letters" style="font-family: 'Outfit', sans-serif; font-weight: 500;">OT</div>
+      <div class="pair-label">Open → Vertical</div>
+    </div>
+    <div class="kern-pair">
+      <div class="pair-letters" style="font-family: 'Outfit', sans-serif; font-weight: 500;">TT</div>
+      <div class="pair-label">The Anchor</div>
+    </div>
+    <div class="kern-pair">
+      <div class="pair-letters" style="font-family: 'Outfit', sans-serif; font-weight: 500;">AV</div>
+      <div class="pair-label">Diagonal Tension</div>
+    </div>
+    <div class="kern-pair">
+      <div class="pair-letters" style="font-family: 'Outfit', sans-serif; font-weight: 500;">IA</div>
+      <div class="pair-label">Narrow → Wide</div>
+    </div>
+  </div>
+</div>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<!-- DIRECTION 3: High-Contrast Geometric -->
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<div class="direction">
+  <div class="direction-label">Direction 03</div>
+  <div class="direction-title">High-Contrast Geometric</div>
+  <div class="direction-desc">Visible thick-thin stroke modulation within a geometric frame. More editorial, more distinctive. Differentiates from the fitness-tracker aesthetic entirely.</div>
+
+  <!-- Hero -->
+  <div class="hero-specimen">
+    <div class="specimen-word" style="font-family: 'Syne', sans-serif; font-weight: 600; letter-spacing: 0.04em;">OTTAVIA</div>
+  </div>
+
+  <!-- Syne explorations -->
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Syne</div>
+      <div class="font-weight-label">Regular · Wide</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Syne', sans-serif; font-weight: 400; letter-spacing: 0.12em;">OTTAVIA</div>
+  </div>
+
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Syne</div>
+      <div class="font-weight-label">SemiBold · Normal</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Syne', sans-serif; font-weight: 600; letter-spacing: 0.06em;">OTTAVIA</div>
+  </div>
+
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Syne</div>
+      <div class="font-weight-label">ExtraBold · Tight</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Syne', sans-serif; font-weight: 800; letter-spacing: 0.01em;">OTTAVIA</div>
+  </div>
+
+  <!-- Space Grotesk -->
+  <div class="specimen-row" style="margin-top: 64px;">
+    <div class="specimen-meta">
+      <div class="font-name">Space Grotesk</div>
+      <div class="font-weight-label">Light · Wide</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Space Grotesk', sans-serif; font-weight: 300; letter-spacing: 0.14em;">OTTAVIA</div>
+  </div>
+
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Space Grotesk</div>
+      <div class="font-weight-label">Medium · Normal</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; letter-spacing: 0.06em;">OTTAVIA</div>
+  </div>
+
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Space Grotesk</div>
+      <div class="font-weight-label">Bold · Tight</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; letter-spacing: 0.02em;">OTTAVIA</div>
+  </div>
+
+  <!-- Bricolage Grotesque -->
+  <div class="specimen-row" style="margin-top: 64px;">
+    <div class="specimen-meta">
+      <div class="font-name">Bricolage Grotesque</div>
+      <div class="font-weight-label">Light · Wide</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 300; letter-spacing: 0.12em;">OTTAVIA</div>
+  </div>
+
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Bricolage Grotesque</div>
+      <div class="font-weight-label">Medium · Normal</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 500; letter-spacing: 0.06em;">OTTAVIA</div>
+  </div>
+
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Bricolage Grotesque</div>
+      <div class="font-weight-label">Bold · Tight</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; letter-spacing: 0.02em;">OTTAVIA</div>
+  </div>
+
+  <!-- Case variations -->
+  <div style="margin-top: 64px; padding-top: 48px; border-top: 1px solid #1a1a1a;">
+    <div class="case-row">
+      <div class="case-label">All Caps</div>
+      <div class="specimen-word" style="font-family: 'Syne', sans-serif; font-weight: 600; letter-spacing: 0.08em; font-size: 48px;">OTTAVIA</div>
+    </div>
+    <div class="case-row">
+      <div class="case-label">Title Case</div>
+      <div class="specimen-word" style="font-family: 'Syne', sans-serif; font-weight: 600; letter-spacing: 0.03em; font-size: 48px;">Ottavia</div>
+    </div>
+    <div class="case-row">
+      <div class="case-label">Lowercase</div>
+      <div class="specimen-word" style="font-family: 'Syne', sans-serif; font-weight: 600; letter-spacing: 0.03em; font-size: 48px;">ottavia</div>
+    </div>
+  </div>
+</div>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<!-- DIRECTION 4: Soft Geometric -->
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<div class="direction light-section">
+  <div class="direction-label">Direction 04</div>
+  <div class="direction-title">Soft Geometric</div>
+  <div class="direction-desc">Geometric skeleton with rounded terminals and softened joins. Not bubbly — just enough warmth that it feels like a companion, not a dashboard. The most approachable direction.</div>
+
+  <!-- Hero -->
+  <div class="hero-specimen">
+    <div class="specimen-word" style="font-family: 'Nunito Sans', sans-serif; font-weight: 600; letter-spacing: 0.06em;">OTTAVIA</div>
+  </div>
+
+  <!-- Nunito Sans -->
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Nunito Sans</div>
+      <div class="font-weight-label">Light · Wide</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Nunito Sans', sans-serif; font-weight: 300; letter-spacing: 0.16em;">OTTAVIA</div>
+  </div>
+
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Nunito Sans</div>
+      <div class="font-weight-label">Regular · Normal</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Nunito Sans', sans-serif; font-weight: 400; letter-spacing: 0.06em;">OTTAVIA</div>
+  </div>
+
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Nunito Sans</div>
+      <div class="font-weight-label">Bold · Tight</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Nunito Sans', sans-serif; font-weight: 700; letter-spacing: 0.02em;">OTTAVIA</div>
+  </div>
+
+  <!-- Rubik -->
+  <div class="specimen-row" style="margin-top: 64px;">
+    <div class="specimen-meta">
+      <div class="font-name">Rubik</div>
+      <div class="font-weight-label">Light · Wide</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Rubik', sans-serif; font-weight: 300; letter-spacing: 0.14em;">OTTAVIA</div>
+  </div>
+
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Rubik</div>
+      <div class="font-weight-label">Medium · Normal</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Rubik', sans-serif; font-weight: 500; letter-spacing: 0.06em;">OTTAVIA</div>
+  </div>
+
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Rubik</div>
+      <div class="font-weight-label">Bold · Tight</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Rubik', sans-serif; font-weight: 700; letter-spacing: 0.02em;">OTTAVIA</div>
+  </div>
+
+  <!-- Quicksand -->
+  <div class="specimen-row" style="margin-top: 64px;">
+    <div class="specimen-meta">
+      <div class="font-name">Quicksand</div>
+      <div class="font-weight-label">Light · Wide</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Quicksand', sans-serif; font-weight: 300; letter-spacing: 0.16em;">OTTAVIA</div>
+  </div>
+
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Quicksand</div>
+      <div class="font-weight-label">Medium · Normal</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Quicksand', sans-serif; font-weight: 500; letter-spacing: 0.06em;">OTTAVIA</div>
+  </div>
+
+  <div class="specimen-row">
+    <div class="specimen-meta">
+      <div class="font-name">Quicksand</div>
+      <div class="font-weight-label">Bold · Tight</div>
+    </div>
+    <div class="specimen-word" style="font-family: 'Quicksand', sans-serif; font-weight: 700; letter-spacing: 0.02em;">OTTAVIA</div>
+  </div>
+
+  <!-- Case variations -->
+  <div style="margin-top: 64px; padding-top: 48px; border-top: 1px solid #ddd;">
+    <div class="case-row">
+      <div class="case-label">All Caps</div>
+      <div class="specimen-word" style="font-family: 'Rubik', sans-serif; font-weight: 500; letter-spacing: 0.1em; font-size: 48px;">OTTAVIA</div>
+    </div>
+    <div class="case-row">
+      <div class="case-label">Title Case</div>
+      <div class="specimen-word" style="font-family: 'Rubik', sans-serif; font-weight: 500; letter-spacing: 0.04em; font-size: 48px;">Ottavia</div>
+    </div>
+    <div class="case-row">
+      <div class="case-label">Lowercase</div>
+      <div class="specimen-word" style="font-family: 'Rubik', sans-serif; font-weight: 500; letter-spacing: 0.04em; font-size: 48px;">ottavia</div>
+    </div>
+  </div>
+</div>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<!-- Side-by-side comparison -->
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<div class="direction">
+  <div class="direction-label">Comparison</div>
+  <div class="direction-title">All Four Directions — Best Candidates</div>
+  <div class="direction-desc">The strongest specimen from each direction, side by side.</div>
+
+  <div class="comparison-strip">
+    <div class="comparison-card">
+      <div class="specimen-word" style="font-family: 'Jost', sans-serif; font-weight: 400; letter-spacing: 0.1em;">OTTAVIA</div>
+      <div class="card-label">01 · Jost · Geometric</div>
+    </div>
+    <div class="comparison-card" style="background: #1a2a24; border: 1px solid #2a4a3a;">
+      <div class="specimen-word" style="font-family: 'Outfit', sans-serif; font-weight: 500; letter-spacing: 0.06em;">OTTAVIA</div>
+      <div class="card-label" style="color: #4a7c6f;">02 · Outfit · Recommended</div>
+    </div>
+    <div class="comparison-card">
+      <div class="specimen-word" style="font-family: 'Syne', sans-serif; font-weight: 600; letter-spacing: 0.04em;">OTTAVIA</div>
+      <div class="card-label">03 · Syne · High-Contrast</div>
+    </div>
+    <div class="comparison-card">
+      <div class="specimen-word" style="font-family: 'Rubik', sans-serif; font-weight: 500; letter-spacing: 0.06em;">OTTAVIA</div>
+      <div class="card-label">04 · Rubik · Soft Geometric</div>
+    </div>
+  </div>
+
+  <!-- Title case comparison -->
+  <div class="comparison-strip" style="margin-top: 24px;">
+    <div class="comparison-card">
+      <div class="specimen-word" style="font-family: 'Jost', sans-serif; font-weight: 400; letter-spacing: 0.04em;">Ottavia</div>
+      <div class="card-label">01 · Title Case</div>
+    </div>
+    <div class="comparison-card" style="background: #1a2a24; border: 1px solid #2a4a3a;">
+      <div class="specimen-word" style="font-family: 'Outfit', sans-serif; font-weight: 500; letter-spacing: 0.03em;">Ottavia</div>
+      <div class="card-label" style="color: #4a7c6f;">02 · Title Case</div>
+    </div>
+    <div class="comparison-card">
+      <div class="specimen-word" style="font-family: 'Syne', sans-serif; font-weight: 600; letter-spacing: 0.02em;">Ottavia</div>
+      <div class="card-label">03 · Title Case</div>
+    </div>
+    <div class="comparison-card">
+      <div class="specimen-word" style="font-family: 'Rubik', sans-serif; font-weight: 500; letter-spacing: 0.03em;">Ottavia</div>
+      <div class="card-label">04 · Title Case</div>
+    </div>
+  </div>
+
+  <!-- Lowercase comparison -->
+  <div class="comparison-strip" style="margin-top: 24px;">
+    <div class="comparison-card">
+      <div class="specimen-word" style="font-family: 'Jost', sans-serif; font-weight: 400; letter-spacing: 0.04em;">ottavia</div>
+      <div class="card-label">01 · Lowercase</div>
+    </div>
+    <div class="comparison-card" style="background: #1a2a24; border: 1px solid #2a4a3a;">
+      <div class="specimen-word" style="font-family: 'Outfit', sans-serif; font-weight: 500; letter-spacing: 0.03em;">ottavia</div>
+      <div class="card-label" style="color: #4a7c6f;">02 · Lowercase</div>
+    </div>
+    <div class="comparison-card">
+      <div class="specimen-word" style="font-family: 'Syne', sans-serif; font-weight: 600; letter-spacing: 0.02em;">ottavia</div>
+      <div class="card-label">03 · Lowercase</div>
+    </div>
+    <div class="comparison-card">
+      <div class="specimen-word" style="font-family: 'Rubik', sans-serif; font-weight: 500; letter-spacing: 0.03em;">ottavia</div>
+      <div class="card-label">04 · Lowercase</div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  Ottavia Brand · Type Exploration · 2026
+</div>
+
+</body>
+</html>
