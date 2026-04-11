@@ -333,6 +333,52 @@
     opacity: 1;
   }
 
+  /* ---- Dual bar (comparison) ---- */
+  .bar-dual {
+    display: flex;
+    gap: 2px;
+    align-items: flex-end;
+    height: 100%;
+  }
+
+  .bar-dual-rect {
+    width: 5px;
+    border-radius: 3px;
+    min-height: 0;
+    transition: height 0.6s cubic-bezier(0.33, 1, 0.68, 1), transform 0.15s ease, opacity 0.15s ease;
+  }
+
+  .touch-chart.active .bar-dual-rect {
+    transform: scale(0.9);
+    opacity: 0.4;
+  }
+
+  .touch-chart.active .bar-col.highlighted .bar-dual-rect {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+
+  .chart-legend {
+    display: flex;
+    gap: 16px;
+    margin-top: 4px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 500;
+    color: #988F80;
+  }
+
+  .legend-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 3px;
+  }
+
   /* ---- Goal line ---- */
   .bar-chart-wrapper {
     position: relative;
@@ -507,6 +553,35 @@ const sampleData = [
     { label: 'Mon', value: 5000 }, { label: 'Tue', value: 5000 }, { label: 'Wed', value: 5000 },
     { label: 'Thu', value: 5000 }, { label: 'Fri', value: 5000 },
   ]}},
+
+  { section: 'Comparison (Dual Bar)' },
+  { label: '11. Sleep vs Body Battery', comparison: true, data: {
+    title: 'Sleep vs Body Battery', dateRange: 'Mar 17–23',
+    series: [
+      { name: 'Sleep', category: 'recovery', values: [7.2, 6.5, 5.8, 7.5, 6.0, 8.1, 6.5] },
+      { name: 'Body Battery', category: 'activity', values: [72, 58, 42, 78, 55, 85, 60] },
+    ],
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    todayIdx: 6,
+  }},
+  { label: '12. Steps vs Calories', comparison: true, data: {
+    title: 'Steps vs Calories Burned', dateRange: 'Mar 17–23',
+    series: [
+      { name: 'Steps', category: 'activity', values: [7200, 5100, 8300, 4800, 6900, 9200, 3400] },
+      { name: 'Calories', category: 'nutrition', values: [2100, 1800, 2450, 1600, 2200, 2800, 1500] },
+    ],
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    todayIdx: 6,
+  }},
+  { label: '13. HRV vs Sleep Quality', comparison: true, data: {
+    title: 'HRV vs Sleep Score', dateRange: 'Mar 17–23',
+    series: [
+      { name: 'HRV', category: 'recovery', values: [45, 38, 52, 41, 55, 48, 43] },
+      { name: 'Sleep Score', category: 'hydration', values: [78, 65, 82, 70, 88, 75, 72] },
+    ],
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    todayIdx: 6,
+  }},
 ];
 
 // Gradient pairs: light top → deep bottom
@@ -550,7 +625,7 @@ function renderCard(data, baseDelay, version) {
     const labelClass = isToday ? 'bar-label today' : 'bar-label';
     const labelStyle = isToday ? `color:${colors.secondary}` : '';
     const delay = baseDelay + i * 60;
-    const useGradColor = version === 'v4' || version === 'v5' || version === 'v6';
+    const useGradColor = version === 'v4' || version === 'v6';
     const dot = isToday ? `<div style="width:4px;height:4px;border-radius:50%;background:${useGradColor ? grad.bottom : colors.border};position:absolute;bottom:-10px"></div>` : '';
 
     let valHtml = '';
@@ -559,7 +634,7 @@ function renderCard(data, baseDelay, version) {
     }
 
     let tooltipHtml = '';
-    if ((version === 'v3' || version === 'v6') && !isZero) {
+    if ((version === 'v3' || version === 'v5' || version === 'v6') && !isZero) {
       tooltipHtml = `<div class="bar-tooltip" style="background:${colors.barEmpty};color:${colors.primary};border-color:${colors.border}">${v.value.toLocaleString()}</div>`;
     }
 
@@ -569,11 +644,14 @@ function renderCard(data, baseDelay, version) {
         ? colors.barEmptyBorder
         : `linear-gradient(to bottom, ${grad.top}, ${grad.bottom})`;
       barEl = `<div class="v6-bar" style="background:${barBg};height:0px" data-height="${barH}" data-delay="${delay}"></div>`;
-    } else if (version === 'v4' || version === 'v5') {
+    } else if (version === 'v4') {
       const barBg = isZero
         ? colors.barEmptyBorder
         : `linear-gradient(to bottom, ${grad.top}, ${grad.bottom})`;
       barEl = `<div class="bar-rect-gradient" style="background:${barBg};height:0px" data-height="${barH}" data-delay="${delay}"></div>`;
+    } else if (version === 'v5') {
+      const barColor = isZero ? colors.barEmptyBorder : (v.colorOverride || colors.border);
+      barEl = `<div class="bar-rect" style="background:${barColor};height:0px" data-height="${barH}" data-delay="${delay}"></div>`;
     } else {
       const barColor = isZero ? colors.barEmptyBorder : colors.border;
       barEl = `<div class="bar-rect" style="background:${barColor};height:0px" data-height="${barH}" data-delay="${delay}"></div>`;
@@ -620,14 +698,80 @@ function renderCard(data, baseDelay, version) {
       ${contextHtml}
       <div class="bar-chart-wrapper" style="position:relative">
         ${goalHtml}
-        <div class="bar-chart ${(version === 'v3' || version === 'v6') ? 'touch-chart' : ''}">
+        <div class="bar-chart ${(version === 'v3' || version === 'v5' || version === 'v6') ? 'touch-chart' : ''}">
           ${barsHtml}
         </div>
       </div>
     </div>`;
 }
 
-// Render all 3 versions
+function renderComparisonCard(data, baseDelay, version) {
+  const series = data.series;
+  const labels = data.labels;
+  const todayIdx = data.todayIdx;
+  const colors0 = COLORS[series[0].category] || COLORS.activity;
+  const colors1 = COLORS[series[1].category] || COLORS.recovery;
+
+  // Normalize each series independently to its own max
+  const max0 = Math.max(...series[0].values, 1);
+  const max1 = Math.max(...series[1].values, 1);
+  const chartHeight = 138;
+  const cardId = `card-${version}-cmp-${baseDelay}`;
+  const isV5 = version === 'v5';
+
+  const barsHtml = labels.map((label, i) => {
+    const v0 = series[0].values[i] || 0;
+    const v1 = series[1].values[i] || 0;
+    const h0 = v0 === 0 ? 3 : Math.max((v0 / max0) * chartHeight, 6);
+    const h1 = v1 === 0 ? 3 : Math.max((v1 / max1) * chartHeight, 6);
+    const isToday = i === todayIdx;
+    const labelClass = isToday ? 'bar-label today' : 'bar-label';
+    const labelStyle = isToday ? `color:${colors0.secondary}` : '';
+    const delay = baseDelay + i * 60;
+    const dot = isToday ? `<div style="width:4px;height:4px;border-radius:50%;background:${colors0.border};position:absolute;bottom:-10px"></div>` : '';
+
+    const bg0 = v0 === 0 ? colors0.barEmptyBorder : colors0.border;
+    const bg1 = v1 === 0 ? colors1.barEmptyBorder : colors1.border;
+
+    let tooltipHtml = '';
+    if (isV5) {
+      tooltipHtml = `<div class="bar-tooltip" style="background:#433E36;color:#fff;border-color:#433E36">${v0.toLocaleString()} / ${v1.toLocaleString()}</div>`;
+    }
+
+    return `
+      <div class="bar-col" data-value="${v0}" data-label="${label}">
+        ${tooltipHtml}
+        <div class="bar-dual">
+          <div class="bar-dual-rect" style="background:${bg0};height:0px" data-height="${h0}" data-delay="${delay}"></div>
+          <div class="bar-dual-rect" style="background:${bg1};height:0px" data-height="${h1}" data-delay="${delay + 30}"></div>
+        </div>
+        <span class="${labelClass}" style="${labelStyle}">${label}</span>
+        ${dot}
+      </div>`;
+  }).join('');
+
+  const legendHtml = `
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:${colors0.border}"></div>${series[0].name}</div>
+      <div class="legend-item"><div class="legend-dot" style="background:${colors1.border}"></div>${series[1].name}</div>
+    </div>`;
+
+  return `
+    <div class="chart-card" id="${cardId}">
+      <div class="card-top">
+        <div class="card-title">${data.title}</div>
+        <div class="card-date">${data.dateRange}</div>
+      </div>
+      ${legendHtml}
+      <div class="bar-chart-wrapper" style="position:relative">
+        <div class="bar-chart ${isV5 ? 'touch-chart' : ''}">
+          ${barsHtml}
+        </div>
+      </div>
+    </div>`;
+}
+
+// Render all versions
 ['v1', 'v2', 'v3', 'v4', 'v5', 'v6'].forEach(version => {
   const container = document.getElementById('cases-' + version);
   let html = '';
@@ -635,6 +779,9 @@ function renderCard(data, baseDelay, version) {
   sampleData.forEach(c => {
     if (c.section) {
       html += `<div class="section-title">${c.section}</div>`;
+    } else if (c.comparison) {
+      html += `<div class="case-label">${c.label}</div>${renderComparisonCard(c.data, delay, version)}`;
+      delay += 500;
     } else {
       html += `<div class="case-label">${c.label}</div>${renderCard(c.data, delay, version)}`;
       delay += 500;
@@ -645,7 +792,7 @@ function renderCard(data, baseDelay, version) {
 
 // Animate visible bars
 function animateBars() {
-  document.querySelectorAll('.version-content.active .bar-rect, .version-content.active .bar-rect-gradient, .version-content.active .v6-bar').forEach(el => {
+  document.querySelectorAll('.version-content.active .bar-rect, .version-content.active .bar-rect-gradient, .version-content.active .v6-bar, .version-content.active .bar-dual-rect').forEach(el => {
     if (el.dataset.animated) return;
     const target = el.dataset.height + 'px';
     const delay = parseInt(el.dataset.delay) || 0;
