@@ -686,7 +686,7 @@ function renderCard(data, baseDelay, version) {
         <div class="card-title">${data.title || '(no title)'}</div>
         <div class="card-date">${data.dateRange}</div>
       </div>
-      ${version === 'v6' ? `
+      ${(version === 'v5' || version === 'v6') ? `
         <div class="v6-value" style="color:${colors.secondary}">${(data.average || '').replace(/,/g, '')}</div>
         <div class="v6-suffix" style="color:${colors.secondary}">${data.suffix || ''}</div>
       ` : `
