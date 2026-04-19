@@ -3,857 +3,525 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ottavia Design</title>
+    <title>Ottavia — Make it about you</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300..900&family=Archivo:ital,wght@0,100..900;1,100..900&family=Sixtyfour+Convergence&family=Bitcount+Grid+Single&family=Coral+Pixels&family=Jacquarda+Bastarda+9&family=Rubik+Pixels&family=Datatype&family=Faster+One&family=Moirai+One&family=Silkscreen&family=Nabla&family=Bungee+Shade&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* ===== RESET & BASE ===== */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
         :root {
-            --accent: #6161FF;
-            --accent-light: #F0F0FF;
-            --accent-hover: #4A4AD4;
-            --bg: #FAFAFE;
-            --sidebar-bg: #FFFFFF;
-            --sidebar-border: #EEEEF2;
-            --text-primary: #1B1B2F;
-            --text-secondary: #6E6E85;
-            --text-tertiary: #A0A0B5;
-            --card-bg: #FFFFFF;
-            --card-border: #EEEEF2;
-            --card-hover-border: #D0D0E0;
-            --card-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
-            --card-hover-shadow: 0 4px 16px rgba(97,97,255,0.08), 0 8px 32px rgba(0,0,0,0.06);
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --tan: #ccc8b2;
+            --tan-light: #e6e3d5;
+            --bg-warm-1: #edf4f8;
+            --bg-warm-2: #f5f1ea;
+            --text-dark: #1a1a18;
+            --text-muted: #8c8875;
+            --card-bg: var(--tan);
+            --radius-lg: 50px;
+            --radius-md: 40px;
+            --radius-sm: 24px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg);
-            color: var(--text-primary);
-            height: 100vh;
-            display: flex;
+            font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-dark);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            background: var(--bg-warm-2);
         }
 
-        /* ===== SIDEBAR ===== */
-        nav {
-            width: 260px;
-            min-width: 260px;
-            height: 100vh;
-            background: var(--sidebar-bg);
-            border-right: 1px solid var(--sidebar-border);
-            display: flex;
-            flex-direction: column;
-            padding: 24px 0;
-            position: fixed;
-            left: 0;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo {
-            padding: 4px 20px 20px;
-            font-size: 17px;
-            font-weight: 700;
-            color: var(--text-primary);
-            cursor: pointer;
-            text-decoration: none;
-            display: block;
-            letter-spacing: -0.3px;
-            border-bottom: 1px solid var(--sidebar-border);
-            margin-bottom: 16px;
-        }
-
-        .logo span {
-            display: block;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--text-tertiary);
-            margin-top: 2px;
-            letter-spacing: 0;
-        }
-
-        .logo:hover {
-            color: var(--accent);
-        }
-
-        .logo.active {
-            color: var(--accent);
-        }
-
-        .nav-search {
-            padding: 0 16px;
-            margin-bottom: 16px;
-        }
-
-        .nav-search input {
+        /* ===== SECTION 1: HERO ===== */
+        .hero {
+            position: relative;
             width: 100%;
-            padding: 8px 12px 8px 34px;
-            border: 1px solid var(--sidebar-border);
-            border-radius: 20px;
-            font-size: 13px;
-            font-family: inherit;
-            color: var(--text-primary);
-            background: var(--bg);
-            outline: none;
-            transition: border-color var(--transition);
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23A0A0B5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: 10px center;
+            height: 100vh;
+            min-height: 700px;
+            max-height: 960px;
+            overflow: hidden;
+            background: linear-gradient(151deg, #edf4f8 2.7%, #f5f1ea 21.5%, #edf4f8 33.2%, #f5f1ea 40%);
         }
 
-        .nav-search input:focus {
-            border-color: var(--accent);
-            background-color: #fff;
+        .hero-image {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 1440px;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
         }
 
-        .nav-section-label {
-            padding: 16px 20px 6px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            color: var(--text-tertiary);
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                180deg,
+                rgba(0,0,0,0.15) 0%,
+                rgba(0,0,0,0.05) 30%,
+                rgba(0,0,0,0.25) 100%
+            );
         }
 
-        .nav-items {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            padding: 0 8px;
-        }
-
-        .nav-item {
-            padding: 8px 12px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all var(--transition);
-            border-radius: var(--radius-sm);
-            text-decoration: none;
+        /* Nav */
+        .nav {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: space-between;
+            padding: 28px 60px;
         }
 
-        .nav-item:hover {
-            color: var(--text-primary);
-            background: var(--accent-light);
-        }
-
-        .nav-item.active {
-            color: var(--accent);
-            background: var(--accent-light);
+        .nav-logo {
+            font-size: 28px;
             font-weight: 600;
+            color: white;
+            opacity: 0.89;
+            letter-spacing: -0.5px;
         }
 
-        .nav-icon {
-            width: 20px;
-            height: 20px;
+        .nav-links {
             display: flex;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            font-size: 18px;
+            font-weight: 400;
+            color: white;
+            opacity: 0.89;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .nav-links a:hover { opacity: 1; }
+
+        /* Hero content */
+        .hero-content {
+            position: absolute;
+            inset: 0;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
+            text-align: center;
+            padding: 0 24px;
+        }
+
+        .hero-content h1 {
+            font-size: 80px;
+            font-weight: 500;
+            color: white;
+            opacity: 0.91;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            max-width: 769px;
+        }
+
+        .hero-content p {
+            font-size: 22px;
+            font-weight: 300;
+            color: white;
+            line-height: 1.55;
+            max-width: 680px;
+            margin-top: 12px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            margin-top: 40px;
+        }
+
+        .hero-buttons a {
+            display: inline-block;
+            background: white;
+            color: black;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 12px 36px;
+            border-radius: var(--radius-lg);
+            text-decoration: none;
+            opacity: 0.91;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .hero-buttons a:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        /* ===== SECTION 2: A PLAN THAT KNOWS YOU ===== */
+        .plan-section {
+            padding: 120px 60px;
+            background: linear-gradient(180deg, #f5f1ea 0%, #edf4f8 50%, #f5f1ea 100%);
+        }
+
+        .plan-title {
+            font-size: 72px;
+            font-weight: 400;
+            line-height: 1.15;
+            text-align: center;
+            background: linear-gradient(90deg, var(--tan) 0%, var(--tan-light) 50%, var(--tan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 80px;
+        }
+
+        .plan-layout {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 80px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .plan-features {
+            flex: 0 0 280px;
+            padding-top: 40px;
+        }
+
+        .plan-feature {
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--text-dark);
+            line-height: 1.8;
+            cursor: default;
+            transition: opacity 0.3s;
+            padding: 4px 0;
+            position: relative;
+        }
+
+        .plan-feature.active {
+            opacity: 1;
+        }
+
+        .plan-feature.active::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background: var(--text-dark);
+            border-radius: 50%;
+        }
+
+        .plan-feature.muted {
+            opacity: 0.2;
+        }
+
+        .plan-phone {
+            width: 380px;
+            height: 780px;
+            background: var(--tan);
+            border-radius: var(--radius-lg);
             flex-shrink: 0;
         }
 
-        .nav-icon svg {
-            width: 18px;
-            height: 18px;
+        /* ===== SECTION 3: DAY TIMELINE ===== */
+        .day-section {
+            padding: 100px 60px 120px;
+            background: linear-gradient(180deg, #f5f1ea 0%, #edf4f8 100%);
         }
 
-        /* ===== CONTENT ===== */
-        .content {
-            margin-left: 260px;
-            flex: 1;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .content iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* ===== HOME ===== */
-        .home-gradient {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #1B1B2F 0%, #2D1B69 40%, #6161FF 100%);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .home-gradient::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -30%;
-            width: 80%;
-            height: 120%;
-            background: radial-gradient(ellipse, rgba(97,97,255,0.3) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .home-gradient::after {
-            content: '';
-            position: absolute;
-            bottom: -20%;
-            left: -10%;
-            width: 60%;
-            height: 80%;
-            background: radial-gradient(ellipse, rgba(97,97,255,0.15) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .home-hero {
+        .day-tabs {
             display: flex;
-            flex-direction: column;
-            padding: 64px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .home-line {
-            font-family: 'Archivo', sans-serif;
-            font-size: clamp(48px, 10vw, 160px);
-            line-height: 0.95;
-            letter-spacing: -0.03em;
-        }
-
-        .home-line-bold {
-            font-weight: 700;
-            color: #fff;
-        }
-
-        .home-line-light {
-            font-weight: 300;
-            color: rgba(255,255,255,0.4);
-            margin-top: 4px;
-        }
-
-        .f-sixtyfour { font-family: 'Sixtyfour Convergence', sans-serif; }
-        .f-bitcount { font-family: 'Bitcount Grid Single', sans-serif; }
-        .f-coral { font-family: 'Coral Pixels', sans-serif; }
-        .f-jacquarda { font-family: 'Jacquarda Bastarda 9', sans-serif; }
-        .f-rubik { font-family: 'Rubik Pixels', sans-serif; }
-        .f-datatype { font-family: 'Datatype', sans-serif; }
-        .f-faster { font-family: 'Faster One', sans-serif; }
-        .f-moirai { font-family: 'Moirai One', sans-serif; }
-        .f-silkscreen { font-family: 'Silkscreen', sans-serif; }
-        .f-nabla { font-family: 'Nabla', sans-serif; }
-        .f-bungee { font-family: 'Bungee Shade', sans-serif; }
-
-        /* ===== PLAYGROUND / TOOLS ===== */
-        .playground-page {
-            padding: 40px;
-            background: var(--bg);
-            height: 100%;
-            position: relative;
-            overflow-y: auto;
-        }
-
-        .playground-page h2 {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 4px;
-            letter-spacing: -0.3px;
-        }
-
-        .playground-page .page-desc {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 28px;
-        }
-
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 16px;
-        }
-
-        .sub-card {
-            padding: 20px;
-            border: 1px solid var(--card-border);
-            border-radius: var(--radius-md);
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: all var(--transition);
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            background: var(--card-bg);
-            box-shadow: var(--card-shadow);
-        }
-
-        .sub-card:hover {
-            border-color: var(--card-hover-border);
-            box-shadow: var(--card-hover-shadow);
-            transform: translateY(-2px);
-        }
-
-        .sub-card .card-date {
-            font-size: 12px;
-            color: var(--text-tertiary);
-            font-weight: 400;
-        }
-
-        .sub-card .card-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
             justify-content: center;
-            margin-bottom: 4px;
-            font-size: 18px;
+            gap: 80px;
+            margin-bottom: 12px;
+            position: relative;
         }
 
-        /* ===== COMMENT BUTTON ===== */
-        .comment-btn {
-            position: absolute;
-            top: 40px;
-            right: 40px;
-            padding: 8px 16px;
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all var(--transition);
-            background: var(--card-bg);
-            font-family: inherit;
-            box-shadow: var(--card-shadow);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .comment-btn:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-            box-shadow: var(--card-hover-shadow);
-        }
-
-        .comment-btn svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        /* ===== COMMENT PANEL ===== */
-        .comment-panel {
-            position: fixed;
-            top: 0;
-            right: -400px;
-            width: 400px;
-            height: 100vh;
-            background: #fff;
-            border-left: 1px solid var(--sidebar-border);
-            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 200;
-            display: flex;
-            flex-direction: column;
-            box-shadow: -8px 0 32px rgba(0,0,0,0.08);
-        }
-
-        .comment-panel.open {
-            right: 0;
-        }
-
-        .comment-panel-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--sidebar-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .comment-panel-header span {
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .comment-panel-close {
-            background: none;
-            border: none;
-            color: var(--text-tertiary);
+        .day-tab {
             font-size: 20px;
-            cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 6px;
-            transition: all var(--transition);
-        }
-
-        .comment-panel-close:hover {
-            color: var(--text-primary);
-            background: var(--bg);
-        }
-
-        .comment-list {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px 24px;
-        }
-
-        .comment-item {
-            padding: 14px 0;
-            border-bottom: 1px solid var(--sidebar-border);
-        }
-
-        .comment-author {
-            font-size: 12px;
             font-weight: 500;
-            color: var(--text-tertiary);
-            margin-bottom: 4px;
+            color: var(--text-muted);
+            opacity: 0.4;
+            cursor: pointer;
+            transition: opacity 0.3s;
+            padding-bottom: 16px;
         }
 
-        .comment-body {
-            font-size: 14px;
-            color: var(--text-primary);
-            line-height: 1.5;
+        .day-tab.active {
+            opacity: 1;
         }
 
-        .comment-empty {
-            color: var(--text-tertiary);
-            font-size: 13px;
-            padding: 24px 0;
+        .day-line {
+            width: 100%;
+            max-width: 1200px;
+            height: 2px;
+            background: var(--tan);
+            opacity: 0.3;
+            margin: 0 auto 16px;
+            position: relative;
         }
 
-        .comment-form {
-            padding: 16px 24px;
-            border-top: 1px solid var(--sidebar-border);
+        .day-line::after {
+            content: '';
+            position: absolute;
+            left: 30%;
+            top: -5px;
+            width: 120px;
+            height: 12px;
+            background: var(--tan);
+            border-radius: 6px;
+        }
+
+        .day-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 1400px;
+            margin: 48px auto 0;
+        }
+
+        .day-card {
+            background: var(--tan);
+            border-radius: var(--radius-md);
+            height: 680px;
+            position: relative;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            justify-content: flex-end;
+            padding: 40px 32px;
         }
 
-        .comment-form input,
-        .comment-form textarea {
-            background: var(--bg);
-            border: 1px solid var(--sidebar-border);
-            border-radius: var(--radius-sm);
-            color: var(--text-primary);
-            padding: 10px 12px;
-            font-size: 13px;
-            font-family: inherit;
-            outline: none;
-            resize: none;
-            transition: border-color var(--transition);
-        }
-
-        .comment-form input:focus,
-        .comment-form textarea:focus {
-            border-color: var(--accent);
-        }
-
-        .comment-form button {
-            padding: 10px 16px;
-            border: none;
-            border-radius: var(--radius-sm);
-            background: var(--accent);
-            color: #fff;
-            font-size: 13px;
-            font-weight: 600;
-            font-family: inherit;
-            cursor: pointer;
-            transition: all var(--transition);
-        }
-
-        .comment-form button:hover {
-            background: var(--accent-hover);
-        }
-
-        .comment-form button:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        /* ===== MOBILE ===== */
-        .mobile-nav {
-            display: none;
-        }
-
-        .mobile-select {
-            width: 100%;
-            background: #fff;
-            color: var(--text-primary);
-            border: none;
-            border-bottom: 1px solid var(--sidebar-border);
-            padding: 14px 16px;
-            font-size: 14px;
+        .day-card h3 {
+            font-size: 28px;
             font-weight: 500;
-            font-family: inherit;
-            appearance: none;
-            -webkit-appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23A0A0B5' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 16px center;
-            outline: none;
+            color: white;
+            opacity: 0.91;
+            line-height: 1.35;
+            max-width: 320px;
         }
 
-        .mobile-bottom {
-            display: none;
+        /* ===== SECTION 4: YOUR DIGITAL PROFILE ===== */
+        .profile-section {
+            padding: 120px 60px 160px;
+            background: linear-gradient(180deg, #edf4f8 0%, #f5f1ea 100%);
         }
 
+        .profile-title {
+            font-size: 72px;
+            font-weight: 400;
+            line-height: 1.15;
+            text-align: center;
+            background: linear-gradient(90deg, var(--tan) 0%, var(--tan-light) 50%, var(--tan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 80px;
+        }
+
+        .profile-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            height: 600px;
+        }
+
+        .profile-card {
+            position: absolute;
+            background: var(--tan);
+            border-radius: var(--radius-md);
+        }
+
+        /* Cards positioned to match Figma scatter layout */
+        .profile-card.pc-1 { width: 250px; height: 380px; left: 38%; top: 12%; z-index: 3; }
+        .profile-card.pc-2 { width: 150px; height: 230px; left: 22%; top: 6%; opacity: 0.45; }
+        .profile-card.pc-3 { width: 250px; height: 230px; left: 60%; top: 28%; opacity: 0.45; }
+        .profile-card.pc-4 { width: 165px; height: 245px; left: 62%; top: 3%; opacity: 0.45; }
+        .profile-card.pc-5 { width: 100px; height: 120px; left: 45%; top: 0%; opacity: 0.8; }
+        .profile-card.pc-6 { width: 52px; height: 62px; left: 15%; top: 42%; opacity: 0.6; }
+        .profile-card.pc-7 { width: 52px; height: 62px; left: 81%; top: 38%; opacity: 0.6; }
+        .profile-card.pc-8 { width: 52px; height: 62px; left: 65%; top: 68%; opacity: 0.6; }
+        .profile-card.pc-9 { width: 280px; height: 160px; left: 13%; top: 58%; }
+        .profile-card.pc-10 { width: 58px; height: 268px; left: 55%; top: 54%; opacity: 0.8; }
+        .profile-card.pc-11 { width: 330px; height: 125px; left: 22%; top: 80%; opacity: 0.45; }
+
+        /* ===== RESPONSIVE ===== */
+
+        /* Tablet */
+        @media (max-width: 1024px) {
+            .nav { padding: 24px 32px; }
+            .nav-links { gap: 28px; }
+            .nav-links a { font-size: 16px; }
+            .nav-logo { font-size: 24px; }
+
+            .hero-content h1 { font-size: 56px; }
+            .hero-content p { font-size: 18px; }
+
+            .plan-section { padding: 80px 32px; }
+            .plan-title { font-size: 52px; }
+            .plan-layout { gap: 48px; }
+            .plan-features { flex: 0 0 240px; }
+            .plan-feature { font-size: 18px; }
+            .plan-phone { width: 300px; height: 620px; }
+
+            .day-section { padding: 80px 32px; }
+            .day-tabs { gap: 48px; }
+            .day-card { height: 520px; }
+            .day-card h3 { font-size: 22px; }
+
+            .profile-section { padding: 80px 32px 120px; }
+            .profile-title { font-size: 52px; }
+            .profile-grid { height: 450px; }
+        }
+
+        /* Mobile */
         @media (max-width: 768px) {
-            body {
+            .nav { padding: 20px 24px; }
+            .nav-links { display: none; }
+            .nav-logo { font-size: 22px; }
+
+            .hero { min-height: 600px; max-height: 800px; }
+            .hero-content h1 { font-size: 40px; max-width: 400px; }
+            .hero-content p { font-size: 17px; max-width: 360px; }
+            .hero-buttons a { padding: 12px 28px; font-size: 15px; }
+
+            .plan-section { padding: 64px 24px; }
+            .plan-title { font-size: 36px; margin-bottom: 48px; }
+            .plan-layout {
                 flex-direction: column;
+                align-items: center;
+                gap: 40px;
             }
+            .plan-features { flex: none; width: 100%; padding-top: 0; text-align: center; }
+            .plan-feature.active::before { display: none; }
+            .plan-feature { font-size: 18px; line-height: 2; }
+            .plan-phone { width: 280px; height: 580px; }
 
-            nav {
-                display: none;
-            }
+            .day-section { padding: 64px 24px; }
+            .day-tabs { gap: 24px; flex-wrap: wrap; }
+            .day-tab { font-size: 16px; }
+            .day-cards { grid-template-columns: 1fr; max-width: 400px; }
+            .day-card { height: 480px; }
 
-            .mobile-nav {
-                display: block;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                z-index: 100;
+            .profile-section { padding: 64px 24px 100px; }
+            .profile-title { font-size: 36px; margin-bottom: 48px; }
+            .profile-grid {
+                height: 400px;
+                max-width: 360px;
             }
+            /* Scale down cards on mobile */
+            .profile-card.pc-1 { width: 180px; height: 280px; }
+            .profile-card.pc-2 { width: 100px; height: 160px; }
+            .profile-card.pc-3 { width: 170px; height: 160px; }
+            .profile-card.pc-4 { width: 110px; height: 170px; }
+            .profile-card.pc-5 { width: 70px; height: 85px; }
+            .profile-card.pc-9 { width: 200px; height: 110px; }
+            .profile-card.pc-10 { width: 40px; height: 190px; }
+            .profile-card.pc-11 { width: 230px; height: 90px; }
+        }
 
-            .mobile-bottom {
-                display: flex;
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                z-index: 100;
-                background: #fff;
-                border-top: 1px solid var(--sidebar-border);
-                padding: 12px 16px;
-            }
-
-            .mobile-bottom .comment-btn {
-                position: static;
-                width: 100%;
-                justify-content: center;
-            }
-
-            .content {
-                margin-left: 0;
-                margin-top: 48px;
-                height: calc(100vh - 48px);
-            }
-
-            .content.has-bottom-bar {
-                height: calc(100vh - 48px - 52px);
-            }
-
-            .playground-page {
-                padding: 20px;
-            }
-
-            .card-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .comment-panel {
-                width: 100%;
-                right: -100%;
-            }
+        /* Small mobile */
+        @media (max-width: 390px) {
+            .hero-content h1 { font-size: 34px; }
+            .hero-content p { font-size: 16px; }
+            .hero-buttons { flex-direction: column; gap: 12px; }
+            .plan-title, .profile-title { font-size: 30px; }
+            .day-tabs { gap: 16px; }
+            .day-tab { font-size: 14px; }
         }
     </style>
 </head>
 <body>
-    <nav>
-        <a class="logo" onclick="navigate(this, 'home')">
-            ottavia hub
-            <span>Design System</span>
-        </a>
-        <div class="nav-search">
-            <input type="text" placeholder="Search..." id="navSearch" oninput="filterNav(this.value)" />
-        </div>
-        <div class="nav-section-label">Pages</div>
-        <div class="nav-items">
-            <a class="nav-item" data-page="playground" onclick="navigate(this, 'playground')">
-                <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></span>
-                Design Playground
-            </a>
-            <a class="nav-item" data-page="design-system" onclick="navigate(this, 'design-system')">
-                <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
-                Design System
-            </a>
-            <a class="nav-item" data-page="tools" onclick="navigate(this, 'tools')">
-                <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
-                Tools
-            </a>
+
+<!-- ===== SECTION 1: HERO ===== -->
+<section class="hero">
+    <img class="hero-image" src="assets/landing-mountains.png" alt="Mountain landscape">
+    <div class="hero-overlay"></div>
+
+    <nav class="nav">
+        <div class="nav-logo">ottavia</div>
+        <div class="nav-links">
+            <a href="#features">Download</a>
+            <a href="#about">About Us</a>
+            <a href="#day">Features</a>
         </div>
     </nav>
 
-    <div class="mobile-nav">
-        <select class="mobile-select" id="mobileSelect" onchange="mobileNavigate(this.value)">
-            <option value="home">ottavia hub</option>
-            <option value="playground">Design Playground</option>
-            <option value="design-system">Design System</option>
-            <option value="tools">Tools</option>
-        </select>
-    </div>
-
-    <div class="mobile-bottom" id="mobileBottom" style="display:none">
-        <button class="comment-btn" onclick="toggleComments()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            Comments
-        </button>
-    </div>
-
-    <main class="content" id="content">
-        <div class="home-gradient"><div class="home-hero">
-            <div class="home-line home-line-bold"><span class="f-silkscreen" style="color:#A8BDD0">you</span> <span class="f-bitcount">may</span> <span class="f-coral">know</span><br><span class="f-jacquarda" style="color:#D4839B">how</span> <span class="f-rubik" style="color:#D6CBAB">to</span> <span class="f-bungee" style="color:#C4A08E">code</span></div>
-            <div class="home-line home-line-light"><span class="f-faster" style="color:#E4763A">but</span> <span class="f-moirai" style="color:#8292D5">can</span> <span class="f-sixtyfour" style="color:rgba(255,255,255,0.5)">you</span> <span class="f-nabla" style="color:#83BD96">imagine?</span></div>
-        </div></div>
-    </main>
-
-    <div class="comment-panel" id="commentPanel">
-        <div class="comment-panel-header">
-            <span>Comments</span>
-            <button class="comment-panel-close" onclick="toggleComments()">&times;</button>
-        </div>
-        <div class="comment-list" id="commentList">
-            <div class="comment-empty">Loading...</div>
-        </div>
-        <div class="comment-form">
-            <input type="text" id="commentName" placeholder="Your name" />
-            <textarea id="commentText" rows="3" placeholder="Write a comment..."></textarea>
-            <button onclick="submitComment()">Post</button>
+    <div class="hero-content">
+        <h1>Make it about you</h1>
+        <p>Ottavia turns your data into personalized insights and recommendations across sleep, fitness, nutrition, and more.</p>
+        <div class="hero-buttons">
+            <a href="#">Apple store</a>
+            <a href="#">Google Play</a>
         </div>
     </div>
+</section>
 
-    <script>
-        const pages = {
-            'design-system': 'design-system.html',
-        };
+<!-- ===== SECTION 2: A PLAN THAT KNOWS YOU ===== -->
+<section class="plan-section" id="features">
+    <h2 class="plan-title">A plan that knows you</h2>
 
-        const inlinePages = {
-            'home': `<div class="home-gradient"><div class="home-hero">
-                <div class="home-line home-line-bold"><span class="f-silkscreen" style="color:#A8BDD0">you</span> <span class="f-bitcount">may</span> <span class="f-coral">know</span><br><span class="f-jacquarda" style="color:#D4839B">how</span> <span class="f-rubik" style="color:#D6CBAB">to</span> <span class="f-bungee" style="color:#C4A08E">code</span></div>
-                <div class="home-line home-line-light"><span class="f-faster" style="color:#E4763A">but</span> <span class="f-moirai" style="color:#8292D5">can</span> <span class="f-sixtyfour" style="color:rgba(255,255,255,0.5)">you</span> <span class="f-nabla" style="color:#83BD96">imagine?</span></div>
-            </div></div>`,
-            'playground': `<div class="playground-page">
-                <h2>Design Playground</h2>
-                <p class="page-desc">Explore design explorations and prototypes</p>
-                <button class="comment-btn" onclick="toggleComments()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Comments</button>
+    <div class="plan-layout">
+        <div class="plan-features">
+            <div class="plan-feature active">Easy food log</div>
+            <div class="plan-feature muted">Morning reports</div>
+            <div class="plan-feature muted">After workout reports</div>
+            <div class="plan-feature muted">Unlimited memory</div>
+            <div class="plan-feature muted">Proactive coach</div>
+        </div>
+        <div class="plan-phone"></div>
+    </div>
+</section>
 
-                <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-bottom:10px;">Screens</div>
-                <div class="card-grid" style="margin-bottom:32px;">
-                    <a class="sub-card" onclick="openPage('v14-claude-design.html')">
+<!-- ===== SECTION 3: DAY TIMELINE ===== -->
+<section class="day-section" id="day">
+    <div class="day-tabs">
+        <div class="day-tab">Morning</div>
+        <div class="day-tab active">Midday</div>
+        <div class="day-tab">Afternoon</div>
+        <div class="day-tab">Evening</div>
+    </div>
+    <div class="day-line"></div>
 
-                        Calendar
-                        <span style="font-size:12px;color:var(--text-secondary);line-height:1.4;">Coach plan, daily timeline, cue cards</span>
-                        <span class="card-date">Mar 14 · <span style="color:#58A471;font-weight:600;">Shipped</span></span>
-                    </a>
-                    <a class="sub-card" onclick="openPage('quick-actions.html')">
+    <div class="day-cards">
+        <div class="day-card">
+            <h3>Get the best sleep of your life</h3>
+        </div>
+        <div class="day-card">
+            <h3>Get the best sleep of your life</h3>
+        </div>
+        <div class="day-card">
+            <h3>Get the best sleep of your life</h3>
+        </div>
+    </div>
+</section>
 
-                        Quick Actions
-                        <span style="font-size:12px;color:var(--text-secondary);line-height:1.4;">Personalized action buttons in chat</span>
-                        <span class="card-date">Mar 22 · <span style="color:#D4A163;font-weight:600;">In Progress</span></span>
-                    </a>
-                </div>
+<!-- ===== SECTION 4: YOUR DIGITAL PROFILE ===== -->
+<section class="profile-section" id="about">
+    <h2 class="profile-title">Your digital profile</h2>
 
-                <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-bottom:10px;">Data Visualization</div>
-                <div class="card-grid" style="margin-bottom:32px;">
-                    <a class="sub-card" onclick="openPage('viz-v6.html')">
+    <div class="profile-grid">
+        <div class="profile-card pc-1"></div>
+        <div class="profile-card pc-2"></div>
+        <div class="profile-card pc-3"></div>
+        <div class="profile-card pc-4"></div>
+        <div class="profile-card pc-5"></div>
+        <div class="profile-card pc-6"></div>
+        <div class="profile-card pc-7"></div>
+        <div class="profile-card pc-8"></div>
+        <div class="profile-card pc-9"></div>
+        <div class="profile-card pc-10"></div>
+        <div class="profile-card pc-11"></div>
+    </div>
+</section>
 
-                        Progress Bar
-                        <span style="font-size:12px;color:var(--text-secondary);line-height:1.4;">Single, multi-bar, exceeded states. 28 cases.</span>
-                        <span class="card-date">Mar 21 · <span style="color:#58A471;font-weight:600;">PR Ready</span></span>
-                    </a>
-                    <a class="sub-card" onclick="openPage('viz-barchart.html')">
-
-                        Bar Chart
-                        <span style="font-size:12px;color:var(--text-secondary);line-height:1.4;">Vertical bars, weekly trends, empty states. 16 cases.</span>
-                        <span class="card-date">Mar 23 · <span style="color:#D4A163;font-weight:600;">In Progress</span></span>
-                    </a>
-                    <a class="sub-card" style="opacity:0.5;cursor:default;" onclick="return false">
-
-                        Pie Chart
-                        <span style="font-size:12px;color:var(--text-secondary);line-height:1.4;">Macro breakdown, category distribution</span>
-                        <span class="card-date">Planned</span>
-                    </a>
-                </div>
-
-                <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-bottom:10px;">Store Compliance</div>
-                <div class="card-grid" style="margin-bottom:32px;">
-                    <a class="sub-card" onclick="openPage('privacy-consent-v1.html')">
-
-                        Privacy Consent — Popup
-                        <span style="font-size:12px;color:var(--text-secondary);line-height:1.4;">Option 1: Bottom sheet over landing screen</span>
-                        <span class="card-date">Mar 28 · <span style="color:#D4A163;font-weight:600;">Exploring</span></span>
-                    </a>
-                </div>
-
-                <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-bottom:10px;">Early Explorations</div>
-                <div class="card-grid">
-                    <a class="sub-card" onclick="openPage('viz-v1.html')">
-
-                        Chart Styles v1–v5
-                        <span style="font-size:12px;color:var(--text-secondary);line-height:1.4;">5 visual directions: white cards, borderless, accent, pixel, rings</span>
-                        <span class="card-date">Mar 14 · <span style="color:var(--text-tertiary);font-weight:600;">Archived</span></span>
-                    </a>
-                </div>
-            </div>`,
-            'tools': `<div class="playground-page">
-                <h2>Tools</h2>
-                <p class="page-desc">Utilities and generators for the design process</p>
-                <div class="card-grid">
-                    <a class="sub-card" onclick="openTool('agent-simulator.html')">
-
-                        Agent Routing Simulator
-                        <span class="card-date">Interactive tool</span>
-                    </a>
-                    <a class="sub-card" onclick="openTool('color-generator.html')">
-
-                        Color Generator
-                        <span class="card-date">Interactive tool</span>
-                    </a>
-                </div>
-            </div>`,
-        };
-
-        const COMMENTS_API = 'https://jsonblob.com/api/jsonBlob/019ce877-1093-7328-b1c3-349d34de0f58';
-
-        const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
-
-        function filterNav(query) {
-            const items = document.querySelectorAll('.nav-item');
-            const q = query.toLowerCase();
-            items.forEach(item => {
-                const text = item.textContent.toLowerCase();
-                item.style.display = text.includes(q) ? 'flex' : 'none';
-            });
-        }
-
-        function showBottomBar(show) {
-            const bar = document.getElementById('mobileBottom');
-            const content = document.getElementById('content');
-            if (isMobile()) {
-                bar.style.display = show ? 'flex' : 'none';
-                content.className = show ? 'content has-bottom-bar' : 'content';
-            }
-        }
-
-        function mobileNavigate(page) {
-            navigate(null, page);
-        }
-
-        function openTool(src) {
-            const content = document.getElementById('content');
-            content.innerHTML = `<iframe src="${src}" style="width:100%;height:100%;border:none"></iframe>`;
-        }
-
-        function openPage(src) {
-            const content = document.getElementById('content');
-            if (isMobile()) {
-                content.innerHTML = `<iframe src="${src}" style="width:100%;height:100%;border:none"></iframe>`;
-                showBottomBar(true);
-            } else if (src === 'quick-actions.html') {
-                // Quick Actions — load full page (has its own phone frame + side panel)
-                content.innerHTML = `<iframe src="${src}" style="width:100%;height:100%;border:none;background:#1a1a1a"></iframe>`;
-            } else {
-                content.innerHTML = `
-                    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;background:var(--bg);position:relative;">
-                        <div style="width:390px;height:844px;border-radius:44px;overflow:hidden;box-shadow:0 25px 80px rgba(0,0,0,0.12);border:6px solid #E0E0E8;position:relative;">
-                            <iframe src="${src}${src.includes('?') ? '&' : '?'}embed=1" style="width:100%;height:100%;border:none;"></iframe>
-                        </div>
-                    </div>`;
-            }
-        }
-
-        function toggleComments() {
-            const panel = document.getElementById('commentPanel');
-            panel.classList.toggle('open');
-            if (panel.classList.contains('open')) loadComments();
-        }
-
-        async function loadComments() {
-            const list = document.getElementById('commentList');
-            try {
-                const res = await fetch(COMMENTS_API);
-                const data = await res.json();
-                if (!data.comments || !data.comments.length) {
-                    list.innerHTML = '<div class="comment-empty">No comments yet</div>';
-                    return;
-                }
-                list.innerHTML = data.comments.slice().reverse().map(c => `
-                    <div class="comment-item">
-                        <div class="comment-author">${c.name} · ${c.date}</div>
-                        <div class="comment-body">${c.text}</div>
-                    </div>
-                `).join('');
-            } catch (e) {
-                list.innerHTML = '<div class="comment-empty">Could not load comments</div>';
-            }
-        }
-
-        async function submitComment() {
-            const nameEl = document.getElementById('commentName');
-            const textEl = document.getElementById('commentText');
-            const name = nameEl.value.trim();
-            const text = textEl.value.trim();
-            if (!name || !text) return;
-
-            const btn = document.querySelector('.comment-form button');
-            btn.disabled = true;
-            btn.textContent = 'Posting...';
-
-            try {
-                const res = await fetch(COMMENTS_API);
-                const data = await res.json();
-                data.comments.push({
-                    name,
-                    text,
-                    date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
-                });
-                await fetch(COMMENTS_API, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-                nameEl.value = '';
-                textEl.value = '';
-                loadComments();
-            } catch (e) {
-                alert('Could not post comment');
-            }
-            btn.disabled = false;
-            btn.textContent = 'Post';
-        }
-
-        function navigate(el, page) {
-            document.querySelectorAll('.nav-item, .logo').forEach(item => item.classList.remove('active'));
-            if (el) el.classList.add('active');
-            document.getElementById('commentPanel').classList.remove('open');
-            showBottomBar(false);
-
-            // Sync mobile select
-            document.getElementById('mobileSelect').value = page;
-
-            const content = document.getElementById('content');
-
-            if (pages[page]) {
-                content.innerHTML = `<iframe src="${pages[page]}"></iframe>`;
-            } else if (inlinePages[page]) {
-                content.innerHTML = inlinePages[page];
-                if (page === 'playground' && isMobile()) {
-                    showBottomBar(true);
-                }
-            }
-        }
-    </script>
 </body>
 </html>

@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OTTAVIA — Brand Direction Proposal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Archivo:wght@100..900&family=Figtree:wght@300..900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Core palette */
+    --cream: #F5F1EA;
+    --cream-deep: #EDE8DF;
+    --white: #FFFFFF;
+    --ink: #2C2824;
+    --ink-soft: #433E36;
+    --text-secondary: #8F897D;
+    --text-muted: #A8A297;
+    --border: #E7DFD0;
+    --border-subtle: #F0EBE4;
+
+    /* Brand accent */
+    --signal: #4A7C6F;
+    --signal-light: #E8F2EE;
+    --signal-soft: rgba(74,124,111,0.08);
+
+    /* Domain colors */
+    --hydration: #3A647E;
+    --hydration-bg: #DBEFFA;
+    --activity: #C08A48;
+    --activity-bg: #F9EFE0;
+    --nutrition: #4B8F61;
+    --nutrition-bg: #D7F4E8;
+    --recovery: #58669D;
+    --recovery-bg: #E7EBFF;
+
+    /* Warning */
+    --caution: #E4763A;
+    --caution-bg: #FFF3EC;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── Navigation ─── */
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(245,241,234,0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    display: flex;
+    align-items: center;
+    height: 56px;
+    gap: 40px;
+  }
+
+  .nav-brand {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--ink); }
+
+  .nav-tag {
+    margin-left: auto;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--signal);
+    border: 1px solid var(--signal);
+    padding: 4px 12px;
+    border-radius: 100px;
+  }
+
+  /* ─── Hero ─── */
+  .hero {
+    padding: 140px 48px 80px;
+    max-width: 900px;
+  }
+
+  .hero-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--signal);
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-family: 'Archivo', sans-serif;
+    font-size: 52px;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+  }
+
+  .hero-sub {
+    font-size: 18px;
+    color: var(--text-secondary);
+    max-width: 640px;
+    line-height: 1.7;
+  }
+
+  .hero-meta {
+    margin-top: 32px;
+    display: flex;
+    gap: 24px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* ─── Sections ─── */
+  .section {
+    padding: 80px 48px;
+    border-top: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--signal);
+    margin-bottom: 12px;
+  }
+
+  .section h2 {
+    font-family: 'Archivo', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    max-width: 700px;
+  }
+
+  .section-intro {
+    font-size: 16px;
+    color: var(--text-secondary);
+    max-width: 640px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+  }
+
+  /* ─── Cards grid ─── */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .card:hover {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.04);
+    border-color: #d4cdc0;
+  }
+
+  .card-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  .card h3 {
+    font-family: 'Archivo', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+
+  .card p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .card-accent {
+    border-left: 3px solid var(--signal);
+  }
+
+  /* ─── Spectrum bars ─── */
+  .spectrum {
+    margin-bottom: 32px;
+  }
+
+  .spectrum-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    gap: 16px;
+  }
+
+  .spectrum-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    min-width: 100px;
+    text-align: right;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+  }
+
+  .spectrum-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    position: relative;
+    max-width: 400px;
+  }
+
+  .spectrum-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--signal);
+  }
+
+  .spectrum-end {
+    font-size: 12px;
+    color: var(--text-muted);
+    min-width: 100px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+  }
+
+  /* ─── Quote block ─── */
+  .quote-block {
+    background: var(--ink);
+    color: var(--cream);
+    border-radius: 20px;
+    padding: 48px;
+    margin: 48px 0;
+    max-width: 800px;
+  }
+
+  .quote-block .quote-label {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(245,241,234,0.4);
+    margin-bottom: 16px;
+  }
+
+  .quote-block blockquote {
+    font-family: 'Archivo', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+  }
+
+  .quote-block .quote-attr {
+    margin-top: 16px;
+    font-size: 13px;
+    color: rgba(245,241,234,0.5);
+  }
+
+  /* ─── Color palette ─── */
+  .palette {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .swatch {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--white);
+  }
+
+  .swatch-color {
+    height: 100px;
+    display: flex;
+    align-items: flex-end;
+    padding: 12px 16px;
+  }
+
+  .swatch-hex {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    opacity: 0.7;
+  }
+
+  .swatch-info {
+    padding: 14px 16px;
+  }
+
+  .swatch-name {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .swatch-use {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  /* ─── Typography showcase ─── */
+  .type-showcase {
+    margin-bottom: 48px;
+  }
+
+  .type-specimen {
+    margin-bottom: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .type-specimen:last-child { border-bottom: none; }
+
+  .type-meta {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 16px;
+  }
+
+  .type-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: var(--cream-deep);
+    padding: 4px 12px;
+    border-radius: 100px;
+  }
+
+  .type-display {
+    margin-bottom: 8px;
+  }
+
+  .type-note {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* ─── Voice examples ─── */
+  .voice-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .voice-col {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+  }
+
+  .voice-col.do { border-top: 3px solid var(--signal); }
+  .voice-col.dont { border-top: 3px solid var(--caution); }
+
+  .voice-col h4 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .voice-col.do h4 { color: var(--signal); }
+  .voice-col.dont h4 { color: var(--caution); }
+
+  .voice-col p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+
+  .voice-col p:last-child { margin-bottom: 0; }
+
+  /* ─── Attribute pills ─── */
+  .attributes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+
+  .attr-pill {
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 20px;
+    border-radius: 100px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    color: var(--ink-soft);
+  }
+
+  .attr-pill.primary {
+    background: var(--signal-light);
+    border-color: var(--signal);
+    color: var(--signal);
+    font-weight: 600;
+  }
+
+  .attr-pill.reject {
+    background: var(--caution-bg);
+    border-color: var(--caution);
+    color: var(--caution);
+    text-decoration: line-through;
+  }
+
+  /* ─── Principle row ─── */
+  .principle-row {
+    display: flex;
+    gap: 48px;
+    margin-bottom: 48px;
+    align-items: flex-start;
+  }
+
+  .principle-num {
+    font-family: 'Archivo', sans-serif;
+    font-size: 64px;
+    font-weight: 800;
+    color: var(--border);
+    line-height: 1;
+    flex-shrink: 0;
+    min-width: 80px;
+  }
+
+  .principle-content h3 {
+    font-family: 'Archivo', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+  }
+
+  .principle-content p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    max-width: 560px;
+  }
+
+  /* ─── Domain cards ─── */
+  .domain-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .domain-card {
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid;
+  }
+
+  .domain-card h4 {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .domain-card p {
+    font-size: 12px;
+    line-height: 1.6;
+    opacity: 0.7;
+  }
+
+  /* ─── Wordmark section ─── */
+  .wordmark-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  .wordmark-card {
+    border-radius: 20px;
+    padding: 60px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .wordmark-card .wordmark {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 48px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+  }
+
+  .wordmark-card .wordmark-label {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  /* ─── Imagery section ─── */
+  .imagery-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .imagery-card {
+    border-radius: 16px;
+    padding: 32px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .imagery-card h4 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .imagery-card p {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* ─── Summary banner ─── */
+  .summary-banner {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 80px 48px;
+    border-top: none;
+  }
+
+  .summary-banner .section-label { color: rgba(245,241,234,0.4); }
+  .summary-banner h2 { color: var(--cream); }
+  .summary-banner .section-intro { color: rgba(245,241,234,0.6); }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+
+  .summary-item h4 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(245,241,234,0.4);
+    margin-bottom: 8px;
+  }
+
+  .summary-item p {
+    font-size: 15px;
+    color: var(--cream);
+    line-height: 1.7;
+  }
+
+  /* ─── Footer ─── */
+  .footer {
+    padding: 40px 48px;
+    border-top: 1px solid rgba(245,241,234,0.1);
+    background: var(--ink);
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: rgba(245,241,234,0.3);
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 768px) {
+    .nav { padding: 0 24px; gap: 20px; }
+    .nav-links { display: none; }
+    .hero, .section { padding-left: 24px; padding-right: 24px; }
+    .hero h1 { font-size: 36px; }
+    .section h2 { font-size: 26px; }
+    .cards { grid-template-columns: 1fr; }
+    .voice-compare { grid-template-columns: 1fr; }
+    .domain-cards { grid-template-columns: 1fr 1fr; }
+    .wordmark-showcase { grid-template-columns: 1fr; }
+    .imagery-grid { grid-template-columns: 1fr; }
+    .summary-grid { grid-template-columns: 1fr; }
+    .summary-banner { padding: 60px 24px; }
+    .footer { padding: 32px 24px; flex-direction: column; gap: 8px; }
+    .principle-row { flex-direction: column; gap: 16px; }
+    .principle-num { font-size: 40px; }
+    .quote-block { padding: 32px; }
+    .quote-block blockquote { font-size: 20px; }
+    .spectrum-row { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ━━━━━━━━━━━━━━━ Navigation ━━━━━━━━━━━━━━━ -->
+<nav class="nav">
+  <div class="nav-brand">Ottavia</div>
+  <ul class="nav-links">
+    <li><a href="#soul">Soul</a></li>
+    <li><a href="#personality">Personality</a></li>
+    <li><a href="#visual">Visual</a></li>
+    <li><a href="#voice">Voice</a></li>
+    <li><a href="#system">System</a></li>
+  </ul>
+  <div class="nav-tag">Brand Proposal</div>
+</nav>
+
+<!-- ━━━━━━━━━━━━━━━ Hero ━━━━━━━━━━━━━━━ -->
+<header class="hero">
+  <div class="hero-label">Brand Direction Proposal</div>
+  <h1>The brand that knows you<br>before you ask.</h1>
+  <p class="hero-sub">
+    Ottavia is not a dashboard. Not a chatbot. Not a wellness app. It's a personal reasoning system that connects what your body does to what your body means. The brand must feel like that — specific, grounded, quietly intelligent, and unmistakably human.
+  </p>
+  <div class="hero-meta">
+    <span>April 2026</span>
+    <span>Brand Strategy + Visual Direction</span>
+    <span>Phase 1: Foundation</span>
+  </div>
+</header>
+
+<!-- ━━━━━━━━━━━━━━━ Part 1: Brand Soul ━━━━━━━━━━━━━━━ -->
+<section class="section" id="soul">
+  <div class="section-label">Part 1 — Who We Are</div>
+  <h2>Brand Soul</h2>
+  <p class="section-intro">
+    Before we choose a color or set a typeface, we need to lock in what Ottavia fundamentally is. Every visual decision flows from this. The soul is the filter — if a design choice doesn't serve it, the choice is wrong.
+  </p>
+
+  <div class="quote-block">
+    <div class="quote-label">The Internal Metaphor</div>
+    <blockquote>"A mother — knows you deeply, unconditionally on your side, tells you plainly when something is dangerous."</blockquote>
+    <div class="quote-attr">This never shows up in marketing. It's the compass the team builds from.</div>
+  </div>
+
+  <div class="cards">
+    <div class="card card-accent">
+      <div class="card-label">Core Promise</div>
+      <h3>Understanding you couldn't see alone</h3>
+      <p>Ottavia's value is not data display. It's the meaning between data points. Your HRV dropped and you slept 5 hours and you ran yesterday — Ottavia connects those three facts into one insight. That's the promise.</p>
+    </div>
+    <div class="card card-accent">
+      <div class="card-label">Emotional Contract</div>
+      <h3>Trust through specificity</h3>
+      <p>The user trusts Ottavia not because it says "trust me" but because every response proves it knows them. Warmth comes from precision — calling out your specific patterns, not generic advice that could apply to anyone.</p>
+    </div>
+    <div class="card card-accent">
+      <div class="card-label">Relationship Model</div>
+      <h3>A peer who remembers everything</h3>
+      <p>Not a coach barking orders. Not an assistant waiting for instructions. A knowledgeable friend who was there for your last three months of training and connects the dots you missed.</p>
+    </div>
+  </div>
+
+  <h3 style="font-family: 'Archivo', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 20px; margin-top: 48px;">Brand Positioning Spectrum</h3>
+
+  <div class="spectrum">
+    <div class="spectrum-row">
+      <span class="spectrum-label">Clinical</span>
+      <div class="spectrum-bar"><div class="spectrum-fill" style="width: 30%; margin-left: 30%;"></div></div>
+      <span class="spectrum-end">Warm</span>
+    </div>
+    <div class="spectrum-row">
+      <span class="spectrum-label">Reactive</span>
+      <div class="spectrum-bar"><div class="spectrum-fill" style="width: 30%; margin-left: 50%;"></div></div>
+      <span class="spectrum-end">Proactive</span>
+    </div>
+    <div class="spectrum-row">
+      <span class="spectrum-label">Generic</span>
+      <div class="spectrum-bar"><div class="spectrum-fill" style="width: 20%; margin-left: 70%;"></div></div>
+      <span class="spectrum-end">Personal</span>
+    </div>
+    <div class="spectrum-row">
+      <span class="spectrum-label">Playful</span>
+      <div class="spectrum-bar"><div class="spectrum-fill" style="width: 25%; margin-left: 35%;"></div></div>
+      <span class="spectrum-end">Serious</span>
+    </div>
+    <div class="spectrum-row">
+      <span class="spectrum-label">Minimal</span>
+      <div class="spectrum-bar"><div class="spectrum-fill" style="width: 30%; margin-left: 25%;"></div></div>
+      <span class="spectrum-end">Expressive</span>
+    </div>
+  </div>
+
+</section>
+
+<!-- ━━━━━━━━━━━━━━━ Part 2: Personality ━━━━━━━━━━━━━━━ -->
+<section class="section" id="personality">
+  <div class="section-label">Part 2 — How We Show Up</div>
+  <h2>Brand Personality</h2>
+  <p class="section-intro">
+    The personality is the brand soul made tangible. These are the traits that should be recognizable in every touchpoint — from the app to the website to an investor email.
+  </p>
+
+  <h3 style="font-family: 'Archivo', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 20px;">Brand Attributes</h3>
+
+  <div class="attributes">
+    <span class="attr-pill primary">Grounded</span>
+    <span class="attr-pill primary">Specific</span>
+    <span class="attr-pill primary">Direct</span>
+    <span class="attr-pill primary">Quietly Confident</span>
+    <span class="attr-pill">Warm</span>
+    <span class="attr-pill">Intelligent</span>
+    <span class="attr-pill">Personal</span>
+    <span class="attr-pill">Honest</span>
+    <span class="attr-pill">Young</span>
+    <span class="attr-pill">Open</span>
+  </div>
+
+  <h3 style="font-family: 'Archivo', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 20px;">What We Are Not</h3>
+
+  <div class="attributes">
+    <span class="attr-pill reject">Corporate wellness</span>
+    <span class="attr-pill reject">Fitness bro</span>
+    <span class="attr-pill reject">Gamified</span>
+    <span class="attr-pill reject">Cautious assistant</span>
+    <span class="attr-pill reject">Cheerleader</span>
+    <span class="attr-pill reject">Medical authority</span>
+    <span class="attr-pill reject">Hype-driven</span>
+  </div>
+
+  <div style="margin-top: 48px;">
+    <div class="principle-row">
+      <div class="principle-num">01</div>
+      <div class="principle-content">
+        <h3>Lead with the answer, not the process</h3>
+        <p>The brand never says "let me analyze..." or "based on your data..." — it just tells you. The confidence is in the knowing, not in explaining that it knows.</p>
+      </div>
+    </div>
+    <div class="principle-row">
+      <div class="principle-num">02</div>
+      <div class="principle-content">
+        <h3>Warmth is earned through precision</h3>
+        <p>We don't use warm language. We show warmth by remembering that you ran your longest distance last Tuesday, that your HRV dips on Mondays, that 130g protein is your personal target. Specificity is the warmest thing a brand can be.</p>
+      </div>
+    </div>
+    <div class="principle-row">
+      <div class="principle-num">03</div>
+      <div class="principle-content">
+        <h3>Say the hard thing</h3>
+        <p>If the data says don't run today, the brand says don't run today. No hedging, no "you might want to consider." The trust contract depends on honesty being the default, not the exception.</p>
+      </div>
+    </div>
+    <div class="principle-row">
+      <div class="principle-num">04</div>
+      <div class="principle-content">
+        <h3>Disappear into usefulness</h3>
+        <p>The best brand moments are when the user doesn't notice the brand at all — they just got exactly what they needed. No celebration of itself, no "look what I found." Just the insight.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━━━━━━━━━━━━━ Part 3: Visual Identity ━━━━━━━━━━━━━━━ -->
+<section class="section" id="visual">
+  <div class="section-label">Part 3 — How We Look</div>
+  <h2>Visual Identity Direction</h2>
+  <p class="section-intro">
+    The visual system should feel like opening a well-made notebook — tactile, considered, quietly premium. Not a tech dashboard. Not a clinical interface. Something that respects the seriousness of your health data without feeling medical.
+  </p>
+
+  <!-- Wordmark -->
+  <h3 style="font-family: 'Archivo', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 20px;">Wordmark Direction</h3>
+  <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 24px; max-width: 560px; line-height: 1.7;">
+    The wordmark uses geometric sans-serif letterforms — clean enough for the fitness/tech space, but with enough character to feel distinct. Spaced wide enough to breathe. Uppercase for structural clarity, but never shouty.
+  </p>
+
+  <div class="wordmark-showcase">
+    <div class="wordmark-card" style="background: var(--ink); color: var(--cream);">
+      <div class="wordmark" style="color: var(--cream);">OTTAVIA</div>
+      <div class="wordmark-label" style="color: rgba(245,241,234,0.4);">On Dark</div>
+    </div>
+    <div class="wordmark-card" style="background: var(--white); border: 1px solid var(--border);">
+      <div class="wordmark" style="color: var(--ink);">OTTAVIA</div>
+      <div class="wordmark-label" style="color: var(--text-muted);">On Light</div>
+    </div>
+    <div class="wordmark-card" style="background: var(--signal); color: white;">
+      <div class="wordmark">OTTAVIA</div>
+      <div class="wordmark-label" style="color: rgba(255,255,255,0.5);">On Brand</div>
+    </div>
+    <div class="wordmark-card" style="background: var(--cream-deep);">
+      <div class="wordmark" style="color: var(--ink-soft);">OTTAVIA</div>
+      <div class="wordmark-label" style="color: var(--text-muted);">On Cream</div>
+    </div>
+  </div>
+
+  <!-- Color Palette -->
+  <h3 style="font-family: 'Archivo', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 8px; margin-top: 48px;">Color System</h3>
+  <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 24px; max-width: 560px; line-height: 1.7;">
+    The palette is deliberately restrained. Cream surfaces feel approachable and analog. The deep ink grounds everything. Color enters through data domains — each health area gets its own muted, pastel identity. The single accent green signals trust and natural intelligence.
+  </p>
+
+  <h4 style="font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 16px;">Foundation</h4>
+  <div class="palette">
+    <div class="swatch">
+      <div class="swatch-color" style="background: #F5F1EA;">
+        <span class="swatch-hex" style="color: var(--ink-soft);">#F5F1EA</span>
+      </div>
+      <div class="swatch-info">
+        <div class="swatch-name">Cream</div>
+        <div class="swatch-use">Primary background. The canvas.</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background: #2C2824;">
+        <span class="swatch-hex" style="color: rgba(255,255,255,0.6);">#2C2824</span>
+      </div>
+      <div class="swatch-info">
+        <div class="swatch-name">Ink</div>
+        <div class="swatch-use">Primary text. Headings. Wordmark.</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background: #4A7C6F;">
+        <span class="swatch-hex" style="color: rgba(255,255,255,0.8);">#4A7C6F</span>
+      </div>
+      <div class="swatch-info">
+        <div class="swatch-name">Signal</div>
+        <div class="swatch-use">Brand accent. Trust marker. CTAs.</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background: #FFFFFF; border-bottom: 1px solid var(--border);">
+        <span class="swatch-hex" style="color: var(--text-muted);">#FFFFFF</span>
+      </div>
+      <div class="swatch-info">
+        <div class="swatch-name">White</div>
+        <div class="swatch-use">Cards. Content surfaces.</div>
+      </div>
+    </div>
+  </div>
+
+  <h4 style="font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 16px; margin-top: 32px;">Domain Colors</h4>
+  <div class="domain-cards">
+    <div class="domain-card" style="background: var(--hydration-bg); border-color: #92B7CE;">
+      <h4 style="color: var(--hydration);">Hydration</h4>
+      <p style="color: var(--hydration);">Cool blue. Water, fluids, hydration state.</p>
+    </div>
+    <div class="domain-card" style="background: var(--activity-bg); border-color: #E2C191;">
+      <h4 style="color: var(--activity);">Activity</h4>
+      <p style="color: var(--activity);">Warm amber. Training, load, movement.</p>
+    </div>
+    <div class="domain-card" style="background: var(--nutrition-bg); border-color: #83BD96;">
+      <h4 style="color: var(--nutrition);">Nutrition</h4>
+      <p style="color: var(--nutrition);">Fresh green. Meals, macros, fueling.</p>
+    </div>
+    <div class="domain-card" style="background: var(--recovery-bg); border-color: #8292D5;">
+      <h4 style="color: var(--recovery);">Recovery</h4>
+      <p style="color: var(--recovery);">Calm indigo. Sleep, HRV, readiness.</p>
+    </div>
+  </div>
+
+  <!-- Typography -->
+  <h3 style="font-family: 'Archivo', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 8px; margin-top: 48px;">Typography System</h3>
+  <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 32px; max-width: 560px; line-height: 1.7;">
+    Two typefaces. Archivo for structural moments — headings, wordmark, impact. DM Sans for everything else — readable, modern, warm without trying. The pairing creates a quiet hierarchy: Archivo says "pay attention," DM Sans says "keep reading."
+  </p>
+
+  <div class="type-showcase">
+    <div class="type-specimen">
+      <div class="type-meta">
+        <span class="type-tag">Display / Headings</span>
+        <span class="type-tag">Archivo</span>
+      </div>
+      <div class="type-display" style="font-family: 'Archivo', sans-serif; font-size: 48px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1;">
+        Your HRV dropped 12% after<br>three consecutive training days.
+      </div>
+      <div class="type-note">Archivo 700 · -0.03em tracking · Line height 1.1</div>
+    </div>
+
+    <div class="type-specimen">
+      <div class="type-meta">
+        <span class="type-tag">Body / UI</span>
+        <span class="type-tag">DM Sans</span>
+      </div>
+      <div class="type-display" style="font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 400; line-height: 1.7; max-width: 560px; color: var(--text-secondary);">
+        Your sleep efficiency hit 91% last night — highest this week. The two rest days are paying off. Your body is ready for a harder session today. If you're planning intervals, your heart rate zones should be responsive.
+      </div>
+      <div class="type-note">DM Sans 400 · 0em tracking · Line height 1.7</div>
+    </div>
+
+    <div class="type-specimen">
+      <div class="type-meta">
+        <span class="type-tag">Wordmark / Labels</span>
+        <span class="type-tag">Space Grotesk</span>
+      </div>
+      <div class="type-display" style="font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted);">
+        OTTAVIA &nbsp;·&nbsp; Personal Intelligence System
+      </div>
+      <div class="type-note">Space Grotesk 500 · 0.12em tracking · Uppercase</div>
+    </div>
+  </div>
+
+  <!-- Photography / Imagery Direction -->
+  <h3 style="font-family: 'Archivo', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 8px; margin-top: 48px;">Imagery & Photography Direction</h3>
+  <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 24px; max-width: 560px; line-height: 1.7;">
+    No stock fitness imagery. No gym selfies. No "person looking at phone while running." The imagery should feel like early morning — quiet focus, natural light, the moments between efforts.
+  </p>
+
+  <div class="imagery-grid">
+    <div class="imagery-card" style="background: linear-gradient(135deg, #E8E2D8, #D4CCC0);">
+      <h4>Environmental</h4>
+      <p>Dawn trails, empty roads, quiet kitchens. The spaces where athletic life actually happens — not posed, not polished.</p>
+    </div>
+    <div class="imagery-card" style="background: linear-gradient(135deg, var(--recovery-bg), #D0D4F0);">
+      <h4>Data Moments</h4>
+      <p>Tight crops on watches, heartbeats, the quiet glow of a morning sync. Technology as a background presence.</p>
+    </div>
+    <div class="imagery-card" style="background: linear-gradient(135deg, var(--nutrition-bg), #BDE8CC);">
+      <h4>Texture</h4>
+      <p>Grain, natural materials, handwritten notes. Analog warmth in a digital product.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━━━━━━━━━━━━━ Part 4: Voice ━━━━━━━━━━━━━━━ -->
+<section class="section" id="voice">
+  <div class="section-label">Part 4 — How We Sound</div>
+  <h2>Brand Voice</h2>
+  <p class="section-intro">
+    The voice is the brand's most powerful tool. In a conversational product, voice IS the product experience. Ottavia sounds like someone who has been paying attention to you for months and gives it to you straight.
+  </p>
+
+  <div class="voice-compare">
+    <div class="voice-col do">
+      <h4>Ottavia sounds like this</h4>
+      <p>"Your HRV is 38 — lowest in two weeks. Yesterday's tempo run on four days of deficit caught up. Rest today. The long run can wait until Saturday."</p>
+      <p>"You've hit 130g protein three days straight. That's the target we set. Your recovery scores are responding — up 8% since you started hitting it consistently."</p>
+      <p>"Don't run today."</p>
+    </div>
+    <div class="voice-col dont">
+      <h4>Ottavia never sounds like this</h4>
+      <p>"Based on your recent data, it appears your HRV has decreased. You might want to consider taking a rest day to optimize your recovery!"</p>
+      <p>"Great job! You've been doing amazing with your protein goals! Keep up the fantastic work! 💪"</p>
+      <p>"Would you like me to analyze your readiness for today's planned workout?"</p>
+    </div>
+  </div>
+
+  <div class="quote-block">
+    <div class="quote-label">The Voice Test</div>
+    <blockquote>"Ottavia told a runner to rest when his HRV dropped to 30. He wanted to run. She said don't."</blockquote>
+    <div class="quote-attr">This one paragraph should feel unmistakably Ottavia. If it could come from any other brand, the voice isn't sharp enough.</div>
+  </div>
+
+  <div class="cards" style="margin-top: 48px;">
+    <div class="card">
+      <div class="card-label">Constraint 1</div>
+      <h3>Direct over diplomatic</h3>
+      <p>Lead with the answer. No preamble, no "Great question!", no "Let me look into that." The first sentence is the insight.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Constraint 2</div>
+      <h3>Specific over generic</h3>
+      <p>Every response should include something that could only apply to this person. If you could swap in any user's name and it still works, it's not specific enough.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Constraint 3</div>
+      <h3>Concise over comprehensive</h3>
+      <p>80 words for a coach cue. 100 for a simple question. 250 max for complex analysis. Length scales with complexity — never with effort signaling.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Constraint 4</div>
+      <h3>Honest over comfortable</h3>
+      <p>If the data says stop, we say stop. No hedging, no softening, no "you could consider maybe possibly." The trust contract depends on this.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━━━━━━━━━━━━━ Part 5: Brand System ━━━━━━━━━━━━━━━ -->
+<section class="section" id="system">
+  <div class="section-label">Part 5 — How It All Connects</div>
+  <h2>Brand as System</h2>
+  <p class="section-intro">
+    The brand isn't a logo file. It's a system that touches every surface where Ottavia meets a person. Here's how the soul, personality, visual, and voice come together across touchpoints.
+  </p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-label">In-App</div>
+      <h3>The product is the brand</h3>
+      <p>Cream backgrounds, white content cards, domain-colored data sections. The chat interface IS the brand experience. Every response is a brand moment — voice, formatting, precision. Markdown as a design tool: bold for metrics, highlights for actions, bullets for parallel data.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Website</div>
+      <h3>Show, don't describe</h3>
+      <p>No hero images of happy runners. Instead: real Ottavia responses. Real data. Real insights. Let the product speak. The website should feel like opening the app for the first time — the visitor gets a taste of what it's like to be known.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Social</div>
+      <h3>One insight, no filler</h3>
+      <p>Every post should be a single specific insight — the kind Ottavia would actually give a real user. "Your Saturday long run keeps landing on your worst sleep night. Move it to Sunday." No motivational quotes. No engagement bait.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Investor Materials</div>
+      <h3>Confident, concrete, no hedging</h3>
+      <p>Same directness. Lead with the strongest data point. Show the moat through specificity: "14 scoring dimensions, 6 bounded agents, cross-domain reasoning that no single-domain app can replicate." No "disrupt" or "revolutionize."</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Onboarding</div>
+      <h3>Prove it immediately</h3>
+      <p>The first report is the brand promise delivered. Six sections of insight from the user's own Garmin data. Within 30 seconds of connecting, they see something they couldn't see in Garmin Connect. That moment IS the brand.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Error States</div>
+      <h3>Honest, warm, brief</h3>
+      <p>When something breaks, Ottavia doesn't pretend. "Garmin data hasn't synced since yesterday. Your report will be ready once it does." No corporate apologetics. No "we're working hard to fix this!" Just the truth.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━━━━━━━━━━━━━ Summary ━━━━━━━━━━━━━━━ -->
+<section class="summary-banner">
+  <div class="section-label">Summary</div>
+  <h2 style="margin-bottom: 16px;">The Ottavia Brand in One Breath</h2>
+  <p class="section-intro">
+    A brand built on the belief that specificity is warmth, precision is trust, and the best technology disappears into usefulness.
+  </p>
+
+  <div class="summary-grid">
+    <div class="summary-item">
+      <h4>Soul</h4>
+      <p>A personal reasoning system that connects what your body does to what your body means. Trust through specificity. A peer who remembers everything.</p>
+    </div>
+    <div class="summary-item">
+      <h4>Personality</h4>
+      <p>Grounded. Specific. Direct. Quietly confident. Young and open, but never casual about your health. Says the hard thing because that's what trust requires.</p>
+    </div>
+    <div class="summary-item">
+      <h4>Visual</h4>
+      <p>Cream canvas, ink typography, one green accent. Domain colors for data. Archivo for impact, DM Sans for reading. The visual restraint of a well-made notebook.</p>
+    </div>
+    <div class="summary-item">
+      <h4>Voice</h4>
+      <p>Direct over diplomatic. Specific over generic. Concise over comprehensive. Honest over comfortable. Warm through precision, not through warm words.</p>
+    </div>
+    <div class="summary-item">
+      <h4>Imagery</h4>
+      <p>Dawn light on empty trails. Quiet focus. Analog texture. Never stock fitness. Never posed. The moments between efforts — where understanding actually happens.</p>
+    </div>
+    <div class="summary-item">
+      <h4>Touchstone</h4>
+      <p>"Ottavia told a runner to rest when his HRV dropped to 30. He wanted to run. She said don't." — If the brand can't deliver that line, it's not Ottavia.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━━━━━━━━━━━━━ Footer ━━━━━━━━━━━━━━━ -->
+<footer class="footer">
+  <span>Ottavia Brand Direction — April 2026</span>
+  <span>Internal Document — Not for Distribution</span>
+</footer>
+
+</body>
+</html>

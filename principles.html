@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ottavia Product Principles</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300..900&family=Archivo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #6161FF;
+            --accent-light: #F0F0FF;
+            --accent-soft: rgba(97,97,255,0.08);
+            --bg: #FAFAFE;
+            --text-primary: #1B1B2F;
+            --text-secondary: #6E6E85;
+            --text-tertiary: #A0A0B5;
+            --card-border: #EEEEF2;
+            --card-bg: #FFFFFF;
+            --boundary-accent: #E8433E;
+            --boundary-light: #FFF5F5;
+            --boundary-soft: rgba(232,67,62,0.06);
+            --design-accent: #2D8B6F;
+            --design-light: #F0FAF6;
+            --design-soft: rgba(45,139,111,0.06);
+            --identity-accent: #6161FF;
+            --identity-light: #F0F0FF;
+            --identity-soft: rgba(97,97,255,0.06);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .page {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 56px 40px 80px;
+        }
+
+        /* Hero */
+        .hero {
+            margin-bottom: 56px;
+        }
+
+        .hero-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .hero h1 {
+            font-family: 'Archivo', sans-serif;
+            font-size: 40px;
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .hero-sub {
+            font-size: 17px;
+            color: var(--text-secondary);
+            max-width: 620px;
+            line-height: 1.65;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 24px;
+            margin-top: 20px;
+            font-size: 13px;
+            color: var(--text-tertiary);
+        }
+
+        .hero-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* One-line test */
+        .test-banner {
+            background: var(--text-primary);
+            color: #fff;
+            padding: 28px 32px;
+            border-radius: 16px;
+            margin-bottom: 56px;
+        }
+
+        .test-banner .test-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.45);
+            margin-bottom: 10px;
+        }
+
+        .test-banner .test-text {
+            font-family: 'Archivo', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.4;
+            letter-spacing: -0.01em;
+        }
+
+        .test-banner .test-answer {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.55);
+        }
+
+        /* Layer headers */
+        .layer {
+            margin-bottom: 48px;
+        }
+
+        .layer-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .layer-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .layer-dot.identity { background: var(--identity-accent); }
+        .layer-dot.design { background: var(--design-accent); }
+        .layer-dot.boundary { background: var(--boundary-accent); }
+
+        .layer-title {
+            font-family: 'Archivo', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .layer-desc {
+            font-size: 14px;
+            color: var(--text-tertiary);
+            margin-left: auto;
+        }
+
+        /* Principle cards */
+        .principle {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 28px 28px 24px;
+            margin-bottom: 16px;
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .principle:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            border-color: #D8D8E4;
+        }
+
+        .principle.identity { border-left: 3px solid var(--identity-accent); }
+        .principle.design { border-left: 3px solid var(--design-accent); }
+        .principle.boundary { border-left: 3px solid var(--boundary-accent); }
+
+        .principle-num {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 6px;
+        }
+
+        .principle-num.identity { color: var(--identity-accent); }
+        .principle-num.design { color: var(--design-accent); }
+        .principle-num.boundary { color: var(--boundary-accent); }
+
+        .principle h3 {
+            font-family: 'Archivo', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .principle-body {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .principle-body strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .principle-bullets {
+            margin-top: 12px;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .principle-bullets li {
+            font-size: 14px;
+            color: var(--text-secondary);
+            padding: 4px 0 4px 20px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .principle-bullets li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 12px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--card-border);
+        }
+
+        .principle-callout {
+            margin-top: 14px;
+            padding: 14px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .principle-callout.identity {
+            background: var(--identity-soft);
+            color: var(--identity-accent);
+        }
+
+        .principle-callout.design {
+            background: var(--design-soft);
+            color: var(--design-accent);
+        }
+
+        .principle-callout.boundary {
+            background: var(--boundary-soft);
+            color: var(--boundary-accent);
+        }
+
+        /* Comparison table */
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            font-size: 14px;
+        }
+
+        .compare-table th {
+            text-align: left;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: var(--text-tertiary);
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .compare-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #F5F5F9;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .compare-table tr td:first-child {
+            color: var(--text-tertiary);
+            font-size: 13px;
+        }
+
+        .compare-table tr td:last-child {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Prescriptive boundary section */
+        .boundary-section {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 28px;
+            margin-top: 48px;
+            margin-bottom: 48px;
+        }
+
+        .boundary-section h3 {
+            font-family: 'Archivo', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin-bottom: 12px;
+        }
+
+        .boundary-section p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 14px;
+        }
+
+        .example-quote {
+            padding: 16px 20px;
+            background: #F8F8FC;
+            border-left: 3px solid var(--accent);
+            border-radius: 0 10px 10px 0;
+            font-size: 14px;
+            color: var(--text-primary);
+            line-height: 1.65;
+            font-style: italic;
+        }
+
+        /* Footer */
+        .page-footer {
+            padding-top: 32px;
+            border-top: 1px solid var(--card-border);
+            font-size: 13px;
+            color: var(--text-tertiary);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        @media (max-width: 768px) {
+            .page { padding: 32px 20px 60px; }
+            .hero h1 { font-size: 28px; }
+            .hero-meta { flex-direction: column; gap: 8px; }
+            .layer-header { flex-direction: column; align-items: flex-start; gap: 4px; }
+            .layer-desc { margin-left: 0; }
+            .test-banner .test-text { font-size: 17px; }
+            .compare-table { font-size: 13px; }
+            .page-footer { flex-direction: column; gap: 4px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+
+        <!-- Hero -->
+        <div class="hero">
+            <div class="hero-label">Internal Operating System</div>
+            <h1>Product Principles</h1>
+            <p class="hero-sub">
+                The rules the product team uses to say "yes" or "no" to every feature, screen and interaction.
+                Not marketing. Not external positioning. The lens through which every decision gets filtered.
+            </p>
+            <div class="hero-meta">
+                <span>April 2026</span>
+                <span>17 principles</span>
+                <span>3 layers</span>
+            </div>
+        </div>
+
+        <!-- One-line test -->
+        <div class="test-banner">
+            <div class="test-label">The One-Line Test</div>
+            <div class="test-text">"Does this help the user understand something they couldn't see on their own, or does it just show them data they already have?"</div>
+            <div class="test-answer">If the answer is "just data," it doesn't belong in Ottavia.</div>
+        </div>
+
+        <!-- ============ LAYER 1: IDENTITY ============ -->
+        <div class="layer">
+            <div class="layer-header">
+                <div class="layer-dot identity"></div>
+                <div class="layer-title">Identity Principles</div>
+                <div class="layer-desc">What kind of product is this</div>
+            </div>
+
+            <div class="principle identity">
+                <div class="principle-num identity">Principle 1</div>
+                <h3>We are the interpretation layer, not the data layer</h3>
+                <div class="principle-body">
+                    Ottavia does not compete with Garmin Connect, Oura, Apple Health or MyFitnessPal for data display. Those apps own data collection and presentation. Ottavia owns meaning.
+                </div>
+                <ul class="principle-bullets">
+                    <li>We don't build dashboards that replicate what Garmin already shows</li>
+                    <li>We don't show HRV as a number. We show what HRV means <strong>for this person today</strong></li>
+                    <li>When we show a metric, it's always in context: compared to something, connected to something, leading to something</li>
+                    <li>A metric alone, without interpretation, is a bug in Ottavia</li>
+                </ul>
+                <div class="principle-callout identity">
+                    <strong>The test:</strong> If you cover the Ottavia logo and the screen could be mistaken for Garmin Connect, we've failed.
+                </div>
+            </div>
+
+            <div class="principle identity">
+                <div class="principle-num identity">Principle 2</div>
+                <h3>We build for understanding, not for compliance</h3>
+                <div class="principle-body">
+                    Ottavia's goal is to make people <strong>smarter about their own body</strong>, not to make them follow instructions. The product succeeds when a user says "Now I get it" rather than "I did what the app told me."
+                </div>
+                <ul class="principle-bullets">
+                    <li>Every recommendation includes the reasoning, not just the action</li>
+                    <li>We show the "why" even when it takes more space</li>
+                    <li>We don't gamify compliance (no streaks, no guilt for ignoring advice)</li>
+                    <li>Over time, users should need Ottavia less for the basics, because they've internalized the patterns</li>
+                </ul>
+                <div class="principle-callout identity">
+                    <strong>The retention paradox:</strong> A product that makes itself less necessary? Yes. Because the depth keeps growing. The data accumulates. New patterns emerge. The user understands their basics but Ottavia keeps finding deeper connections they can't see alone.
+                </div>
+            </div>
+
+            <div class="principle identity">
+                <div class="principle-num identity">Principle 3</div>
+                <h3>We are a companion to your existing tools, not a replacement</h3>
+                <div class="principle-body">
+                    Ottavia is the layer <strong>on top of</strong> the apps people already use. We make Garmin more valuable, not less. We make food logging more meaningful, not redundant.
+                </div>
+                <ul class="principle-bullets">
+                    <li>We never ask users to abandon an app they already use</li>
+                    <li>We integrate with, not duplicate, existing data sources</li>
+                    <li>A user with three devices and five apps is our ideal user, not a problem to solve</li>
+                </ul>
+            </div>
+
+            <div class="principle identity">
+                <div class="principle-num identity">Principle 4</div>
+                <h3>We serve the person, not the metric</h3>
+                <div class="principle-body">
+                    Metrics are inputs. The person's life is the output. Ottavia doesn't optimize HRV or sleep scores. It helps the person feel better, perform better and make decisions with confidence.
+                </div>
+                <ul class="principle-bullets">
+                    <li>We never celebrate a metric improvement in isolation without connecting it to something the person cares about</li>
+                    <li>Sometimes the "right" health decision conflicts with the person's life, and that's OK</li>
+                    <li>We never shame, guilt or judge</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ============ LAYER 2: DESIGN ============ -->
+        <div class="layer">
+            <div class="layer-header">
+                <div class="layer-dot design"></div>
+                <div class="layer-title">Design Principles</div>
+                <div class="layer-desc">How we build inside the product</div>
+            </div>
+
+            <div class="principle design">
+                <div class="principle-num design">Principle 5</div>
+                <h3>Show meaning, not metrics</h3>
+                <div class="principle-body">
+                    When Ottavia presents information, the default unit is <strong>insight</strong>, not number. Numbers appear in service of narrative, not as standalone displays.
+                </div>
+                <table class="compare-table">
+                    <thead>
+                        <tr>
+                            <th>Monitoring apps show</th>
+                            <th>Ottavia shows</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>HRV: 45ms</td>
+                            <td>Your recovery is lower than usual. After three hard training days and below-average sleep, your body is asking for a lighter day.</td>
+                        </tr>
+                        <tr>
+                            <td>Sleep score: 72</td>
+                            <td>You slept 6.5 hours but your deep sleep was only 45 minutes, below your baseline. This matters today because you have a long run planned.</td>
+                        </tr>
+                        <tr>
+                            <td>Calories: 1,800 / 2,200</td>
+                            <td>You're 400 calories short with a 15K run tomorrow. Under-fueling tonight usually shows up in your pace and RPE the next day.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="principle design">
+                <div class="principle-num design">Principle 6</div>
+                <h3>Fewer screens, more depth</h3>
+                <div class="principle-body">
+                    Every screen Ottavia adds is a screen competing with Garmin, Oura, MyFitnessPal. We don't want to win that fight. We want to avoid it.
+                </div>
+                <ul class="principle-bullets">
+                    <li>The home screen is not a dashboard. It's a <strong>briefing</strong>: what matters right now, in words</li>
+                    <li>Depth lives in the conversation, not in navigation hierarchy</li>
+                    <li>If a user needs to tap through three screens to find value, we've designed it wrong</li>
+                    <li>Every additional screen must justify itself: "Could the conversation handle this better?"</li>
+                </ul>
+            </div>
+
+            <div class="principle design">
+                <div class="principle-num design">Principle 7</div>
+                <h3>Proactive over reactive</h3>
+                <div class="principle-body">
+                    The highest-value moments are when the system speaks first, not when the user asks. Ottavia reaches the user <strong>before</strong> they make a decision.
+                </div>
+                <ul class="principle-bullets">
+                    <li>Push notifications are a first-class product surface, not an afterthought</li>
+                    <li>The best Ottavia interaction is one the user didn't initiate but is grateful for</li>
+                    <li>Each proactive message must pass the bar: "Would I thank Ottavia for interrupting me with this?"</li>
+                    <li>Thoughtful friend, not noisy app</li>
+                </ul>
+            </div>
+
+            <div class="principle design">
+                <div class="principle-num design">Principle 8</div>
+                <h3>Time-aware, not just data-aware</h3>
+                <div class="principle-body">
+                    Context is temporal. "Your sleep was bad" means different things at 7am (deciding whether to train), at noon (choosing lunch) and at 9pm (planning tomorrow).
+                </div>
+                <ul class="principle-bullets">
+                    <li>The same data gets interpreted differently depending on when the user sees it</li>
+                    <li>Morning: what's ahead. Evening: recovery and preparation</li>
+                    <li>Ottavia knows what time it is and adjusts what it prioritizes accordingly</li>
+                </ul>
+            </div>
+
+            <div class="principle design">
+                <div class="principle-num design">Principle 9</div>
+                <h3>Progressive disclosure of complexity</h3>
+                <div class="principle-body">
+                    New users need clarity. Experienced users want depth. The product must serve both.
+                </div>
+                <ul class="principle-bullets">
+                    <li>First interactions are simple, warm and focused on the biggest insight</li>
+                    <li>Over time, as data accumulates, responses get richer and more connected</li>
+                    <li>Users who ask "why?" get explanations. Users who ask "what should I do?" get actions</li>
+                    <li>The system adapts to how much complexity the user invites</li>
+                </ul>
+            </div>
+
+            <div class="principle design">
+                <div class="principle-num design">Principle 10</div>
+                <h3>Every output earns its existence</h3>
+                <div class="principle-body">
+                    Nothing appears in Ottavia unless it passes a clear bar: <strong>does this help the user understand something or make a better decision?</strong>
+                </div>
+                <ul class="principle-bullets">
+                    <li>No "good morning!" messages with no substance</li>
+                    <li>No metric readouts without interpretation</li>
+                    <li>No logging confirmations that just say "saved"</li>
+                    <li>No notifications that could be described as "filler" or "engagement plays"</li>
+                    <li>If we can't make it meaningful, we don't send it</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ============ LAYER 3: BOUNDARIES ============ -->
+        <div class="layer">
+            <div class="layer-header">
+                <div class="layer-dot boundary"></div>
+                <div class="layer-title">Boundary Principles</div>
+                <div class="layer-desc">What we intentionally refuse to build</div>
+            </div>
+
+            <div class="principle boundary">
+                <div class="principle-num boundary">Principle 11</div>
+                <h3>We don't build dashboards</h3>
+                <div class="principle-body">
+                    Dashboards are the monitoring era's product. They show you everything and help you with nothing. Garmin Connect is a dashboard. Oura is a dashboard. Apple Health is a dashboard. We are not.
+                </div>
+                <ul class="principle-bullets">
+                    <li>No "metrics overview" screen with HRV + Sleep + Activity + Nutrition cards</li>
+                    <li>No graphs for the sake of graphs</li>
+                    <li>No "data explorer" where users browse their own metrics</li>
+                    <li>No standalone "scores" or "readiness scores"</li>
+                </ul>
+                <div class="principle-callout boundary">
+                    <strong>What this allows:</strong> Briefings that synthesize across data into plain language. Visualizations that appear inside conversation to support a specific point. Trend indicators when they're part of an interpretation.
+                </div>
+            </div>
+
+            <div class="principle boundary">
+                <div class="principle-num boundary">Principle 12</div>
+                <h3>We don't gamify health</h3>
+                <div class="principle-body">
+                    No streaks. No badges. No points. No leaderboards. Gamification creates a compliance dynamic. Users chase the streak, not the understanding. When the streak breaks, they feel guilt. When they feel guilt, they avoid the app.
+                </div>
+                <div class="principle-callout boundary">
+                    <strong>What we do instead:</strong> Show the value of consistency without gamifying it. "You've logged food consistently this week, which means your nutrition picture is clearer and more reliable." That's different from a streak counter.
+                </div>
+            </div>
+
+            <div class="principle boundary">
+                <div class="principle-num boundary">Principle 13</div>
+                <h3>We don't build social features</h3>
+                <div class="principle-body">
+                    No sharing. No community. No "see how you compare to others." Health data is intimate. Comparison is toxic for most health contexts. Social features optimize for engagement, not understanding.
+                </div>
+            </div>
+
+            <div class="principle boundary">
+                <div class="principle-num boundary">Principle 14</div>
+                <h3>We don't duplicate source apps</h3>
+                <div class="principle-body">
+                    If Garmin already shows your run map, we don't show a run map. If MyFitnessPal already shows your food diary, we don't show a food diary. If Oura already shows your readiness score, we don't show a readiness score. Our value is what happens <strong>after</strong> you've seen the data somewhere else and want to know what it means.
+                </div>
+            </div>
+
+            <div class="principle boundary">
+                <div class="principle-num boundary">Principle 15</div>
+                <h3>We don't chase feature parity</h3>
+                <div class="principle-body">
+                    When a new feature appears in Whoop, Oura or any wearable app, the default response is: "That's their job, not ours." We only build features that serve our interpretation mission. Someone will always say "They just added X, shouldn't we have X too?" The answer is almost always no.
+                </div>
+            </div>
+
+            <div class="principle boundary">
+                <div class="principle-num boundary">Principle 16</div>
+                <h3>We accumulate, we don't snapshot</h3>
+                <div class="principle-body">
+                    The longer you use Ottavia, the more valuable it becomes. The structured data model gets richer and the interpretations get more grounded. Monitoring apps are equally useful on day 1 and day 100 (which is why people churn). Ottavia should be noticeably better at month 6 than month 1. Every interaction should add something to the long-term model.
+                </div>
+            </div>
+
+            <div class="principle boundary">
+                <div class="principle-num boundary">Principle 17</div>
+                <h3>We speak in one voice</h3>
+                <div class="principle-body">
+                    Users never see "agents." They never see seams between nutrition reasoning and sleep reasoning. Ottavia is one system, one personality, one voice. This shapes every design decision about how responses are structured.
+                </div>
+            </div>
+        </div>
+
+        <!-- Prescriptive Boundary -->
+        <div class="boundary-section">
+            <h3>The Prescriptive Boundary</h3>
+            <p>
+                Ottavia gives specific, opinionated answers when asked, but always shows the reasoning.
+                That's opinionated AND educational. The user learns <strong>why</strong>, not just <strong>what</strong>.
+            </p>
+            <div class="example-quote">
+                "Skip the run today. Your HRV is at 32, you had 5.5 hours of sleep, and your training load this week is already above target. A rest day will serve your Saturday long run better."
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>Ottavia Product Principles</span>
+            <span>April 2026 / Living document</span>
+        </div>
+
+    </div>
+</body>
+</html>

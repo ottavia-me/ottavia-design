@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ottavia — Make it about you</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&family=Poppins:wght@100;200;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== FONT ===== */
+        @font-face { font-family: 'Modern Era'; src: url('assets/Modern Era.ttf') format('truetype'); font-weight: 400; font-style: normal; }
+
+        /* ===== RESET & BASE ===== */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --tan: #ccc8b2;
+            --tan-light: #e6e3d5;
+            --bg-warm-1: #edf4f8;
+            --bg-warm-2: #f5f1ea;
+            --text-dark: #1a1a18;
+            --text-muted: #8c8875;
+            --card-bg: var(--tan);
+            --radius-lg: 50px;
+            --radius-md: 40px;
+            --radius-sm: 24px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Modern Era', 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-dark);
+            letter-spacing: -0.04em;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            background: var(--bg-warm-2);
+        }
+
+        /* ===== SECTION 1: HERO ===== */
+        .hero {
+            position: relative;
+            width: 100%;
+            background: linear-gradient(151deg, #edf4f8 2.7%, #f5f1ea 21.5%, #edf4f8 33.2%, #f5f1ea 40%);
+        }
+
+        .hero-shape {
+            position: relative;
+            width: 100%;
+            height: 86vh;
+            min-height: 610px;
+            max-height: 900px;
+            background: #CCC8B2;
+            border-radius: 0 0 126px 126px;
+            overflow: hidden;
+        }
+
+        /* hero overlay — commented out while no photo
+        .hero-shape::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.25);
+            border-radius: inherit;
+        } */
+
+        /* Nav */
+        .nav {
+            position: fixed;
+            top: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 80px);
+            max-width: 1400px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 28px;
+            border-radius: 100px;
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            opacity: 1;
+            pointer-events: auto;
+            transition: background 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease, opacity 0.3s ease;
+        }
+
+        .nav.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .nav.scrolled {
+            opacity: 1;
+            pointer-events: auto;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+        }
+
+        .nav-logo {
+            font-size: 34px;
+            font-weight: 600;
+            color: white;
+            letter-spacing: -0.5px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav.scrolled .nav-logo {
+            color: var(--text-dark);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 36px;
+        }
+
+        .nav-links a {
+            font-size: 18px;
+            font-weight: 400;
+            color: white;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+            transition: color 0.3s ease, opacity 0.2s;
+        }
+
+        .nav.scrolled .nav-links a {
+            color: var(--text-dark);
+        }
+
+        .nav-links a:hover { opacity: 0.6; }
+
+        /* Hero entrance animation */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero content — title + buttons on photo */
+        .hero-content {
+            position: absolute;
+            bottom: 140px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 80px);
+            max-width: 1400px;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+            padding-left: 28px;
+        }
+
+        .hero-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .hero-content h1 .line {
+            display: block;
+            opacity: 0;
+            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .hero-content h1 .line:nth-child(1) { animation-delay: 0.3s; }
+        .hero-content h1 .line:nth-child(2) { animation-delay: 0.6s; }
+
+        .hero-content h1 {
+            font-size: 86px;
+            font-weight: 600;
+            color: white;
+            line-height: 1.05;
+            letter-spacing: -2px;
+        }
+
+        .hero-sub {
+            font-size: 86px;
+            font-weight: 600;
+            color: #928D77;
+            letter-spacing: -0.04em;
+            line-height: 1.05;
+            max-width: none;
+            margin-top: 0;
+            opacity: 0;
+            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 0.8s;
+        }
+
+        .hero-content .hero-buttons {
+            margin-top: 40px;
+            opacity: 0;
+            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 1s;
+        }
+
+        .hero-partners {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .hero-partners span {
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--text-muted);
+            opacity: 0.6;
+        }
+
+        .garmin-logo {
+            width: 140px;
+            height: auto;
+            opacity: 0.3;
+        }
+
+        .garmin-label {
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+
+        /* Subtitle — below the photo */
+        .hero-below {
+            text-align: center;
+            padding: 36px 60px 48px;
+            opacity: 0;
+            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 1.3s;
+        }
+
+        .hero-below p {
+            font-size: 22px;
+            font-weight: 200;
+            line-height: 1.3;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: linear-gradient(90deg, #8B7355, #A6896A);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+        }
+
+        .hero-buttons a {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            background: white;
+            color: #433E36;
+            font-size: 19px;
+            font-weight: 700;
+            padding: 20px 20px;
+            border-radius: var(--radius-lg);
+            text-decoration: none;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            transition: transform 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
+        }
+
+        .hero-buttons a svg {
+            width: 20px;
+            height: 20px;
+            fill: #433E36;
+        }
+
+        .hero-buttons a:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        }
+
+        /* ===== BANNER: FOREVER FREE ===== */
+        .banner-section {
+            background: transparent;
+            padding: 120px 60px;
+            text-align: center;
+        }
+
+        .banner-title {
+            font-size: 72px;
+            font-weight: 300;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            color: #9E9185;
+            font-style: normal;
+            margin-bottom: 32px;
+        }
+
+        .banner-title span {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 200;
+            color: #b5a47a;
+        }
+
+        .banner-sub {
+            font-size: 20px;
+            font-weight: 300;
+            color: var(--text-muted);
+            line-height: 1.6;
+            max-width: 680px;
+            margin: 0 auto 48px;
+        }
+
+        .banner-btn {
+            display: inline-block;
+            font-size: 19px;
+            font-weight: 700;
+            color: var(--text-dark);
+            background: white;
+            padding: 20px 20px;
+            border-radius: 100px;
+            text-decoration: none;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .banner-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        }
+
+        /* ===== SECTION 2: A PLAN THAT KNOWS YOU ===== */
+        .plan-section {
+            background: linear-gradient(180deg, #f5f1ea 0%, #edf4f8 50%, #f5f1ea 100%);
+        }
+
+        .plan-title {
+            font-size: 72px;
+            font-weight: 400;
+            line-height: 1.15;
+            text-align: center;
+            color: #9E9185;
+            letter-spacing: -0.04em;
+            font-weight: 600;
+            padding: 40px 60px 16px;
+        }
+
+        .plan-subtitle {
+            font-size: 20px;
+            font-weight: 300;
+            color: var(--text-muted);
+            text-align: center;
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 60px 80px;
+            line-height: 1.6;
+        }
+
+        .plan-scroll-container {
+            height: 300vh;
+            position: relative;
+        }
+
+        .plan-sticky {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 60px;
+        }
+
+        .plan-features {
+            justify-self: end;
+            padding-right: 80px;
+        }
+
+        .plan-feature {
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--text-dark);
+            line-height: 1.8;
+            cursor: pointer;
+            transition: opacity 0.4s ease;
+            padding: 4px 0;
+            position: relative;
+            opacity: 0.2;
+        }
+
+        .plan-feature.active {
+            opacity: 1;
+        }
+
+        .plan-feature.active::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background: var(--text-dark);
+            border-radius: 50%;
+        }
+
+        .plan-phone {
+            width: 380px;
+            height: 820px;
+            background: var(--tan);
+            border-radius: 52px;
+            flex-shrink: 0;
+            padding: 6px;
+            position: relative;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+        }
+
+        .plan-phone-screen {
+            width: 100%;
+            height: 100%;
+            background: #f8f7f4;
+            border-radius: 47px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .plan-screen {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .plan-screen.active {
+            opacity: 1;
+        }
+
+        .plan-screen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top;
+        }
+
+        /* Placeholder screens (until real screenshots are added) */
+        .plan-screen-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        /* ===== INTERSTITIAL TEXT ===== */
+        .interstitial {
+            padding: 100px 60px;
+        }
+
+        .interstitial p {
+            font-size: 72px;
+            font-weight: 600;
+            color: #9E9185;
+            letter-spacing: -0.04em;
+            line-height: 1.15;
+            max-width: none;
+        }
+
+        /* ===== SECTION 3: DAY TIMELINE ===== */
+        .day-section {
+            background: linear-gradient(180deg, #f5f1ea 0%, #edf4f8 100%);
+        }
+
+        .day-scroll-container {
+            height: 400vh;
+            position: relative;
+        }
+
+        .day-sticky {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 60px;
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        .day-nav {
+            position: relative;
+            margin-bottom: 48px;
+        }
+
+        .day-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 64px;
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .day-tab {
+            font-size: 22px;
+            font-weight: 500;
+            color: var(--text-muted);
+            opacity: 0.4;
+            cursor: pointer;
+            transition: opacity 0.3s;
+            position: relative;
+            user-select: none;
+        }
+
+        .day-tab.active {
+            opacity: 1;
+        }
+
+        .day-line {
+            width: 100%;
+            height: 2px;
+            background: var(--tan);
+            opacity: 0.3;
+            position: relative;
+        }
+
+        .day-indicator {
+            position: absolute;
+            top: -5px;
+            height: 12px;
+            background: var(--tan);
+            border-radius: 6px;
+            transition: left 0.4s ease, width 0.4s ease;
+        }
+
+        .day-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .day-card {
+            background: var(--tan);
+            border-radius: var(--radius-md);
+            height: 580px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 40px 32px;
+            transition: background 0.6s ease;
+        }
+
+        .day-card h3 {
+            font-size: 28px;
+            font-weight: 500;
+            color: white;
+            opacity: 0.91;
+            line-height: 1.35;
+            max-width: 320px;
+            transition: opacity 0.4s ease;
+        }
+
+        .day-card .day-card-text {
+            position: absolute;
+            bottom: 40px;
+            left: 32px;
+            right: 32px;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .day-card .day-card-text.hidden {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+
+        .day-card .day-card-text.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== SECTION 4: YOUR DIGITAL PROFILE ===== */
+        .profile-section {
+            background: linear-gradient(180deg, #edf4f8 0%, #f5f1ea 100%);
+            overflow: hidden;
+        }
+
+        .profile-title {
+            font-size: 72px;
+            font-weight: 400;
+            line-height: 1.15;
+            text-align: center;
+            color: #9E9185;
+            letter-spacing: -0.04em;
+            padding: 72px 60px 0;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .profile-section.in-view .profile-title {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .profile-canvas {
+            position: relative;
+            width: 100%;
+            height: 60vh;
+            min-height: 420px;
+            margin-bottom: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Center person profile */
+        .profile-center {
+            z-index: 10;
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #e8e5de;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: width 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                        height 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                        border-radius 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                        opacity 0.5s ease;
+            opacity: 0.5;
+        }
+
+        .profile-center img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: inherit;
+        }
+
+        .profile-section.in-view .profile-center {
+            width: 220px;
+            height: 300px;
+            border-radius: 24px;
+            opacity: 1;
+        }
+
+
+        /* Biomarker blocks */
+        .bio-block {
+            position: absolute;
+            border-radius: 12px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+            overflow: hidden;
+            padding: 8px;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.2);
+            transition: opacity 0.6s ease,
+                        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .profile-section.in-view .bio-block {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .bio-block span {
+            font-size: 9px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.75);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            line-height: 1.2;
+        }
+
+        .bio-block .bio-icon {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            font-size: 16px;
+            opacity: 0.5;
+        }
+
+        /* Sizes — matching reference mosaic */
+        .bio-block.s-lg { width: 99px; height: 129px; border-radius: 20px; }
+        .bio-block.s-md { width: 105px; height: 117px; border-radius: 18px; }
+        .bio-block.s-sm { width: 48px; height: 54px; border-radius: 12px; }
+        .bio-block.s-lgsq { width: 129px; height: 129px; border-radius: 20px; }
+        .bio-block.s-wide { width: 186px; height: 78px; border-radius: 21px; }
+        .bio-block.s-xwide { width: 222px; height: 63px; border-radius: 18px; }
+        .bio-block.s-tall { width: 29px; height: 93px; border-radius: 15px; }
+        .bio-block.s-dot { width: 25px; height: 31px; border-radius: 50%; padding: 0; }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--bg-warm-2);
+            color: var(--text-muted);
+            padding: 80px 60px 40px;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            padding-bottom: 60px;
+            border-bottom: 1px solid var(--tan);
+        }
+
+        .footer-brand {
+            max-width: 280px;
+        }
+
+        .footer-logo {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--text-dark);
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+        }
+
+        .footer-tagline {
+            font-size: 15px;
+            line-height: 1.5;
+            opacity: 0.5;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 80px;
+        }
+
+        .footer-col {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-col h4 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 4px;
+        }
+
+        .footer-col a {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover {
+            color: var(--text-dark);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 32px;
+            font-size: 13px;
+            opacity: 0.4;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-social a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-social a:hover {
+            color: var(--text-dark);
+        }
+
+        /* ===== RESPONSIVE ===== */
+
+        /* Tablet */
+        @media (max-width: 1024px) {
+            .nav { padding: 24px 32px; }
+            .nav-links { gap: 28px; }
+            .nav-links a { font-size: 16px; }
+            .nav-logo { font-size: 24px; }
+
+            .hero-shape { min-height: 580px; }
+            .hero-content h1 { font-size: 72px; }
+            .hero-content { bottom: 56px; }
+            .hero-below { padding: 28px 32px 40px; }
+            .hero-buttons { bottom: 60px; }
+
+            .plan-title { font-size: 52px; padding: 80px 32px 60px; }
+            .plan-sticky { padding: 0 32px; }
+            .plan-features { padding-right: 48px; }
+            .plan-feature { font-size: 18px; }
+            .plan-phone { width: 300px; height: 620px; }
+
+            .day-sticky { padding: 0 32px; }
+            .day-tabs { gap: 48px; }
+            .day-card { height: 440px; }
+            .day-card h3 { font-size: 22px; }
+
+            .profile-title { font-size: 36px; }
+            .profile-canvas { min-height: 400px; transform: scale(0.8); transform-origin: center center; }
+
+            .footer { padding: 60px 32px 32px; }
+            .footer-links { gap: 48px; }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .nav { padding: 20px 24px; }
+            .nav-links { display: none; }
+            .nav-logo { font-size: 22px; }
+
+            .hero-shape { min-height: 420px; max-height: 600px; border-radius: 0 0 48px 48px; }
+            .hero-content { bottom: 40px; }
+            .hero-content h1 { font-size: 52px; letter-spacing: -1px; }
+            .hero-below { padding: 24px 24px 36px; }
+            .hero-below p { font-size: 17px; }
+            .hero-buttons a { padding: 12px 28px; font-size: 15px; }
+
+            .plan-title { font-size: 36px; padding: 64px 24px 48px; }
+            .plan-scroll-container { height: 250vh; }
+            .plan-sticky {
+                grid-template-columns: 1fr;
+                justify-items: center;
+                gap: 32px;
+                padding: 0 24px;
+            }
+            .plan-features { justify-self: center; padding-right: 0; padding-left: 24px; }
+            .plan-feature { font-size: 18px; line-height: 2; }
+            .plan-phone { width: 280px; height: 580px; }
+
+            .day-scroll-container { height: 350vh; }
+            .day-sticky { padding: 0 24px; }
+            .day-tabs { gap: 24px; }
+            .day-tab { font-size: 16px; }
+            .day-cards { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+            .day-card { height: 400px; }
+
+            .profile-title { font-size: 30px; padding: 48px 24px 0; }
+            .profile-canvas { min-height: 350px; transform: scale(0.5); transform-origin: center center; margin-bottom: 60px; }
+            .profile-section.in-view .profile-center { width: 120px; height: 165px; border-radius: 60px; }
+
+            .footer { padding: 48px 24px 28px; }
+            .footer-top { flex-direction: column; gap: 40px; }
+            .footer-links { gap: 40px; }
+            .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+        }
+
+        /* Small mobile */
+        @media (max-width: 390px) {
+            .hero-content h1 { font-size: 38px; }
+            .hero-buttons { flex-direction: column; gap: 12px; bottom: 40px; }
+            .plan-title, .profile-title { font-size: 30px; }
+            .day-tabs { gap: 16px; }
+            .day-tab { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== SECTION 1: HERO ===== -->
+<section class="hero">
+    <div class="hero-shape">
+        <nav class="nav">
+            <a href="#" class="nav-logo">ottavia</a>
+            <div class="nav-links">
+                <a href="#features">Download</a>
+                <a href="#about">About Us</a>
+                <a href="#day">Features</a>
+            </div>
+        </nav>
+
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1><span class="line">Wellbeing explained.</span></h1>
+                <p class="hero-sub">Your body's everyday signals,<br>turned into one intelligent next step.</p>
+            </div>
+            <div class="hero-buttons">
+                <a href="#"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>App Store</a>
+                <a href="#"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M1 2.43c0-.36.19-.68.5-.87L12.63 12 1.5 22.44c-.31-.19-.5-.51-.5-.87V2.43zm1.78-1.7L14.54 10.5l2.88-1.66L4.15.55c-.47-.27-.95-.12-1.37.18zM14.54 13.5L2.78 23.27c.42.3.9.45 1.37.18l13.27-7.69-2.88-1.66v-.6zM21.17 11.07l-3.42-1.98L14.54 12l3.21 2.91 3.42-1.98c.95-.56.95-1.3 0-1.86z"/></svg>Google Play</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero-below">
+        <div class="hero-partners">
+            <img class="garmin-logo" src="assets/garmin-2 1.png" alt="Garmin">
+            <span class="garmin-label">Authorized Partner</span>
+        </div>
+    </div>
+</section>
+
+<!-- ===== BANNER: FOREVER FREE (hidden for now) =====
+<section class="banner-section">
+    <h2 class="banner-title">Forever free<br>for the first <span>1000</span> users</h2>
+    <p class="banner-sub">Be among the first to experience Ottavia, your personal wellbeing companion, powered by your data.</p>
+    <a href="#" class="banner-btn">Get Access</a>
+</section>
+-->
+
+<!-- ===== SECTION 2: A PLAN THAT KNOWS YOU ===== -->
+<section class="plan-section" id="features">
+    <h2 class="plan-title">A plan that knows you</h2>
+
+    <div class="plan-scroll-container">
+        <div class="plan-sticky">
+            <div class="plan-features">
+                <div class="plan-feature active" data-index="0">Easy food log</div>
+                <div class="plan-feature" data-index="1">Morning reports</div>
+                <div class="plan-feature" data-index="2">After workout reports</div>
+                <div class="plan-feature" data-index="3">Unlimited memory</div>
+                <div class="plan-feature" data-index="4">Proactive coach</div>
+            </div>
+            <div class="plan-phone">
+                <div class="plan-phone-screen">
+                    <div class="plan-screen active" data-screen="0"><img src="assets/landing/chat-report-after-run.png" alt="Easy food log"></div>
+                    <div class="plan-screen" data-screen="1"><div class="plan-screen-placeholder">Morning reports</div></div>
+                    <div class="plan-screen" data-screen="2"><div class="plan-screen-placeholder">After workout reports</div></div>
+                    <div class="plan-screen" data-screen="3"><div class="plan-screen-placeholder">Unlimited memory</div></div>
+                    <div class="plan-screen" data-screen="4"><div class="plan-screen-placeholder">Proactive coach</div></div>
+                </div>
+            </div>
+            <div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== SECTION 3: DAY TIMELINE ===== -->
+<section class="day-section" id="day">
+    <div class="interstitial">
+        <p>Everything your body tells you, finally in one place. Ottavia listens, connects and shows you what actually matters.</p>
+    </div>
+    <div class="day-scroll-container">
+        <div class="day-sticky">
+            <div class="day-nav">
+                <div class="day-tabs">
+                    <div class="day-tab active" data-day="0">Morning</div>
+                    <div class="day-tab" data-day="1">Midday</div>
+                    <div class="day-tab" data-day="2">Afternoon</div>
+                    <div class="day-tab" data-day="3">Evening</div>
+                </div>
+                <div class="day-line">
+                    <div class="day-indicator"></div>
+                </div>
+            </div>
+
+            <div class="day-cards">
+                <div class="day-card" data-day-card="0">
+                    <div class="day-card-text visible" data-day-text="0">
+                        <h3>Start your day with a full recovery report</h3>
+                    </div>
+                    <div class="day-card-text hidden" data-day-text="1">
+                        <h3>Log your lunch in seconds with a photo</h3>
+                    </div>
+                    <div class="day-card-text hidden" data-day-text="2">
+                        <h3>Get a pre-workout check before training</h3>
+                    </div>
+                    <div class="day-card-text hidden" data-day-text="3">
+                        <h3>Review your full day and plan tomorrow</h3>
+                    </div>
+                </div>
+                <div class="day-card" data-day-card="1">
+                    <div class="day-card-text visible" data-day-text="0">
+                        <h3>See how last night's sleep affects today</h3>
+                    </div>
+                    <div class="day-card-text hidden" data-day-text="1">
+                        <h3>Track macros against your daily targets</h3>
+                    </div>
+                    <div class="day-card-text hidden" data-day-text="2">
+                        <h3>Ottavia adjusts intensity based on your HRV</h3>
+                    </div>
+                    <div class="day-card-text hidden" data-day-text="3">
+                        <h3>Wind down with personalized recovery cues</h3>
+                    </div>
+                </div>
+                <div class="day-card" data-day-card="2">
+                    <div class="day-card-text visible" data-day-text="0">
+                        <h3>Coach cues timed to your morning routine</h3>
+                    </div>
+                    <div class="day-card-text hidden" data-day-text="1">
+                        <h3>Hydration reminders based on your activity</h3>
+                    </div>
+                    <div class="day-card-text hidden" data-day-text="2">
+                        <h3>Real-time guidance during your session</h3>
+                    </div>
+                    <div class="day-card-text hidden" data-day-text="3">
+                        <h3>Get the best sleep of your life</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== SECTION 4: YOUR DIGITAL PROFILE ===== -->
+<section class="profile-section" id="about">
+    <h2 class="profile-title">Your digital profile</h2>
+
+    <div class="profile-canvas">
+        <div class="profile-center">
+            <img src="assets/women.png" alt="Profile">
+        </div>
+        <!-- Biomarker blocks — positioned by JS into fingerprint pattern -->
+    </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <div class="footer-logo">ottavia</div>
+                <p class="footer-tagline">Make it about you</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h4>Product</h4>
+                    <a href="#">Features</a>
+                    <a href="#">How it works</a>
+                    <a href="#">Pricing</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <a href="#">About</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Careers</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <a href="#">Help Center</a>
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 Ottavia. All rights reserved.</span>
+            <div class="footer-social">
+                <a href="#">Instagram</a>
+                <a href="#">Twitter</a>
+                <a href="#">LinkedIn</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // === STICKY NAV ===
+    const nav = document.querySelector('.nav');
+    const heroShape = document.querySelector('.hero-shape');
+    let lastScroll = 0;
+
+    window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        const heroBottom = heroShape.offsetHeight;
+        const scrollingDown = y > lastScroll;
+
+        if (y <= 40) {
+            // At top: visible, no bg, white text
+            nav.classList.remove('scrolled', 'hidden');
+        } else if (scrollingDown && y > heroBottom) {
+            // Scrolling down past hero: hide
+            nav.classList.add('hidden');
+            nav.classList.remove('scrolled');
+        } else {
+            // Scrolling up or within hero: show with glass bg
+            nav.classList.remove('hidden');
+            nav.classList.add('scrolled');
+        }
+
+        lastScroll = y;
+    }, { passive: true });
+
+    const scrollContainer = document.querySelector('.plan-scroll-container');
+    const features = document.querySelectorAll('.plan-feature');
+    const screens = document.querySelectorAll('.plan-screen');
+    const featureCount = features.length;
+
+    function setActiveFeature(index) {
+        features.forEach((f, i) => f.classList.toggle('active', i === index));
+        screens.forEach((s, i) => s.classList.toggle('active', i === index));
+    }
+
+    function updateFeatures() {
+        const rect = scrollContainer.getBoundingClientRect();
+        const scrollHeight = scrollContainer.offsetHeight - window.innerHeight;
+        const progress = Math.max(0, Math.min(1, -rect.top / scrollHeight));
+        const activeIndex = Math.min(featureCount - 1, Math.floor(progress * featureCount));
+        setActiveFeature(activeIndex);
+    }
+
+    window.addEventListener('scroll', updateFeatures, { passive: true });
+    updateFeatures();
+
+    // Tap to select feature
+    features.forEach(f => {
+        f.addEventListener('click', () => {
+            setActiveFeature(parseInt(f.dataset.index));
+        });
+    });
+
+    // === DAY TIMELINE ===
+    const dayScrollContainer = document.querySelector('.day-scroll-container');
+    const dayTabs = document.querySelectorAll('.day-tab');
+    const dayTexts = document.querySelectorAll('.day-card-text');
+    const dayIndicator = document.querySelector('.day-indicator');
+    const dayCards = document.querySelectorAll('.day-card');
+    const dayCount = dayTabs.length;
+    let currentDay = 0;
+    let dayLocked = false;
+
+    const dayCardColors = [
+        ['#CCC8B2', '#B8C4C0', '#C4BFB2'],
+        ['#B2C8CC', '#C0B8C4', '#B2BCC8'],
+        ['#C8B2CC', '#B2CCB8', '#CCB2B8'],
+        ['#1a1a18', '#2a2a26', '#1e1e1a']
+    ];
+
+    function setDayActive(index) {
+        currentDay = index;
+
+        dayTabs.forEach((t, i) => {
+            t.classList.toggle('active', i === index);
+        });
+
+        // Move indicator under active tab
+        const activeTab = dayTabs[index];
+        const tabsRect = activeTab.parentElement.getBoundingClientRect();
+        const tabRect = activeTab.getBoundingClientRect();
+        dayIndicator.style.left = (tabRect.left - tabsRect.left) + 'px';
+        dayIndicator.style.width = tabRect.width + 'px';
+
+        // Swap card text
+        dayTexts.forEach(t => {
+            const textDay = parseInt(t.dataset.dayText);
+            t.classList.toggle('visible', textDay === index);
+            t.classList.toggle('hidden', textDay !== index);
+        });
+
+        // Change card colors
+        dayCards.forEach((card, i) => {
+            card.style.background = dayCardColors[index][i] || dayCardColors[index][0];
+        });
+    }
+
+    // Tap navigation
+    dayTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const index = parseInt(tab.dataset.day);
+            setDayActive(index);
+            dayLocked = true;
+            clearTimeout(dayLocked._timeout);
+            dayLocked._timeout = setTimeout(() => { dayLocked = false; }, 1000);
+        });
+    });
+
+    // Scroll navigation
+    function updateDay() {
+        if (dayLocked) return;
+        const rect = dayScrollContainer.getBoundingClientRect();
+        const scrollHeight = dayScrollContainer.offsetHeight - window.innerHeight;
+        const progress = Math.max(0, Math.min(1, -rect.top / scrollHeight));
+        const activeIndex = Math.min(dayCount - 1, Math.floor(progress * dayCount));
+
+        if (activeIndex !== currentDay) {
+            setDayActive(activeIndex);
+        }
+    }
+
+    window.addEventListener('scroll', updateDay, { passive: true });
+
+    // Init indicator position
+    requestAnimationFrame(() => setDayActive(0));
+
+    // === DIGITAL PROFILE ===
+    const profileSection = document.querySelector('.profile-section');
+    const profileCanvas = document.querySelector('.profile-canvas');
+
+    // Block layout — matches reference mosaic exactly
+    const blocks = [
+        // Top-left: tall rectangle
+        { label: 'Sleep', icon: '😴', size: 's-lg', color: '#C8C5B5', x: -117, y: -99 },
+        // Top-center: small square
+        { size: 's-sm', color: '#C5C3B2', x: 3, y: -156 },
+        // Top-right: medium rectangle
+        { label: 'Recovery', icon: '💚', size: 's-md', color: '#CDCABC', x: 129, y: -87 },
+        // Dot far-right
+        { size: 's-dot', color: '#C8C5B4', x: 219, y: -45 },
+        // Dot far-left
+        { size: 's-dot', color: '#C5C2B1', x: -198, y: -18 },
+        // Wide rect left
+        { label: 'Nutrition', icon: '🥗', size: 's-wide', color: '#C2BFB0', x: -144, y: 42 },
+        // Large square right
+        { label: 'Activity', icon: '🏃', size: 's-lgsq', color: '#CCCABB', x: 159, y: 48 },
+        // Extra-wide rect bottom-left
+        { label: 'Labs', icon: '🔬', size: 's-xwide', color: '#C5C2B2', x: -90, y: 156 },
+        // Thin tall bar bottom-center
+        { size: 's-tall', color: '#C2C0B0', x: 48, y: 159 },
+        // Dot bottom-right
+        { size: 's-dot', color: '#C5C3B2', x: 89, y: 195 },
+    ];
+
+    // Create blocks at explicit positions — CSS .in-view handles animation
+    blocks.forEach((bm, i) => {
+        const el = document.createElement('div');
+        el.className = `bio-block ${bm.size}`;
+        el.style.background = bm.color;
+
+        let inner = '';
+        if (bm.icon) inner += `<span class="bio-icon">${bm.icon}</span>`;
+        if (bm.label) inner += `<span>${bm.label}</span>`;
+        el.innerHTML = inner;
+
+        el.style.left = `calc(50% + ${bm.x}px)`;
+        el.style.top = `calc(50% + ${bm.y}px)`;
+        el.style.transitionDelay = `${0.1 + i * 0.04}s`;
+
+        profileCanvas.appendChild(el);
+    });
+
+    // Repeatable: toggles .in-view on enter/leave so animation replays on every scroll
+    const profileObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            profileSection.classList.toggle('in-view', entry.isIntersecting);
+        });
+    }, { threshold: 0.15 });
+
+    profileObserver.observe(profileSection);
+</script>
+
+</body>
+</html>

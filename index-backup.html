@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ottavia — Make it about you</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ===== RESET & BASE ===== */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --tan: #ccc8b2;
+            --tan-light: #e6e3d5;
+            --bg-warm-1: #edf4f8;
+            --bg-warm-2: #f5f1ea;
+            --text-dark: #1a1a18;
+            --text-muted: #8c8875;
+            --card-bg: var(--tan);
+            --radius-lg: 50px;
+            --radius-md: 40px;
+            --radius-sm: 24px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-dark);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            background: var(--bg-warm-2);
+        }
+
+        /* ===== SECTION 1: HERO ===== */
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            min-height: 700px;
+            max-height: 960px;
+            overflow: hidden;
+            background: linear-gradient(151deg, #edf4f8 2.7%, #f5f1ea 21.5%, #edf4f8 33.2%, #f5f1ea 40%);
+        }
+
+        .hero-image {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 1440px;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                180deg,
+                rgba(0,0,0,0.15) 0%,
+                rgba(0,0,0,0.05) 30%,
+                rgba(0,0,0,0.25) 100%
+            );
+        }
+
+        /* Nav */
+        .nav {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 28px 60px;
+        }
+
+        .nav-logo {
+            font-size: 28px;
+            font-weight: 600;
+            color: white;
+            opacity: 0.89;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            font-size: 18px;
+            font-weight: 400;
+            color: white;
+            opacity: 0.89;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .nav-links a:hover { opacity: 1; }
+
+        /* Hero content */
+        .hero-content {
+            position: absolute;
+            inset: 0;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 24px;
+        }
+
+        .hero-content h1 {
+            font-size: 80px;
+            font-weight: 500;
+            color: white;
+            opacity: 0.91;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            max-width: 769px;
+        }
+
+        .hero-content p {
+            font-size: 22px;
+            font-weight: 300;
+            color: white;
+            line-height: 1.55;
+            max-width: 680px;
+            margin-top: 12px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            margin-top: 40px;
+        }
+
+        .hero-buttons a {
+            display: inline-block;
+            background: white;
+            color: black;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 12px 36px;
+            border-radius: var(--radius-lg);
+            text-decoration: none;
+            opacity: 0.91;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .hero-buttons a:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        /* ===== SECTION 2: A PLAN THAT KNOWS YOU ===== */
+        .plan-section {
+            padding: 120px 60px;
+            background: linear-gradient(180deg, #f5f1ea 0%, #edf4f8 50%, #f5f1ea 100%);
+        }
+
+        .plan-title {
+            font-size: 72px;
+            font-weight: 400;
+            line-height: 1.15;
+            text-align: center;
+            background: linear-gradient(90deg, var(--tan) 0%, var(--tan-light) 50%, var(--tan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 80px;
+        }
+
+        .plan-layout {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 80px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .plan-features {
+            flex: 0 0 280px;
+            padding-top: 40px;
+        }
+
+        .plan-feature {
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--text-dark);
+            line-height: 1.8;
+            cursor: default;
+            transition: opacity 0.3s;
+            padding: 4px 0;
+            position: relative;
+        }
+
+        .plan-feature.active {
+            opacity: 1;
+        }
+
+        .plan-feature.active::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background: var(--text-dark);
+            border-radius: 50%;
+        }
+
+        .plan-feature.muted {
+            opacity: 0.2;
+        }
+
+        .plan-phone {
+            width: 380px;
+            height: 780px;
+            background: var(--tan);
+            border-radius: var(--radius-lg);
+            flex-shrink: 0;
+        }
+
+        /* ===== SECTION 3: DAY TIMELINE ===== */
+        .day-section {
+            padding: 100px 60px 120px;
+            background: linear-gradient(180deg, #f5f1ea 0%, #edf4f8 100%);
+        }
+
+        .day-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .day-tab {
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--text-muted);
+            opacity: 0.4;
+            cursor: pointer;
+            transition: opacity 0.3s;
+            padding-bottom: 16px;
+        }
+
+        .day-tab.active {
+            opacity: 1;
+        }
+
+        .day-line {
+            width: 100%;
+            max-width: 1200px;
+            height: 2px;
+            background: var(--tan);
+            opacity: 0.3;
+            margin: 0 auto 16px;
+            position: relative;
+        }
+
+        .day-line::after {
+            content: '';
+            position: absolute;
+            left: 30%;
+            top: -5px;
+            width: 120px;
+            height: 12px;
+            background: var(--tan);
+            border-radius: 6px;
+        }
+
+        .day-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 1400px;
+            margin: 48px auto 0;
+        }
+
+        .day-card {
+            background: var(--tan);
+            border-radius: var(--radius-md);
+            height: 680px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 40px 32px;
+        }
+
+        .day-card h3 {
+            font-size: 28px;
+            font-weight: 500;
+            color: white;
+            opacity: 0.91;
+            line-height: 1.35;
+            max-width: 320px;
+        }
+
+        /* ===== SECTION 4: YOUR DIGITAL PROFILE ===== */
+        .profile-section {
+            padding: 120px 60px 160px;
+            background: linear-gradient(180deg, #edf4f8 0%, #f5f1ea 100%);
+        }
+
+        .profile-title {
+            font-size: 72px;
+            font-weight: 400;
+            line-height: 1.15;
+            text-align: center;
+            background: linear-gradient(90deg, var(--tan) 0%, var(--tan-light) 50%, var(--tan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 80px;
+        }
+
+        .profile-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            height: 600px;
+        }
+
+        .profile-card {
+            position: absolute;
+            background: var(--tan);
+            border-radius: var(--radius-md);
+        }
+
+        /* Cards positioned to match Figma scatter layout */
+        .profile-card.pc-1 { width: 250px; height: 380px; left: 38%; top: 12%; z-index: 3; }
+        .profile-card.pc-2 { width: 150px; height: 230px; left: 22%; top: 6%; opacity: 0.45; }
+        .profile-card.pc-3 { width: 250px; height: 230px; left: 60%; top: 28%; opacity: 0.45; }
+        .profile-card.pc-4 { width: 165px; height: 245px; left: 62%; top: 3%; opacity: 0.45; }
+        .profile-card.pc-5 { width: 100px; height: 120px; left: 45%; top: 0%; opacity: 0.8; }
+        .profile-card.pc-6 { width: 52px; height: 62px; left: 15%; top: 42%; opacity: 0.6; }
+        .profile-card.pc-7 { width: 52px; height: 62px; left: 81%; top: 38%; opacity: 0.6; }
+        .profile-card.pc-8 { width: 52px; height: 62px; left: 65%; top: 68%; opacity: 0.6; }
+        .profile-card.pc-9 { width: 280px; height: 160px; left: 13%; top: 58%; }
+        .profile-card.pc-10 { width: 58px; height: 268px; left: 55%; top: 54%; opacity: 0.8; }
+        .profile-card.pc-11 { width: 330px; height: 125px; left: 22%; top: 80%; opacity: 0.45; }
+
+        /* ===== RESPONSIVE ===== */
+
+        /* Tablet */
+        @media (max-width: 1024px) {
+            .nav { padding: 24px 32px; }
+            .nav-links { gap: 28px; }
+            .nav-links a { font-size: 16px; }
+            .nav-logo { font-size: 24px; }
+
+            .hero-content h1 { font-size: 56px; }
+            .hero-content p { font-size: 18px; }
+
+            .plan-section { padding: 80px 32px; }
+            .plan-title { font-size: 52px; }
+            .plan-layout { gap: 48px; }
+            .plan-features { flex: 0 0 240px; }
+            .plan-feature { font-size: 18px; }
+            .plan-phone { width: 300px; height: 620px; }
+
+            .day-section { padding: 80px 32px; }
+            .day-tabs { gap: 48px; }
+            .day-card { height: 520px; }
+            .day-card h3 { font-size: 22px; }
+
+            .profile-section { padding: 80px 32px 120px; }
+            .profile-title { font-size: 52px; }
+            .profile-grid { height: 450px; }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .nav { padding: 20px 24px; }
+            .nav-links { display: none; }
+            .nav-logo { font-size: 22px; }
+
+            .hero { min-height: 600px; max-height: 800px; }
+            .hero-content h1 { font-size: 40px; max-width: 400px; }
+            .hero-content p { font-size: 17px; max-width: 360px; }
+            .hero-buttons a { padding: 12px 28px; font-size: 15px; }
+
+            .plan-section { padding: 64px 24px; }
+            .plan-title { font-size: 36px; margin-bottom: 48px; }
+            .plan-layout {
+                flex-direction: column;
+                align-items: center;
+                gap: 40px;
+            }
+            .plan-features { flex: none; width: 100%; padding-top: 0; text-align: center; }
+            .plan-feature.active::before { display: none; }
+            .plan-feature { font-size: 18px; line-height: 2; }
+            .plan-phone { width: 280px; height: 580px; }
+
+            .day-section { padding: 64px 24px; }
+            .day-tabs { gap: 24px; flex-wrap: wrap; }
+            .day-tab { font-size: 16px; }
+            .day-cards { grid-template-columns: 1fr; max-width: 400px; }
+            .day-card { height: 480px; }
+
+            .profile-section { padding: 64px 24px 100px; }
+            .profile-title { font-size: 36px; margin-bottom: 48px; }
+            .profile-grid {
+                height: 400px;
+                max-width: 360px;
+            }
+            /* Scale down cards on mobile */
+            .profile-card.pc-1 { width: 180px; height: 280px; }
+            .profile-card.pc-2 { width: 100px; height: 160px; }
+            .profile-card.pc-3 { width: 170px; height: 160px; }
+            .profile-card.pc-4 { width: 110px; height: 170px; }
+            .profile-card.pc-5 { width: 70px; height: 85px; }
+            .profile-card.pc-9 { width: 200px; height: 110px; }
+            .profile-card.pc-10 { width: 40px; height: 190px; }
+            .profile-card.pc-11 { width: 230px; height: 90px; }
+        }
+
+        /* Small mobile */
+        @media (max-width: 390px) {
+            .hero-content h1 { font-size: 34px; }
+            .hero-content p { font-size: 16px; }
+            .hero-buttons { flex-direction: column; gap: 12px; }
+            .plan-title, .profile-title { font-size: 30px; }
+            .day-tabs { gap: 16px; }
+            .day-tab { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== SECTION 1: HERO ===== -->
+<section class="hero">
+    <img class="hero-image" src="assets/landing-mountains.png" alt="Mountain landscape">
+    <div class="hero-overlay"></div>
+
+    <nav class="nav">
+        <div class="nav-logo">ottavia</div>
+        <div class="nav-links">
+            <a href="#features">Download</a>
+            <a href="#about">About Us</a>
+            <a href="#day">Features</a>
+        </div>
+    </nav>
+
+    <div class="hero-content">
+        <h1>Make it about you</h1>
+        <p>Ottavia turns your data into personalized insights and recommendations across sleep, fitness, nutrition, and more.</p>
+        <div class="hero-buttons">
+            <a href="#">Apple store</a>
+            <a href="#">Google Play</a>
+        </div>
+    </div>
+</section>
+
+<!-- ===== SECTION 2: A PLAN THAT KNOWS YOU ===== -->
+<section class="plan-section" id="features">
+    <h2 class="plan-title">A plan that knows you</h2>
+
+    <div class="plan-layout">
+        <div class="plan-features">
+            <div class="plan-feature active">Easy food log</div>
+            <div class="plan-feature muted">Morning reports</div>
+            <div class="plan-feature muted">After workout reports</div>
+            <div class="plan-feature muted">Unlimited memory</div>
+            <div class="plan-feature muted">Proactive coach</div>
+        </div>
+        <div class="plan-phone"></div>
+    </div>
+</section>
+
+<!-- ===== SECTION 3: DAY TIMELINE ===== -->
+<section class="day-section" id="day">
+    <div class="day-tabs">
+        <div class="day-tab">Morning</div>
+        <div class="day-tab active">Midday</div>
+        <div class="day-tab">Afternoon</div>
+        <div class="day-tab">Evening</div>
+    </div>
+    <div class="day-line"></div>
+
+    <div class="day-cards">
+        <div class="day-card">
+            <h3>Get the best sleep of your life</h3>
+        </div>
+        <div class="day-card">
+            <h3>Get the best sleep of your life</h3>
+        </div>
+        <div class="day-card">
+            <h3>Get the best sleep of your life</h3>
+        </div>
+    </div>
+</section>
+
+<!-- ===== SECTION 4: YOUR DIGITAL PROFILE ===== -->
+<section class="profile-section" id="about">
+    <h2 class="profile-title">Your digital profile</h2>
+
+    <div class="profile-grid">
+        <div class="profile-card pc-1"></div>
+        <div class="profile-card pc-2"></div>
+        <div class="profile-card pc-3"></div>
+        <div class="profile-card pc-4"></div>
+        <div class="profile-card pc-5"></div>
+        <div class="profile-card pc-6"></div>
+        <div class="profile-card pc-7"></div>
+        <div class="profile-card pc-8"></div>
+        <div class="profile-card pc-9"></div>
+        <div class="profile-card pc-10"></div>
+        <div class="profile-card pc-11"></div>
+    </div>
+</section>
+
+</body>
+</html>

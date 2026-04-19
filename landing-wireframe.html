@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ottavia Landing Page — Wireframe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FAFAF8;
+            --bg-warm: #F4F2ED;
+            --bg-dark: #0F1012;
+            --text-primary: #0F1012;
+            --text-secondary: #6B6B6B;
+            --text-muted: #A3A3A3;
+            --text-on-dark: #FAFAF8;
+            --accent: #6161FF;
+            --accent-soft: #EDEDFF;
+            --card-bg: #FFFFFF;
+            --card-border: #EBEBEB;
+            --section-gap: 120px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Figtree', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== WIREFRAME BADGE ===== */
+        .wireframe-badge {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: #FF3B30;
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 100px;
+            z-index: 1000;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* ===== SECTION LABELS ===== */
+        .section-label {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .section-note {
+            background: #FFF3CD;
+            border-left: 3px solid #F59E0B;
+            padding: 12px 16px;
+            font-size: 13px;
+            color: #92400E;
+            border-radius: 0 8px 8px 0;
+            margin-top: 16px;
+            line-height: 1.5;
+        }
+
+        .ref-tag {
+            display: inline-block;
+            background: #E8F5E9;
+            color: #2E7D32;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 100px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        /* ===== LAYOUT ===== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        section + section {
+            border-top: 1px dashed #DDD;
+        }
+
+        /* ===== 1. NAV ===== */
+        .nav {
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            background: var(--bg);
+            z-index: 100;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .nav .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            font-weight: 800;
+            font-size: 22px;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .nav-cta {
+            background: var(--text-primary);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        /* ===== 2. HERO ===== */
+        .hero {
+            padding: 100px 0 80px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            max-width: 800px;
+            margin: 0 auto 24px;
+        }
+
+        .hero h1 .highlight {
+            color: var(--text-muted);
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: var(--text-secondary);
+            max-width: 540px;
+            margin: 0 auto 40px;
+            line-height: 1.5;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-primary {
+            background: var(--text-primary);
+            color: white;
+            padding: 16px 36px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary {
+            color: var(--text-secondary);
+            padding: 16px 24px;
+            font-weight: 500;
+            font-size: 16px;
+            text-decoration: none;
+        }
+
+        .hero-badges {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            margin-top: 32px;
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .hero-image {
+            margin-top: 64px;
+            background: var(--bg-warm);
+            border-radius: 24px;
+            height: 480px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 14px;
+            border: 2px dashed var(--card-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 24px;
+            opacity: 0.4;
+        }
+
+        .hero-image .overlay-text {
+            position: absolute;
+            background: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-primary);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+
+        /* ===== 3. TRUST BAR ===== */
+        .trust-bar {
+            padding: 40px 0;
+            text-align: center;
+            background: var(--bg);
+        }
+
+        .trust-bar p {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .trust-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 48px;
+            flex-wrap: wrap;
+        }
+
+        .trust-logo-placeholder {
+            width: 100px;
+            height: 32px;
+            background: var(--card-border);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* ===== 4. PILLARS ===== */
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 48px;
+        }
+
+        .pillar-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 32px 24px;
+            text-align: left;
+        }
+
+        .pillar-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-soft);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .pillar-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .pillar-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* ===== 5. PRODUCT SHOWCASE ===== */
+        .showcase {
+            background: var(--bg-warm);
+        }
+
+        .showcase-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .showcase-header h2 {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin-bottom: 16px;
+        }
+
+        .showcase-header p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .showcase-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+            margin-bottom: 80px;
+        }
+
+        .showcase-split.reverse {
+            direction: rtl;
+        }
+
+        .showcase-split.reverse > * {
+            direction: ltr;
+        }
+
+        .showcase-phone {
+            background: var(--card-bg);
+            border-radius: 32px;
+            height: 560px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed var(--card-border);
+            font-size: 14px;
+            color: var(--text-muted);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.06);
+        }
+
+        .showcase-content h3 {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 16px;
+        }
+
+        .showcase-content p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .showcase-content .feature-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .showcase-content .feature-list li {
+            padding: 8px 0;
+            font-size: 15px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .showcase-content .feature-list li::before {
+            content: "✓";
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* ===== 6. SCENARIOS ===== */
+        .scenarios-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .scenarios-header h2 {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin-bottom: 16px;
+        }
+
+        .scenarios-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .scenario-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 40px 32px;
+            min-height: 280px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scenario-card .scenario-time {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .scenario-card h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .scenario-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            max-width: 320px;
+        }
+
+        .scenario-card .scenario-preview {
+            position: absolute;
+            bottom: -20px;
+            right: 24px;
+            width: 180px;
+            height: 200px;
+            background: var(--bg-warm);
+            border-radius: 16px 16px 0 0;
+            border: 2px dashed var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* ===== 7. DIFFERENTIATOR ===== */
+        .diff {
+            background: var(--bg-dark);
+            color: var(--text-on-dark);
+        }
+
+        .diff-content {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .diff h2 {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin-bottom: 24px;
+        }
+
+        .diff h2 .soft {
+            color: #666;
+        }
+
+        .diff p {
+            font-size: 18px;
+            color: #999;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .diff-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 56px;
+            text-align: left;
+        }
+
+        .diff-item h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .diff-item p {
+            font-size: 14px;
+            color: #888;
+            line-height: 1.5;
+        }
+
+        /* ===== 8. SOCIAL PROOF ===== */
+        .social-proof-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .social-proof-header h2 {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin-bottom: 12px;
+        }
+
+        .social-proof-header p {
+            font-size: 18px;
+            color: var(--text-secondary);
+        }
+
+        .testimonial-row {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding-bottom: 16px;
+        }
+
+        .testimonial-card {
+            flex: 0 0 340px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 28px 24px;
+        }
+
+        .testimonial-card .stars {
+            color: #F59E0B;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .testimonial-card blockquote {
+            font-size: 15px;
+            line-height: 1.5;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .testimonial-card .author {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* ===== 9. HOW IT WORKS ===== */
+        .how-header {
+            text-align: center;
+            margin-bottom: 56px;
+        }
+
+        .how-header h2 {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin-bottom: 12px;
+        }
+
+        .how-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            text-align: center;
+        }
+
+        .how-step .step-number {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-soft);
+            color: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+            margin: 0 auto 20px;
+        }
+
+        .how-step h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .how-step p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* ===== 10. FINAL CTA ===== */
+        .final-cta {
+            text-align: center;
+            position: relative;
+            background: var(--bg-warm);
+            padding: 100px 0;
+            overflow: hidden;
+        }
+
+        .final-cta h2 {
+            font-size: 56px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin-bottom: 16px;
+        }
+
+        .final-cta p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 460px;
+            margin: 0 auto 40px;
+            line-height: 1.5;
+        }
+
+        .store-badges {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .store-badge {
+            background: var(--text-primary);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ===== 11. FOOTER ===== */
+        footer {
+            background: var(--bg-dark);
+            color: #999;
+            padding: 64px 0 32px;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-brand p {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-top: 12px;
+            color: #666;
+        }
+
+        .footer-col h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .footer-col a {
+            display: block;
+            font-size: 14px;
+            color: #888;
+            text-decoration: none;
+            margin-bottom: 10px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #222;
+            padding-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #555;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 40px; letter-spacing: -1px; }
+            .pillars-grid { grid-template-columns: repeat(2, 1fr); }
+            .showcase-split { grid-template-columns: 1fr; }
+            .scenarios-grid { grid-template-columns: 1fr; }
+            .diff-grid { grid-template-columns: 1fr; }
+            .how-steps { grid-template-columns: 1fr; gap: 32px; }
+            .footer-top { grid-template-columns: 1fr 1fr; }
+            .hero-cta-group { flex-direction: column; }
+            .showcase-header h2, .scenarios-header h2, .social-proof-header h2, .how-header h2, .diff h2, .final-cta h2 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="wireframe-badge">WIREFRAME — NOT FINAL DESIGN</div>
+
+<!-- ===== 1. NAVIGATION ===== -->
+<nav class="nav">
+    <div class="container">
+        <div class="nav-logo">Ottavia</div>
+        <div class="nav-links">
+            <span>How it works</span>
+            <span>Features</span>
+            <span>About</span>
+            <a href="#" class="nav-cta">Download App</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ===== 2. HERO ===== -->
+<section class="hero">
+    <div class="container">
+        <span class="section-label">Section 1 — Hero</span>
+
+        <h1>Your data already knows. <span class="highlight">Now you will too.</span></h1>
+
+        <p>Ottavia turns your wearable data into specific, actionable guidance across sleep, nutrition, training and recovery.</p>
+
+        <div class="hero-cta-group">
+            <a href="#" class="btn-primary">Download Free →</a>
+            <a href="#" class="btn-secondary">See how it works</a>
+        </div>
+
+        <div class="hero-badges">
+            <span>★ 4.8 on App Store</span>
+            <span>·</span>
+            <span>Works with Garmin</span>
+            <span>·</span>
+            <span>Free to use</span>
+        </div>
+
+        <div class="hero-image">
+            <img src="assets/landing-mountains.png" alt="Hero background">
+            <span class="overlay-text">📱 App screenshot or lifestyle image + phone mockup here</span>
+        </div>
+
+        <div class="section-note">
+            <strong>Pattern:</strong> Bevel-style hero — big headline, single CTA, nature imagery.<br>
+            <strong>Imagery options:</strong> (A) Outdoor athlete with phone overlay, (B) Clean phone mockup on gradient, (C) Split — lifestyle left, app UI right.<br>
+            <strong>Headline uses the Bevel pattern</strong> of dimming the second part for visual hierarchy.
+        </div>
+    </div>
+</section>
+
+<!-- ===== 3. TRUST BAR ===== -->
+<section class="trust-bar">
+    <div class="container">
+        <span class="section-label">Section 2 — Trust Bar</span>
+        <p>Integrates with</p>
+        <div class="trust-logos">
+            <div class="trust-logo-placeholder">Garmin</div>
+            <div class="trust-logo-placeholder">Apple Watch</div>
+            <div class="trust-logo-placeholder">Whoop</div>
+            <div class="trust-logo-placeholder">Oura</div>
+        </div>
+        <div class="section-note">
+            <strong>Purpose:</strong> Instantly answers "does it work with my device?" — the #1 question.<br>
+            <strong>Start with Garmin only (real). Others = "Coming soon"</strong> to stay honest per brand guidelines.
+            <span class="ref-tag">Like Oura</span>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 4. FEATURE PILLARS ===== -->
+<section>
+    <div class="container">
+        <span class="section-label">Section 3 — Feature Pillars</span>
+
+        <div class="pillars-grid">
+            <div class="pillar-card">
+                <div class="pillar-icon">🏃</div>
+                <h3>Train smarter</h3>
+                <p>Understand your training load, recovery readiness and when to push or rest. Grounded in your actual data.</p>
+            </div>
+            <div class="pillar-card">
+                <div class="pillar-icon">🥗</div>
+                <h3>Fuel with clarity</h3>
+                <p>Log meals with a photo. Get instant feedback on how it fits your goals, not generic calorie counts.</p>
+            </div>
+            <div class="pillar-card">
+                <div class="pillar-icon">😴</div>
+                <h3>Sleep with purpose</h3>
+                <p>See how your sleep connects to performance, recovery and daily energy. Patterns, not just numbers.</p>
+            </div>
+            <div class="pillar-card">
+                <div class="pillar-icon">💬</div>
+                <h3>Ask anything</h3>
+                <p>One conversation. All your data. Ask questions and get answers that actually know your history.</p>
+            </div>
+        </div>
+
+        <div class="section-note">
+            <strong>Pattern:</strong> Bevel's 4 feature cards. Short headline + 1 sentence. <br>
+            <strong>Key difference:</strong> Our 4th pillar is the chat/reasoning — this is our differentiator. Bevel doesn't have it.
+            <span class="ref-tag">Like Bevel</span>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 5. PRODUCT SHOWCASE ===== -->
+<section class="showcase">
+    <div class="container">
+        <span class="section-label">Section 4 — Product Showcase (phone mockups)</span>
+
+        <div class="showcase-header">
+            <h2>See what Ottavia sees</h2>
+            <p>Your data, connected and understood.</p>
+        </div>
+
+        <!-- Showcase 1: Chat -->
+        <div class="showcase-split">
+            <div class="showcase-phone">📱 App screenshot: Chat conversation<br>showing a real data-grounded response</div>
+            <div class="showcase-content">
+                <h3>A conversation that knows your data</h3>
+                <p>Ask "How's my recovery?" and get an answer that references last night's sleep, yesterday's workout and your HRV trend. Not a generic tip.</p>
+                <ul class="feature-list">
+                    <li>Grounded in your actual metrics</li>
+                    <li>Cross-domain connections (sleep → training → nutrition)</li>
+                    <li>Honest about uncertainty</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Showcase 2: Nutrition -->
+        <div class="showcase-split reverse">
+            <div class="showcase-phone">📱 App screenshot: Food logging<br>camera capture → confirmation card</div>
+            <div class="showcase-content">
+                <h3>Log meals in seconds</h3>
+                <p>Take a photo. Ottavia identifies the food, estimates the macros, and shows how it fits your daily targets and training plan.</p>
+                <ul class="feature-list">
+                    <li>Camera-first food logging</li>
+                    <li>Instant macro breakdown</li>
+                    <li>Connected to your goals and deficit</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Showcase 3: Insights -->
+        <div class="showcase-split">
+            <div class="showcase-phone">📱 App screenshot: Proactive insight<br>push notification → detail view</div>
+            <div class="showcase-content">
+                <h3>Guidance that comes to you</h3>
+                <p>Ottavia notices what you miss. A dip in HRV, a pattern in your sleep, a nutrition gap before a big training day. It tells you before you ask.</p>
+                <ul class="feature-list">
+                    <li>Proactive push insights after Garmin syncs</li>
+                    <li>Coach cues timed to your day</li>
+                    <li>Context, not just alerts</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section-note">
+            <strong>Pattern:</strong> Oura's split-screen product showcase — phone mockup + text description, alternating sides.<br>
+            <strong>We need 3-4 real app screenshots.</strong> These sell the product more than anything else on the page.<br>
+            <strong>Content priority:</strong> Chat first (differentiator), Nutrition second (visual), Insights third (proactive value).
+            <span class="ref-tag">Like Oura</span>
+            <span class="ref-tag">Like Bevel</span>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 6. REAL-LIFE SCENARIOS ===== -->
+<section>
+    <div class="container">
+        <span class="section-label">Section 5 — Daily Scenarios</span>
+
+        <div class="scenarios-header">
+            <h2>Designed for your real day</h2>
+        </div>
+
+        <div class="scenarios-grid">
+            <div class="scenario-card">
+                <div class="scenario-time">6:30 AM · Morning</div>
+                <h3>Waking up</h3>
+                <p>Your Garmin synced overnight. Ottavia tells you how you recovered and whether today's planned run makes sense.</p>
+                <div class="scenario-preview">Chat screenshot</div>
+            </div>
+            <div class="scenario-card">
+                <div class="scenario-time">12:30 PM · Lunch</div>
+                <h3>Logging a meal</h3>
+                <p>Snap a photo of your lunch. See how it fits your protein target and calorie budget for the day.</p>
+                <div class="scenario-preview">Nutrition screenshot</div>
+            </div>
+            <div class="scenario-card">
+                <div class="scenario-time">5:00 PM · Pre-workout</div>
+                <h3>Before training</h3>
+                <p>Ottavia notices you slept poorly and your HRV is low. It suggests adjusting intensity today.</p>
+                <div class="scenario-preview">Coach cue screenshot</div>
+            </div>
+            <div class="scenario-card">
+                <div class="scenario-time">9:30 PM · Evening</div>
+                <h3>Winding down</h3>
+                <p>Ask "How did I do today?" and get a full picture: training load, nutrition balance, recovery outlook.</p>
+                <div class="scenario-preview">Summary screenshot</div>
+            </div>
+        </div>
+
+        <div class="section-note">
+            <strong>Pattern:</strong> Oura's scenario-based storytelling ("Starting your day", "Taking a walk", etc.)<br>
+            <strong>Why this works:</strong> Frames features as real moments, not abstract capabilities. Users see themselves in the story.<br>
+            <strong>This is our strongest emotional section.</strong> It shows Ottavia woven into a real day.
+            <span class="ref-tag">Like Oura</span>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 7. DIFFERENTIATOR ===== -->
+<section class="diff">
+    <div class="container">
+        <span class="section-label" style="background: white; color: var(--accent);">Section 6 — Why Ottavia is Different</span>
+
+        <div class="diff-content">
+            <h2>Not another <span class="soft">health app.</span></h2>
+            <p>Most apps show you data. Ottavia reasons about it. It builds a model of you — your patterns, your goals, your context — and gives you guidance that evolves as you do.</p>
+        </div>
+
+        <div class="diff-grid">
+            <div class="diff-item">
+                <h4>Data-grounded, not generic</h4>
+                <p>Every response references your actual metrics. No platitudes, no "drink more water" advice.</p>
+            </div>
+            <div class="diff-item">
+                <h4>Cross-domain reasoning</h4>
+                <p>Sleep affects training. Training affects nutrition. Ottavia connects what other apps keep in silos.</p>
+            </div>
+            <div class="diff-item">
+                <h4>Honest about uncertainty</h4>
+                <p>When the data is unclear, Ottavia says so. It would rather say "I don't know" than guess.</p>
+            </div>
+        </div>
+
+        <div class="section-note" style="background: #2A2A0A; border-left-color: #F59E0B; color: #D4A846;">
+            <strong>This section has no Bevel/Oura equivalent.</strong> It's unique to Ottavia.<br>
+            <strong>Purpose:</strong> Handle the objection "How is this different from MyFitnessPal + ChatGPT?"<br>
+            Dark background creates visual break and signals "pay attention, this matters."
+        </div>
+    </div>
+</section>
+
+<!-- ===== 8. SOCIAL PROOF ===== -->
+<section>
+    <div class="container">
+        <span class="section-label">Section 7 — Social Proof</span>
+
+        <div class="social-proof-header">
+            <h2>Trusted by real athletes</h2>
+            <p>From our first 100 testers.</p>
+        </div>
+
+        <div class="testimonial-row">
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <blockquote>"It actually connected my bad sleep with my training plan and told me to take it easy. No other app does that."</blockquote>
+                <div class="author">— Marathon runner, Tel Aviv</div>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <blockquote>"I just take a photo of my food and it tells me exactly where I stand for the day. The protein tracking alone is worth it."</blockquote>
+                <div class="author">— Triathlete, Berlin</div>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <blockquote>"Finally an app that talks to me like a coach who actually knows my data. Not generic tips."</blockquote>
+                <div class="author">— Ultra runner, California</div>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <blockquote>"The morning insights after Garmin syncs are exactly what I needed. It's like having a sports scientist on call."</blockquote>
+                <div class="author">— Cyclist, London</div>
+            </div>
+        </div>
+
+        <div class="section-note">
+            <strong>Pattern:</strong> Bevel's scrolling testimonial marquee.<br>
+            <strong>Action needed:</strong> Replace placeholder quotes with real tester feedback. Even 4-5 genuine quotes are enough.<br>
+            <strong>Format:</strong> Quote + activity type + city (not full names — feels more authentic and privacy-safe).
+            <span class="ref-tag">Like Bevel</span>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 9. HOW IT WORKS ===== -->
+<section style="background: var(--bg-warm);">
+    <div class="container">
+        <span class="section-label">Section 8 — How It Works</span>
+
+        <div class="how-header">
+            <h2>Three steps. That's it.</h2>
+        </div>
+
+        <div class="how-steps">
+            <div class="how-step">
+                <div class="step-number">1</div>
+                <h3>Connect your wearable</h3>
+                <p>Sync your Garmin. Your sleep, activities, HRV and body data flow in automatically.</p>
+            </div>
+            <div class="how-step">
+                <div class="step-number">2</div>
+                <h3>Log and ask</h3>
+                <p>Snap your meals. Ask questions. Ottavia learns more about you with every interaction.</p>
+            </div>
+            <div class="how-step">
+                <div class="step-number">3</div>
+                <h3>Get guidance that knows you</h3>
+                <p>Receive proactive insights, coaching cues and answers grounded in your real data.</p>
+            </div>
+        </div>
+
+        <div class="section-note">
+            <strong>Purpose:</strong> Reduce friction. Show it's easy to start.<br>
+            <strong>This should feel effortless</strong> — three simple steps, nothing overwhelming.<br>
+            <strong>Bevel has this implicitly; Oura makes it explicit.</strong> We need it because "AI reasoning system" sounds complex. This says "it's just three things."
+        </div>
+    </div>
+</section>
+
+<!-- ===== 10. FINAL CTA ===== -->
+<section class="final-cta">
+    <div class="container">
+        <span class="section-label">Section 9 — Final CTA</span>
+
+        <h2>Your next step starts here.</h2>
+        <p>Free to download. No credit card. No commitment. Just better decisions, starting today.</p>
+
+        <a href="#" class="btn-primary">Download Ottavia →</a>
+
+        <div class="store-badges">
+            <div class="store-badge">🍎 App Store</div>
+            <div class="store-badge">▶ Google Play</div>
+        </div>
+
+        <div class="section-note" style="margin-top: 40px;">
+            <strong>Pattern:</strong> Bevel's "Ready When You Are" closer.<br>
+            <strong>"Your next step"</strong> — per your direction, Vika. Forward-looking, action-oriented.<br>
+            <strong>"Free" is stated three ways</strong> — this removes the last objection.
+            <span class="ref-tag">Like Bevel</span>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 11. FOOTER ===== -->
+<footer>
+    <div class="container">
+        <span class="section-label" style="background: white; color: var(--accent);">Section 10 — Footer</span>
+
+        <div class="footer-top">
+            <div class="footer-brand">
+                <div style="font-size: 22px; font-weight: 800; color: white;">Ottavia</div>
+                <p>A personal reasoning system for wellbeing. Built by athletes, for athletes.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Product</h4>
+                <a href="#">Download App</a>
+                <a href="#">Features</a>
+                <a href="#">How it works</a>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <a href="#">About</a>
+                <a href="#">Blog</a>
+                <a href="#">Careers</a>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© 2026 Ottavia. All rights reserved.</span>
+            <span>Instagram · Twitter · LinkedIn</span>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

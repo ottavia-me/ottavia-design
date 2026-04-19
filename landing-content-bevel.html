@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OTTAVIA — Landing Page Content Bevel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@100..900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F1EA;
+    --ink: #2C2824;
+    --ink-soft: #433E36;
+    --mid: #6E675D;
+    --muted: #A8A297;
+    --border: #E7DFD0;
+    --signal: #4A7C6F;
+    --signal-bg: #E8F2EE;
+    --white: #FFFFFF;
+    --yellow-bg: #FFF9E6;
+    --yellow-border: #E8D9A0;
+    --red-soft: #F5E8E8;
+    --red-border: #D4ABAB;
+    --blue-bg: #EBF0FA;
+    --blue-border: #A8B8D8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+
+  /* ─── Layout ─── */
+  .page {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 80px 40px 120px;
+  }
+
+  /* ─── Header ─── */
+  .doc-header {
+    margin-bottom: 64px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .doc-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--signal);
+    margin-bottom: 16px;
+  }
+
+  .doc-header h1 {
+    font-family: 'Archivo', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+
+  .doc-header .sub {
+    font-size: 16px;
+    color: var(--mid);
+    max-width: 580px;
+    line-height: 1.7;
+  }
+
+  .doc-meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 24px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .doc-meta span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* ─── TOC ─── */
+  .toc {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 64px;
+  }
+
+  .toc h3 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .toc ol {
+    list-style: none;
+    counter-reset: toc;
+  }
+
+  .toc li {
+    counter-increment: toc;
+    margin-bottom: 8px;
+  }
+
+  .toc li a {
+    font-size: 14px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    transition: color 0.2s;
+  }
+
+  .toc li a:hover { color: var(--signal); }
+
+  .toc li a::before {
+    content: counter(toc, decimal-leading-zero);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    min-width: 20px;
+  }
+
+  .toc li .toc-role {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* ─── Overview block ─── */
+  .overview {
+    background: var(--ink);
+    color: var(--cream);
+    border-radius: 16px;
+    padding: 40px;
+    margin-bottom: 64px;
+  }
+
+  .overview h3 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(245,241,234,0.4);
+    margin-bottom: 20px;
+  }
+
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  .overview-item h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(245,241,234,0.5);
+    margin-bottom: 6px;
+  }
+
+  .overview-item p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--cream);
+  }
+
+  /* ─── Section blocks ─── */
+  .beat {
+    margin-bottom: 56px;
+    padding-bottom: 56px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .beat:last-of-type { border-bottom: none; }
+
+  .beat-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+
+  .beat-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    min-width: 28px;
+  }
+
+  .beat-role {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 100px;
+    margin-left: auto;
+  }
+
+  .role-hook { background: #FFE8E8; color: #B85454; }
+  .role-tension { background: #FFF3E0; color: #B8864A; }
+  .role-turn { background: var(--blue-bg); color: #5A6FA0; }
+  .role-reveal { background: var(--signal-bg); color: var(--signal); }
+  .role-proof { background: #F0E8FF; color: #7B5EA7; }
+  .role-close { background: var(--ink); color: var(--cream); }
+
+  .beat h2 {
+    font-family: 'Archivo', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 16px;
+    padding-left: 44px;
+  }
+
+  /* ─── Intent block ─── */
+  .intent {
+    background: var(--yellow-bg);
+    border: 1px solid var(--yellow-border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    margin-left: 44px;
+  }
+
+  .intent-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #B8964A;
+    margin-bottom: 6px;
+  }
+
+  .intent p {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+
+  /* ─── Copy block ─── */
+  .copy-block {
+    margin-left: 44px;
+    margin-bottom: 24px;
+  }
+
+  .copy-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .headline-copy {
+    font-family: 'Archivo', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    padding: 20px 24px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    border-left: 3px solid var(--signal);
+  }
+
+  .headline-copy .dim {
+    color: var(--muted);
+  }
+
+  .body-copy {
+    font-size: 15px;
+    color: var(--mid);
+    line-height: 1.8;
+    padding: 16px 24px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-top: 8px;
+  }
+
+  .body-copy p + p {
+    margin-top: 12px;
+  }
+
+  /* ─── Alts ─── */
+  .alts {
+    margin-left: 44px;
+    margin-bottom: 24px;
+  }
+
+  .alts-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .alt-option {
+    font-size: 14px;
+    color: var(--ink-soft);
+    padding: 10px 16px;
+    background: rgba(245,241,234,0.5);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    margin-bottom: 6px;
+    line-height: 1.5;
+  }
+
+  .alt-option .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-right: 8px;
+  }
+
+  /* ─── Notes ─── */
+  .note {
+    margin-left: 44px;
+    margin-bottom: 24px;
+    padding: 14px 20px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .note-design {
+    background: var(--blue-bg);
+    border: 1px solid var(--blue-border);
+    color: #4A5A80;
+  }
+
+  .note-voice {
+    background: var(--signal-bg);
+    border: 1px solid rgba(74,124,111,0.3);
+    color: var(--signal);
+  }
+
+  .note-warn {
+    background: var(--red-soft);
+    border: 1px solid var(--red-border);
+    color: #8A5A5A;
+  }
+
+  .note-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* ─── Element list ─── */
+  .elements {
+    margin-left: 44px;
+    margin-bottom: 24px;
+  }
+
+  .elements-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .element-item {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  .element-item:last-child { border-bottom: none; }
+
+  .element-type {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    background: var(--cream);
+    padding: 2px 8px;
+    border-radius: 4px;
+    min-width: 70px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border: 1px solid var(--border);
+  }
+
+  /* ─── Chat preview ─── */
+  .chat-preview {
+    margin-left: 44px;
+    margin-bottom: 24px;
+    background: var(--ink);
+    border-radius: 16px;
+    padding: 28px;
+    max-width: 520px;
+  }
+
+  .chat-msg {
+    padding: 14px 18px;
+    border-radius: 16px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .chat-msg.user-msg {
+    background: rgba(74,124,111,0.15);
+    border: 1px solid rgba(74,124,111,0.2);
+    color: rgba(245,241,234,0.7);
+    margin-left: 40px;
+    border-bottom-right-radius: 4px;
+    font-size: 13px;
+  }
+
+  .chat-msg.system-msg {
+    background: rgba(245,241,234,0.06);
+    border: 1px solid rgba(245,241,234,0.08);
+    color: rgba(245,241,234,0.85);
+    border-bottom-left-radius: 4px;
+  }
+
+  .chat-msg strong { color: var(--cream); font-weight: 600; }
+
+  .chat-msg .hl {
+    background: rgba(74,124,111,0.2);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: #7EBDAD;
+  }
+
+  .chat-msg .sender {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(245,241,234,0.3);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  /* ─── Grid compare ─── */
+  .compare-preview {
+    margin-left: 44px;
+    margin-bottom: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--ink);
+    border-radius: 12px;
+    overflow: hidden;
+    max-width: 600px;
+  }
+
+  .compare-cell {
+    padding: 20px;
+    background: #1A1816;
+  }
+
+  .compare-cell .old {
+    font-size: 12px;
+    color: rgba(245,241,234,0.25);
+    text-decoration: line-through;
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+
+  .compare-cell .new {
+    font-size: 14px;
+    color: rgba(245,241,234,0.85);
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 768px) {
+    .page { padding: 48px 20px 80px; }
+    .doc-header h1 { font-size: 28px; }
+    .overview-grid { grid-template-columns: 1fr; }
+    .headline-copy { font-size: 24px; }
+    .compare-preview { grid-template-columns: 1fr; }
+    .beat h2 { padding-left: 0; }
+    .intent, .copy-block, .alts, .note, .elements, .chat-preview, .compare-preview { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ━━━━━━ Header ━━━━━━ -->
+  <header class="doc-header">
+    <div class="doc-tag">Content Bevel — Landing Page</div>
+    <h1>Your body is not a competition.</h1>
+    <p class="sub">
+      The complete content architecture for Ottavia's scroll-story landing page. Every section, every headline, every body line — with narrative intent and alternative options. Lock the words before the pixels.
+    </p>
+    <div class="doc-meta">
+      <span>April 2026</span>
+      <span>10 story beats</span>
+      <span>Scroll narrative</span>
+    </div>
+  </header>
+
+  <!-- ━━━━━━ TOC ━━━━━━ -->
+  <div class="toc">
+    <h3>Story Beats</h3>
+    <ol>
+      <li><a href="#b1">Your body is not a competition <span class="toc-role">Hook</span></a></li>
+      <li><a href="#b2">Every app turned your health into a scoreboard <span class="toc-role">Tension</span></a></li>
+      <li><a href="#b3">You have more data than any generation <span class="toc-role">Tension</span></a></li>
+      <li><a href="#b4">What if something just paid attention <span class="toc-role">Turn</span></a></li>
+      <li><a href="#b5">Ottavia connects your sleep, training, nutrition <span class="toc-role">Reveal</span></a></li>
+      <li><a href="#b6">This is what it sounds like <span class="toc-role">Proof</span></a></li>
+      <li><a href="#b7">It's you vs. you <span class="toc-role">Proof</span></a></li>
+      <li><a href="#b8">Morning reports. Post-workout. Meals. <span class="toc-role">Proof</span></a></li>
+      <li><a href="#b9">She said don't <span class="toc-role">Emotional anchor</span></a></li>
+      <li><a href="#b10">Stop competing. Start understanding. <span class="toc-role">Close</span></a></li>
+    </ol>
+  </div>
+
+  <!-- ━━━━━━ Overview ━━━━━━ -->
+  <div class="overview">
+    <h3>Narrative Strategy</h3>
+    <div class="overview-grid">
+      <div class="overview-item">
+        <h4>Story Structure</h4>
+        <p>Classic three-act: establish the problem (the world gamifies your body), introduce the turn (what if something just listened), deliver the proof (Ottavia in action). Each beat is one full-screen scroll panel.</p>
+      </div>
+      <div class="overview-item">
+        <h4>Brand Stance</h4>
+        <p>"Your body is not a competition" is the line that positions Ottavia against every fitness app that ranks, gamifies, and reduces health to leaderboards. It's a belief, not a tagline.</p>
+      </div>
+      <div class="overview-item">
+        <h4>Emotional Arc</h4>
+        <p>Frustration (I have all this data and it doesn't help) → Recognition (wait, someone gets it) → Trust (this thing actually knows me) → Action (I want in).</p>
+      </div>
+      <div class="overview-item">
+        <h4>Voice Rules</h4>
+        <p>Short sentences. No adverbs. No hype words. No exclamation marks. Let the specificity do the persuading. If a sentence could come from any health app, cut it.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <!-- BEAT 01 -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="beat" id="b1">
+    <div class="beat-header">
+      <span class="beat-num">01</span>
+      <span class="beat-role role-hook">Hook</span>
+    </div>
+    <h2>The Opening</h2>
+
+    <div class="intent">
+      <div class="intent-label">Narrative Intent</div>
+      <p>Stop the scroll. Make a claim that feels personal, not corporate. The visitor should feel like someone just said something they've been thinking but haven't heard anyone say out loud. No logo, no product name — just the belief.</p>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Headline</div>
+      <div class="headline-copy">
+        Your body is not<br>a competition.
+      </div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Supporting Line</div>
+      <div class="body-copy">
+        <p>It's a conversation. One that's been happening your whole life. You just haven't had the right listener.</p>
+      </div>
+    </div>
+
+    <div class="alts">
+      <div class="alts-label">Alternative Supporting Lines</div>
+      <div class="alt-option"><span class="num">A</span> It's a system. One that runs 24 hours a day, whether you're paying attention or not. What if something else was?</div>
+      <div class="alt-option"><span class="num">B</span> It's the most complex system you'll ever own. And no app has ever tried to actually understand it.</div>
+      <div class="alt-option"><span class="num">C</span> It doesn't need a coach. It needs a listener. One that connects what your sleep, training, and food are actually saying.</div>
+    </div>
+
+    <div class="note note-design">
+      <div class="note-label">Design Direction</div>
+      Full viewport. No navigation visible. No logo. Just the statement, large, left-aligned. The supporting line fades in 0.5s after the headline. A subtle "scroll" indicator at the bottom. The nav wordmark and CTA fade in only after the user begins scrolling.
+    </div>
+
+    <div class="elements">
+      <div class="elements-label">On-Screen Elements</div>
+      <div class="element-item"><span class="element-type">heading</span> "Your body is not a competition."</div>
+      <div class="element-item"><span class="element-type">body</span> Supporting line (1 sentence)</div>
+      <div class="element-item"><span class="element-type">ui</span> Scroll indicator (fades on scroll)</div>
+    </div>
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <!-- BEAT 02 -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="beat" id="b2">
+    <div class="beat-header">
+      <span class="beat-num">02</span>
+      <span class="beat-role role-tension">Tension</span>
+    </div>
+    <h2>The Scoreboard Problem</h2>
+
+    <div class="intent">
+      <div class="intent-label">Narrative Intent</div>
+      <p>Name the enemy without naming a competitor. The enemy is the pattern — the gamification model that every fitness app uses. Steps, streaks, badges, rankings. The visitor should nod and think "yeah, that's exactly what bothers me." Build resentment toward the status quo.</p>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Headline</div>
+      <div class="headline-copy">
+        Every app you've tried<br>
+        <span class="dim">turned your health into a scoreboard.</span>
+      </div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Body</div>
+      <div class="body-copy">
+        <p>Steps counted. Calories burned. Streaks maintained. Badges earned. Rankings climbed.</p>
+        <p>All of it designed to make you do more. None of it designed to help you understand more.</p>
+      </div>
+    </div>
+
+    <div class="alts">
+      <div class="alts-label">Alternative Body Copy</div>
+      <div class="alt-option"><span class="num">A</span> You've been scored, ranked, and gamified. You've maintained streaks you didn't care about and lost streaks that made you feel like you failed. None of it made you healthier. It made you more compliant.</div>
+      <div class="alt-option"><span class="num">B</span> More steps than yesterday. Longer streak than last month. Higher ranking than your friends. But do you actually understand your body any better than you did a year ago?</div>
+    </div>
+
+    <div class="note note-voice">
+      <div class="note-label">Voice Note</div>
+      The rhythm of "Steps counted. Calories burned." is deliberate — short, staccato, building. It should feel like a list that's exhausting to read. That exhaustion is the point.
+    </div>
+
+    <div class="elements">
+      <div class="elements-label">On-Screen Elements</div>
+      <div class="element-item"><span class="element-type">heading</span> Two-line headline, second line dimmed</div>
+      <div class="element-item"><span class="element-type">body</span> Two short paragraphs</div>
+    </div>
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <!-- BEAT 03 -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="beat" id="b3">
+    <div class="beat-header">
+      <span class="beat-num">03</span>
+      <span class="beat-role role-tension">Tension</span>
+    </div>
+    <h2>The Data Paradox</h2>
+
+    <div class="intent">
+      <div class="intent-label">Narrative Intent</div>
+      <p>Shift from emotional frustration to intellectual frustration. The problem isn't that you don't have data — it's that you have too much, spread across too many apps, and none of it connects. This is the setup for Ottavia's core value prop: cross-domain reasoning.</p>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Headline</div>
+      <div class="headline-copy">
+        You have more data<br>about your body<br>
+        <span class="dim">than any generation in history.</span>
+      </div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Body</div>
+      <div class="body-copy">
+        <p>Your watch knows your heart rate variability. Your sleep stages. Your training load. Your food app knows your macros. Your scale knows your weight.</p>
+        <p>But none of them talk to each other. And none of them know you.</p>
+      </div>
+    </div>
+
+    <div class="alts">
+      <div class="alts-label">Alternative Closing Lines</div>
+      <div class="alt-option"><span class="num">A</span> You have five apps and zero understanding.</div>
+      <div class="alt-option"><span class="num">B</span> The data exists. The connections don't.</div>
+      <div class="alt-option"><span class="num">C</span> Every app sees one piece. Nobody sees the whole picture.</div>
+    </div>
+
+    <div class="note note-warn">
+      <div class="note-label">Watch Out</div>
+      Don't make this feel like a tech problem ("siloed data" / "fragmented ecosystem"). Make it feel personal. The frustration is: I'm wearing a $400 watch and I still don't know if I should run today.
+    </div>
+
+    <div class="elements">
+      <div class="elements-label">On-Screen Elements</div>
+      <div class="element-item"><span class="element-type">heading</span> Three-line headline, last line dimmed</div>
+      <div class="element-item"><span class="element-type">body</span> Two paragraphs, second one is the punch</div>
+    </div>
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <!-- BEAT 04 -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="beat" id="b4">
+    <div class="beat-header">
+      <span class="beat-num">04</span>
+      <span class="beat-role role-turn">Turn</span>
+    </div>
+    <h2>The Question</h2>
+
+    <div class="intent">
+      <div class="intent-label">Narrative Intent</div>
+      <p>This is the pivot. The mood shifts. The background goes dark. We stop naming problems and start opening a door. This beat is a question, not an answer — it creates pull. The visitor leans in because they want to know what "paying attention" looks like.</p>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Headline</div>
+      <div class="headline-copy" style="background: var(--ink); color: var(--cream); border-color: #333;">
+        What if something<br>
+        <span style="color: rgba(245,241,234,0.3);">just paid attention?</span>
+      </div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Body</div>
+      <div class="body-copy">
+        <p>Not to your steps. Not to your streaks. To the patterns between your sleep and your training and your nutrition that only appear when someone looks at all three together.</p>
+        <p>The things you can't see by staring at one dashboard at a time.</p>
+      </div>
+    </div>
+
+    <div class="alts">
+      <div class="alts-label">Alternative Headlines</div>
+      <div class="alt-option"><span class="num">A</span> What if something actually listened?</div>
+      <div class="alt-option"><span class="num">B</span> What if the answer was already in your data?</div>
+      <div class="alt-option"><span class="num">C</span> What if something connected the dots?</div>
+    </div>
+
+    <div class="note note-design">
+      <div class="note-label">Design Direction</div>
+      Background transitions from cream to dark (ink). This is the threshold — everything before was the old world, everything after is Ottavia's world. The shift should feel like walking into a quiet room. No animation fireworks. Just a color change and a question.
+    </div>
+
+    <div class="elements">
+      <div class="elements-label">On-Screen Elements</div>
+      <div class="element-item"><span class="element-type">heading</span> Two-line question, second line dimmed</div>
+      <div class="element-item"><span class="element-type">body</span> Two short paragraphs</div>
+      <div class="element-item"><span class="element-type">bg</span> Transition to dark</div>
+    </div>
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <!-- BEAT 05 -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="beat" id="b5">
+    <div class="beat-header">
+      <span class="beat-num">05</span>
+      <span class="beat-role role-reveal">Reveal</span>
+    </div>
+    <h2>Ottavia Enters</h2>
+
+    <div class="intent">
+      <div class="intent-label">Narrative Intent</div>
+      <p>First time the product name appears. The word "Introducing" is small and understated — the product doesn't announce itself loudly. The headline IS the value proposition, stated as what the product does, not what it is. The green accent color appears for the first time on the key phrase.</p>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Eyebrow</div>
+      <div class="body-copy" style="font-family: 'Space Grotesk', sans-serif; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--signal);">Introducing</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Headline</div>
+      <div class="headline-copy" style="background: var(--ink); color: var(--cream); border-color: var(--signal);">
+        Ottavia connects your sleep,<br>training and nutrition to find<br>
+        <span style="color: #7EBDAD;">patterns that only appear<br>when they're connected.</span>
+      </div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Body</div>
+      <div class="body-copy">
+        <p>Not a dashboard. Not a chatbot. A reasoning system that remembers everything you share, grows sharper over time, and tells you what it actually thinks.</p>
+      </div>
+    </div>
+
+    <div class="alts">
+      <div class="alts-label">Alternative Body Copy</div>
+      <div class="alt-option"><span class="num">A</span> A personal intelligence system. It connects your wearable data across domains, reasons over your history, and gives you the kind of specific, honest guidance that only comes from actually knowing someone.</div>
+      <div class="alt-option"><span class="num">B</span> One system that sees your sleep, your training, and your nutrition together. That remembers your last three months. That tells you when to push and when to stop — and means it.</div>
+    </div>
+
+    <div class="note note-voice">
+      <div class="note-label">Voice Note</div>
+      "Not a dashboard. Not a chatbot." — the negation pattern is important here. The visitor has been burned by things that call themselves "AI health assistants." We need to preemptively reject those categories before they lump us in.
+    </div>
+
+    <div class="elements">
+      <div class="elements-label">On-Screen Elements</div>
+      <div class="element-item"><span class="element-type">eyebrow</span> "Introducing" in Space Grotesk, small</div>
+      <div class="element-item"><span class="element-type">heading</span> Four-line headline, last two lines in green</div>
+      <div class="element-item"><span class="element-type">body</span> One paragraph, three clauses</div>
+      <div class="element-item"><span class="element-type">bg</span> Still dark</div>
+    </elements>
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <!-- BEAT 06 -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="beat" id="b6">
+    <div class="beat-header">
+      <span class="beat-num">06</span>
+      <span class="beat-role role-proof">Proof</span>
+    </div>
+    <h2>The Conversation</h2>
+
+    <div class="intent">
+      <div class="intent-label">Narrative Intent</div>
+      <p>Show, don't tell. Two real conversation exchanges that demonstrate specificity, directness, and data-grounded reasoning. The first exchange shows Ottavia saying "no" (the hardest, most trust-building thing). The second shows Ottavia connecting dots across domains. No UI chrome — just the words. The product proves itself through language.</p>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Section Label</div>
+      <div class="body-copy" style="font-family: 'Space Grotesk', sans-serif; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--signal);">This is what it sounds like</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Exchange 1 — The "No"</div>
+    </div>
+
+    <div class="chat-preview">
+      <div class="chat-msg user-msg">Should I run today?</div>
+      <div class="chat-msg system-msg">
+        <span class="sender">Ottavia</span>
+        <strong>No.</strong> Your HRV is 38 — lowest in two weeks. Yesterday's tempo run on four days of caloric deficit caught up. <span class="hl">Rest today.</span> The long run can move to Saturday when your body has had two recovery nights.
+      </div>
+    </div>
+
+    <div class="copy-block" style="margin-top: 16px;">
+      <div class="copy-label">Exchange 2 — The Connection</div>
+    </div>
+
+    <div class="chat-preview">
+      <div class="chat-msg user-msg">How's my nutrition been?</div>
+      <div class="chat-msg system-msg">
+        <span class="sender">Ottavia</span>
+        You've hit <strong>130g protein three days straight</strong> — that's the target we set together. Your recovery scores are responding. Up 8% since you started hitting it consistently. <span class="hl">Keep this up through the weekend.</span>
+      </div>
+    </div>
+
+    <div class="alts">
+      <div class="alts-label">Alternative Exchange Ideas</div>
+      <div class="alt-option"><span class="num">A</span> "Why was yesterday's run so hard?" → Ottavia connects sleep deficit + high training load + low carb intake from the day before</div>
+      <div class="alt-option"><span class="num">B</span> "What should I eat before my long run?" → Ottavia references the user's past meal timing patterns and what worked best for their specific body</div>
+      <div class="alt-option"><span class="num">C</span> A proactive morning message: "Your sleep dipped to 5.8 hours. Combined with yesterday's threshold session, today is a recovery day. Here's what that means for your week."</div>
+    </div>
+
+    <div class="note note-voice">
+      <div class="note-label">Voice Note</div>
+      These examples must be indistinguishable from real Ottavia output. Use real-sounding numbers (HRV 38, not HRV 40). Reference specific timeframes (two weeks, three days). Include the cross-domain reasoning (deficit + tempo run = rest). If an example could come from any generic AI, replace it.
+    </div>
+
+    <div class="elements">
+      <div class="elements-label">On-Screen Elements</div>
+      <div class="element-item"><span class="element-type">label</span> "This is what it sounds like"</div>
+      <div class="element-item"><span class="element-type">chat</span> Exchange 1 — staggered reveal on scroll</div>
+      <div class="element-item"><span class="element-type">chat</span> Exchange 2 — staggered reveal on scroll</div>
+      <div class="element-item"><span class="element-type">bg</span> Still dark</div>
+    </div>
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <!-- BEAT 07 -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="beat" id="b7">
+    <div class="beat-header">
+      <span class="beat-num">07</span>
+      <span class="beat-role role-proof">Proof</span>
+    </div>
+    <h2>The Counter-Narrative</h2>
+
+    <div class="intent">
+      <div class="intent-label">Narrative Intent</div>
+      <p>Crystallize the difference. A 2x3 grid where every cell crosses out the old-world pattern and replaces it with the Ottavia way. This should feel like a manifesto compressed into a table. "It's you vs. you" reappears here as the section headline — connecting the hero statement to the product difference.</p>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Headline</div>
+      <div class="headline-copy" style="background: var(--ink); color: var(--cream); border-color: #333;">
+        It's you vs. you.<br>
+        <span style="color: rgba(245,241,234,0.3);">And Ottavia is on your side.</span>
+      </div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Grid Content</div>
+    </div>
+
+    <div class="compare-preview">
+      <div class="compare-cell">
+        <div class="old">Leaderboards and rankings</div>
+        <div class="new">Patterns only visible in your data</div>
+      </div>
+      <div class="compare-cell">
+        <div class="old">Generic advice for everyone</div>
+        <div class="new">Insights that only apply to you</div>
+      </div>
+      <div class="compare-cell">
+        <div class="old">Streaks and badges</div>
+        <div class="new">Understanding that compounds</div>
+      </div>
+      <div class="compare-cell">
+        <div class="old">"Great job! Keep it up! 💪"</div>
+        <div class="new">"Don't run today. Rest."</div>
+      </div>
+      <div class="compare-cell">
+        <div class="old">Disconnected dashboards</div>
+        <div class="new">Sleep + training + nutrition, connected</div>
+      </div>
+      <div class="compare-cell">
+        <div class="old">One-size-fits-all</div>
+        <div class="new">Remembers your last three months</div>
+      </div>
+    </div>
+
+    <div class="note note-warn">
+      <div class="note-label">Watch Out</div>
+      The crossed-out items should never feel like we're attacking specific apps. They're patterns, not products. "Leaderboards" is fair game. "Strava's leaderboards" is not. The contrast should feel like a worldview difference, not a competitive takedown.
+    </div>
+
+    <div class="elements">
+      <div class="elements-label">On-Screen Elements</div>
+      <div class="element-item"><span class="element-type">heading</span> "It's you vs. you" + dimmed line</div>
+      <div class="element-item"><span class="element-type">grid</span> 2x3 comparison grid</div>
+      <div class="element-item"><span class="element-type">bg</span> Still dark</div>
+    </div>
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <!-- BEAT 08 -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="beat" id="b8">
+    <div class="beat-header">
+      <span class="beat-num">08</span>
+      <span class="beat-role role-proof">Proof</span>
+    </div>
+    <h2>What It Does</h2>
+
+    <div class="intent">
+      <div class="intent-label">Narrative Intent</div>
+      <p>Functional proof. After the emotional story, the visitor needs to know what they'll actually get. Three cards, three features, no fluff. The transition back to cream background signals we're moving from the emotional argument to the practical one. Keep the copy tight — each card is one capability, one sentence of context.</p>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Section Label</div>
+      <div class="body-copy" style="font-family: 'Space Grotesk', sans-serif; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--signal);">What Ottavia Does</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Headline</div>
+      <div class="headline-copy">
+        Morning reports. Post-workout analysis.<br>Meal feedback in seconds.<br>
+        <span class="dim">Connections you can't see alone.</span>
+      </div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Card 1 — Morning Reports</div>
+      <div class="body-copy">
+        <p><strong>Morning Reports.</strong> After your sleep syncs, Ottavia tells you how you recovered and what today can look like. Not a score. A plan.</p>
+      </div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Card 2 — Post-Workout</div>
+      <div class="body-copy">
+        <p><strong>Post-Workout Analysis.</strong> Connects your effort to your recent load, sleep and nutrition. Was that run harder than it should have been? Ottavia knows why.</p>
+      </div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Card 3 — Meal Feedback</div>
+      <div class="body-copy">
+        <p><strong>Meal Feedback.</strong> Snap a photo or just tell her. Seconds later, you know how it fits your targets and what it means for your recovery tonight.</p>
+      </div>
+    </div>
+
+    <div class="alts">
+      <div class="alts-label">Optional 4th Card</div>
+      <div class="alt-option"><span class="num">A</span> <strong>Proactive Cues.</strong> Ottavia doesn't wait for you to ask. When your data says something important, she tells you. A morning note. A post-training nudge. The kind of thing a coach who sees your data would say.</div>
+    </div>
+
+    <div class="note note-design">
+      <div class="note-label">Design Direction</div>
+      Background transitions back to cream. Three white cards in a row. Keep cards compact — heading + two sentences max. No icons, no illustrations. The words carry it.
+    </div>
+
+    <div class="elements">
+      <div class="elements-label">On-Screen Elements</div>
+      <div class="element-item"><span class="element-type">label</span> "What Ottavia Does"</div>
+      <div class="element-item"><span class="element-type">heading</span> Three-line headline, last line dimmed</div>
+      <div class="element-item"><span class="element-type">cards</span> 3 feature cards</div>
+      <div class="element-item"><span class="element-type">bg</span> Cream (transition from dark)</div>
+    </div>
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <!-- BEAT 09 -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="beat" id="b9">
+    <div class="beat-header">
+      <span class="beat-num">09</span>
+      <span class="beat-role role-hook">Emotional Anchor</span>
+    </div>
+    <h2>The Line</h2>
+
+    <div class="intent">
+      <div class="intent-label">Narrative Intent</div>
+      <p>The single moment that should stick in someone's memory after they leave the page. This isn't a feature. It's a story compressed into three lines. It demonstrates everything the brand stands for: specificity (HRV 30), honesty (don't run), and the courage to say no. Centered. Quiet. No body copy. Just the line.</p>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Full Text</div>
+      <div class="headline-copy" style="text-align: center;">
+        Ottavia told a runner to rest<br>
+        when his HRV dropped to 30.<br><br>
+        <span class="dim">He wanted to run.</span><br><br>
+        She said don't.
+      </div>
+    </div>
+
+    <div class="alts">
+      <div class="alts-label">Alternative Versions</div>
+      <div class="alt-option"><span class="num">A</span> "Ottavia told a cyclist to eat more when her deficit hit day five. She didn't want to. Ottavia showed her the recovery cost. She ate."</div>
+      <div class="alt-option"><span class="num">B</span> "Ottavia noticed a pattern: every Monday, his HRV crashed. Three weeks of data. Same cause. Sunday long runs on Saturday night sleep. She told him. He moved the run to Saturday morning. Mondays recovered."</div>
+    </div>
+
+    <div class="note note-voice">
+      <div class="note-label">Voice Note</div>
+      The power is in the structure: statement → conflict → resolution in three lines. "She said don't." is the shortest, most confident sentence on the entire page. It earns its weight from everything that came before it. Don't add to it. Don't explain it.
+    </div>
+
+    <div class="elements">
+      <div class="elements-label">On-Screen Elements</div>
+      <div class="element-item"><span class="element-type">heading</span> Centered, three beats with line breaks</div>
+      <div class="element-item"><span class="element-type">bg</span> Cream</div>
+      <div class="element-item"><span class="element-type">nothing</span> No body copy. No CTA. Just the line.</div>
+    </div>
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <!-- BEAT 10 -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="beat" id="b10">
+    <div class="beat-header">
+      <span class="beat-num">10</span>
+      <span class="beat-role role-close">Close</span>
+    </div>
+    <h2>The Ask</h2>
+
+    <div class="intent">
+      <div class="intent-label">Narrative Intent</div>
+      <p>Convert the emotional momentum into action. The CTA headline mirrors the opening — "stop competing" echoes "not a competition." The body copy is the simplest possible description of what happens next. Three steps compressed into one sentence. The wordmark appears above the headline, small and dignified — this is the brand's formal introduction after the whole story has been told.</p>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Wordmark</div>
+      <div class="body-copy" style="font-family: 'Space Grotesk', sans-serif; font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); text-align: center;">Ottavia</div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Headline</div>
+      <div class="headline-copy" style="text-align: center;">
+        Stop competing.<br>Start understanding.
+      </div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Body</div>
+      <div class="body-copy" style="text-align: center;">
+        <p>Connect your Garmin. Ask a question. Get an answer that could only be for you.</p>
+      </div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">CTA Button</div>
+      <div class="body-copy" style="text-align: center; font-weight: 600;">
+        Get Early Access
+      </div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">Sub-CTA Note</div>
+      <div class="body-copy" style="text-align: center; font-size: 13px; color: var(--muted);">
+        <p>Currently available for Garmin users</p>
+      </div>
+    </div>
+
+    <div class="alts">
+      <div class="alts-label">Alternative Headlines</div>
+      <div class="alt-option"><span class="num">A</span> Your data has a story. Ottavia reads it.</div>
+      <div class="alt-option"><span class="num">B</span> You already have the data. Now get the understanding.</div>
+      <div class="alt-option"><span class="num">C</span> It's you vs. you. Ottavia makes sure you win.</div>
+    </div>
+
+    <div class="alts">
+      <div class="alts-label">Alternative CTA Copy</div>
+      <div class="alt-option"><span class="num">A</span> Try Ottavia Free</div>
+      <div class="alt-option"><span class="num">B</span> Connect Your Garmin</div>
+      <div class="alt-option"><span class="num">C</span> Start Your First Report</div>
+    </div>
+
+    <div class="note note-design">
+      <div class="note-label">Design Direction</div>
+      Centered layout. Cream background. The wordmark is small and muted above the headline — not shouting, just present. The button is the only element with the ink background, making it the strongest visual anchor on the page. Below the button, the Garmin note in muted text manages expectations without killing momentum.
+    </div>
+
+    <div class="elements">
+      <div class="elements-label">On-Screen Elements</div>
+      <div class="element-item"><span class="element-type">wordmark</span> "Ottavia" — small, centered, muted</div>
+      <div class="element-item"><span class="element-type">heading</span> Two-line CTA headline, centered</div>
+      <div class="element-item"><span class="element-type">body</span> One sentence</div>
+      <div class="element-item"><span class="element-type">button</span> "Get Early Access"</div>
+      <div class="element-item"><span class="element-type">note</span> "Currently available for Garmin users"</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
