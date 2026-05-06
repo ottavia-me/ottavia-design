@@ -31,7 +31,8 @@
         body {
             font-family: 'Modern Era', 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
             color: var(--text-dark);
-            letter-spacing: -0.04em;
+            letter-spacing: -0.02em;
+            text-wrap: pretty;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
             background: var(--bg-warm-2);
@@ -55,14 +56,23 @@
             overflow: hidden;
         }
 
-        /* hero overlay — commented out while no photo
+        .hero-image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+
         .hero-shape::after {
             content: '';
             position: absolute;
             inset: 0;
             background: rgba(0,0,0,0.25);
             border-radius: inherit;
-        } */
+            z-index: 1;
+        }
 
         /* Nav */
         .nav {
@@ -181,7 +191,7 @@
         .hero-sub {
             font-size: 86px;
             font-weight: 600;
-            color: #928D77;
+            color: rgba(255, 255, 255, 0.6);
             letter-spacing: -0.04em;
             line-height: 1.05;
             max-width: none;
@@ -331,6 +341,38 @@
         /* ===== SECTION 2: A PLAN THAT KNOWS YOU ===== */
         .plan-section {
             background: linear-gradient(180deg, #f5f1ea 0%, #edf4f8 50%, #f5f1ea 100%);
+            position: relative;
+            overflow: clip;
+        }
+
+        .plan-section::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            left: -10%;
+            width: 120%;
+            height: 140%;
+            background:
+                linear-gradient(
+                    135deg,
+                    transparent 20%,
+                    rgba(255, 120, 120, 0.07) 28%,
+                    rgba(255, 180, 100, 0.06) 33%,
+                    rgba(255, 240, 140, 0.05) 38%,
+                    rgba(140, 230, 140, 0.05) 43%,
+                    rgba(120, 190, 255, 0.06) 48%,
+                    rgba(160, 130, 255, 0.07) 53%,
+                    rgba(220, 130, 220, 0.05) 58%,
+                    transparent 66%
+                );
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .plan-section > * {
+            position: relative;
+            z-index: 1;
         }
 
         .plan-title {
@@ -341,7 +383,7 @@
             color: #9E9185;
             letter-spacing: -0.04em;
             font-weight: 600;
-            padding: 40px 60px 16px;
+            padding: 24px 0 16px;
         }
 
         .plan-subtitle {
@@ -356,7 +398,7 @@
         }
 
         .plan-scroll-container {
-            height: 300vh;
+            height: 200vh;
             position: relative;
         }
 
@@ -366,7 +408,10 @@
             height: 100vh;
             display: grid;
             grid-template-columns: 1fr auto 1fr;
+            grid-template-rows: auto auto;
+            align-content: center;
             align-items: center;
+            row-gap: 24px;
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 60px;
@@ -378,10 +423,10 @@
         }
 
         .plan-feature {
-            font-size: 22px;
-            font-weight: 400;
+            font-size: 26px;
+            font-weight: 700;
             color: var(--text-dark);
-            line-height: 1.8;
+            line-height: 34px;
             cursor: pointer;
             transition: opacity 0.4s ease;
             padding: 4px 0;
@@ -396,18 +441,17 @@
         .plan-feature.active::before {
             content: '';
             position: absolute;
-            left: -20px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 8px;
-            height: 8px;
+            left: -16px;
+            top: 15px;
+            width: 6px;
+            height: 6px;
             background: var(--text-dark);
             border-radius: 50%;
         }
 
         .plan-phone {
-            width: 380px;
-            height: 820px;
+            width: 304px;
+            height: 656px;
             background: var(--tan);
             border-radius: 52px;
             flex-shrink: 0;
@@ -467,6 +511,25 @@
             letter-spacing: -0.04em;
             line-height: 1.15;
             max-width: none;
+        }
+
+        .plan-description {
+            justify-self: start;
+            padding-left: 60px;
+            max-width: 624px;
+        }
+
+        .plan-desc {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-muted);
+            line-height: 34px;
+            text-wrap: pretty;
+            display: none;
+        }
+
+        .plan-desc.active {
+            display: block;
         }
 
         /* ===== SECTION 3: DAY TIMELINE ===== */
@@ -808,9 +871,11 @@
 
             .plan-title { font-size: 52px; padding: 80px 32px 60px; }
             .plan-sticky { padding: 0 32px; }
-            .plan-features { padding-right: 48px; }
-            .plan-feature { font-size: 18px; }
-            .plan-phone { width: 300px; height: 620px; }
+            .plan-features { padding-right: 32px; }
+            .plan-feature { font-size: 22px; line-height: 30px; }
+            .plan-phone { width: 240px; height: 520px; }
+            .plan-description { padding-left: 32px; max-width: 400px; }
+            .plan-desc { font-size: 22px; line-height: 30px; }
 
             .day-sticky { padding: 0 32px; }
             .day-tabs { gap: 48px; }
@@ -846,8 +911,10 @@
                 padding: 0 24px;
             }
             .plan-features { justify-self: center; padding-right: 0; padding-left: 24px; }
-            .plan-feature { font-size: 18px; line-height: 2; }
-            .plan-phone { width: 280px; height: 580px; }
+            .plan-feature { font-size: 18px; line-height: 26px; }
+            .plan-phone { width: 220px; height: 476px; }
+            .plan-description { padding-left: 0; max-width: none; margin-top: 24px; }
+            .plan-desc { font-size: 18px; line-height: 26px; }
 
             .day-scroll-container { height: 350vh; }
             .day-sticky { padding: 0 24px; }
@@ -879,8 +946,10 @@
 <body>
 
 <!-- ===== SECTION 1: HERO ===== -->
+<!-- Sections: 1. hero | 2. core features | 3. timeline examples | 4. digital profile | 5. footer -->
 <section class="hero">
     <div class="hero-shape">
+        <img class="hero-image" src="assets/landing/heroimage.jpg" alt="">
         <nav class="nav">
             <a href="#" class="nav-logo">ottavia</a>
             <div class="nav-links">
@@ -910,42 +979,39 @@
     </div>
 </section>
 
-<!-- ===== BANNER: FOREVER FREE (hidden for now) =====
-<section class="banner-section">
-    <h2 class="banner-title">Forever free<br>for the first <span>1000</span> users</h2>
-    <p class="banner-sub">Be among the first to experience Ottavia, your personal wellbeing companion, powered by your data.</p>
-    <a href="#" class="banner-btn">Get Access</a>
-</section>
--->
-
-<!-- ===== SECTION 2: A PLAN THAT KNOWS YOU ===== -->
+<!-- ===== SECTION 2: CORE FEATURES ===== -->
 <section class="plan-section" id="features">
-    <h2 class="plan-title">A plan that knows you</h2>
-
     <div class="plan-scroll-container">
         <div class="plan-sticky">
+            <h2 class="plan-title" style="grid-column: 1 / -1;">A plan that knows you</h2>
             <div class="plan-features">
-                <div class="plan-feature active" data-index="0">Easy food log</div>
-                <div class="plan-feature" data-index="1">Morning reports</div>
-                <div class="plan-feature" data-index="2">After workout reports</div>
-                <div class="plan-feature" data-index="3">Unlimited memory</div>
-                <div class="plan-feature" data-index="4">Proactive coach</div>
+                <div class="plan-feature active" data-index="0">Comes to you first</div>
+                <div class="plan-feature" data-index="1">Sees the full picture</div>
+                <div class="plan-feature" data-index="2">Snap. Logged. Done.</div>
+                <div class="plan-feature" data-index="3">Gets sharper every week</div>
+                <div class="plan-feature" data-index="4">One step, not ten dashboards</div>
             </div>
             <div class="plan-phone">
                 <div class="plan-phone-screen">
-                    <div class="plan-screen active" data-screen="0"><img src="assets/landing/chat-report-after-run.png" alt="Easy food log"></div>
-                    <div class="plan-screen" data-screen="1"><div class="plan-screen-placeholder">Morning reports</div></div>
-                    <div class="plan-screen" data-screen="2"><div class="plan-screen-placeholder">After workout reports</div></div>
-                    <div class="plan-screen" data-screen="3"><div class="plan-screen-placeholder">Unlimited memory</div></div>
-                    <div class="plan-screen" data-screen="4"><div class="plan-screen-placeholder">Proactive coach</div></div>
+                    <div class="plan-screen active" data-screen="0"><img src="assets/landing/chat-report-after-run.png" alt="Comes to you first"></div>
+                    <div class="plan-screen" data-screen="1"><div class="plan-screen-placeholder">Cross-domain insight</div></div>
+                    <div class="plan-screen" data-screen="2"><div class="plan-screen-placeholder">Photo food log</div></div>
+                    <div class="plan-screen" data-screen="3"><div class="plan-screen-placeholder">Pattern over time</div></div>
+                    <div class="plan-screen" data-screen="4"><div class="plan-screen-placeholder">Clear next step</div></div>
                 </div>
             </div>
-            <div></div>
+            <div class="plan-description">
+                <div class="plan-desc active" data-desc="0">Morning briefing. Post-workout review. Evening check-in. Ottavia reaches out before you even open the app.</div>
+                <div class="plan-desc" data-desc="1">Your sleep affects your training. Your nutrition affects your recovery. Ottavia is the only system that reasons across all your data in a single thought.</div>
+                <div class="plan-desc" data-desc="2">Take a photo of your plate. Ottavia identifies everything, logs it and tells you how it fits your day. No searching, no typing, no guessing.</div>
+                <div class="plan-desc" data-desc="3">Week one, Ottavia knows your numbers. Week eight, it knows your patterns. The longer you use it, the more specific the guidance becomes.</div>
+                <div class="plan-desc" data-desc="4">No scores to interpret. No graphs to decode. One grounded, specific thing to do next.</div>
+            </div>
         </div>
     </div>
 </section>
 
-<!-- ===== SECTION 3: DAY TIMELINE ===== -->
+<!-- ===== SECTION 3: TIMELINE EXAMPLES ===== -->
 <section class="day-section" id="day">
     <div class="interstitial">
         <p>Everything your body tells you, finally in one place. Ottavia listens, connects and shows you what actually matters.</p>
@@ -1012,7 +1078,7 @@
     </div>
 </section>
 
-<!-- ===== SECTION 4: YOUR DIGITAL PROFILE ===== -->
+<!-- ===== SECTION 4: DIGITAL PROFILE ===== -->
 <section class="profile-section" id="about">
     <h2 class="profile-title">Your digital profile</h2>
 
@@ -1094,11 +1160,13 @@
     const scrollContainer = document.querySelector('.plan-scroll-container');
     const features = document.querySelectorAll('.plan-feature');
     const screens = document.querySelectorAll('.plan-screen');
+    const descs = document.querySelectorAll('.plan-desc');
     const featureCount = features.length;
 
     function setActiveFeature(index) {
         features.forEach((f, i) => f.classList.toggle('active', i === index));
         screens.forEach((s, i) => s.classList.toggle('active', i === index));
+        descs.forEach((d, i) => d.classList.toggle('active', i === index));
     }
 
     function updateFeatures() {

@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Ottavia — Thinking Indicator (OTRD-1835 / OTRD-1767)</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --bg: #F5F1EA;          /* PRIMARY_10 */
+    --text: #433E36;        /* PRIMARY_80 */
+    --text-mute: #766F64;   /* PRIMARY_60 */
+    --text-soft: #8F897D;   /* PRIMARY_50 */
+    --line: #C2BCB2;        /* PRIMARY_30 */
+    --surface: #DBD6CD;     /* PRIMARY_20 */
+    --terracotta: #A17A5B;  /* TERRACOTTA_60 */
+    --terracotta-30: #C4A08E;
+    --terracotta-10: #F5E6DC;
+    --bubble-user: #FFFFFF;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro', 'Segoe UI', sans-serif;
+    background: #111;
+    display: flex; justify-content: center; align-items: flex-start;
+    min-height: 100vh; padding: 24px; gap: 20px;
+    color: #ddd;
+  }
+
+  /* ---- Side panel ---- */
+  .panel {
+    width: 220px; flex-shrink: 0;
+    display: flex; flex-direction: column; gap: 18px;
+    padding-top: 20px;
+  }
+  .panel h1 {
+    font-size: 13px; font-weight: 600; letter-spacing: 0.5px;
+    color: #eee; text-transform: uppercase;
+  }
+  .panel p { font-size: 11px; color: #888; line-height: 1.5; }
+  .ctrl-group { display: flex; flex-direction: column; gap: 4px; }
+  .ctrl-label {
+    font-size: 9px; font-weight: 700; color: #666;
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;
+  }
+  .ctrl-btn {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+    padding: 10px 12px; border-radius: 8px;
+    background: #1a1a1a; border: 1px solid #2a2a2a;
+    color: #888; font-size: 12px; font-weight: 500;
+    font-family: inherit; cursor: pointer;
+    transition: all 0.12s ease; text-align: left; line-height: 1.3;
+  }
+  .ctrl-btn:hover { background: #222; color: #bbb; border-color: #3a3a3a; }
+  .ctrl-btn.active { background: #2a2a2a; color: #fff; border-color: var(--terracotta); }
+  .ctrl-btn .c-sub { font-size: 10px; color: #666; font-weight: 400; }
+  .ctrl-btn.active .c-sub { color: #aaa; }
+
+  .restart-btn {
+    padding: 10px 12px; border-radius: 8px;
+    background: var(--terracotta); border: none;
+    color: #fff; font-size: 12px; font-weight: 600;
+    font-family: inherit; cursor: pointer;
+  }
+  .restart-btn:hover { background: #8a6849; }
+
+  /* ---- Phone frame ---- */
+  .phone-frame {
+    width: 390px; height: 844px;
+    background: var(--bg); border-radius: 44px;
+    overflow: hidden; position: relative;
+    box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+    flex-shrink: 0;
+  }
+
+  /* status */
+  .status-bar {
+    position: absolute; top: 0; left: 0; right: 0; height: 54px;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 30px; z-index: 10;
+  }
+  .status-time { font-size: 16px; font-weight: 600; color: #000; }
+  .status-icons { display: flex; gap: 5px; color: #000; font-size: 14px; }
+
+  /* header */
+  .app-header {
+    position: absolute; top: 0; left: 0; right: 0; height: 100px; z-index: 5;
+    background: linear-gradient(180deg, var(--bg) 92%, rgba(245,241,234,0) 100%);
+  }
+  .header-title {
+    position: absolute; bottom: 14px; left: 0; right: 0;
+    text-align: center; font-size: 17px; font-weight: 600; color: var(--text);
+    font-family: 'SFProDisplay-Semibold', inherit;
+  }
+  .header-icons {
+    position: absolute; bottom: 10px; left: 20px; right: 20px;
+    display: flex; justify-content: space-between; color: var(--text-mute); font-size: 18px;
+  }
+
+  /* chat */
+  .chat-area {
+    position: absolute; top: 100px; left: 0; right: 0; bottom: 110px;
+    overflow-y: auto; padding: 16px 16px 20px;
+    display: flex; flex-direction: column;
+  }
+  .chat-area::-webkit-scrollbar { display: none; }
+
+  .msg { opacity: 0; transform: translateY(8px); animation: msgIn 0.35s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+  @keyframes msgIn { to { opacity: 1; transform: translateY(0); } }
+
+  .msg-user {
+    align-self: flex-end; margin-right: 4px; margin-bottom: 14px;
+    max-width: 280px; padding: 10px 16px;
+    background: var(--bubble-user); color: var(--text);
+    border-radius: 22px;
+    font-size: 17px; line-height: 24px; letter-spacing: 0.2px;
+  }
+
+  .msg-agent {
+    align-self: flex-start; margin-left: 4px; margin-bottom: 14px;
+    max-width: 320px; color: var(--text);
+    font-size: 17px; line-height: 24px; letter-spacing: 0.2px;
+  }
+  .msg-agent .confirm-row {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+    font-size: 15px; color: var(--text-mute);
+  }
+  .msg-agent .tick {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--terracotta-10); border: 1.5px solid var(--terracotta);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--terracotta); font-size: 11px;
+  }
+  .msg-agent .confirm-body { color: var(--text); }
+  .msg-agent .confirm-body b { font-weight: 600; }
+
+  /* composer */
+  .composer {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: var(--bg); padding: 12px 16px 22px;
+    border-top: 1px solid rgba(194,188,178,0.4);
+  }
+  .composer-inner {
+    display: flex; align-items: center; gap: 10px;
+    background: #fff; border: 1px solid var(--line);
+    border-radius: 22px; padding: 10px 14px;
+    font-size: 15px; color: var(--text-mute);
+  }
+  .composer-inner .send { margin-left: auto; color: var(--line); font-size: 18px; }
+
+  /* ────────────── VARIANT A — Inline text line ────────────── */
+  .va-indicator {
+    align-self: flex-start;
+    margin: 0 0 14px 6px;
+    display: flex; align-items: center; gap: 8px;
+    font-size: 14px; color: var(--text-mute);
+    font-style: italic;
+    max-width: 280px;
+    opacity: 0; animation: fadeIn 0.4s 0.2s forwards;
+  }
+  .va-indicator .swap-text {
+    transition: opacity 0.25s ease;
+    line-height: 20px;
+  }
+  .va-indicator .dots { display: inline-flex; gap: 3px; }
+  .va-indicator .dot {
+    width: 4px; height: 4px; border-radius: 50%;
+    background: var(--text-mute);
+    animation: dotPulse 1.4s infinite;
+  }
+  .va-indicator .dot:nth-child(2) { animation-delay: 0.2s; }
+  .va-indicator .dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes dotPulse {
+    0%, 60%, 100% { opacity: 0.3; transform: scale(1); }
+    30% { opacity: 1; transform: scale(1.3); }
+  }
+
+  /* ────────────── VARIANT B — Floating pill above composer ────────────── */
+  .vb-pill-wrap {
+    position: absolute; left: 0; right: 0; bottom: 110px;
+    display: flex; justify-content: center; pointer-events: none;
+    z-index: 4;
+  }
+  .vb-pill {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 9px 14px 9px 12px;
+    display: flex; align-items: center; gap: 9px;
+    font-size: 13px; color: var(--text);
+    box-shadow: 0 8px 24px rgba(67,62,54,0.08);
+    opacity: 0; transform: translateY(6px);
+    animation: pillIn 0.4s 0.2s forwards;
+    max-width: 300px;
+  }
+  @keyframes pillIn { to { opacity: 1; transform: translateY(0); } }
+  .vb-pill .breath {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--terracotta);
+    animation: breath 1.8s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  @keyframes breath {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.35); opacity: 1; }
+  }
+  .vb-pill .swap-text {
+    transition: opacity 0.25s ease;
+    white-space: nowrap;
+  }
+
+  /* ────────────── VARIANT C — Ambient trailing chip ────────────── */
+  .vc-chip {
+    align-self: flex-start; margin-left: 6px; margin-bottom: 14px;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 12px 6px 10px;
+    background: var(--terracotta-10);
+    border-radius: 999px;
+    font-size: 13px; color: var(--terracotta); font-weight: 500;
+    opacity: 0; animation: fadeIn 0.4s 0.2s forwards;
+  }
+  .vc-chip .spinner {
+    width: 11px; height: 11px; border-radius: 50%;
+    border: 1.8px solid var(--terracotta-30);
+    border-top-color: var(--terracotta);
+    animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ────────────── VARIANT D — Narrative stream (OTRD-1767 extended) ────────────── */
+  .vd-narrative {
+    align-self: flex-start; margin-left: 6px; margin-bottom: 14px;
+    display: flex; align-items: flex-start; gap: 10px;
+    max-width: 300px;
+    opacity: 0; animation: fadeIn 0.4s 0.2s forwards;
+  }
+  .vd-narrative .dot-stack {
+    margin-top: 8px;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--terracotta);
+    position: relative; flex-shrink: 0;
+  }
+  .vd-narrative .dot-stack::before,
+  .vd-narrative .dot-stack::after {
+    content: ''; position: absolute; inset: -3px; border-radius: 50%;
+    border: 1.5px solid var(--terracotta-30);
+    opacity: 0; animation: ripple 2.4s ease-out infinite;
+  }
+  .vd-narrative .dot-stack::after { animation-delay: 1.2s; }
+  @keyframes ripple {
+    0% { transform: scale(0.5); opacity: 0.9; }
+    100% { transform: scale(2.8); opacity: 0; }
+  }
+  .vd-narrative .swap-text {
+    font-size: 15px; color: var(--text-mute); font-style: italic;
+    line-height: 22px;
+    transition: opacity 0.25s ease;
+    flex: 1;
+  }
+
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  /* ────────────── VARIANT E — Onboarding-style stepped loader ────────────── */
+  /* Matches the real component in ChatRenderCustomView.tsx exactly:
+     no card/container — sits directly on the chat background.
+     Same icon sizes (~30), text (20px), progress colors (#4C4C49 / #E9E1D5 / #A6A297). */
+  .ve-loader {
+    align-self: stretch;
+    margin: 8px 0 16px 0;
+    padding: 0 2px;
+    opacity: 0; animation: fadeIn 0.4s 0.2s forwards;
+  }
+  .ve-header {
+    margin-bottom: 18px;
+    padding: 0 2px;
+  }
+  .ve-headline {
+    font-size: 20px; line-height: 26px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .ve-subtext {
+    font-size: 14px; line-height: 20px;
+    color: var(--text-mute);
+  }
+  .ve-step {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 14px;
+    min-height: 30px;
+  }
+  .ve-step .ve-icon {
+    width: 30px; height: 30px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  /* Pending — light outlined circle, muted text */
+  .ve-step.pending .ve-icon::before {
+    content: ''; width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 2px solid #D6CEC0;
+  }
+  .ve-step.pending .ve-label { color: #B5AEA3; }
+  /* Active — dark spinner */
+  .ve-step.active .ve-icon::before {
+    content: ''; width: 22px; height: 22px;
+    border: 2.5px solid #E9E1D5;
+    border-top-color: #4C4C49;
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+  }
+  .ve-step.active .ve-label { color: var(--text); }
+  /* Done — charcoal filled circle with white tick (matches check-full.json) */
+  .ve-step.done .ve-icon {
+    background: #4C4C49;
+    border-radius: 50%;
+    width: 26px; height: 26px;
+  }
+  .ve-step.done .ve-icon::before {
+    content: '✓'; color: #fff; font-size: 14px; font-weight: 700;
+    line-height: 1;
+  }
+  .ve-step.done .ve-label { color: var(--text); }
+  .ve-step .ve-label {
+    font-size: 20px; line-height: 26px;
+    font-weight: 400;
+    transition: color 0.3s ease;
+  }
+  /* Progress bar row — only under the active step */
+  .ve-progress-row {
+    display: flex; align-items: center; gap: 10px;
+    margin: -4px 0 14px 38px;
+  }
+  .ve-progress-bar {
+    flex: 1; height: 5px; background: #E9E1D5;
+    border-radius: 20px; overflow: hidden;
+  }
+  .ve-progress-fill {
+    height: 100%; background: #4C4C49;
+    width: 0%; transition: width 0.6s ease;
+    border-radius: 20px;
+  }
+  .ve-progress-pct {
+    font-size: 14px; font-weight: 500; color: #A6A297;
+    min-width: 36px; text-align: right;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  /* Notification contract — plain muted text, no border/card */
+  .ve-notify {
+    display: flex; align-items: flex-start; gap: 8px;
+    margin: 6px 2px 0 2px;
+    font-size: 13px; color: var(--text-mute);
+    line-height: 1.5;
+  }
+  .ve-notify .ve-bell { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+  .ve-notify b { color: var(--text); font-weight: 500; }
+
+  /* legend in phone frame — placed below header to avoid overlap */
+  .variant-tag {
+    position: absolute; top: 108px; right: 14px; z-index: 11;
+    font-size: 9px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase;
+    background: #433E36; color: #F5F1EA;
+    padding: 4px 8px; border-radius: 4px;
+    opacity: 0.75;
+  }
+
+  /* scenario step */
+  .scenario-note {
+    font-size: 10px; color: #888; line-height: 1.6;
+    padding: 10px 12px; border-left: 2px solid var(--terracotta);
+    background: #1a1a1a; border-radius: 0 6px 6px 0;
+  }
+  .scenario-note b { color: #ddd; }
+
+  .summary {
+    font-size: 11px; color: #aaa; line-height: 1.6;
+    padding: 12px; background: #1a1a1a; border-radius: 8px;
+    border: 1px solid #2a2a2a;
+  }
+  .summary b { color: #fff; }
+</style>
+</head>
+<body>
+
+<!-- LEFT PANEL -->
+<div class="panel">
+  <div>
+    <h1>Thinking Indicator</h1>
+    <p style="margin-top: 6px;">OTRD-1835 / OTRD-1767 unified.<br>5 directions for the 30–60s silent wait after goal set.<br><br><b style="color:#ddd;">A–D</b> = Tier-2 (user stays in chat).<br><b style="color:#ddd;">E</b> = Tier-3 (user can leave, push notify).</p>
+  </div>
+
+  <div class="ctrl-group">
+    <div class="ctrl-label">Variant</div>
+    <button class="ctrl-btn active" data-v="a">
+      <span>A — Inline text line</span>
+      <span class="c-sub">Subtle italic under last msg</span>
+    </button>
+    <button class="ctrl-btn" data-v="b">
+      <span>B — Floating pill</span>
+      <span class="c-sub">Docked above composer</span>
+    </button>
+    <button class="ctrl-btn" data-v="c">
+      <span>C — Trailing chip</span>
+      <span class="c-sub">Terracotta badge, spinner</span>
+    </button>
+    <button class="ctrl-btn" data-v="d">
+      <span>D — Narrative stream</span>
+      <span class="c-sub">Extends OTRD-1767 pattern</span>
+    </button>
+    <button class="ctrl-btn" data-v="e">
+      <span>E — Progress card + notify</span>
+      <span class="c-sub">Onboarding-loader pattern, Tier-3</span>
+    </button>
+  </div>
+
+  <button class="restart-btn" id="restart">↻ Restart scenario</button>
+
+  <div class="scenario-note">
+    <b>Scenario:</b><br>
+    User sets goal → Ottavia confirms preference → 30–60s silent wait → Coach plan appears.<br>
+    Sped up to ~18s for demo.
+  </div>
+
+  <div class="summary">
+    <b>Shared traits across all 4:</b><br>
+    • Text lines come from backend (OTRD-1767 SSE stream)<br>
+    • No "Coach is…" agent-exposing language<br>
+    • Narrative rotates every 3–4s to avoid "stuck" feel<br>
+    • Terracotta accent = Ottavia thinking state<br>
+    • Removed the instant the real message arrives
+  </div>
+</div>
+
+<!-- PHONE -->
+<div class="phone-frame" id="phone">
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <span class="status-icons">●●● 􀙇 􀛨</span>
+  </div>
+
+  <div class="app-header">
+    <div class="header-icons"><span>⏱</span><span>☰</span></div>
+    <div class="header-title">Ottavia</div>
+  </div>
+
+  <div class="variant-tag" id="variantTag">A · INLINE LINE</div>
+
+  <div class="chat-area" id="chat"></div>
+
+  <!-- Variant B pill lives outside .chat-area so it stays docked -->
+  <div class="vb-pill-wrap" id="vbPillWrap" style="display:none;">
+    <div class="vb-pill">
+      <span class="breath"></span>
+      <span class="swap-text" id="vbSwap"></span>
+    </div>
+  </div>
+
+  <div class="composer">
+    <div class="composer-inner">
+      <span>＋</span>
+      <span>Ask or log…</span>
+      <span class="send">↑</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---- Narrative script: same lines feed all variants ----
+  // Matches OTRD-1767's SSE stream pattern — backend pushes these, client renders.
+  const NARRATIVE = [
+    "Reading your last 7 days…",
+    "Looking at your training load…",
+    "Balancing calories and protein…",
+    "Shaping your plan…",
+    "Almost there…"
+  ];
+
+  const SCENARIO = {
+    userMsg: "Set a goal: lose 2 kg in 6 weeks",
+    confirmTitle: "Goal saved.",
+    confirmBody: "Weight target set to <b>–2&nbsp;kg</b> over 6 weeks. I'll build a plan around your training and nutrition.",
+    coachTitle: "Here's your plan.",
+    coachBody: "Aim for a <b>~400 kcal daily deficit</b> on training days, maintenance on rest days. Protein stays at <b>120g</b>. I've set 3 runs + 2 strength sessions for week&nbsp;1."
+  };
+
+  const VARIANTS = {
+    a: { tag: 'A · INLINE LINE' },
+    b: { tag: 'B · FLOATING PILL' },
+    c: { tag: 'C · TRAILING CHIP' },
+    d: { tag: 'D · NARRATIVE STREAM' },
+    e: { tag: 'E · PROGRESS CARD' }
+  };
+
+  // Variant E — stepped progression (Tier-3: long background work)
+  const VE_STEPS = [
+    { label: 'Reading your last 7 days', pct: 35 },
+    { label: 'Balancing training & nutrition', pct: 72 },
+    { label: 'Shaping your plan', pct: 100 }
+  ];
+
+  let currentVariant = 'a';
+  let timers = [];
+  let narrativeInterval = null;
+
+  const chat = document.getElementById('chat');
+  const variantTag = document.getElementById('variantTag');
+  const vbPillWrap = document.getElementById('vbPillWrap');
+  const vbSwap = document.getElementById('vbSwap');
+
+  function el(tag, cls, html) {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (html) n.innerHTML = html;
+    return n;
+  }
+
+  function clearAll() {
+    timers.forEach(t => clearTimeout(t));
+    timers = [];
+    if (narrativeInterval) { clearInterval(narrativeInterval); narrativeInterval = null; }
+    chat.innerHTML = '';
+    vbPillWrap.style.display = 'none';
+    vbSwap.innerHTML = '';
+  }
+
+  function schedule(fn, ms) { timers.push(setTimeout(fn, ms)); }
+
+  // ---- Text swap: fade out, replace text, fade in ----
+  // Uses a single node so multi-line wrapping sizes its own container.
+  function makeSwap(node, initial) {
+    node.textContent = initial;
+    node.style.opacity = '1';
+    return (next) => {
+      node.style.opacity = '0';
+      setTimeout(() => {
+        node.textContent = next;
+        node.style.opacity = '1';
+      }, 250);
+    };
+  }
+
+  function startNarrativeRotation(swapFn) {
+    let idx = 0;
+    narrativeInterval = setInterval(() => {
+      idx = (idx + 1) % NARRATIVE.length;
+      swapFn(NARRATIVE[idx]);
+    }, 3200);
+  }
+
+  // ---- Message builders ----
+  function addUser() {
+    const m = el('div', 'msg msg-user', SCENARIO.userMsg);
+    chat.appendChild(m);
+  }
+
+  function addConfirm() {
+    const m = el('div', 'msg msg-agent');
+    m.innerHTML = `
+      <div class="confirm-row">
+        <span class="tick">✓</span>
+        <span>${SCENARIO.confirmTitle}</span>
+      </div>
+      <div class="confirm-body">${SCENARIO.confirmBody}</div>
+    `;
+    chat.appendChild(m);
+  }
+
+  function addCoach() {
+    const m = el('div', 'msg msg-agent');
+    m.innerHTML = `
+      <div style="margin-bottom: 8px;"><b>${SCENARIO.coachTitle}</b></div>
+      <div>${SCENARIO.coachBody}</div>
+    `;
+    chat.appendChild(m);
+  }
+
+  // ---- Variant-specific indicators ----
+  function addVariantA() {
+    const node = el('div', 'va-indicator');
+    node.innerHTML = `
+      <span class="swap-text"></span>
+      <span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>
+    `;
+    node.id = 'indicator';
+    chat.appendChild(node);
+    const swap = makeSwap(node.querySelector('.swap-text'), NARRATIVE[0]);
+    startNarrativeRotation(swap);
+    return node;
+  }
+
+  function addVariantB() {
+    vbPillWrap.style.display = 'flex';
+    const swap = makeSwap(vbSwap, NARRATIVE[0]);
+    startNarrativeRotation(swap);
+    return vbPillWrap;
+  }
+
+  function addVariantC() {
+    const node = el('div', 'vc-chip');
+    node.id = 'indicator';
+    node.innerHTML = `<span class="spinner"></span><span class="swap-text" style="transition: opacity 0.25s ease;"></span>`;
+    chat.appendChild(node);
+    const swap = makeSwap(node.querySelector('.swap-text'), NARRATIVE[0]);
+    startNarrativeRotation(swap);
+    return node;
+  }
+
+  function addVariantD() {
+    const node = el('div', 'vd-narrative');
+    node.id = 'indicator';
+    node.innerHTML = `<span class="dot-stack"></span><span class="swap-text"></span>`;
+    chat.appendChild(node);
+    const swap = makeSwap(node.querySelector('.swap-text'), NARRATIVE[0]);
+    startNarrativeRotation(swap);
+    return node;
+  }
+
+  function addVariantE() {
+    const node = el('div', 've-loader');
+    node.id = 'indicator';
+    const stepsHtml = VE_STEPS.map((s, i) => `
+      <div class="ve-step ${i === 0 ? 'active' : 'pending'}" data-step="${i}">
+        <span class="ve-icon"></span>
+        <span class="ve-label">${s.label}</span>
+      </div>
+    `).join('');
+    node.innerHTML = `
+      <div class="ve-header">
+        <div class="ve-headline">Give me a minute to put this together.</div>
+        <div class="ve-subtext">Feel free to leave, I'll send you a notification when it's ready.</div>
+      </div>
+      ${stepsHtml}
+      <div class="ve-progress-row">
+        <div class="ve-progress-bar"><div class="ve-progress-fill" id="veFill"></div></div>
+        <span class="ve-progress-pct" id="vePct">0%</span>
+      </div>
+    `;
+    chat.appendChild(node);
+    chat.scrollTop = chat.scrollHeight;
+
+    // Step through the progression — each step ~4.5s
+    VE_STEPS.forEach((step, i) => {
+      schedule(() => {
+        const rows = node.querySelectorAll('.ve-step');
+        // current step → done
+        rows[i].classList.remove('active', 'pending');
+        rows[i].classList.add('done');
+        // next step → active
+        if (rows[i + 1]) {
+          rows[i + 1].classList.remove('pending');
+          rows[i + 1].classList.add('active');
+        }
+        const fill = document.getElementById('veFill');
+        const pct = document.getElementById('vePct');
+        if (fill) fill.style.width = step.pct + '%';
+        if (pct) pct.textContent = step.pct + '%';
+      }, (i + 1) * 4500);
+    });
+
+    return node;
+  }
+
+  function removeIndicator() {
+    if (narrativeInterval) { clearInterval(narrativeInterval); narrativeInterval = null; }
+    const ind = document.getElementById('indicator');
+    if (ind) {
+      ind.style.transition = 'opacity 0.3s ease';
+      ind.style.opacity = '0';
+      setTimeout(() => ind.remove(), 300);
+    }
+    if (currentVariant === 'b') {
+      vbPillWrap.style.transition = 'opacity 0.3s ease';
+      vbPillWrap.style.opacity = '0';
+      setTimeout(() => {
+        vbPillWrap.style.display = 'none';
+        vbPillWrap.style.opacity = '1';
+        vbPillWrap.style.transition = '';
+      }, 300);
+    }
+  }
+
+  // ---- Scenario runner ----
+  function runScenario() {
+    clearAll();
+    variantTag.textContent = VARIANTS[currentVariant].tag;
+
+    // t=0: user message
+    schedule(addUser, 400);
+
+    // t=1.0: confirmation
+    schedule(addConfirm, 1400);
+
+    // t=2.2: indicator appears
+    schedule(() => {
+      if (currentVariant === 'a') addVariantA();
+      else if (currentVariant === 'b') addVariantB();
+      else if (currentVariant === 'c') addVariantC();
+      else if (currentVariant === 'd') addVariantD();
+      else if (currentVariant === 'e') addVariantE();
+      chat.scrollTop = chat.scrollHeight;
+    }, 2600);
+
+    // Variant E runs longer to show the full stepped progression (~3 steps × 4.5s)
+    const endDelay = currentVariant === 'e' ? 20000 : 18000;
+
+    // indicator disappears, coach arrives
+    schedule(removeIndicator, endDelay);
+    schedule(() => {
+      addCoach();
+      chat.scrollTop = chat.scrollHeight;
+    }, endDelay + 400);
+
+    // loop
+    schedule(runScenario, endDelay + 6000);
+  }
+
+  // ---- Wire up ----
+  document.querySelectorAll('.ctrl-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.ctrl-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentVariant = btn.dataset.v;
+      runScenario();
+    });
+  });
+
+  document.getElementById('restart').addEventListener('click', runScenario);
+
+  // URL param: ?v=e to start on a specific variant
+  const urlV = new URLSearchParams(location.search).get('v');
+  if (urlV && VARIANTS[urlV]) {
+    currentVariant = urlV;
+    document.querySelectorAll('.ctrl-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.v === urlV);
+    });
+  }
+
+  runScenario();
+</script>
+
+</body>
+</html>

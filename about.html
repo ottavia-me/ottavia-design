@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ottavia · About</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        @font-face { font-family: 'Modern Era'; src: url('assets/Modern Era.ttf') format('truetype'); font-weight: 400; font-style: normal; }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --neutral-10: #F5F1EA;
+            --neutral-40: #A8A297;
+            --neutral-80: #433E36;
+            --text-dark: #433E36;
+            --text-muted: #8c8875;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Modern Era', 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-dark);
+            letter-spacing: -0.02em;
+            text-wrap: pretty;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            background: var(--neutral-10);
+        }
+
+        /* ===== NAV ===== */
+        .nav {
+            position: fixed;
+            top: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 80px);
+            max-width: 1400px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 28px;
+            border-radius: 100px;
+            background: rgba(245, 241, 234, 0.55);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow:
+                0 0 40px 12px rgba(245, 241, 234, 0.85),
+                0 0 80px 24px rgba(245, 241, 234, 0.5);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .nav.scrolled {
+            background: rgba(245, 241, 234, 0.7);
+            box-shadow:
+                0 0 40px 12px rgba(245, 241, 234, 0.9),
+                0 0 80px 24px rgba(245, 241, 234, 0.55),
+                0 1px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .nav.hidden {
+            transform: translateX(-50%) translateY(-160%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .nav-logo {
+            font-size: 34px;
+            font-weight: 600;
+            color: var(--text-dark);
+            letter-spacing: -0.5px;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 36px;
+        }
+
+        .nav-links a {
+            font-size: 18px;
+            font-weight: 400;
+            color: var(--text-dark);
+            letter-spacing: -0.02em;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .nav-links a:hover { opacity: 0.6; }
+
+        /* ===== HERO PHOTO ===== */
+        .hero-photo {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 120px 80px 60px;
+            text-align: center;
+        }
+
+        .hero-photo img {
+            width: 100%;
+            height: auto;
+            border-radius: 24px;
+            display: block;
+            object-fit: cover;
+        }
+
+        /* ===== STORY ===== */
+        .story {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 80px 200px;
+            text-align: center;
+        }
+
+        .story p {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--neutral-40);
+            line-height: 1.4;
+            letter-spacing: -0.03em;
+            margin-bottom: 32px;
+            text-wrap: balance;
+        }
+
+        .word {
+            color: var(--neutral-40);
+            transition: color 0.4s ease;
+        }
+
+        .word.is-active {
+            color: var(--neutral-80);
+        }
+
+        .story p.muted {
+            color: rgba(67, 62, 54, 0.45);
+        }
+
+        .swap {
+            display: inline;
+            position: relative;
+        }
+
+        .story a {
+            color: inherit;
+            text-decoration: underline;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 6px;
+            text-decoration-color: rgba(67, 62, 54, 0.3);
+            transition: text-decoration-color 0.25s ease;
+        }
+        .story a:hover {
+            text-decoration-color: var(--neutral-80);
+        }
+
+        @media (max-width: 1024px) {
+            .hero-photo { padding: 100px 48px 48px; }
+            .story { padding: 48px 48px 160px; }
+            .story p { font-size: 24px; margin-bottom: 24px; }
+        }
+
+        @media (max-width: 640px) {
+            .nav { width: calc(100% - 24px); padding: 10px 20px; }
+            .nav-logo { font-size: 26px; }
+            .nav-links { gap: 20px; }
+            .nav-links a { font-size: 15px; }
+            .hero-photo { padding: 80px 24px 32px; }
+            .hero-photo img { border-radius: 16px; }
+            .story { padding: 32px 24px 120px; }
+            .story p { font-size: 16px; line-height: 1.5; margin-bottom: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="nav">
+    <a href="landing-story.html" class="nav-logo">ottavia</a>
+    <div class="nav-links">
+        <a href="#">Download</a>
+        <a href="about.html">About Us</a>
+        <a href="features.html">Features</a>
+    </div>
+</nav>
+
+<header class="hero-photo">
+    <img src="assets/landing/founders.jpg" alt="The team behind Ottavia">
+</header>
+
+<main class="story">
+
+    <p class="is-active">Some products are built to make you better.</p>
+
+    <p>Ottavia was built because we got tired of being told we needed to be.</p>
+
+    <p>Every wellness app was a <span class="swap" data-key="leaderboard">leaderboard</span>. Every score was a verdict. Every day, the same trade. Hand over your data, get back a number you couldn't act on.</p>
+
+    <p>We thought it could be different.</p>
+
+    <p>We started by asking what you actually want to know. Not what the data could be made to display.</p>
+
+    <p class="muted">Did I recover. Did I eat enough. Should I push or rest. Why am I tired.</p>
+
+    <p>The questions are simple. The answers require the system to <span class="swap" data-key="thread">think across everything at once</span>.</p>
+
+    <p>So we built one that does.</p>
+
+    <p>Ottavia reads your sleep, your training, your meals, your mood, your cycle. Every signal, every day. She finds the thread between them. She does not score you. She speaks to you.</p>
+
+    <p>We are a <span class="swap" data-key="team">small team</span>. We care about what we make.</p>
+
+    <p>Built by <a href="https://www.linkedin.com/in/REPLACE-WITH-YOUR-LINKEDIN" target="_blank" rel="noopener">Vika</a> and <a href="https://www.linkedin.com/in/REPLACE-WITH-COFOUNDER-LINKEDIN" target="_blank" rel="noopener">Cofounder Name</a>.</p>
+
+    <p>We do not believe wellbeing is a streak. We do not believe a low score is a verdict. We do not believe your body owes you a gold star.</p>
+
+    <p>Your <span class="swap" data-key="data">data</span> stays yours. Stripped of who you are, it travels far enough to be understood, and no further.</p>
+
+    <p>This is what we wanted for ourselves.</p>
+
+    <p class="muted">We made it for you, too.</p>
+
+</main>
+
+<script>
+    const nav = document.querySelector('.nav');
+    let lastY = window.scrollY;
+    window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        const goingDown = y > lastY;
+        if (goingDown && y > 80) nav.classList.add('hidden');
+        else nav.classList.remove('hidden');
+        if (y > 40) nav.classList.add('scrolled');
+        else nav.classList.remove('scrolled');
+        lastY = y;
+    });
+
+    function wrapWords(node) {
+        [...node.childNodes].forEach((child) => {
+            if (child.nodeType === Node.TEXT_NODE) {
+                const text = child.textContent;
+                if (!text.trim()) return;
+                const frag = document.createDocumentFragment();
+                text.split(/(\s+)/).forEach((part) => {
+                    if (/^\s+$/.test(part)) {
+                        frag.appendChild(document.createTextNode(part));
+                    } else if (part.length) {
+                        const span = document.createElement('span');
+                        span.className = 'word';
+                        span.textContent = part;
+                        frag.appendChild(span);
+                    }
+                });
+                child.replaceWith(frag);
+            } else if (child.nodeType === Node.ELEMENT_NODE && child.tagName !== 'IMG' && child.tagName !== 'SVG' && !child.classList.contains('inline-chart')) {
+                wrapWords(child);
+            }
+        });
+    }
+    document.querySelectorAll('.story p').forEach(wrapWords);
+    document.querySelectorAll('.story p.is-active .word').forEach((w) => w.classList.add('is-active'));
+
+    const words = document.querySelectorAll('.story .word');
+    let ticking = false;
+    function updateWords() {
+        const threshold = window.innerHeight * 0.65;
+        words.forEach((w) => {
+            const rect = w.getBoundingClientRect();
+            if (rect.top < threshold) w.classList.add('is-active');
+        });
+        ticking = false;
+    }
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(updateWords);
+            ticking = true;
+        }
+    }, { passive: true });
+    updateWords();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ottavia — Founder Brand Questionnaire</title>
+<style>
+  :root {
+    --bg: #F6F1EA;
+    --ink: #1F1B17;
+    --muted: #7A6E62;
+    --accent: #B5532A;
+    --line: #E3D9CC;
+    --card: #FFFFFF;
+    --ok: #2F7A4F;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 64px 28px 140px; }
+  header { margin-bottom: 56px; border-bottom: 1px solid var(--line); padding-bottom: 32px; }
+  .eyebrow {
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  h1 { font-size: 44px; line-height: 1.1; margin: 0 0 16px; font-weight: 500; letter-spacing: -0.01em; }
+  .lede { font-size: 18px; color: var(--muted); margin: 0; max-width: 56ch; }
+  .meta {
+    display: flex; gap: 24px; margin-top: 24px; flex-wrap: wrap;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 13px; color: var(--muted);
+  }
+  .meta b { color: var(--ink); font-weight: 600; }
+
+  .who {
+    display: flex; gap: 12px; align-items: center; margin-top: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  .who label { font-size: 13px; color: var(--muted); }
+  .who input {
+    background: var(--card); border: 1px solid var(--line); border-radius: 6px;
+    padding: 8px 12px; font-size: 14px; font-family: inherit;
+  }
+
+  section {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 36px 36px 28px;
+    margin-bottom: 24px;
+  }
+  section h2 { font-size: 24px; font-weight: 500; margin: 0 0 6px; letter-spacing: -0.01em; }
+  section .sub {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--muted); font-size: 13px; margin-bottom: 28px;
+    text-transform: uppercase; letter-spacing: 0.14em;
+  }
+  .q { margin-bottom: 28px; }
+  .q:last-child { margin-bottom: 0; }
+  .q label { display: block; font-size: 17px; margin-bottom: 10px; color: var(--ink); }
+  .q .num {
+    color: var(--accent);
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 600; font-size: 13px; margin-right: 8px; letter-spacing: 0.04em;
+  }
+  textarea, input[type="text"] {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-family: inherit;
+    font-size: 16px;
+    color: var(--ink);
+    resize: vertical;
+    transition: border-color 0.15s;
+  }
+  textarea:focus, input[type="text"]:focus { outline: none; border-color: var(--accent); }
+  textarea { min-height: 90px; }
+  textarea.tall { min-height: 130px; }
+
+  .actions {
+    position: sticky; bottom: 16px;
+    display: flex; gap: 12px; justify-content: flex-end; align-items: center;
+    margin-top: 32px;
+    background: rgba(246, 241, 234, 0.92);
+    backdrop-filter: blur(8px);
+    padding: 12px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+  }
+  button {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px; font-weight: 600; letter-spacing: 0.02em;
+    padding: 14px 22px;
+    border-radius: 999px;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: var(--bg);
+    cursor: pointer;
+  }
+  button.secondary { background: var(--card); color: var(--ink); }
+  button:hover { transform: translateY(-1px); }
+  button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .save-status {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 12px; color: var(--muted);
+    margin-right: auto; padding-left: 12px;
+  }
+  .save-status.ok { color: var(--ok); }
+  .save-status.err { color: var(--accent); }
+
+  footer {
+    margin-top: 48px; padding-top: 28px;
+    border-top: 1px solid var(--line);
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 13px; color: var(--muted);
+  }
+  footer ol { padding-left: 18px; }
+  footer li { margin-bottom: 6px; }
+
+  .toast {
+    position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+    background: var(--ink); color: var(--bg);
+    padding: 14px 22px; border-radius: 999px;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px; font-weight: 500;
+    opacity: 0; transition: opacity 0.3s;
+    pointer-events: none; z-index: 100;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.18);
+  }
+  .toast.show { opacity: 1; }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 36px 18px 120px; }
+    h1 { font-size: 32px; }
+    section { padding: 24px 22px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="eyebrow">Ottavia · Brand Book v1</div>
+      <h1>Founder Brand Questionnaire</h1>
+      <p class="lede">Capture the founder's intent so we can build Ottavia's brand. Raw is better than polished — voice-note in your head, then type.</p>
+      <div class="meta">
+        <span><b>Time</b> 60–90 min</span>
+        <span><b>Saves</b> automatically</span>
+        <span><b>Finish</b> writes a markdown file into <code>brand/answers/</code></span>
+      </div>
+      <div class="who">
+        <label for="author">Your name:</label>
+        <input id="author" type="text" name="author" placeholder="Elad" />
+      </div>
+    </header>
+
+    <form id="form">
+
+      <section>
+        <h2>1 · Origin & Why</h2>
+        <div class="sub">Foundation</div>
+        <div class="q"><label><span class="num">01</span>Tell the story of how Ottavia started. What was the moment you knew this had to exist?</label><textarea class="tall" name="q1"></textarea></div>
+        <div class="q"><label><span class="num">02</span>What problem are you actually solving? Explain it as if to a friend at dinner — no product language.</label><textarea name="q2"></textarea></div>
+        <div class="q"><label><span class="num">03</span>What would happen in the world if Ottavia didn't exist? Who suffers, and how?</label><textarea name="q3"></textarea></div>
+        <div class="q"><label><span class="num">04</span>Why <em>you</em>? Why is this your fight?</label><textarea name="q4"></textarea></div>
+        <div class="q"><label><span class="num">05</span>If Ottavia succeeded beyond your wildest dreams in 10 years, what does the world look like?</label><textarea name="q5"></textarea></div>
+        <div class="q"><label><span class="num">06</span>One sentence you want on Ottavia's tombstone if it ever dies.</label><input type="text" name="q6" /></div>
+      </section>
+
+      <section>
+        <h2>2 · Beliefs & Values</h2>
+        <div class="sub">What we stand for</div>
+        <div class="q"><label><span class="num">07</span>3–5 things you believe about wellbeing / women that the rest of the industry gets wrong.</label><textarea class="tall" name="q7"></textarea></div>
+        <div class="q"><label><span class="num">08</span>A popular opinion in this space that you think is bullshit.</label><textarea name="q8"></textarea></div>
+        <div class="q"><label><span class="num">09</span>The non-negotiables. Things Ottavia will never do, even if it means losing money or users.</label><textarea name="q9"></textarea></div>
+        <div class="q"><label><span class="num">10</span>What are you willing to be unpopular for?</label><textarea name="q10"></textarea></div>
+        <div class="q"><label><span class="num">11</span>If Ottavia had to choose between growth and integrity, what does it pick? Give a concrete example.</label><textarea name="q11"></textarea></div>
+      </section>
+
+      <section>
+        <h2>3 · Audience</h2>
+        <div class="sub">Who it's for</div>
+        <div class="q"><label><span class="num">12</span>Describe the woman Ottavia is built for. A real person you've met — name, age, what she's dealing with this week.</label><textarea class="tall" name="q12"></textarea></div>
+        <div class="q"><label><span class="num">13</span>What does she currently do instead of Ottavia? (Therapist? Journaling? Nothing? Her best friend?)</label><textarea name="q13"></textarea></div>
+        <div class="q"><label><span class="num">14</span>What does she feel when she opens Ottavia for the first time? What does she <em>need</em> to feel?</label><textarea name="q14"></textarea></div>
+        <div class="q"><label><span class="num">15</span>Who is Ottavia <em>not</em> for? Be specific — turning people away is part of the brand.</label><textarea name="q15"></textarea></div>
+        <div class="q"><label><span class="num">16</span>What does she call us when she tells her best friend about Ottavia?</label><input type="text" name="q16" /></div>
+      </section>
+
+      <section>
+        <h2>4 · Competition & Position</h2>
+        <div class="sub">Where we stand</div>
+        <div class="q"><label><span class="num">17</span>Real competition. (Apps, people, habits, alternatives.)</label><textarea name="q17"></textarea></div>
+        <div class="q"><label><span class="num">18</span>For each, what do they do well, and where do they fail her?</label><textarea class="tall" name="q18"></textarea></div>
+        <div class="q"><label><span class="num">19</span>Finish: "Ottavia is the only ___ that ___."</label><input type="text" name="q19" /></div>
+        <div class="q"><label><span class="num">20</span>What category does Ottavia belong to? If it's new — what do we name it?</label><textarea name="q20"></textarea></div>
+        <div class="q"><label><span class="num">21</span>If Ottavia had a public enemy — a brand or idea we define ourselves against — who/what is it?</label><textarea name="q21"></textarea></div>
+      </section>
+
+      <section>
+        <h2>5 · Personality & Voice</h2>
+        <div class="sub">How she sounds</div>
+        <div class="q"><label><span class="num">22</span>If Ottavia were a person, who would she be? Real person, character, or archetype. "Like X but with a touch of Y."</label><textarea name="q22"></textarea></div>
+        <div class="q"><label><span class="num">23</span>5 adjectives. Then cross out 2. Keep the 3 non-negotiable ones.</label><textarea name="q23"></textarea></div>
+        <div class="q"><label><span class="num">24</span>How does she speak? References — songs, writers, podcasters, friends.</label><textarea name="q24"></textarea></div>
+        <div class="q"><label><span class="num">25</span>What does she <em>never</em> sound like?</label><textarea name="q25"></textarea></div>
+        <div class="q"><label><span class="num">26</span>Three phrases Ottavia would say. Three phrases Ottavia would never say.</label><textarea class="tall" name="q26"></textarea></div>
+        <div class="q"><label><span class="num">27</span>Does she swear? Does she joke? Does she cry with you?</label><textarea name="q27"></textarea></div>
+      </section>
+
+      <section>
+        <h2>6 · Visual Direction</h2>
+        <div class="sub">Gut, not committee</div>
+        <div class="q"><label><span class="num">28</span>5–10 images, brands, or products that <em>feel</em> like Ottavia. Drop links + why each.</label><textarea class="tall" name="q28"></textarea></div>
+        <div class="q"><label><span class="num">29</span>3–5 that are close but wrong. Why wrong?</label><textarea name="q29"></textarea></div>
+        <div class="q"><label><span class="num">30</span>Color: warm or cool? Saturated or muted? Light or dark-mode first?</label><textarea name="q30"></textarea></div>
+        <div class="q"><label><span class="num">31</span>Type: editorial/serif (thoughtful, slow) or sans (modern, clean) or something more expressive?</label><textarea name="q31"></textarea></div>
+        <div class="q"><label><span class="num">32</span>Should Ottavia feel more like a <em>space</em> (calm, room to breathe) or a <em>person</em> (presence, intimacy)?</label><textarea name="q32"></textarea></div>
+      </section>
+
+      <section>
+        <h2>7 · Brand Promise</h2>
+        <div class="sub">What we owe her</div>
+        <div class="q"><label><span class="num">33</span>The one thing a user can always count on Ottavia for. The promise we'd refund money over if broken.</label><textarea name="q33"></textarea></div>
+        <div class="q"><label><span class="num">34</span>The emotional shift every interaction should deliver. ("felt unseen → feels seen")</label><textarea name="q34"></textarea></div>
+        <div class="q"><label><span class="num">35</span>If Ottavia wrote her users a letter on day one, what's the first line?</label><input type="text" name="q35" /></div>
+      </section>
+
+      <section>
+        <h2>8 · Open</h2>
+        <div class="sub">Anything else</div>
+        <div class="q"><label><span class="num">36</span>What scares you about building this brand publicly?</label><textarea name="q36"></textarea></div>
+        <div class="q"><label><span class="num">37</span>A brand you admire and would steal from. What specifically?</label><textarea name="q37"></textarea></div>
+        <div class="q"><label><span class="num">38</span>Anything you want in the brand book that no one's asked you about?</label><textarea class="tall" name="q38"></textarea></div>
+      </section>
+
+      <div class="actions">
+        <span class="save-status" id="status">Saved locally</span>
+        <button type="button" class="secondary" id="downloadBtn">Download MD</button>
+        <button type="button" id="finishBtn">Finish & save to repo</button>
+      </div>
+
+      <footer>
+        <strong>What happens next</strong>
+        <ol>
+          <li>Brand Director synthesizes answers → Brand Strategy doc</li>
+          <li>content-designer turns strategy → Verbal Identity</li>
+          <li>product-designer turns strategy → Visual Identity</li>
+          <li>Consolidate into Ottavia Brand Book v1</li>
+        </ol>
+      </footer>
+
+    </form>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+  const form = document.getElementById('form');
+  const status = document.getElementById('status');
+  const toast = document.getElementById('toast');
+  const STORAGE_KEY = 'ottavia-brand-questionnaire';
+
+  // Load saved answers
+  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+  Object.entries(saved).forEach(([k, v]) => {
+    const el = document.querySelector(`[name="${k}"]`);
+    if (el) el.value = v;
+  });
+
+  function getAllAnswers() {
+    const data = {};
+    document.querySelectorAll('[name]').forEach(el => { data[el.name] = el.value; });
+    return data;
+  }
+
+  // Autosave
+  let saveTimer;
+  document.body.addEventListener('input', () => {
+    clearTimeout(saveTimer);
+    status.textContent = 'Saving…';
+    status.className = 'save-status';
+    saveTimer = setTimeout(() => {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(getAllAnswers()));
+      const t = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      status.textContent = `Saved · ${t}`;
+    }, 500);
+  });
+
+  function buildMarkdown() {
+    const author = document.getElementById('author').value.trim() || 'Anonymous';
+    const date = new Date().toLocaleDateString();
+    let md = `# Ottavia — Founder Brand Questionnaire\n\n_Filled by ${author} · ${date}_\n\n---\n\n`;
+    document.querySelectorAll('section').forEach(sec => {
+      md += `## ${sec.querySelector('h2').textContent}\n\n`;
+      sec.querySelectorAll('.q').forEach(q => {
+        const label = q.querySelector('label').innerText.replace(/\s+/g, ' ').trim();
+        const val = q.querySelector('textarea, input')?.value.trim() || '';
+        md += `**${label}**\n\n${val || '_(blank)_'}\n\n`;
+      });
+    });
+    return md;
+  }
+
+  function buildFilename() {
+    const author = (document.getElementById('author').value.trim() || 'anonymous')
+      .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const date = new Date().toISOString().slice(0, 10);
+    return `${author}-${date}.md`;
+  }
+
+  function showToast(msg, isError = false) {
+    toast.textContent = msg;
+    toast.style.background = isError ? '#B5532A' : '#1F1B17';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3200);
+  }
+
+  // Download MD locally
+  document.getElementById('downloadBtn').addEventListener('click', () => {
+    const blob = new Blob([buildMarkdown()], {type: 'text/markdown'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = buildFilename();
+    a.click();
+    URL.revokeObjectURL(a.href);
+    showToast('Downloaded');
+  });
+
+  // Finish — POST to local server, which writes to brand/answers/
+  document.getElementById('finishBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('finishBtn');
+    btn.disabled = true;
+    btn.textContent = 'Saving…';
+    try {
+      const res = await fetch('/save', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          filename: buildFilename(),
+          markdown: buildMarkdown()
+        })
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      status.textContent = `Saved to ${data.path}`;
+      status.className = 'save-status ok';
+      showToast(`Saved to ${data.path}`);
+      btn.textContent = 'Saved ✓';
+    } catch (e) {
+      status.textContent = `Server save failed — use Download instead. (${e.message})`;
+      status.className = 'save-status err';
+      showToast('Server not running — use Download MD', true);
+      btn.textContent = 'Try again';
+      btn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

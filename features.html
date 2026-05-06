@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ottavia · Features</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        @font-face { font-family: 'Modern Era'; src: url('assets/Modern Era.ttf') format('truetype'); font-weight: 400; font-style: normal; }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --neutral-10: #F5F1EA;
+            --neutral-40: #A8A297;
+            --neutral-80: #433E36;
+            --tan: #ccc8b2;
+            --text-dark: #433E36;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Modern Era', 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-dark);
+            letter-spacing: -0.02em;
+            text-wrap: pretty;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            background: var(--neutral-10);
+        }
+
+        /* ===== NAV ===== */
+        .nav {
+            position: fixed;
+            top: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 80px);
+            max-width: 1400px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 28px;
+            border-radius: 100px;
+            background: rgba(245, 241, 234, 0.55);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow:
+                0 0 40px 12px rgba(245, 241, 234, 0.85),
+                0 0 80px 24px rgba(245, 241, 234, 0.5);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+        }
+        .nav.scrolled {
+            background: rgba(245, 241, 234, 0.7);
+            box-shadow:
+                0 0 40px 12px rgba(245, 241, 234, 0.9),
+                0 0 80px 24px rgba(245, 241, 234, 0.55),
+                0 1px 8px rgba(0, 0, 0, 0.04);
+        }
+        .nav.hidden {
+            transform: translateX(-50%) translateY(-160%);
+            opacity: 0;
+            pointer-events: none;
+        }
+        .nav-logo {
+            font-size: 34px;
+            font-weight: 600;
+            color: var(--text-dark);
+            letter-spacing: -0.5px;
+            text-decoration: none;
+        }
+        .nav-links { display: flex; gap: 36px; }
+        .nav-links a {
+            font-size: 18px;
+            font-weight: 400;
+            color: var(--text-dark);
+            letter-spacing: -0.02em;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .nav-links a:hover { opacity: 0.6; }
+
+        /* ===== INTRO ===== */
+        .intro {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30vh 80px 12vh;
+            text-align: center;
+        }
+        .intro p {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--neutral-40);
+            line-height: 1.4;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+            text-wrap: balance;
+        }
+        .intro p.is-active .word { color: var(--neutral-80); }
+        .intro .scroll-cue {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--neutral-40);
+            margin-top: 64px;
+        }
+
+        /* ===== Q & A SECTIONS ===== */
+        .qa {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 12vh 80px 12vh;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .qa-num {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--neutral-40);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+        .question {
+            font-size: 36px;
+            font-weight: 400;
+            color: var(--neutral-40);
+            line-height: 1.3;
+            letter-spacing: -0.02em;
+            margin-bottom: 48px;
+            text-wrap: balance;
+            font-style: italic;
+            max-width: 800px;
+        }
+        .feature-tag {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--neutral-40);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-top: 32px;
+        }
+        .feature-tag::before {
+            content: "→ ";
+            margin-right: 4px;
+        }
+
+        /* ===== PHONE MOCK ===== */
+        .phone-mock {
+            width: 280px;
+            height: 580px;
+            background: var(--tan);
+            border-radius: 44px;
+            padding: 8px;
+            box-shadow: 0 24px 80px rgba(67, 62, 54, 0.12), 0 4px 16px rgba(67, 62, 54, 0.06);
+            flex-shrink: 0;
+        }
+        .phone-screen {
+            background: #fbfaf6;
+            border-radius: 36px;
+            height: 100%;
+            overflow: hidden;
+            padding: 28px 16px 16px;
+            display: flex;
+            flex-direction: column;
+        }
+        .phone-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--neutral-80);
+            padding: 0 8px 18px;
+        }
+        .phone-status .dots {
+            display: inline-flex;
+            gap: 3px;
+            opacity: 0.6;
+        }
+        .phone-status .dots span {
+            width: 4px;
+            height: 4px;
+            background: var(--neutral-80);
+            border-radius: 50%;
+        }
+        .chat-meta {
+            font-size: 10px;
+            color: var(--neutral-40);
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            font-weight: 700;
+            text-align: left;
+            padding-left: 12px;
+            margin-bottom: 8px;
+        }
+        .chat-bubble {
+            background: white;
+            border-radius: 18px;
+            border-top-left-radius: 6px;
+            padding: 14px 16px;
+            font-size: 13.5px;
+            line-height: 1.5;
+            color: var(--neutral-80);
+            font-weight: 500;
+            text-align: left;
+            box-shadow: 0 1px 3px rgba(67, 62, 54, 0.06);
+            margin-bottom: 12px;
+        }
+        .chat-bubble strong {
+            font-weight: 700;
+        }
+        .chat-quick {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            padding: 0 4px;
+            margin-top: auto;
+        }
+        .chat-quick span {
+            background: rgba(67, 62, 54, 0.06);
+            color: var(--neutral-80);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 7px 12px;
+            border-radius: 20px;
+        }
+
+        /* Word coloring */
+        .word {
+            color: var(--neutral-40);
+            transition: color 0.4s ease;
+        }
+        .word.is-active {
+            color: var(--neutral-80);
+        }
+
+        /* Closing */
+        .closing {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20vh 80px 25vh;
+            text-align: center;
+        }
+        .closing p {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--neutral-40);
+            line-height: 1.25;
+            letter-spacing: -0.03em;
+            text-wrap: balance;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .intro { padding: 25vh 48px 10vh; }
+            .intro p { font-size: 28px; }
+            .qa { padding: 10vh 48px; }
+            .question { font-size: 28px; margin-bottom: 36px; }
+            .closing { padding: 15vh 48px 20vh; }
+            .closing p { font-size: 36px; }
+        }
+
+        @media (max-width: 640px) {
+            .nav { width: calc(100% - 24px); padding: 10px 20px; }
+            .nav-logo { font-size: 26px; }
+            .nav-links { gap: 20px; }
+            .nav-links a { font-size: 15px; }
+            .intro { padding: 20vh 24px 8vh; }
+            .intro p { font-size: 22px; }
+            .qa { padding: 8vh 24px; }
+            .question { font-size: 22px; line-height: 1.3; margin-bottom: 28px; }
+            .qa-num, .feature-tag { font-size: 11px; }
+            .phone-mock { width: 240px; height: 500px; }
+            .phone-screen { padding: 24px 14px 14px; }
+            .closing { padding: 12vh 24px 18vh; }
+            .closing p { font-size: 26px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="nav">
+    <a href="landing-story.html" class="nav-logo">ottavia</a>
+    <div class="nav-links">
+        <a href="#">Download</a>
+        <a href="about.html">About Us</a>
+        <a href="features.html">Features</a>
+    </div>
+</nav>
+
+<section class="intro">
+    <p class="is-active">Six questions you have already asked.</p>
+    <p>Six answers no app has ever given you.</p>
+    <div class="scroll-cue">Scroll</div>
+</section>
+
+<!-- 01 — Cross-domain reasoning -->
+<section class="qa">
+    <div class="qa-num">01</div>
+    <p class="question">"Did I recover enough for tomorrow's run?"</p>
+    <div class="phone-mock">
+        <div class="phone-screen">
+            <div class="phone-status"><span>9:42</span><span class="dots"><span></span><span></span><span></span></span></div>
+            <div class="chat-meta">Ottavia</div>
+            <div class="chat-bubble">It wasn't the workout. It was the late dinner.<br><br>Your HRV dropped after midnight and didn't fully recover.<br><br>Skip intervals. A 45-minute easy run is enough.</div>
+            <div class="chat-quick"><span>Adjust plan</span><span>Show data</span></div>
+        </div>
+    </div>
+    <div class="feature-tag">Cross-domain reasoning</div>
+</section>
+
+<!-- 02 — Pattern over time -->
+<section class="qa">
+    <div class="qa-num">02</div>
+    <p class="question">"Why is my readiness low again?"</p>
+    <div class="phone-mock">
+        <div class="phone-screen">
+            <div class="phone-status"><span>7:14</span><span class="dots"><span></span><span></span><span></span></span></div>
+            <div class="chat-meta">Ottavia</div>
+            <div class="chat-bubble">You've held the same training load for nine days.<br><br>Your body is asking for one full day off.<br><br>Tomorrow is the day.</div>
+            <div class="chat-quick"><span>Plan rest day</span><span>See trend</span></div>
+        </div>
+    </div>
+    <div class="feature-tag">Pattern over time</div>
+</section>
+
+<!-- 03 — Photo food log -->
+<section class="qa">
+    <div class="qa-num">03</div>
+    <p class="question">"Did I eat enough protein today?"</p>
+    <div class="phone-mock">
+        <div class="phone-screen">
+            <div class="phone-status"><span>20:08</span><span class="dots"><span></span><span></span><span></span></span></div>
+            <div class="chat-meta">Ottavia</div>
+            <div class="chat-bubble">You hit <strong>87 g</strong>. You needed <strong>110 g</strong>.<br><br>The yoghurt at breakfast counted. The rest didn't add up.<br><br>A handful of nuts now will close the gap.</div>
+            <div class="chat-quick"><span>Log a snack</span><span>See macros</span></div>
+        </div>
+    </div>
+    <div class="feature-tag">Photo food log + smart targets</div>
+</section>
+
+<!-- 04 — Beyond the score -->
+<section class="qa">
+    <div class="qa-num">04</div>
+    <p class="question">"Why did I wake up tired with a 'good' sleep score?"</p>
+    <div class="phone-mock">
+        <div class="phone-screen">
+            <div class="phone-status"><span>6:48</span><span class="dots"><span></span><span></span><span></span></span></div>
+            <div class="chat-meta">Ottavia</div>
+            <div class="chat-bubble">You spent eight hours in bed and six asleep.<br><br>The score saw the time. I saw the gaps.<br><br>Your dinner ran late, and so did your wind-down.</div>
+            <div class="chat-quick"><span>Tonight's plan</span><span>Show stages</span></div>
+        </div>
+    </div>
+    <div class="feature-tag">Beyond the score</div>
+</section>
+
+<!-- 05 — Context-aware insight -->
+<section class="qa">
+    <div class="qa-num">05</div>
+    <p class="question">"Why does my heart rate spike on easy runs?"</p>
+    <div class="phone-mock">
+        <div class="phone-screen">
+            <div class="phone-status"><span>17:22</span><span class="dots"><span></span><span></span><span></span></span></div>
+            <div class="chat-meta">Ottavia</div>
+            <div class="chat-bubble">Two days of poor sleep. Two glasses of wine last night. A heat alert in your area.<br><br>None of those are the run. All of them are the heart rate.</div>
+            <div class="chat-quick"><span>Adjust pace</span><span>See factors</span></div>
+        </div>
+    </div>
+    <div class="feature-tag">Context-aware insight</div>
+</section>
+
+<!-- 06 — Early warning -->
+<section class="qa">
+    <div class="qa-num">06</div>
+    <p class="question">"Am I getting sick, or just tired?"</p>
+    <div class="phone-mock">
+        <div class="phone-screen">
+            <div class="phone-status"><span>8:03</span><span class="dots"><span></span><span></span><span></span></span></div>
+            <div class="chat-meta">Ottavia</div>
+            <div class="chat-bubble">Your HRV is six points below baseline. Your resting heart rate is up four.<br><br>This pattern, twice in the last six months, was the day before you got sick.<br><br>Rest today. We'll know tomorrow.</div>
+            <div class="chat-quick"><span>Cancel workout</span><span>Watch closely</span></div>
+        </div>
+    </div>
+    <div class="feature-tag">Early warning</div>
+</section>
+
+<section class="closing">
+    <p>Six questions. One system that thinks across all of them.</p>
+</section>
+
+<script>
+    const nav = document.querySelector('.nav');
+    let lastY = window.scrollY;
+    window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        const goingDown = y > lastY;
+        if (goingDown && y > 80) nav.classList.add('hidden');
+        else nav.classList.remove('hidden');
+        if (y > 40) nav.classList.add('scrolled');
+        else nav.classList.remove('scrolled');
+        lastY = y;
+    });
+
+    function wrapWords(node) {
+        [...node.childNodes].forEach((child) => {
+            if (child.nodeType === Node.TEXT_NODE) {
+                const text = child.textContent;
+                if (!text.trim()) return;
+                const frag = document.createDocumentFragment();
+                text.split(/(\s+)/).forEach((part) => {
+                    if (/^\s+$/.test(part)) {
+                        frag.appendChild(document.createTextNode(part));
+                    } else if (part.length) {
+                        const span = document.createElement('span');
+                        span.className = 'word';
+                        span.textContent = part;
+                        frag.appendChild(span);
+                    }
+                });
+                child.replaceWith(frag);
+            } else if (child.nodeType === Node.ELEMENT_NODE && child.tagName !== 'IMG' && child.tagName !== 'SVG' && !child.classList.contains('inline-chart')) {
+                wrapWords(child);
+            }
+        });
+    }
+    document.querySelectorAll('.intro p, .question, .closing p').forEach(wrapWords);
+    document.querySelectorAll('.is-active .word').forEach((w) => w.classList.add('is-active'));
+
+    const words = document.querySelectorAll('.word');
+    let ticking = false;
+    function updateWords() {
+        const threshold = window.innerHeight * 0.65;
+        words.forEach((w) => {
+            const rect = w.getBoundingClientRect();
+            if (rect.top < threshold) w.classList.add('is-active');
+        });
+        ticking = false;
+    }
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(updateWords);
+            ticking = true;
+        }
+    }, { passive: true });
+    updateWords();
+</script>
+
+</body>
+</html>

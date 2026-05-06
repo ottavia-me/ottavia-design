@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ottavia · A story</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        @font-face { font-family: 'Modern Era'; src: url('assets/Modern Era.ttf') format('truetype'); font-weight: 400; font-style: normal; }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --neutral-10: #F5F1EA;
+            --neutral-40: #A8A297;
+            --neutral-80: #433E36;
+            --text-dark: #433E36;
+            --text-muted: #8c8875;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Modern Era', 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-dark);
+            letter-spacing: -0.02em;
+            text-wrap: pretty;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            background: var(--neutral-10);
+        }
+
+        /* ===== NAV (same as landing.html, tuned for light bg) ===== */
+        .nav {
+            position: fixed;
+            top: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 80px);
+            max-width: 1400px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 28px;
+            border-radius: 100px;
+            background: rgba(245, 241, 234, 0.55);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow:
+                0 0 40px 12px rgba(245, 241, 234, 0.85),
+                0 0 80px 24px rgba(245, 241, 234, 0.5);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .nav.scrolled {
+            background: rgba(245, 241, 234, 0.7);
+            box-shadow:
+                0 0 40px 12px rgba(245, 241, 234, 0.9),
+                0 0 80px 24px rgba(245, 241, 234, 0.55),
+                0 1px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .nav.hidden {
+            transform: translateX(-50%) translateY(-160%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .nav-logo {
+            font-size: 34px;
+            font-weight: 600;
+            color: var(--text-dark);
+            letter-spacing: -0.5px;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 36px;
+        }
+
+        .nav-links a {
+            font-size: 18px;
+            font-weight: 400;
+            color: var(--text-dark);
+            letter-spacing: -0.02em;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .nav-links a:hover { opacity: 0.6; }
+
+        /* ===== STORY ===== */
+        .story {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 78vh 80px 200px;
+        }
+
+        .story p {
+            font-size: 64px;
+            font-weight: 700;
+            color: var(--neutral-40);
+            line-height: 1.25;
+            letter-spacing: -0.04em;
+            margin-bottom: 64px;
+            text-wrap: balance;
+        }
+
+        .word {
+            color: var(--neutral-40);
+            transition: color 0.4s ease;
+        }
+
+        .word.is-active {
+            color: var(--neutral-80);
+        }
+
+        .story p.muted {
+            color: rgba(67, 62, 54, 0.45);
+        }
+
+
+        /* Swap candidates — placeholders for future inline images */
+        .swap {
+            display: inline;
+            position: relative;
+        }
+
+        /* Inline image — sits within the line box without breaking line-height */
+        .inline-img {
+            display: inline-block;
+            height: 1.1em;
+            width: auto;
+            vertical-align: -0.22em;
+            border-radius: 8px;
+            object-fit: cover;
+            margin: 0 0.12em;
+        }
+
+        /* Inline mini dashboard — 3 ring charts that fit on a single text line */
+        .inline-chart {
+            display: inline-block;
+            vertical-align: -0.32em;
+            margin: 0 0.18em;
+            line-height: 0;
+        }
+        .inline-chart svg {
+            height: 1.2em;
+            width: auto;
+            display: block;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .story { padding: 78vh 48px 160px; }
+            .story p { font-size: 48px; margin-bottom: 48px; }
+        }
+
+        @media (max-width: 640px) {
+            .nav { width: calc(100% - 24px); padding: 10px 20px; }
+            .nav-logo { font-size: 26px; }
+            .nav-links { gap: 20px; }
+            .nav-links a { font-size: 15px; }
+            .story { padding: 78vh 24px 120px; }
+            .story p { font-size: 28px; line-height: 1.25; margin-bottom: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="nav">
+    <a href="#" class="nav-logo">ottavia</a>
+    <div class="nav-links">
+        <a href="#">Download</a>
+        <a href="about.html">About Us</a>
+        <a href="features.html">Features</a>
+    </div>
+</nav>
+
+<main class="story">
+
+    <p class="is-active">It usually starts the moment you <span class="swap" data-key="morning">wake up</span>.</p>
+
+    <p>You open one app to check your <span class="swap" data-key="sleep">sleep</span>. Another to log your <span class="swap" data-key="meal">meal</span>. A third to see whether you can train tomorrow.</p>
+
+    <p class="muted">None of them agree. None of them know what to do.</p>
+
+    <p>Did I recover enough for tomorrow's run?<br>Why is my readiness low again?<br>Did I eat enough protein today?<br>Why did I wake up tired with a "good" sleep score?<br>Why does my heart rate spike on easy runs?<br>Am I getting sick, or just tired?</p>
+
+    <p>This is where Ottavia begins.</p>
+
+    <p>She is not a <span class="swap" data-key="dashboard">dashboard</span> <span class="inline-chart" aria-label="Sleep 74%, Recovery 85%, Strain 14.2"><svg viewBox="0 0 175 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g transform="translate(30,30)">
+            <circle r="22" fill="none" stroke="rgba(67,62,54,0.16)" stroke-width="5"/>
+            <circle r="22" fill="none" stroke="#9FB4C2" stroke-width="5" stroke-linecap="round" stroke-dasharray="138.23" stroke-dashoffset="35.94" transform="rotate(-90)"/>
+            <text x="0" y="1" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="11" font-weight="700" letter-spacing="0.3" fill="#433E36">74<tspan font-size="7" dx="0.5">%</tspan></text>
+        </g>
+        <g transform="translate(87,30)">
+            <circle r="22" fill="none" stroke="rgba(67,62,54,0.16)" stroke-width="5"/>
+            <circle r="22" fill="none" stroke="#3CD86A" stroke-width="5" stroke-linecap="round" stroke-dasharray="138.23" stroke-dashoffset="20.73" transform="rotate(-90)"/>
+            <text x="0" y="1" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="11" font-weight="700" letter-spacing="0.3" fill="#433E36">85<tspan font-size="7" dx="0.5">%</tspan></text>
+        </g>
+        <g transform="translate(144,30)">
+            <circle r="22" fill="none" stroke="rgba(67,62,54,0.16)" stroke-width="5"/>
+            <circle r="22" fill="none" stroke="#1FA8F0" stroke-width="5" stroke-linecap="round" stroke-dasharray="138.23" stroke-dashoffset="44.78" transform="rotate(-90)"/>
+            <text x="0" y="1" text-anchor="middle" dominant-baseline="middle" font-family="inherit" font-size="10" font-weight="700" letter-spacing="0.3" fill="#433E36">14.2</text>
+        </g>
+    </svg></span>. She is a presence. A quiet, steady voice that watches your everyday signals and finds the thread between them.</p>
+
+    <p>When you wake, she has already read the night. Your <span class="swap" data-key="hrv">heart rate variability</span>, your sleep stages, the <span class="swap" data-key="run">run</span> you did yesterday. Before you reach for your phone, she has already shaped the morning around you.</p>
+
+    <p>When you eat, you do not log. You take a <span class="swap" data-key="photo">photo of your plate</span>. She names the food, fits it into the day, and tells you what your body is asking for next.</p>
+
+    <p>When you train, she watches the load. When you rest, she reads the recovery. When the week shifts, so does the plan.</p>
+
+    <p>Sleep affects training.<br>Nutrition affects mood.<br>Mood affects sleep.</p>
+
+    <p class="muted">The loop is not linear. Neither is she.</p>
+
+    <p>She is the only system that thinks across all of it <span class="swap" data-key="at-once">at once</span>.</p>
+
+    <p>Everything stays anonymous. Your data leaves your phone stripped of who you are. The <span class="swap" data-key="patterns">patterns</span> travel. Your name never does.</p>
+
+    <p>What she gives back is not a number. Not a graph. Not a streak.</p>
+
+    <p>One grounded, specific thing to do <span class="swap" data-key="next-step">next</span>.</p>
+
+    <p class="muted">This is wellbeing, finally explained.</p>
+
+</main>
+
+<script>
+    const nav = document.querySelector('.nav');
+    let lastY = window.scrollY;
+    window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        const goingDown = y > lastY;
+        if (goingDown && y > 80) nav.classList.add('hidden');
+        else nav.classList.remove('hidden');
+        if (y > 40) nav.classList.add('scrolled');
+        else nav.classList.remove('scrolled');
+        lastY = y;
+    });
+
+    // Wrap every word in a span so we can color them individually.
+    function wrapWords(node) {
+        [...node.childNodes].forEach((child) => {
+            if (child.nodeType === Node.TEXT_NODE) {
+                const text = child.textContent;
+                if (!text.trim()) return;
+                const frag = document.createDocumentFragment();
+                text.split(/(\s+)/).forEach((part) => {
+                    if (/^\s+$/.test(part)) {
+                        frag.appendChild(document.createTextNode(part));
+                    } else if (part.length) {
+                        const span = document.createElement('span');
+                        span.className = 'word';
+                        span.textContent = part;
+                        frag.appendChild(span);
+                    }
+                });
+                child.replaceWith(frag);
+            } else if (child.nodeType === Node.ELEMENT_NODE && child.tagName !== 'IMG' && child.tagName !== 'SVG' && !child.classList.contains('inline-chart')) {
+                wrapWords(child);
+            }
+        });
+    }
+    document.querySelectorAll('.story p').forEach(wrapWords);
+
+    // First paragraph is active on load.
+    document.querySelectorAll('.story p.is-active .word').forEach((w) => w.classList.add('is-active'));
+
+    // Activate each word as it crosses the read line (~65% viewport height).
+    const words = document.querySelectorAll('.story .word');
+    let ticking = false;
+    function updateWords() {
+        const threshold = window.innerHeight * 0.65;
+        words.forEach((w) => {
+            const rect = w.getBoundingClientRect();
+            if (rect.top < threshold) w.classList.add('is-active');
+        });
+        ticking = false;
+    }
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(updateWords);
+            ticking = true;
+        }
+    }, { passive: true });
+    updateWords();
+</script>
+
+</body>
+</html>

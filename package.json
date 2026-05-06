@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "dev": "npx serve -l 8090 .",
-    "sim": "node sim-server.js"
+    "sim": "node sim-server.js",
+    "brand": "node brand/server.js"
   },
   "dependencies": {
     "cors": "^2.8.6",

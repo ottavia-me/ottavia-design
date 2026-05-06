@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ribbon draw animation</title>
+<style>
+  :root {
+    --bg: #F2EFE7;
+    --beige-bar: #E9D9BE;
+    --ink: #1B1B1F;
+    --muted: #9A968B;
+    --blue-light: #B7D4F7;
+    --blue-dark: #6FA4E8;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, "SF Pro Text", "Inter", system-ui, sans-serif; }
+  .wrap { max-width: 420px; margin: 0 auto; padding: 32px 24px 80px; }
+  h1 { font-size: 22px; line-height: 1.25; margin: 0 0 4px; font-weight: 600; }
+  .sub { font-size: 14px; color: #555; margin: 0 0 28px; }
+  .label { font-size: 13px; color: var(--muted); margin: 0 0 4px; }
+  .km { font-size: 22px; color: var(--blue-dark); font-weight: 600; margin: 0 0 8px; }
+  .chart { position: relative; width: 100%; aspect-ratio: 1.55 / 1; }
+  .chart svg { width: 100%; height: 100%; display: block; overflow: visible; }
+  .chart svg { position: relative; z-index: 2; }
+
+  /* The ribbon paths */
+  .ribbon {
+    fill: none;
+    stroke-linecap: butt;
+    stroke-linejoin: miter;
+  }
+  .ribbon-back   { stroke: var(--blue-light); stroke-width: 22; }
+  .ribbon-front  { stroke: var(--blue-dark);  stroke-width: 22; }
+  .ribbon-beige  { stroke: var(--beige-bar);  stroke-width: 22; }
+
+  /* Animation: stroke-dashoffset from full length down to 0.
+     Each path is drawn following its OWN direction (the order of points
+     in the d attribute), so the ribbon appears as if drawn by a pen. */
+  .draw {
+    stroke-dasharray: var(--len);
+    stroke-dashoffset: var(--len);
+    animation: draw 2s cubic-bezier(.65,.05,.36,1) forwards;
+  }
+  .draw.delay-1 { animation-delay: .35s; }
+  .draw.delay-2 { animation-delay: .7s; }
+
+  @keyframes draw {
+    to { stroke-dashoffset: 0; }
+  }
+
+  .controls { margin-top: 20px; display: flex; gap: 8px; }
+  button {
+    appearance: none; border: 1px solid #d8d3c6; background: #fff;
+    padding: 8px 14px; border-radius: 999px; font: inherit; cursor: pointer;
+  }
+  button:hover { background: #faf7ef; }
+
+  .footer { margin-top: 28px; font-size: 13px; color: #555; line-height: 1.45; }
+  code { background: #ece8db; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Nice run</h1>
+    <p class="sub">10.7 km at a steady pace. The ribbons draw themselves like ink on paper.</p>
+
+    <p class="label">Weekly running progress</p>
+    <p class="km">10.7 km</p>
+
+    <div class="chart">
+      <svg viewBox="0 0 600 380" preserveAspectRatio="none">
+        <!--
+          Three ribbons drawn in sequence, each following its own
+          authored direction so the "pen" traces the curve naturally.
+        -->
+
+        <!-- BACK ribbon: light blue -->
+        <path id="back"
+              class="ribbon ribbon-back draw"
+              d="M -10 250
+                 C  90 250, 150 110, 260 110
+                 S 430 320, 540 320
+                 S 660 110, 760 110" />
+
+        <!-- BEIGE bar: now also a stroked path so it draws itself -->
+        <path id="beige"
+              class="ribbon ribbon-beige draw delay-1"
+              d="M -10 190 L 760 190" />
+
+        <!-- FRONT ribbon: dark blue, mirrored phase -->
+        <path id="front"
+              class="ribbon ribbon-front draw delay-2"
+              d="M -10 130
+                 C  90 130, 150 290, 260 290
+                 S 430 90,  540 90
+                 S 660 300, 760 300" />
+      </svg>
+    </div>
+
+    <div class="controls">
+      <button onclick="replay()">Replay</button>
+      <button onclick="toggleSlow()">Toggle slow-motion</button>
+    </div>
+
+    <p class="footer">
+      Each ribbon is an SVG <code>&lt;path&gt;</code>. We set
+      <code>stroke-dasharray</code> to the path length and animate
+      <code>stroke-dashoffset</code> from full length to <code>0</code>.
+      The dash travels along the path in its authored direction, so even
+      curves that move backward or cross each other appear as if drawn by hand.
+      Same technique works in React Native via <code>react-native-svg</code> +
+      <code>reanimated</code>.
+    </p>
+  </div>
+
+<script>
+  // Auto-measure each path so the dash length is exact and the
+  // "pen" speed feels consistent regardless of viewBox scaling.
+  document.querySelectorAll('.ribbon').forEach(p => {
+    const len = p.getTotalLength();
+    p.style.setProperty('--len', len);
+  });
+
+  function replay() {
+    document.querySelectorAll('.draw').forEach(el => {
+      el.style.animation = 'none';
+      // force reflow
+      el.getBoundingClientRect();
+      el.style.animation = '';
+    });
+  }
+
+  let slow = false;
+  function toggleSlow() {
+    slow = !slow;
+    document.querySelectorAll('.draw').forEach(el => {
+      el.style.animationDuration = slow ? '6s' : '2s';
+    });
+    replay();
+  }
+</script>
+</body>
+</html>
