@@ -470,11 +470,11 @@
       padding: 8px 16px 20px;
     }
 
-    /* Chat markdown styles for previews */
+    /* Chat markdown styles for previews — mirrors src/utils/MarkdownStyles.ts */
     .chat-md { color: #433E36; }
     .chat-md p {
       font-size: 18px;
-      line-height: 28px;
+      line-height: 26px;
       letter-spacing: 0.2px;
       margin-top: 0;
       margin-bottom: 12px;
@@ -486,7 +486,6 @@
       font-weight: 600;
       margin-top: 14px;
       margin-bottom: 6px;
-      letter-spacing: 0;
     }
     .chat-md h3 {
       font-size: 22px;
@@ -494,15 +493,13 @@
       font-weight: 600;
       margin-top: 10px;
       margin-bottom: 6px;
-      letter-spacing: 0;
     }
     .chat-md h4, .chat-md h5, .chat-md h6 {
-      font-size: 18px;
-      line-height: 28px;
+      font-size: 20px;
+      line-height: 30px;
       font-weight: 600;
-      margin-top: 8px;
+      margin-top: 14px;
       margin-bottom: 4px;
-      letter-spacing: 0;
     }
     .chat-md strong {
       font-weight: 600;
@@ -519,7 +516,7 @@
       display: flex;
       align-items: flex-start;
       font-size: 18px;
-      line-height: 28px;
+      line-height: 26px;
       letter-spacing: 0.2px;
     }
     .chat-md ul li::before {
@@ -528,8 +525,8 @@
       height: 7px;
       border-radius: 50%;
       background: #C2BCB2;
-      margin-right: 10px;
-      margin-top: 10px;
+      margin-right: 12px;
+      margin-top: 11px;
       flex-shrink: 0;
     }
     .chat-md ol {
@@ -544,15 +541,15 @@
       display: flex;
       align-items: flex-start;
       font-size: 18px;
-      line-height: 28px;
+      line-height: 26px;
       letter-spacing: 0.2px;
       counter-increment: ol-counter;
     }
     .chat-md ol li::before {
       content: counter(ol-counter) ".";
       color: #A8A297;
-      font-size: 18px;
-      line-height: 28px;
+      font-size: 20px;
+      line-height: 32px;
       margin-right: 8px;
       flex-shrink: 0;
     }
@@ -560,19 +557,24 @@
       background: #DBD6CD;
       height: 1px;
       border: none;
-      margin: 14px 20px 16px;
+      margin: 14px 0 16px;
     }
     .chat-md mark {
       background: #FCE7B5;
       color: #433E36;
-      padding: 2px 6px;
-      border-radius: 4px;
+      font-size: 18px;
+      line-height: 26px;
+      letter-spacing: 0.2px;
     }
     .chat-md table {
-      margin: 16px 0;
+      margin: 12px 0;
       border: 1px solid #C2BCB2;
-      border-collapse: collapse;
+      border-radius: 20px;
+      border-collapse: separate;
+      border-spacing: 0;
+      overflow: hidden;
       width: 100%;
+      padding-bottom: 6px;
     }
     .chat-md thead { background: #DBD6CD; }
     .chat-md th {
@@ -580,19 +582,20 @@
       color: #433E36;
       padding: 8px;
       text-align: left;
-      font-size: 18px;
+      font-size: 16px;
+      line-height: 20px;
     }
     .chat-md td {
-      padding: 8px;
-      font-size: 18px;
+      padding: 10px;
+      font-size: 16px;
+      line-height: 18px;
       color: #433E36;
-      border-bottom: 1px solid #C2BCB2;
       font-variant-numeric: tabular-nums;
     }
     .chat-md blockquote {
       border-left: 3px solid #C2BCB2;
       padding-left: 14px;
-      margin: 12px 0;
+      margin: 16px;
     }
 
     /* ===== MARGIN VISUALIZATION ===== */
@@ -2352,10 +2355,10 @@
         <div class="type-preview">
           <div style="font-size:24px; font-weight:600; line-height:32px; color:#433E36; margin-bottom:12px;">Heading/H2 — The quick brown fox</div>
           <div style="font-size:22px; font-weight:600; line-height:31px; color:#433E36; margin-bottom:12px;">Heading/H3 — The quick brown fox</div>
-          <div style="font-size:18px; font-weight:600; line-height:28px; color:#433E36; margin-bottom:12px;">Heading/H4 — The quick brown fox</div>
-          <div style="font-size:18px; line-height:28px; letter-spacing:0.2px; color:#433E36; margin-bottom:12px;">Body/Regular — The quick brown fox jumps over the lazy dog</div>
-          <div style="font-size:18px; font-weight:600; line-height:28px; letter-spacing:0.2px; color:#433E36; margin-bottom:12px;">Body/Bold — The quick brown fox jumps over</div>
-          <div style="font-size:18px; line-height:28px; letter-spacing:0.2px; color:#8F897D;">Body/Muted — The quick brown fox jumps over</div>
+          <div style="font-size:20px; font-weight:600; line-height:30px; color:#433E36; margin-bottom:12px;">Heading/H4 — The quick brown fox</div>
+          <div style="font-size:18px; line-height:26px; letter-spacing:0.2px; color:#433E36; margin-bottom:12px;">Body/Regular — The quick brown fox jumps over the lazy dog</div>
+          <div style="font-size:18px; font-weight:600; line-height:26px; letter-spacing:0.2px; color:#433E36; margin-bottom:12px;">Body/Bold — The quick brown fox jumps over</div>
+          <div style="font-size:18px; line-height:26px; letter-spacing:0.2px; color:#8F897D;">Body/Muted — The quick brown fox jumps over</div>
         </div>
 
         <table class="token-table">
@@ -2367,7 +2370,7 @@
               <td><span class="token-name">Body/Regular</span></td>
               <td><span class="hex">SF Pro Display Regular</span></td>
               <td><span class="hex">18</span></td>
-              <td><span class="hex">28</span></td>
+              <td><span class="hex">26</span></td>
               <td><span class="hex">0.2</span></td>
               <td><span class="hex">#433E36</span></td>
             </tr>
@@ -2375,7 +2378,7 @@
               <td><span class="token-name">Body/Bold</span></td>
               <td><span class="hex">SF Pro Display Semibold</span></td>
               <td><span class="hex">18</span></td>
-              <td><span class="hex">28</span></td>
+              <td><span class="hex">26</span></td>
               <td><span class="hex">0.2</span></td>
               <td><span class="hex">#433E36</span></td>
             </tr>
@@ -2383,7 +2386,7 @@
               <td><span class="token-name">Body/Muted</span></td>
               <td><span class="hex">SF Pro Display Regular</span></td>
               <td><span class="hex">18</span></td>
-              <td><span class="hex">28</span></td>
+              <td><span class="hex">26</span></td>
               <td><span class="hex">0.2</span></td>
               <td><span class="hex">#8F897D</span></td>
             </tr>
@@ -2406,8 +2409,8 @@
             <tr>
               <td><span class="token-name">Heading/H4</span></td>
               <td><span class="hex">SF Pro Display Semibold</span></td>
-              <td><span class="hex">18</span></td>
-              <td><span class="hex">28</span></td>
+              <td><span class="hex">20</span></td>
+              <td><span class="hex">30</span></td>
               <td><span class="hex">0</span></td>
               <td><span class="hex">#433E36</span></td>
             </tr>
@@ -2792,9 +2795,9 @@
           <div class="margin-viz">
             <div class="phone-status-bar"><span>Margins</span><span></span></div>
             <div class="viz-chat">
-              <div class="viz-element" style="font-size:18px; line-height:28px; letter-spacing:0.2px;">Your HRV dropped to <strong>30</strong> last night — down from <strong>41</strong> two days ago.</div>
+              <div class="viz-element" style="font-size:18px; line-height:26px; letter-spacing:0.2px;">Your HRV dropped to <strong>30</strong> last night, down from <strong>41</strong> two days ago.</div>
               <div class="mb-band" style="height:12px">mb 12</div>
-              <div class="viz-element" style="font-size:18px; line-height:28px; letter-spacing:0.2px;">Sleep stress came back POOR.</div>
+              <div class="viz-element" style="font-size:18px; line-height:26px; letter-spacing:0.2px;">Sleep stress came back POOR.</div>
               <div class="mb-band" style="height:12px">mb 12</div>
             </div>
           </div>
@@ -2802,7 +2805,7 @@
         <table class="spec-table">
           <tr><th>Property</th><th>Value</th></tr>
           <tr><td>Font</td><td>SF Pro Display Regular, 18px</td></tr>
-          <tr><td>Line Height</td><td>28px</td></tr>
+          <tr><td>Line Height</td><td>26px</td></tr>
           <tr><td>Letter Spacing</td><td>0.2px</td></tr>
           <tr><td>Color</td><td>#433E36</td></tr>
           <tr><td>Margin Top</td><td>0</td></tr>
@@ -2823,12 +2826,12 @@
           <div class="margin-viz">
             <div class="phone-status-bar"><span>Margins</span><span></span></div>
             <div class="viz-chat">
-              <div class="viz-element" style="font-size:18px; line-height:28px;">Your recovery is lagging.</div>
+              <div class="viz-element" style="font-size:18px; line-height:26px;">Your recovery is lagging.</div>
               <div class="mb-band" style="height:12px">mb 12</div>
               <div class="mt-band" style="height:14px">mt 14</div>
               <div class="viz-element" style="font-size:24px; font-weight:600; line-height:32px;">Why not train</div>
               <div class="mb-band" style="height:6px">mb 6</div>
-              <div class="viz-element" style="font-size:18px; line-height:28px;">Sleep stress came back POOR.</div>
+              <div class="viz-element" style="font-size:18px; line-height:26px;">Sleep stress came back POOR.</div>
               <div class="mb-band" style="height:12px">mb 12</div>
             </div>
           </div>
@@ -2857,12 +2860,12 @@
           <div class="margin-viz">
             <div class="phone-status-bar"><span>Margins</span><span></span></div>
             <div class="viz-chat">
-              <div class="viz-element" style="font-size:18px; line-height:28px;">Your metrics show a clear pattern.</div>
+              <div class="viz-element" style="font-size:18px; line-height:26px;">Your metrics show a clear pattern.</div>
               <div class="mb-band" style="height:12px">mb 12</div>
               <div class="mt-band" style="height:10px">mt 10</div>
               <div class="viz-element" style="font-size:22px; font-weight:600; line-height:31px;">Recovery markers</div>
               <div class="mb-band" style="height:6px">mb 6</div>
-              <div class="viz-element" style="font-size:18px; line-height:28px;">Resting HR is elevated at 54 bpm.</div>
+              <div class="viz-element" style="font-size:18px; line-height:26px;">Resting HR is elevated at 54 bpm.</div>
               <div class="mb-band" style="height:12px">mb 12</div>
             </div>
           </div>
@@ -2882,25 +2885,25 @@
             <div class="phone-status-bar"><span>9:41</span><span></span></div>
             <div class="phone-chat chat-md">
               <h4>Small heading</h4>
-              <p>All three (H4, H5, H6) render identically at body size, Semibold weight.</p>
+              <p>All three (H4, H5, H6) render identically, slightly larger than body, Semibold weight.</p>
             </div>
           </div>
           <div class="margin-viz">
             <div class="phone-status-bar"><span>Margins</span><span></span></div>
             <div class="viz-chat">
-              <div class="mt-band" style="height:8px">mt 8</div>
-              <div class="viz-element" style="font-size:18px; font-weight:600; line-height:28px;">Small heading</div>
+              <div class="mt-band" style="height:14px">mt 14</div>
+              <div class="viz-element" style="font-size:20px; font-weight:600; line-height:30px;">Small heading</div>
               <div class="mb-band" style="height:4px">mb 4</div>
-              <div class="viz-element" style="font-size:18px; line-height:28px;">All three render identically.</div>
+              <div class="viz-element" style="font-size:18px; line-height:26px;">All three render identically.</div>
               <div class="mb-band" style="height:12px">mb 12</div>
             </div>
           </div>
         </div>
         <table class="spec-table">
           <tr><th>Property</th><th>Value</th></tr>
-          <tr><td>Font</td><td>SF Pro Display Semibold, 18px</td></tr>
-          <tr><td>Line Height</td><td>28px</td></tr>
-          <tr><td>Margin Top</td><td>8px</td></tr>
+          <tr><td>Font</td><td>SF Pro Display Semibold, 20px</td></tr>
+          <tr><td>Line Height</td><td>30px</td></tr>
+          <tr><td>Margin Top</td><td>14px</td></tr>
           <tr><td>Margin Bottom</td><td>4px</td></tr>
         </table>
 
@@ -2916,7 +2919,7 @@
           <div class="margin-viz">
             <div class="phone-status-bar"><span>Margins</span><span></span></div>
             <div class="viz-chat">
-              <div class="viz-element" style="font-size:18px; line-height:28px;">Your HRV was <strong>45</strong> — up from <strong>38</strong>.</div>
+              <div class="viz-element" style="font-size:18px; line-height:26px;">Your HRV was <strong>45</strong>, up from <strong>38</strong>.</div>
               <div class="mb-band" style="height:12px">mb 12</div>
               <div style="font-size:11px; color:#6B665D; padding:8px 0;">Inline — no extra margins. Inherits parent &lt;p&gt; spacing.</div>
             </div>
@@ -2969,7 +2972,9 @@
           <tr><td>List Margin Bottom</td><td>12px</td></tr>
           <tr><td>Bullet Dot</td><td>7px circle, #C2BCB2</td></tr>
           <tr><td>Item Margin Bottom</td><td>6px</td></tr>
-          <tr><td>Item Font</td><td>18px / 28px / 0.2 letter-spacing</td></tr>
+          <tr><td>Item Font</td><td>18px / 26px / 0.2 letter-spacing</td></tr>
+          <tr><td>Bullet Margin Right</td><td>12px</td></tr>
+          <tr><td>List Padding Left</td><td>8px</td></tr>
         </table>
 
         <!-- Ordered list -->
@@ -3008,7 +3013,10 @@
           <tr><th>Property</th><th>Value</th></tr>
           <tr><td>List Margin Top</td><td>2px</td></tr>
           <tr><td>List Margin Bottom</td><td>12px</td></tr>
-          <tr><td>Number Color</td><td>#A8A297, 18px</td></tr>
+          <tr><td>Number Color</td><td>#A8A297</td></tr>
+          <tr><td>Number Font</td><td>20px / 32px line-height</td></tr>
+          <tr><td>Number Margin Right</td><td>8px</td></tr>
+          <tr><td>List Padding Left</td><td>8px</td></tr>
           <tr><td>Item Margin Bottom</td><td>6px</td></tr>
         </table>
 
@@ -3026,12 +3034,12 @@
           <div class="margin-viz">
             <div class="phone-status-bar"><span>Margins</span><span></span></div>
             <div class="viz-chat">
-              <div class="viz-element" style="font-size:18px; line-height:28px;">Your recovery metrics are improving.</div>
+              <div class="viz-element" style="font-size:18px; line-height:26px;">Your recovery metrics are improving.</div>
               <div class="mb-band" style="height:12px">mb 12</div>
               <div class="mt-band" style="height:14px">mt 14</div>
-              <div style="height:1px; background:#DBD6CD; margin:0 20px;"></div>
+              <div style="height:1px; background:#DBD6CD;"></div>
               <div class="mb-band" style="height:16px">mb 16</div>
-              <div class="viz-element" style="font-size:18px; line-height:28px;">Next section after a divider.</div>
+              <div class="viz-element" style="font-size:18px; line-height:26px;">Next section after a divider.</div>
               <div class="mb-band" style="height:12px">mb 12</div>
             </div>
           </div>
@@ -3042,7 +3050,6 @@
           <tr><td>Color</td><td>#DBD6CD</td></tr>
           <tr><td>Margin Top</td><td>14px</td></tr>
           <tr><td>Margin Bottom</td><td>16px</td></tr>
-          <tr><td>Margin Horizontal</td><td>20px</td></tr>
         </table>
 
         <!-- Mark / Highlight -->
@@ -3058,20 +3065,19 @@
           <div class="margin-viz">
             <div class="phone-status-bar"><span>Margins</span><span></span></div>
             <div class="viz-chat">
-              <div class="viz-element" style="font-size:18px; line-height:28px;">Your recovery is lagging.</div>
+              <div class="viz-element" style="font-size:18px; line-height:26px;">Your recovery is lagging.</div>
               <div class="mb-band" style="height:12px">mb 12</div>
-              <div class="viz-element" style="font-size:18px; line-height:28px;"><span style="background:#FCE7B5; padding:2px 6px; border-radius:4px;">take a rest day</span></div>
+              <div class="viz-element" style="font-size:18px; line-height:26px;"><span style="background:#FCE7B5;">take a rest day</span></div>
               <div class="mb-band" style="height:12px">mb 12</div>
-              <div style="font-size:11px; color:#6B665D; padding:8px 0;">Inline — inherits &lt;p&gt; spacing. ph:6, borderRadius:4.</div>
+              <div style="font-size:11px; color:#6B665D; padding:8px 0;">Inline, inherits &lt;p&gt; spacing.</div>
             </div>
           </div>
         </div>
         <table class="spec-table">
           <tr><th>Property</th><th>Value</th></tr>
           <tr><td>Background</td><td>#FCE7B5</td></tr>
-          <tr><td>Padding Horizontal</td><td>6px</td></tr>
-          <tr><td>Border Radius</td><td>4px</td></tr>
-          <tr><td>Color</td><td>#433E36 (inherits)</td></tr>
+          <tr><td>Color</td><td>#433E36</td></tr>
+          <tr><td>Font</td><td>SF Pro Display Regular, 18px / 26px / 0.2 letter-spacing</td></tr>
         </table>
 
         <!-- Table -->
@@ -3089,20 +3095,24 @@
           <div class="margin-viz">
             <div class="phone-status-bar"><span>Margins</span><span></span></div>
             <div class="viz-chat">
-              <div class="mt-band" style="height:16px">mt 16</div>
-              <div class="viz-element" style="font-size:14px; line-height:22px; padding:6px 4px; border:1px solid #C2BCB2; border-radius:4px;">Table content</div>
-              <div class="mb-band" style="height:16px">mb 16</div>
+              <div class="mt-band" style="height:12px">mt 12</div>
+              <div class="viz-element" style="font-size:14px; line-height:22px; padding:6px 4px; border:1px solid #C2BCB2; border-radius:20px;">Table content</div>
+              <div class="mb-band" style="height:12px">mb 12</div>
             </div>
           </div>
         </div>
         <table class="spec-table">
           <tr><th>Property</th><th>Value</th></tr>
-          <tr><td>Margin</td><td>16px vertical</td></tr>
-          <tr><td>Cell Font</td><td>18px</td></tr>
-          <tr><td>Cell Padding</td><td>8px</td></tr>
+          <tr><td>Margin</td><td>12px vertical, 0 horizontal</td></tr>
           <tr><td>Border</td><td>1px #C2BCB2</td></tr>
+          <tr><td>Border Radius</td><td>20px</td></tr>
+          <tr><td>Padding Bottom</td><td>6px</td></tr>
           <tr><td>Header Background</td><td>#DBD6CD</td></tr>
-          <tr><td>Font Variant</td><td>tabular-nums</td></tr>
+          <tr><td>Header Cell Font</td><td>SF Pro Display Semibold, 16px / 20px line-height</td></tr>
+          <tr><td>Header Cell Padding</td><td>8px</td></tr>
+          <tr><td>Body Cell Font</td><td>16px / 18px line-height</td></tr>
+          <tr><td>Body Cell Padding</td><td>10px</td></tr>
+          <tr><td>Width</td><td>100%</td></tr>
         </table>
 
         <!-- Blockquote -->
@@ -3120,11 +3130,11 @@
           <div class="margin-viz">
             <div class="phone-status-bar"><span>Margins</span><span></span></div>
             <div class="viz-chat">
-              <div class="viz-element" style="font-size:18px; line-height:28px;">Your sleep pattern shows a clear trend:</div>
+              <div class="viz-element" style="font-size:18px; line-height:26px;">Your sleep pattern shows a clear trend:</div>
               <div class="mb-band" style="height:12px">mb 12</div>
-              <div class="mt-band" style="height:12px">mt 12</div>
+              <div class="mt-band" style="height:16px">mt 16</div>
               <div class="viz-element" style="font-size:14px; line-height:22px; border-left:3px solid #C2BCB2; padding-left:14px;">Best nights cluster around 22:00-23:00.</div>
-              <div class="mb-band" style="height:12px">mb 12</div>
+              <div class="mb-band" style="height:16px">mb 16</div>
             </div>
           </div>
         </div>
@@ -3132,7 +3142,7 @@
           <tr><th>Property</th><th>Value</th></tr>
           <tr><td>Border Left</td><td>3px solid #C2BCB2</td></tr>
           <tr><td>Padding Left</td><td>14px</td></tr>
-          <tr><td>Margin</td><td>12px vertical</td></tr>
+          <tr><td>Margin</td><td>16px (all sides)</td></tr>
         </table>
       </section>
 
@@ -3256,22 +3266,39 @@
           <span class="status status-new" style="margin-left:4px">New</span>
         </div>
         <p class="section-description">
-          Proposed spec for user message bubbles. Fixes the cramped padding (was 2px) and adjusts font size to 18px to match the new body text style.
+          Spec for user message bubbles, mirrored from <code>ChatRenderBubble.tsx</code>. Vertical gap between any two consecutive bubbles (Ottavia → user, user → Ottavia, user → user) is 18px, set as <code>paddingBottom</code> on each bubble container.
         </p>
 
-        <!-- Preview -->
-        <div class="phone-frame">
-          <div class="phone-status-bar"><span>8:15</span><span></span></div>
-          <div class="phone-chat" style="display:flex; flex-direction:column; gap:16px;">
-            <div class="chat-md" style="margin-left:12px; width:calc(100% - 52px);">
-              Good morning. You slept <strong>7.5 hours</strong> with an HRV of <strong>42 ms</strong>.
+        <!-- Preview with visible gap -->
+        <h3 class="subsection-title">Live preview</h3>
+        <div class="preview-pair">
+          <div class="phone-frame">
+            <div class="phone-status-bar"><span>8:15</span><span></span></div>
+            <div class="phone-chat" style="display:flex; flex-direction:column;">
+              <div class="chat-md" style="margin-left:12px; width:calc(100% - 52px); padding-bottom:18px;">
+                Good morning. You slept <strong>7.5 hours</strong> with an HRV of <strong>42 ms</strong>.
+              </div>
+              <div class="user-bubble-preview" style="margin-bottom:18px;">How did I sleep last night?</div>
+              <div class="chat-md" style="margin-left:12px; width:calc(100% - 52px); padding-bottom:18px;">
+                Recovery looks solid. Resting heart rate was <strong>52 bpm</strong>.
+              </div>
+              <div class="user-bubble-preview" style="margin-bottom:18px;">What about my heart rate?</div>
+              <div class="user-bubble-preview">Ok thanks</div>
             </div>
-            <div class="user-bubble-preview">How did I sleep last night?</div>
-            <div class="chat-md" style="margin-left:12px; width:calc(100% - 52px);">
-              Recovery looks solid. Resting heart rate was <strong>52 bpm</strong>.
+          </div>
+          <div class="margin-viz">
+            <div class="phone-status-bar"><span>Margins</span><span></span></div>
+            <div class="viz-chat">
+              <div class="viz-element" style="font-size:18px; line-height:26px;">Ottavia: You slept 7.5 hours…</div>
+              <div class="mb-band" style="height:18px">pb 18 (Ottavia → user)</div>
+              <div class="viz-element" style="font-size:18px; line-height:26px; background:#FFF; border-radius:22px; padding:10px 14px; align-self:flex-end; max-width:240px; margin-left:auto;">How did I sleep last night?</div>
+              <div class="mb-band" style="height:18px">pb 18 (user → Ottavia)</div>
+              <div class="viz-element" style="font-size:18px; line-height:26px;">Ottavia: Recovery looks solid…</div>
+              <div class="mb-band" style="height:18px">pb 18 (Ottavia → user)</div>
+              <div class="viz-element" style="font-size:18px; line-height:26px; background:#FFF; border-radius:22px; padding:10px 14px; align-self:flex-end; max-width:240px; margin-left:auto;">What about my heart rate?</div>
+              <div class="mb-band" style="height:18px">pb 18 (user → user)</div>
+              <div class="viz-element" style="font-size:18px; line-height:26px; background:#FFF; border-radius:22px; padding:10px 14px; align-self:flex-end; max-width:120px; margin-left:auto;">Ok thanks</div>
             </div>
-            <div class="user-bubble-preview">What about my heart rate?</div>
-            <div class="user-bubble-preview">Ok thanks</div>
           </div>
         </div>
 
@@ -3281,25 +3308,25 @@
           <tbody>
             <tr><td><span class="token-name">Background</span></td><td><span class="hex">#FFFFFF</span></td></tr>
             <tr><td><span class="token-name">Max Width</span></td><td><span class="hex">302px</span></td></tr>
-            <tr><td><span class="token-name">Border Radius</span></td><td><span class="hex">22px (fixed)</span></td></tr>
-            <tr><td><span class="token-name">Padding</span></td><td><span class="hex">10px 16px</span></td></tr>
+            <tr><td><span class="token-name">Border Radius</span></td><td><span class="hex">wp(6) ≈ 22px</span></td></tr>
+            <tr><td><span class="token-name">Padding Horizontal</span></td><td><span class="hex">14px (inner content view)</span></td></tr>
             <tr><td><span class="token-name">Font Size</span></td><td><span class="hex">18px</span></td></tr>
             <tr><td><span class="token-name">Line Height</span></td><td><span class="hex">26px</span></td></tr>
             <tr><td><span class="token-name">Letter Spacing</span></td><td><span class="hex">0.2px</span></td></tr>
-            <tr><td><span class="token-name">Margin Right</span></td><td><span class="hex">12px</span></td></tr>
-            <tr><td><span class="token-name">Bubble Gap</span></td><td><span class="hex">16px</span></td></tr>
+            <tr><td><span class="token-name">Margin Right (bubble → screen edge)</span></td><td><span class="hex">12px</span></td></tr>
+            <tr><td><span class="token-name">Margin Left (Ottavia text → screen edge)</span></td><td><span class="hex">12px</span></td></tr>
+            <tr><td><span class="token-name">Vertical gap between bubbles</span></td><td><span class="hex">18px (paddingBottom on each container)</span></td></tr>
           </tbody>
         </table>
 
         <div class="do-dont">
           <div class="do-card">
-            <strong>What changed (vs current):</strong><br>
-            Padding: 2px → 10px vertical<br>
+            <strong>What changed (vs old):</strong><br>
+            Inner padding: 2px → 14px horizontal<br>
             Font size: 20px → 18px<br>
             Line height: 30px → 26px<br>
             Letter spacing: 0.4 → 0.2<br>
-            Border radius: ~23px → 22px fixed<br>
-            Bubble gap: 20px → 16px
+            Vertical gap between bubbles: 18px (paddingBottom)
           </div>
           <div class="dont-card">
             <strong>Why:</strong><br>

@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Ottavia — Onboarding Flows</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.10/dist/dotlottie-wc.js" type="module"></script>
+<style>
+  @font-face {
+    font-family: 'Modern Era';
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+    src: url('assets/ModernEra/ModernEra-Regular-Trial.otf') format('opentype');
+  }
+  @font-face {
+    font-family: 'Modern Era';
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+    src: url('assets/ModernEra/ModernEra-Medium-Trial.otf') format('opentype');
+  }
+  @font-face {
+    font-family: 'Modern Era';
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+    src: url('assets/ModernEra/ModernEra-Bold-Trial.otf') format('opentype');
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+  :root {
+    /* Ottavia tokens */
+    --neutral-10: #F5F1EA;
+    --neutral-70: #5C564D;
+    --neutral-80: #433E36;
+    --toggle-track: #D8CDBA;
+
+    --font-display: 'Modern Era', 'Inter Tight', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    --font-ui:      'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+  }
+
+  html, body { height:100%; }
+
+  body {
+    background:#000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    font-family: var(--font-ui);
+    color: var(--neutral-80);
+  }
+  body.embed { background: var(--neutral-10); }
+
+  /* ============== iPhone-shaped screen (430×932 internal) ============== */
+  .frame-wrap {
+    /* When embedded in playground (?embed=1) we scale 430×932 → 390×844 */
+    transform-origin: center center;
+  }
+  .frame-wrap.embed { transform: scale(0.9069767); }
+
+  .screen {
+    width:430px;
+    height:932px;
+    position:relative;
+    overflow:hidden;
+    background: var(--neutral-10);
+  }
+
+  /* Status bar */
+  .status-bar {
+    position:absolute;
+    top:0; left:0; right:0;
+    height:59px;
+    z-index:10;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 32px;
+  }
+  .status-time {
+    font-family: var(--font-ui);
+    font-size:17px;
+    font-weight:600;
+    color:#000;
+    letter-spacing:-0.4px;
+  }
+  .status-icons { display:flex; align-items:center; gap:5px; }
+  .status-icons svg { display:block; fill:#000; }
+
+  /* Logo wordmark */
+  .logo {
+    position:absolute;
+    top:70px;
+    left:50%;
+    transform:translateX(-50%);
+    font-family: var(--font-display);
+    font-size:32px;
+    font-weight:500;
+    color: var(--neutral-70);
+    letter-spacing:-1.28px;
+    line-height:47px;
+  }
+
+  /* Wave field — much larger window, no edge fading. */
+  .waves {
+    position:absolute;
+    top:130px;
+    left:0;
+    right:0;
+    height:500px;
+    overflow:visible;
+    pointer-events:none;
+  }
+  .wave {
+    position:absolute;
+    top:0;
+    height:500px;
+    will-change: transform;
+  }
+  /* Each ribbon spans the screen width; SVG paths extend beyond viewBox so the
+     ribbon flows in/out of the visible window like a gymnast's ribbon. */
+  .wave--blue, .wave--orange {
+    left:0;
+    width:430px;
+  }
+  .wave svg {
+    height:100%;
+    width:auto;               /* SVG renders at its intrinsic 3-copy width */
+    display:block;
+    overflow:visible;
+    position:absolute;
+    top:0;
+    left:0;
+  }
+
+  /* Path morphing inside each <svg> handles the full dance — no CSS keyframes needed. */
+
+  /* ============== Control panel (hidden in embed mode) ============== */
+  .controls {
+    position:fixed;
+    top:24px;
+    right:24px;
+    width:280px;
+    max-height: calc(100vh - 48px);
+    overflow-y:auto;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(8px);
+    border-radius:16px;
+    padding:18px 20px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+    font-family: var(--font-ui);
+    color: var(--neutral-80);
+    z-index: 1000;
+  }
+  body.embed .controls { display:none; }
+
+  .controls h3 {
+    margin:0 0 12px;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color: var(--neutral-70);
+  }
+  .ctl {
+    display:grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    gap:2px 8px;
+    margin-bottom:12px;
+  }
+  .ctl label {
+    font-size:12px;
+    font-weight:600;
+    grid-column: 1;
+  }
+  .ctl .v {
+    font-size:11px;
+    font-variant-numeric: tabular-nums;
+    color: var(--neutral-70);
+    grid-column:2;
+    text-align:right;
+  }
+  .ctl input[type=range] {
+    grid-column: 1 / -1;
+    width:100%;
+    accent-color: #427EF7;
+    margin:0;
+  }
+  .ctl-row { display:flex; gap:8px; align-items:center; margin-bottom:12px; }
+  .ctl-row button {
+    flex:1;
+    padding:8px 10px;
+    border:1px solid var(--border-light);
+    background:#fff;
+    border-radius:8px;
+    cursor:pointer;
+    font-family:inherit;
+    font-size:12px;
+    font-weight:600;
+    color: var(--neutral-80);
+  }
+  .ctl-row button.on {
+    background: var(--neutral-80);
+    color:#fff;
+    border-color: var(--neutral-80);
+  }
+  .ctl-foot {
+    margin-top:8px;
+    padding-top:12px;
+    border-top:1px solid var(--border-light);
+    display:flex;
+    gap:8px;
+  }
+  .ctl-foot button {
+    flex:1;
+    padding:8px;
+    background:#fff;
+    border:1px solid var(--border-light);
+    border-radius:8px;
+    font-family:inherit;
+    font-size:11px;
+    font-weight:600;
+    color: var(--neutral-70);
+    cursor:pointer;
+  }
+
+  /* Headline */
+  .headline {
+    position:absolute;
+    top:445px; /* ~47.75% of 932 */
+    left:50%;
+    transform:translateX(-50%);
+    width:304px;
+    font-family: var(--font-display);
+    font-weight:500;
+    font-size:48px;
+    line-height:56px;
+    text-align:center;
+    color: var(--neutral-80);
+  }
+
+  /* Primary button */
+  .primary-button {
+    position:absolute;
+    top:683px;
+    left:50%;
+    transform:translateX(-50%);
+    width:280px;
+    height:60px;
+    border:none;
+    border-radius:200px;
+    background: var(--neutral-80);
+    color:#fff;
+    font-family: var(--font-ui);
+    font-size:18px;
+    font-weight:600;
+    line-height:26px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:transform .12s ease, opacity .12s ease;
+  }
+  .primary-button:active { transform:translateX(-50%) scale(0.98); opacity:0.92; }
+
+  /* Privacy row */
+  .privacy-text {
+    position:absolute;
+    top:786px;
+    left:45px;
+    width:207px;
+    font-family: var(--font-ui);
+    font-size:16px;
+    line-height:20px;
+    font-weight:400;
+    color: var(--neutral-70);
+  }
+  .privacy-link {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  /* Toggle */
+  .toggle {
+    position:absolute;
+    top:788px;
+    left:321px;
+    width:62px;
+    height:34px;
+    border:none;
+    padding:0;
+    border-radius:50px;
+    background: var(--toggle-track);
+    cursor:pointer;
+    transition: background 0.18s ease;
+  }
+  .toggle .knob {
+    position:absolute;
+    top:2px;
+    left:2px;
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    background:#fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.18);
+    transition: left 0.18s ease, background 0.18s ease;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .toggle .knob svg { display:none; }
+  .toggle.on { background: var(--neutral-80); }
+  .toggle.on .knob { left:30px; }
+  .toggle.on .knob svg { display:block; }
+
+  /* Home indicator */
+  .home-indicator {
+    position:absolute;
+    bottom:9px;
+    left:50%;
+    transform:translateX(-50%);
+    width:144px;
+    height:5px;
+    background:#000;
+    border-radius:100px;
+  }
+
+  /* ============== Version switcher (dev-only, hidden in embed) ============== */
+  .version-tabs {
+    position:absolute;
+    top:8px;
+    right:8px;
+    display:flex;
+    gap:2px;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(8px);
+    border:1px solid rgba(0,0,0,0.06);
+    border-radius:999px;
+    padding:3px;
+    z-index:100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .version-tab {
+    border:none;
+    background:transparent;
+    color: var(--neutral-70);
+    font-family: var(--font-ui);
+    font-size:10px;
+    font-weight:600;
+    letter-spacing:0.3px;
+    padding:4px 10px;
+    border-radius:999px;
+    cursor:pointer;
+  }
+  .version-tab.active {
+    background: var(--neutral-80);
+    color:#fff;
+  }
+
+  /* Versions */
+  .version { display:none; }
+  .version.active { display:block; }
+</style>
+</head>
+<body>
+  <!-- ============== Live control panel ============== -->
+  <div class="controls" id="controls">
+    <h3 style="margin-top:0">Animation Source</h3>
+    <div class="ctl-row">
+      <button id="srcJS" class="on">JS Physics</button>
+      <button id="srcLottie">Lottie</button>
+    </div>
+
+    <h3>Blue Ribbon</h3>
+    <div class="ctl"><label>Move Speed</label><span class="v" id="vBMove">0.45</span>
+      <input type="range" id="cBMove" min="0" max="2" step="0.02" value="0.45"></div>
+    <div class="ctl"><label>Wave Speed</label><span class="v" id="vBWaveS">1.80</span>
+      <input type="range" id="cBWaveS" min="0" max="4" step="0.05" value="1.8"></div>
+    <div class="ctl"><label>Wave Height</label><span class="v" id="vBAmp">62</span>
+      <input type="range" id="cBAmp" min="0" max="140" step="1" value="62"></div>
+    <div class="ctl"><label>Wavelength</label><span class="v" id="vBWave">1.55 cycles</span>
+      <input type="range" id="cBWave" min="0.05" max="0.6" step="0.005" value="0.27"></div>
+    <div class="ctl"><label>Tail Swing (gradient)</label><span class="v" id="vBTail">0.60</span>
+      <input type="range" id="cBTail" min="0" max="1.5" step="0.02" value="0.6"></div>
+    <div class="ctl"><label>Head Height</label><span class="v" id="vBHead">250</span>
+      <input type="range" id="cBHead" min="0" max="500" step="1" value="250"></div>
+    <div class="ctl"><label>Elasticity</label><span class="v" id="vBElas">0.50</span>
+      <input type="range" id="cBElas" min="0" max="1" step="0.01" value="0.5"></div>
+    <div class="ctl"><label>Phase</label><span class="v" id="vBPhase">0°</span>
+      <input type="range" id="cBPhase" min="0" max="360" step="1" value="0"></div>
+    <div class="ctl"><label>Corner Radius</label><span class="v" id="vBCorner">1.00</span>
+      <input type="range" id="cBCorner" min="0" max="1" step="0.01" value="1"></div>
+    <div class="ctl-row">
+      <button id="bDirL">←</button>
+      <button id="bDirR" class="on">→</button>
+    </div>
+
+    <h3>Pink Ribbon</h3>
+    <div class="ctl"><label>Move Speed</label><span class="v" id="vPMove">0.38</span>
+      <input type="range" id="cPMove" min="0" max="2" step="0.02" value="0.38"></div>
+    <div class="ctl"><label>Wave Speed</label><span class="v" id="vPWaveS">1.55</span>
+      <input type="range" id="cPWaveS" min="0" max="4" step="0.05" value="1.55"></div>
+    <div class="ctl"><label>Wave Height</label><span class="v" id="vPAmp">56</span>
+      <input type="range" id="cPAmp" min="0" max="140" step="1" value="56"></div>
+    <div class="ctl"><label>Wavelength</label><span class="v" id="vPWave">1.72 cycles</span>
+      <input type="range" id="cPWave" min="0.05" max="0.6" step="0.005" value="0.30"></div>
+    <div class="ctl"><label>Tail Swing (gradient)</label><span class="v" id="vPTail">0.60</span>
+      <input type="range" id="cPTail" min="0" max="1.5" step="0.02" value="0.6"></div>
+    <div class="ctl"><label>Head Height</label><span class="v" id="vPHead">250</span>
+      <input type="range" id="cPHead" min="0" max="500" step="1" value="250"></div>
+    <div class="ctl"><label>Elasticity</label><span class="v" id="vPElas">0.55</span>
+      <input type="range" id="cPElas" min="0" max="1" step="0.01" value="0.55"></div>
+    <div class="ctl"><label>Phase</label><span class="v" id="vPPhase">180°</span>
+      <input type="range" id="cPPhase" min="0" max="360" step="1" value="180"></div>
+    <div class="ctl"><label>Corner Radius</label><span class="v" id="vPCorner">1.00</span>
+      <input type="range" id="cPCorner" min="0" max="1" step="0.01" value="1"></div>
+    <div class="ctl-row">
+      <button id="pDirL">←</button>
+      <button id="pDirR" class="on">→</button>
+    </div>
+
+    <h3>Shared</h3>
+    <div class="ctl"><label>Wave Size (stroke)</label><span class="v" id="vStroke">31px</span>
+      <input type="range" id="cStroke" min="3" max="80" step="1" value="31"></div>
+    <div class="ctl"><label>Wave Width (span)</label><span class="v" id="vSpan">1100px</span>
+      <input type="range" id="cSpan" min="5" max="40" step="0.5" value="11"></div>
+    <div class="ctl"><label>Vertical Gap</label><span class="v" id="vGap">0px</span>
+      <input type="range" id="cGap" min="-80" max="80" step="1" value="0"></div>
+    <div class="ctl"><label>Camera (start ↔ end of ribbon)</label><span class="v" id="vCam">middle</span>
+      <input type="range" id="cCam" min="0" max="1" step="0.01" value="0.5"></div>
+
+    <div class="ctl-foot">
+      <button id="cReset">Reset</button>
+      <button id="cCopy">Copy JSON</button>
+      <button id="cExport">Export code</button>
+    </div>
+  </div>
+
+  <div class="frame-wrap" id="frameWrap">
+    <div class="screen" data-node-id="1436:6837">
+
+      <!-- Status bar -->
+      <div class="status-bar" data-node-id="1436:6840">
+        <span class="status-time">9:41</span>
+        <span class="status-icons">
+          <!-- Cellular -->
+          <svg width="19" height="12" viewBox="0 0 19 12" aria-hidden="true">
+            <rect x="0"  y="8" width="3" height="4" rx="0.8"/>
+            <rect x="5"  y="6" width="3" height="6" rx="0.8"/>
+            <rect x="10" y="3" width="3" height="9" rx="0.8"/>
+            <rect x="15" y="0" width="3" height="12" rx="0.8"/>
+          </svg>
+          <!-- Wifi -->
+          <svg width="17" height="12" viewBox="0 0 17 12" aria-hidden="true">
+            <path d="M8.5 1.5C5.6 1.5 2.95 2.6 0.95 4.4l1.5 1.5C4.05 4.45 6.2 3.6 8.5 3.6s4.45.85 6.05 2.3l1.5-1.5C14.05 2.6 11.4 1.5 8.5 1.5zm0 3.4c-2.05 0-3.85.8-5.2 2.05l1.55 1.55C5.85 7.55 7.1 7 8.5 7s2.65.55 3.65 1.5l1.55-1.55C12.35 5.7 10.55 4.9 8.5 4.9zm0 3.4a1.7 1.7 0 100 3.4 1.7 1.7 0 000-3.4z"/>
+          </svg>
+          <!-- Battery -->
+          <svg width="27" height="12" viewBox="0 0 27 12" aria-hidden="true">
+            <rect x="0.5" y="0.5" width="22" height="11" rx="2.7" fill="none" stroke="#000" stroke-opacity="0.35"/>
+            <rect x="2"   y="2"   width="19" height="8"  rx="1.5"/>
+            <rect x="23.5" y="3.5" width="2"  height="5"  rx="0.7"/>
+          </svg>
+        </span>
+      </div>
+
+      <!-- v1 — Splash -->
+      <div class="version active" data-v="v1">
+
+        <!-- Logo -->
+        <div class="logo" data-node-id="1436:6849">ottavia</div>
+
+        <!-- Waves — toggle between JS physics ribbons and Lottie embed via the controls panel -->
+        <div class="waves" aria-hidden="true">
+          <dotlottie-wc id="lottieRibbon"
+                        src="https://lottie.host/b780174c-b278-4929-9fde-6143da73d77d/Tn3DXAIZ3r.lottie"
+                        autoplay loop
+                        style="position:absolute; inset:0; width:100%; height:100%; display:none;"></dotlottie-wc>
+
+
+          <!-- Rhythmic-gymnastics ribbon: morphs through 4 hand-crafted keyframes
+               with spline easing. Slow on floating curves, faster on sweeping
+               gestures. Path extends past the viewBox so the ribbon flows in
+               and out of the phone-screen window. -->
+          <!-- Ribbons are now driven by a JS physics simulation (see <script> below).
+               Each ribbon is a chain of points: driver moves on a sin path, body
+               follows with tension + damping, perpendicular wave travels along length. -->
+
+          <div class="wave wave--orange" data-node-id="1436:6845">
+            <svg width="430" height="500" viewBox="0 0 430 500" preserveAspectRatio="none"
+                 overflow="visible" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="grad-orange" x1="-100" y1="250" x2="630" y2="250"
+                                gradientUnits="userSpaceOnUse">
+                  <stop offset="0"        stop-color="#F9D9B3"/>
+                  <stop offset="0.548077" stop-color="#F9D9B3"/>
+                  <stop offset="1"        stop-color="#F9A14F"/>
+                </linearGradient>
+              </defs>
+              <path id="ribbonOrange" fill="none" stroke="url(#grad-orange)" stroke-width="31"
+                    stroke-linecap="butt" stroke-linejoin="round" style="opacity:0"
+                    d="M 215 140"/>
+            </svg>
+          </div>
+
+          <div class="wave wave--blue" data-node-id="1436:6844">
+            <svg width="430" height="500" viewBox="0 0 430 500" preserveAspectRatio="none"
+                 overflow="visible" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="grad-blue" x1="-100" y1="250" x2="630" y2="250"
+                                gradientUnits="userSpaceOnUse">
+                  <stop offset="0"        stop-color="#B1DAFF"/>
+                  <stop offset="0.725962" stop-color="#B1DAFF"/>
+                  <stop offset="1"        stop-color="#359FFF"/>
+                </linearGradient>
+              </defs>
+              <path id="ribbonBlue" fill="none" stroke="url(#grad-blue)" stroke-width="31"
+                    stroke-linecap="butt" stroke-linejoin="round" d="M 215 140"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Headline -->
+        <h1 class="headline" data-node-id="1436:6848">
+          Your wellbeing<br>explained
+        </h1>
+
+        <!-- CTA -->
+        <button class="primary-button" data-node-id="1436:6846" onclick="onGetStarted()">
+          Get Started
+        </button>
+
+        <!-- Privacy -->
+        <p class="privacy-text" data-node-id="1436:6847">
+          I accept the <a class="privacy-link" href="#">Privacy Policy</a> &amp; <a class="privacy-link" href="#">Terms of Services</a>
+        </p>
+
+        <!-- Toggle (accept) -->
+        <button class="toggle" id="acceptToggle" data-node-id="1231:2901" aria-pressed="false" aria-label="Accept" onclick="toggleAccept()">
+          <span class="knob">
+            <svg width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="butt" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="2 5 6 9 12 1"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+
+      <!-- Home indicator -->
+      <div class="home-indicator" data-node-id="1436:6839"></div>
+
+      <!-- Version switcher (dev) -->
+      <div class="version-tabs" id="versionTabs" role="tablist">
+        <button class="version-tab active" data-v="v1" onclick="switchVersion('v1')">v1</button>
+        <button class="version-tab"        data-v="v2" onclick="switchVersion('v2')">v2</button>
+        <button class="version-tab"        data-v="v3" onclick="switchVersion('v3')">v3</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // Auto-scale when embedded in the playground (index.html passes ?embed=1)
+  (function() {
+    const params = new URLSearchParams(location.search);
+    if (params.get('embed') === '1') {
+      document.body.classList.add('embed');
+      document.getElementById('frameWrap').classList.add('embed');
+    }
+  })();
+
+  function switchVersion(v) {
+    document.querySelectorAll('.version-tab').forEach(t =>
+      t.classList.toggle('active', t.dataset.v === v));
+    document.querySelectorAll('.version').forEach(s =>
+      s.classList.toggle('active', s.dataset.v === v));
+  }
+
+  function toggleAccept() {
+    const t = document.getElementById('acceptToggle');
+    const on = t.classList.toggle('on');
+    t.setAttribute('aria-pressed', on ? 'true' : 'false');
+  }
+
+  function onGetStarted() {
+    const t = document.getElementById('acceptToggle');
+    if (!t.classList.contains('on')) {
+      t.animate(
+        [{ transform:'translateX(0)' }, { transform:'translateX(-4px)' }, { transform:'translateX(4px)' }, { transform:'translateX(0)' }],
+        { duration: 260, easing: 'ease-out' }
+      );
+      return;
+    }
+    console.log('Get Started — accepted');
+  }
+
+  /* =====================================================================
+     Ribbon physics — SIDE VIEW.
+     Chain is spread along the X axis. Each point has a rest position
+     anchored to (centerX + i*spacing) so the ribbon stays long horizontally
+     instead of collapsing onto the driver. The driver gently sways the
+     whole ribbon, and the wave (perpendicular to flow) travels from
+     head to tail with per-point time lag — so the ribbon looks like a
+     long satin strip viewed from the side, with waves rippling along it.
+     ===================================================================== */
+  class Ribbon {
+    constructor(opts) {
+      this.length         = opts.length         ?? 60;
+      this.spacing        = opts.spacing        ?? 12;
+      this.centerX        = opts.centerX        ?? 215;
+      this.baseY          = opts.baseY          ?? 140;
+
+      // Whole-ribbon sway (driver oscillation)
+      this.swayX          = opts.swayX          ?? 50;
+      this.swayY          = opts.swayY          ?? 22;
+      this.swaySpeed      = opts.swaySpeed      ?? 0.7;
+      this.phase          = opts.phase          ?? 0;
+
+      // Per-point lag → wave appears to travel along the length
+      this.lagPerPoint    = opts.lagPerPoint    ?? 0.05;
+
+      // Perpendicular ripple (the satin wave)
+      this.waveAmplitude  = opts.waveAmplitude  ?? 32;
+      this.waveFrequency  = opts.waveFrequency  ?? 0.38;
+      this.waveSpeed      = opts.waveSpeed      ?? 2.6;
+
+      // Spring physics → momentum, drag, organic catch-up
+      this.tension        = opts.tension        ?? 0.20;
+      this.damping        = opts.damping        ?? 0.86;
+
+      // Pre-spread points horizontally so chain has length from frame 0
+      const startOffset = -(this.length - 1) * this.spacing / 2;
+      this.points = [];
+      for (let i = 0; i < this.length; i++) {
+        this.points.push({
+          x: this.centerX + startOffset + i * this.spacing,
+          y: this.baseY,
+          vx: 0, vy: 0,
+        });
+      }
+
+      // Warmup: settle the chain into formation before first paint
+      for (let s = 0; s < 200; s++) this.update(s * 0.016);
+    }
+
+    update(t) {
+      const startOffset = -(this.length - 1) * this.spacing / 2;
+
+      // Slow breathing on amplitude → motion accelerates, stretches, settles
+      const ampMod = 1 + 0.30 * Math.sin(t * 0.22 + this.phase * 0.4);
+      const swayMod = 1 + 0.25 * Math.sin(t * 0.17);
+
+      for (let i = 0; i < this.length; i++) {
+        // Each point's slot in the horizontal chain + lagged whole-ribbon sway
+        const tl = t - i * this.lagPerPoint;
+        // Linear tilt: head at headY, tail at baseY (norm = 0 at head, 1 at tail)
+        const normTilt = i / (this.length - 1);
+        const baseLine = (this.headY ?? this.baseY) * (1 - normTilt) + this.baseY * normTilt;
+        const restX = this.centerX + startOffset + i * this.spacing
+                    + Math.sin(tl * this.swaySpeed + this.phase) * this.swayX * swayMod;
+        const restY = baseLine
+                    + Math.sin(tl * this.swaySpeed * 0.7 + this.phase * 1.3) * this.swayY * swayMod;
+
+        // Corner-radius shaping: round (pure sin) ↔ sharp (square via tanh saturation)
+        const angle = t * this.waveSpeed + i * this.waveFrequency + this.phase;
+        const sinV = Math.sin(angle);
+        const r = this.cornerRadius ?? 1;
+        const shaped = r >= 0.99
+          ? sinV
+          : (Math.tanh(sinV / (r * 0.95 + 0.05)) / Math.tanh(1 / (r * 0.95 + 0.05)));
+
+        // Tail amplification: amplitude grows along the wave's travel direction.
+        // tailAmp=0 → uniform; tailAmp=1 → head 0.5×, tail 1.5× of base amplitude
+        const norm = i / (this.length - 1);
+        const tailIsRight = this.waveSpeed >= 0;
+        const tailFactor = tailIsRight ? norm : (1 - norm);
+        const lengthFactor = 1 + (this.tailAmp ?? 0) * (tailFactor - 0.5);
+        const wave = shaped * this.waveAmplitude * ampMod * lengthFactor;
+
+        const targetX = restX;
+        const targetY = restY + wave;
+
+        // Spring chase with damping → elasticity, momentum, overshoot
+        const cur = this.points[i];
+        cur.vx = (cur.vx + (targetX - cur.x) * this.tension) * this.damping;
+        cur.vy = (cur.vy + (targetY - cur.y) * this.tension) * this.damping;
+        cur.x += cur.vx;
+        cur.y += cur.vy;
+      }
+    }
+
+    /* Snap every point directly to its rest position at time t — used when
+       params change so the chain doesn't spring-bounce toward the new state. */
+    snap(t) {
+      const startOffset = -(this.length - 1) * this.spacing / 2;
+      const ampMod  = 1 + 0.30 * Math.sin(t * 0.22 + this.phase * 0.4);
+      const swayMod = 1 + 0.25 * Math.sin(t * 0.17);
+      for (let i = 0; i < this.length; i++) {
+        const tl = t - i * this.lagPerPoint;
+        const normTilt = i / (this.length - 1);
+        const baseLine = (this.headY ?? this.baseY) * (1 - normTilt) + this.baseY * normTilt;
+        const restX = this.centerX + startOffset + i * this.spacing
+                    + Math.sin(tl * this.swaySpeed + this.phase) * this.swayX * swayMod;
+        const restY = baseLine
+                    + Math.sin(tl * this.swaySpeed * 0.7 + this.phase * 1.3) * this.swayY * swayMod;
+        const angle = t * this.waveSpeed + i * this.waveFrequency + this.phase;
+        const sinV = Math.sin(angle);
+        const r = this.cornerRadius ?? 1;
+        const shaped = r >= 0.99
+          ? sinV
+          : (Math.tanh(sinV / (r * 0.95 + 0.05)) / Math.tanh(1 / (r * 0.95 + 0.05)));
+        const norm = i / (this.length - 1);
+        const tailIsRight = this.waveSpeed >= 0;
+        const tailFactor = tailIsRight ? norm : (1 - norm);
+        const lengthFactor = 1 + (this.tailAmp ?? 0) * (tailFactor - 0.5);
+        const wave = shaped * this.waveAmplitude * ampMod * lengthFactor;
+        this.points[i].x = restX;
+        this.points[i].y = restY + wave;
+        this.points[i].vx = 0;
+        this.points[i].vy = 0;
+      }
+    }
+
+    toPath() {
+      const pts = this.points;
+      if (pts.length < 2) return '';
+      let d = `M ${pts[0].x.toFixed(2)} ${pts[0].y.toFixed(2)}`;
+      for (let i = 1; i < pts.length - 1; i++) {
+        const cur = pts[i];
+        const next = pts[i + 1];
+        const mx = (cur.x + next.x) * 0.5;
+        const my = (cur.y + next.y) * 0.5;
+        d += ` Q ${cur.x.toFixed(2)} ${cur.y.toFixed(2)} ${mx.toFixed(2)} ${my.toFixed(2)}`;
+      }
+      const last = pts[pts.length - 1];
+      d += ` T ${last.x.toFixed(2)} ${last.y.toFixed(2)}`;
+      return d;
+    }
+  }
+
+  const DEFAULTS = {
+    blue:   { moveSpeed: 0.45, waveSpeed: 1.8,  amp: 62, waveFreq: 0.27, tailAmp: 0.6, headY: 250, elas: 0.50, phaseDeg: 0,   corner: 1, dir: 1 },
+    pink:   { moveSpeed: 0.38, waveSpeed: 1.55, amp: 56, waveFreq: 0.30, tailAmp: 0.6, headY: 250, elas: 0.55, phaseDeg: 180, corner: 1, dir: 1 },
+    shared: { stroke: 31, span: 11, gap: 0, camera: 0.5 },
+  };
+
+  // Persistence: load saved state from localStorage (merged with defaults so
+  // any new keys added in code still get their default values).
+  const STORAGE_KEY = 'ottavia-ribbons-v2'; // bumped: viewBox 280→500, baseY 140→250
+  function loadSavedState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch { return null; }
+  }
+  const _saved = loadSavedState();
+  let state = {
+    blue:   { ...DEFAULTS.blue,   ...(_saved?.blue   ?? {}) },
+    pink:   { ...DEFAULTS.pink,   ...(_saved?.pink   ?? {}) },
+    shared: { ...DEFAULTS.shared, ...(_saved?.shared ?? {}) },
+  };
+  function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch {}
+  }
+
+  // Blue (lead). Pink mirrors with phase offset. Speeds slightly different
+  // so they drift in/out of sync naturally.
+  // Chain length is intentionally large so endpoints stay far off-screen
+  // regardless of span / camera. The screen-edge mask handles any residual fade.
+  const ribbonBlue = new Ribbon({
+    length: 110, spacing: 11,
+    centerX: 215, baseY: 250,
+    swayX: 18, swayY: 22, swaySpeed: 0.45, phase: 0,
+    lagPerPoint: 0.04,
+    waveAmplitude: 62, waveFrequency: 0.27, waveSpeed: 1.8,
+    tension: 0.13, damping: 0.91,
+    cornerRadius: 1,
+  });
+
+  const ribbonOrange = new Ribbon({
+    length: 110, spacing: 12,
+    centerX: 215, baseY: 250,
+    swayX: 15, swayY: 18, swaySpeed: 0.38, phase: Math.PI,
+    lagPerPoint: 0.045,
+    waveAmplitude: 56, waveFrequency: 0.30, waveSpeed: 1.55,
+    tension: 0.11, damping: 0.93,
+    cornerRadius: 1,
+  });
+
+  const blueEl   = document.getElementById('ribbonBlue');
+  const orangeEl = document.getElementById('ribbonOrange');
+  let pinkRevealed = false;
+
+  function applyOne(rib, p) {
+    rib.swaySpeed     = p.moveSpeed;
+    rib.waveSpeed     = p.waveSpeed * p.dir;
+    rib.waveAmplitude = p.amp;
+    rib.waveFrequency = p.waveFreq;
+    rib.tailAmp       = p.tailAmp;
+    rib.headY         = p.headY;
+    rib.tension       = 0.25 - p.elas * 0.18;   // 0.25 → 0.07
+    rib.damping       = 0.82 + p.elas * 0.15;   // 0.82 → 0.97
+    rib.phase         = (p.phaseDeg * Math.PI) / 180;
+    rib.cornerRadius  = p.corner;
+  }
+
+  // Snap chains directly to their new rest positions — no spring chase, no bounce
+  function snapAll() {
+    const t = performance.now() / 1000;
+    ribbonBlue.snap(t);
+    ribbonOrange.snap(t);
+  }
+
+  function applyState() {
+    applyOne(ribbonBlue,   state.blue);
+    applyOne(ribbonOrange, state.pink);
+
+    // Shared
+    blueEl.setAttribute('stroke-width',   state.shared.stroke);
+    orangeEl.setAttribute('stroke-width', state.shared.stroke);
+    ribbonBlue.spacing   = state.shared.span;
+    ribbonOrange.spacing = state.shared.span;
+    ribbonBlue.baseY     = 250 - state.shared.gap / 2;
+    ribbonOrange.baseY   = 250 + state.shared.gap / 2;
+
+    // Camera: pan along the ribbon (0 = beginning, 0.5 = middle, 1 = end visible)
+    const totalSpan = ribbonBlue.length * state.shared.span;
+    const visibleW = 430;
+    const camCenterX = totalSpan / 2 + state.shared.camera * (visibleW - totalSpan);
+    ribbonBlue.centerX   = camCenterX;
+    ribbonOrange.centerX = camCenterX;
+
+    // Read-outs
+    const visiblePts = 36;
+    document.getElementById('vBWave').textContent =
+      ((visiblePts * state.blue.waveFreq) / (2 * Math.PI)).toFixed(2) + ' cycles';
+    document.getElementById('vPWave').textContent =
+      ((visiblePts * state.pink.waveFreq) / (2 * Math.PI)).toFixed(2) + ' cycles';
+    document.getElementById('vSpan').textContent =
+      Math.round(ribbonBlue.length * state.shared.span) + 'px';
+    const camV = state.shared.camera;
+    document.getElementById('vCam').textContent =
+      camV < 0.2 ? 'beginning' : camV > 0.8 ? 'end' : camV < 0.45 ? 'left' : camV > 0.55 ? 'right' : 'middle';
+
+    snapAll();
+    saveState();
+  }
+
+  function bindSlider(id, valId, path, fmt) {
+    const [section, key] = path.split('.');
+    const el = document.getElementById(id);
+    const v  = document.getElementById(valId);
+    el.value = state[section][key];                 // init from saved state
+    const sync = () => {
+      state[section][key] = parseFloat(el.value);
+      v.textContent = fmt(state[section][key]);
+      applyState();
+    };
+    el.addEventListener('input', sync);
+    sync();
+  }
+
+  // Blue
+  bindSlider('cBMove',   'vBMove',   'blue.moveSpeed', x => x.toFixed(2));
+  bindSlider('cBWaveS',  'vBWaveS',  'blue.waveSpeed', x => x.toFixed(2));
+  bindSlider('cBAmp',    'vBAmp',    'blue.amp',       x => Math.round(x));
+  bindSlider('cBWave',   'vBWave',   'blue.waveFreq',  x => x.toFixed(3));
+  bindSlider('cBTail',   'vBTail',   'blue.tailAmp',   x => x.toFixed(2));
+  bindSlider('cBHead',   'vBHead',   'blue.headY',     x => Math.round(x));
+  bindSlider('cBElas',   'vBElas',   'blue.elas',      x => x.toFixed(2));
+  bindSlider('cBPhase',  'vBPhase',  'blue.phaseDeg',  x => Math.round(x) + '°');
+  bindSlider('cBCorner', 'vBCorner', 'blue.corner',    x => x.toFixed(2));
+
+  // Pink
+  bindSlider('cPMove',   'vPMove',   'pink.moveSpeed', x => x.toFixed(2));
+  bindSlider('cPWaveS',  'vPWaveS',  'pink.waveSpeed', x => x.toFixed(2));
+  bindSlider('cPAmp',    'vPAmp',    'pink.amp',       x => Math.round(x));
+  bindSlider('cPWave',   'vPWave',   'pink.waveFreq',  x => x.toFixed(3));
+  bindSlider('cPTail',   'vPTail',   'pink.tailAmp',   x => x.toFixed(2));
+  bindSlider('cPHead',   'vPHead',   'pink.headY',     x => Math.round(x));
+  bindSlider('cPElas',   'vPElas',   'pink.elas',      x => x.toFixed(2));
+  bindSlider('cPPhase',  'vPPhase',  'pink.phaseDeg',  x => Math.round(x) + '°');
+  bindSlider('cPCorner', 'vPCorner', 'pink.corner',    x => x.toFixed(2));
+
+  // Shared
+  bindSlider('cStroke',  'vStroke',  'shared.stroke', x => Math.round(x) + 'px');
+  bindSlider('cSpan',    'vSpan',    'shared.span',   x => Math.round(70 * x) + 'px');
+  bindSlider('cGap',     'vGap',     'shared.gap',    x => Math.round(x) + 'px');
+  bindSlider('cCam',     'vCam',     'shared.camera', x => x.toFixed(2));
+
+  // Source toggle: JS physics ribbons vs Lottie embed
+  const lottieEl = document.getElementById('lottieRibbon');
+  const blueWaveEl = document.querySelector('.wave--blue');
+  const orangeWaveEl = document.querySelector('.wave--orange');
+  const srcJSBtn = document.getElementById('srcJS');
+  const srcLottieBtn = document.getElementById('srcLottie');
+  const wavCtrls = [
+    'cBMove','cBWaveS','cBAmp','cBWave','cBTail','cBHead','cBElas','cBPhase','cBCorner','bDirL','bDirR',
+    'cPMove','cPWaveS','cPAmp','cPWave','cPTail','cPHead','cPElas','cPPhase','cPCorner','pDirL','pDirR',
+    'cStroke','cSpan','cGap','cCam'
+  ].map(id => document.getElementById(id));
+
+  function setSource(useLottie) {
+    if (useLottie) {
+      srcLottieBtn.classList.add('on');
+      srcJSBtn.classList.remove('on');
+      lottieEl.style.display = 'block';
+      blueWaveEl.style.display = 'none';
+      orangeWaveEl.style.display = 'none';
+      wavCtrls.forEach(el => el.disabled = true);
+    } else {
+      srcJSBtn.classList.add('on');
+      srcLottieBtn.classList.remove('on');
+      lottieEl.style.display = 'none';
+      blueWaveEl.style.display = '';
+      orangeWaveEl.style.display = '';
+      wavCtrls.forEach(el => el.disabled = false);
+    }
+  }
+  srcJSBtn.addEventListener('click', () => setSource(false));
+  srcLottieBtn.addEventListener('click', () => setSource(true));
+
+  // Per-ribbon direction toggles
+  function bindDir(prefix, section) {
+    const lBtn = document.getElementById(prefix + 'DirL');
+    const rBtn = document.getElementById(prefix + 'DirR');
+    // Init button state from saved state.dir
+    if (state[section].dir === 1) {
+      rBtn.classList.add('on'); lBtn.classList.remove('on');
+    } else {
+      lBtn.classList.add('on'); rBtn.classList.remove('on');
+    }
+    lBtn.addEventListener('click', () => {
+      state[section].dir = -1; lBtn.classList.add('on'); rBtn.classList.remove('on'); applyState();
+    });
+    rBtn.addEventListener('click', () => {
+      state[section].dir = 1;  rBtn.classList.add('on'); lBtn.classList.remove('on'); applyState();
+    });
+  }
+  bindDir('b', 'blue');
+  bindDir('p', 'pink');
+
+  // Reset — wipe saved state, rebuild from defaults, update every slider+button
+  document.getElementById('cReset').addEventListener('click', () => {
+    try { localStorage.removeItem(STORAGE_KEY); } catch {}
+    state = JSON.parse(JSON.stringify(DEFAULTS));
+    const setVal = (id, val) => (document.getElementById(id).value = val);
+    const setText = (id, text) => (document.getElementById(id).textContent = text);
+    // Blue
+    setVal('cBMove',   state.blue.moveSpeed); setText('vBMove',   state.blue.moveSpeed.toFixed(2));
+    setVal('cBWaveS',  state.blue.waveSpeed); setText('vBWaveS',  state.blue.waveSpeed.toFixed(2));
+    setVal('cBAmp',    state.blue.amp);       setText('vBAmp',    state.blue.amp);
+    setVal('cBWave',   state.blue.waveFreq);
+    setVal('cBTail',   state.blue.tailAmp);   setText('vBTail',   state.blue.tailAmp.toFixed(2));
+    setVal('cBHead',   state.blue.headY);     setText('vBHead',   Math.round(state.blue.headY));
+    setVal('cBElas',   state.blue.elas);      setText('vBElas',   state.blue.elas.toFixed(2));
+    setVal('cBPhase',  state.blue.phaseDeg);  setText('vBPhase',  state.blue.phaseDeg + '°');
+    setVal('cBCorner', state.blue.corner);    setText('vBCorner', state.blue.corner.toFixed(2));
+    document.getElementById('bDirR').classList.add('on');
+    document.getElementById('bDirL').classList.remove('on');
+    // Pink
+    setVal('cPMove',   state.pink.moveSpeed); setText('vPMove',   state.pink.moveSpeed.toFixed(2));
+    setVal('cPWaveS',  state.pink.waveSpeed); setText('vPWaveS',  state.pink.waveSpeed.toFixed(2));
+    setVal('cPAmp',    state.pink.amp);       setText('vPAmp',    state.pink.amp);
+    setVal('cPWave',   state.pink.waveFreq);
+    setVal('cPTail',   state.pink.tailAmp);   setText('vPTail',   state.pink.tailAmp.toFixed(2));
+    setVal('cPHead',   state.pink.headY);     setText('vPHead',   Math.round(state.pink.headY));
+    setVal('cPElas',   state.pink.elas);      setText('vPElas',   state.pink.elas.toFixed(2));
+    setVal('cPPhase',  state.pink.phaseDeg);  setText('vPPhase',  state.pink.phaseDeg + '°');
+    setVal('cPCorner', state.pink.corner);    setText('vPCorner', state.pink.corner.toFixed(2));
+    document.getElementById('pDirR').classList.add('on');
+    document.getElementById('pDirL').classList.remove('on');
+    // Shared
+    setVal('cStroke',  state.shared.stroke);  setText('vStroke', state.shared.stroke + 'px');
+    setVal('cSpan',    state.shared.span);
+    setVal('cGap',     state.shared.gap);     setText('vGap',    state.shared.gap + 'px');
+    setVal('cCam',     state.shared.camera);
+    applyState();
+  });
+
+  // Copy state JSON
+  document.getElementById('cCopy').addEventListener('click', async (e) => {
+    const txt = JSON.stringify(state, null, 2);
+    try { await navigator.clipboard.writeText(txt); e.target.textContent = 'Copied!'; }
+    catch { e.target.textContent = 'Copy failed'; }
+    setTimeout(() => (e.target.textContent = 'Copy JSON'), 1200);
+  });
+
+  /* =====================================================================
+     Export — produces a complete, drop-in-ready HTML file with the current
+     parameters baked in. Class source is grabbed via Ribbon.toString() so
+     the snippet is self-contained.
+     ===================================================================== */
+  function buildStandaloneCode() {
+    const b = state.blue, p = state.pink, sh = state.shared;
+    const len = 110;
+    const totalSpan = len * sh.span;
+    const visibleW = 430;
+    const camCenterX = totalSpan / 2 + sh.camera * (visibleW - totalSpan);
+    const r2 = (n) => +Number(n).toFixed(3);
+
+    const blueOpts = {
+      length: len, spacing: sh.span,
+      centerX: r2(camCenterX), baseY: 250 - sh.gap / 2,
+      headY: b.headY,
+      swayX: 18, swayY: 22,
+      swaySpeed: b.moveSpeed,
+      phase: r2((b.phaseDeg * Math.PI) / 180),
+      lagPerPoint: 0.04,
+      waveAmplitude: b.amp,
+      waveFrequency: b.waveFreq,
+      waveSpeed: r2(b.waveSpeed * b.dir),
+      tailAmp: b.tailAmp,
+      tension: r2(0.25 - b.elas * 0.18),
+      damping: r2(0.82 + b.elas * 0.15),
+      cornerRadius: b.corner,
+    };
+    const pinkOpts = {
+      length: len, spacing: sh.span,
+      centerX: r2(camCenterX), baseY: 250 + sh.gap / 2,
+      headY: p.headY,
+      swayX: 15, swayY: 18,
+      swaySpeed: p.moveSpeed,
+      phase: r2((p.phaseDeg * Math.PI) / 180),
+      lagPerPoint: 0.045,
+      waveAmplitude: p.amp,
+      waveFrequency: p.waveFreq,
+      waveSpeed: r2(p.waveSpeed * p.dir),
+      tailAmp: p.tailAmp,
+      tension: r2(0.25 - p.elas * 0.18),
+      damping: r2(0.82 + p.elas * 0.15),
+      cornerRadius: p.corner,
+    };
+    const fmt = (o) => '{ ' + Object.entries(o).map(([k,v]) => `${k}: ${v}`).join(', ') + ' }';
+
+    return `<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Ottavia ribbons</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#F5F1EA; min-height:100vh; display:flex; align-items:center; justify-content:center; }
+  .ribbons {
+    position:relative;
+    width:430px; height:280px;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 7%, black 93%, transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0%, black 7%, black 93%, transparent 100%);
+  }
+  .ribbons svg { position:absolute; inset:0; overflow:visible; }
+</style></head><body>
+
+<div class="ribbons">
+  <svg viewBox="0 0 430 500" preserveAspectRatio="none" overflow="visible" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="grad-orange" x1="-100" y1="250" x2="630" y2="250" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#F9D9B3"/>
+        <stop offset="0.548077" stop-color="#F9D9B3"/>
+        <stop offset="1" stop-color="#F9A14F"/>
+      </linearGradient>
+    </defs>
+    <path id="ribbonOrange" fill="none" stroke="url(#grad-orange)" stroke-width="${sh.stroke}"
+          stroke-linecap="butt" stroke-linejoin="round" d=""/>
+  </svg>
+  <svg viewBox="0 0 430 500" preserveAspectRatio="none" overflow="visible" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="grad-blue" x1="-100" y1="250" x2="630" y2="250" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#B1DAFF"/>
+        <stop offset="0.725962" stop-color="#B1DAFF"/>
+        <stop offset="1" stop-color="#359FFF"/>
+      </linearGradient>
+    </defs>
+    <path id="ribbonBlue" fill="none" stroke="url(#grad-blue)" stroke-width="${sh.stroke}"
+          stroke-linecap="butt" stroke-linejoin="round" d=""/>
+  </svg>
+</div>
+
+<script>
+${Ribbon.toString()}
+
+const ribbonBlue   = new Ribbon(${fmt(blueOpts)});
+const ribbonOrange = new Ribbon(${fmt(pinkOpts)});
+
+const blueEl   = document.getElementById('ribbonBlue');
+const orangeEl = document.getElementById('ribbonOrange');
+
+function tick(now) {
+  const t = now / 1000;
+  ribbonBlue.update(t);
+  ribbonOrange.update(t);
+  blueEl.setAttribute('d', ribbonBlue.toPath());
+  orangeEl.setAttribute('d', ribbonOrange.toPath());
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+<\/script>
+</body></html>
+`;
+  }
+
+  document.getElementById('cExport').addEventListener('click', async (e) => {
+    const code = buildStandaloneCode();
+    try {
+      await navigator.clipboard.writeText(code);
+      e.target.textContent = 'Copied!';
+    } catch {
+      e.target.textContent = 'Copy failed';
+    }
+    setTimeout(() => (e.target.textContent = 'Export code'), 1500);
+  });
+
+  function tick(now) {
+    const t = now / 1000;
+    ribbonBlue.update(t);
+    ribbonOrange.update(t);
+    blueEl.setAttribute('d', ribbonBlue.toPath());
+    orangeEl.setAttribute('d', ribbonOrange.toPath());
+
+    // Pink fades in 2s after blue starts
+    if (!pinkRevealed && t > 2) {
+      pinkRevealed = true;
+      orangeEl.style.transition = 'opacity 0.7s ease-out';
+      orangeEl.style.opacity = '1';
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+</script>
+</body>
+</html>
