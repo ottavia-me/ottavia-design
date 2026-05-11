@@ -717,6 +717,18 @@
                 <h2>Tools</h2>
                 <p class="page-desc">Utilities and generators for the design process</p>
                 <div class="card-grid">
+                    <a class="sub-card" onclick="openTool('../ottavia-ops/agents/product-designer-handoff-workflow.html')">
+
+                        Product Designer Handoff
+                        <span style="font-size:12px;color:var(--text-secondary);line-height:1.4;">Agent workflow for design-to-engineering handoff</span>
+                        <span class="card-date">Agent workflow</span>
+                    </a>
+                    <a class="sub-card" onclick="openTool('onboarding-flows.html')">
+
+                        Animation Ribbon
+                        <span style="font-size:12px;color:var(--text-secondary);line-height:1.4;">Onboarding flow animations and ribbon explorations</span>
+                        <span class="card-date">Interactive tool</span>
+                    </a>
                     <a class="sub-card" onclick="openTool('agent-simulator.html')">
 
                         Agent Routing Simulator
@@ -754,21 +766,28 @@
         }
 
         function mobileNavigate(page) {
-            navigate(null, page);
+            setHash(page);
         }
 
         function openTool(src) {
+            setHash('tools/' + src);
+        }
+
+        function openPage(src) {
+            setHash('playground/' + src);
+        }
+
+        function renderTool(src) {
             const content = document.getElementById('content');
             content.innerHTML = `<iframe src="${src}" style="width:100%;height:100%;border:none"></iframe>`;
         }
 
-        function openPage(src) {
+        function renderPage(src) {
             const content = document.getElementById('content');
             if (isMobile()) {
                 content.innerHTML = `<iframe src="${src}" style="width:100%;height:100%;border:none"></iframe>`;
                 showBottomBar(true);
             } else if (src === 'quick-actions.html') {
-                // Quick Actions — load full page (has its own phone frame + side panel)
                 content.innerHTML = `<iframe src="${src}" style="width:100%;height:100%;border:none;background:#1a1a1a"></iframe>`;
             } else {
                 content.innerHTML = `
@@ -841,16 +860,31 @@
         }
 
         function navigate(el, page) {
+            setHash(page);
+        }
+
+        function setHash(h) {
+            const target = '#' + h;
+            if (location.hash !== target) {
+                location.hash = target;
+            } else {
+                applyHash();
+            }
+        }
+
+        function renderNav(page) {
             document.querySelectorAll('.nav-item, .logo').forEach(item => item.classList.remove('active'));
-            if (el) el.classList.add('active');
+            if (page === 'home') {
+                document.querySelector('.logo').classList.add('active');
+            } else {
+                const el = document.querySelector(`.nav-item[data-page="${page}"]`);
+                if (el) el.classList.add('active');
+            }
             document.getElementById('commentPanel').classList.remove('open');
             showBottomBar(false);
-
-            // Sync mobile select
             document.getElementById('mobileSelect').value = page;
 
             const content = document.getElementById('content');
-
             if (pages[page]) {
                 content.innerHTML = `<iframe src="${pages[page]}"></iframe>`;
             } else if (inlinePages[page]) {
@@ -860,6 +894,32 @@
                 }
             }
         }
+
+        function applyHash() {
+            const hash = location.hash.slice(1);
+            if (!hash) {
+                renderNav('home');
+                return;
+            }
+            const slashIdx = hash.indexOf('/');
+            const page = slashIdx === -1 ? hash : hash.slice(0, slashIdx);
+            const sub = slashIdx === -1 ? '' : decodeURIComponent(hash.slice(slashIdx + 1));
+
+            if (!inlinePages[page] && !pages[page]) {
+                renderNav('home');
+                return;
+            }
+
+            renderNav(page);
+
+            if (sub) {
+                if (page === 'tools') renderTool(sub);
+                else if (page === 'playground') renderPage(sub);
+            }
+        }
+
+        window.addEventListener('hashchange', applyHash);
+        applyHash();
     </script>
 </body>
 </html>
