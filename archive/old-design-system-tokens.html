@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ottavia Design Tokens</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+      background: #F8F7F5;
+      color: #1a1a1a;
+      line-height: 1.5;
+    }
+
+    /* Layout */
+    .page { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    /* Header */
+    .page-header {
+      padding: 40px 0 32px;
+      border-bottom: 1px solid #E5E0D8;
+      margin-bottom: 48px;
+    }
+    .page-header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .page-header p {
+      font-size: 16px;
+      color: #6B665D;
+      max-width: 600px;
+    }
+
+    /* Navigation */
+    .nav {
+      position: sticky;
+      top: 0;
+      background: #F8F7F5;
+      padding: 12px 0;
+      border-bottom: 1px solid #E5E0D8;
+      margin-bottom: 40px;
+      z-index: 10;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .nav a {
+      font-size: 13px;
+      font-weight: 500;
+      color: #6B665D;
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 8px;
+      background: #EFEBE4;
+      transition: all 0.15s;
+    }
+    .nav a:hover { background: #E5E0D8; color: #1a1a1a; }
+
+    /* Section */
+    .section { margin-bottom: 56px; }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .section-header h2 {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+    .section-header .badge {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: #E5E0D8;
+      color: #6B665D;
+    }
+    .section-description {
+      font-size: 14px;
+      color: #6B665D;
+      margin-bottom: 24px;
+      max-width: 600px;
+    }
+
+    /* Token table */
+    .token-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .token-table thead th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #9B9590;
+      padding: 0 16px 10px;
+      border-bottom: 1px solid #E5E0D8;
+    }
+    .token-table tbody tr {
+      border-bottom: 1px solid #F0EBE4;
+      transition: background 0.1s;
+    }
+    .token-table tbody tr:hover { background: #F0EBE4; }
+    .token-table td {
+      padding: 14px 16px;
+      font-size: 14px;
+      vertical-align: middle;
+    }
+
+    /* Color swatch */
+    .swatch-cell { display: flex; align-items: center; gap: 12px; }
+    .swatch {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 1px solid rgba(0,0,0,0.08);
+      flex-shrink: 0;
+    }
+    .swatch-large {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      border: 1px solid rgba(0,0,0,0.08);
+      flex-shrink: 0;
+    }
+
+    /* Token name */
+    .token-name {
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      color: #433E36;
+    }
+
+    /* Hex value */
+    .hex {
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 13px;
+      color: #9B9590;
+    }
+
+    /* Description */
+    .token-desc { color: #6B665D; font-size: 13px; }
+
+    /* Status badges */
+    .status {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .status-figma { background: #E8DEF8; color: #6B42C4; }
+    .status-code { background: #D4EDDA; color: #2D6A3F; }
+    .status-gap { background: #FFE0CC; color: #B35C1E; }
+    .status-new { background: #CCE5FF; color: #1A5FB4; }
+
+    /* Palette strip */
+    .palette-strip {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 24px;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .palette-strip .strip-color {
+      flex: 1;
+      height: 48px;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+    .palette-strip .strip-color:hover {
+      transform: scaleY(1.15);
+      z-index: 1;
+    }
+    .palette-strip .strip-color .strip-label {
+      position: absolute;
+      bottom: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      color: #9B9590;
+      white-space: nowrap;
+      font-family: 'SF Mono', monospace;
+    }
+
+    /* Typography preview */
+    .type-preview {
+      background: white;
+      border: 1px solid #F0EBE4;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 8px;
+    }
+
+    /* Spacing preview */
+    .spacing-preview {
+      display: flex;
+      align-items: flex-end;
+      gap: 16px;
+    }
+    .spacing-box {
+      background: #CBAC9B;
+      border-radius: 4px;
+      opacity: 0.6;
+    }
+    .spacing-label {
+      font-size: 11px;
+      color: #9B9590;
+      text-align: center;
+      margin-top: 6px;
+      font-family: 'SF Mono', monospace;
+    }
+
+    /* Comparison row */
+    .compare-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+    .compare-card {
+      background: white;
+      border: 1px solid #F0EBE4;
+      border-radius: 12px;
+      padding: 16px 20px;
+    }
+    .compare-card h4 {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #9B9590;
+      margin-bottom: 12px;
+    }
+    .compare-swatch-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 0;
+    }
+    .compare-swatch-row .hex { font-size: 12px; }
+    .compare-swatch-row .label {
+      font-size: 13px;
+      color: #433E36;
+    }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #6B665D;
+    }
+
+    /* Info box */
+    .info-box {
+      background: #FFF9F0;
+      border: 1px solid #F0E4D0;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: #6B665D;
+    }
+    .info-box strong { color: #433E36; }
+
+    /* Footer */
+    .page-footer {
+      border-top: 1px solid #E5E0D8;
+      padding-top: 24px;
+      margin-top: 48px;
+      font-size: 13px;
+      color: #9B9590;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="page-header">
+      <h1>Ottavia Design Tokens</h1>
+      <p>The single source of truth for colors, typography, spacing, and radii. Every value here maps from Figma variables to React Native code.</p>
+    </header>
+
+    <nav class="nav">
+      <a href="#color-palette">Color Palette</a>
+      <a href="#semantic-colors">Semantic Colors</a>
+      <a href="#text-colors">Text</a>
+      <a href="#surface-colors">Surfaces</a>
+      <a href="#data-colors">Data</a>
+      <a href="#status-colors">Status</a>
+      <a href="#border-colors">Borders</a>
+      <a href="#typography">Typography</a>
+      <a href="#spacing">Spacing</a>
+      <a href="#radius">Radius</a>
+      <a href="#gaps">Figma vs Code Gaps</a>
+    </nav>
+
+    <div class="legend">
+      <div class="legend-item"><span class="status status-figma">Figma</span> Defined in Figma</div>
+      <div class="legend-item"><span class="status status-code">Code</span> Exists in code</div>
+      <div class="legend-item"><span class="status status-gap">Gap</span> Mismatch between Figma and code</div>
+      <div class="legend-item"><span class="status status-new">New</span> Proposed new token</div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- COLOR PALETTE (Raw Values from Figma)        -->
+    <!-- ============================================ -->
+    <section class="section" id="color-palette">
+      <div class="section-header">
+        <h2>Color Palette</h2>
+        <span class="badge">Primitives</span>
+      </div>
+      <p class="section-description">
+        Raw color values from your Figma file. These are the ingredients. The semantic tokens below tell engineers when to use each one.
+      </p>
+
+      <h3 style="font-size:15px; font-weight:600; margin-bottom:16px; color:#433E36;">Neutrals</h3>
+      <div class="palette-strip" style="margin-bottom:48px;">
+        <div class="strip-color" style="background:#433E36"><span class="strip-label">80</span></div>
+        <div class="strip-color" style="background:#5C564D"><span class="strip-label">70</span></div>
+        <div class="strip-color" style="background:#766F64"><span class="strip-label">60</span></div>
+        <div class="strip-color" style="background:#8F897D"><span class="strip-label">50</span></div>
+        <div class="strip-color" style="background:#A8A297"><span class="strip-label">40</span></div>
+        <div class="strip-color" style="background:#C2BCB2"><span class="strip-label">30</span></div>
+        <div class="strip-color" style="background:#DBD6CD"><span class="strip-label">20</span></div>
+        <div class="strip-color" style="background:#F5F1EA"><span class="strip-label">10</span></div>
+      </div>
+
+      <h3 style="font-size:15px; font-weight:600; margin-bottom:16px; color:#433E36;">Blue (Data)</h3>
+      <div class="palette-strip" style="margin-bottom:48px;">
+        <div class="strip-color" style="background:#427EF7"><span class="strip-label">80</span></div>
+        <div class="strip-color" style="background:#E4EEFF"><span class="strip-label">20</span></div>
+      </div>
+
+      <h3 style="font-size:15px; font-weight:600; margin-bottom:16px; color:#433E36;">Green (Success)</h3>
+      <div class="palette-strip" style="margin-bottom:48px;">
+        <div class="strip-color" style="background:#56B683"><span class="strip-label">60</span></div>
+        <div class="strip-color" style="background:#E1F9EB"><span class="strip-label">20</span></div>
+      </div>
+
+      <h3 style="font-size:15px; font-weight:600; margin-bottom:16px; color:#433E36;">Purple (Accent)</h3>
+      <div class="palette-strip" style="margin-bottom:48px;">
+        <div class="strip-color" style="background:#A280FF"><span class="strip-label">60</span></div>
+        <div class="strip-color" style="background:#F9EDFE"><span class="strip-label">20</span></div>
+      </div>
+
+      <h3 style="font-size:15px; font-weight:600; margin-bottom:16px; color:#433E36;">Orange (Warning/Error)</h3>
+      <div class="palette-strip" style="margin-bottom:48px;">
+        <div class="strip-color" style="background:#E4763A"><span class="strip-label">80</span></div>
+        <div class="strip-color" style="background:#FF8C4E"><span class="strip-label">70</span></div>
+        <div class="strip-color" style="background:#FFA676"><span class="strip-label">60</span></div>
+        <div class="strip-color" style="background:#FFC09E"><span class="strip-label">50</span></div>
+        <div class="strip-color" style="background:#FFDAC5"><span class="strip-label">40</span></div>
+        <div class="strip-color" style="background:#FFF3ED"><span class="strip-label">20</span></div>
+      </div>
+
+      <h3 style="font-size:15px; font-weight:600; margin-bottom:16px; color:#433E36;">Yellow (Highlight)</h3>
+      <div class="palette-strip" style="margin-bottom:48px;">
+        <div class="strip-color" style="background:#FCE7B5"><span class="strip-label">50</span></div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SEMANTIC TOKENS: Text Colors                 -->
+    <!-- ============================================ -->
+    <section class="section" id="text-colors">
+      <div class="section-header">
+        <h2>Text Colors</h2>
+        <span class="badge">Semantic</span>
+      </div>
+      <p class="section-description">
+        Use these tokens for all text. Never hardcode a hex value for text color.
+      </p>
+
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th style="width:40px">Preview</th>
+            <th>Token Name</th>
+            <th>Value</th>
+            <th>Usage</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="swatch" style="background:#433E36"></div></td>
+            <td><span class="token-name">text.primary</span></td>
+            <td><span class="hex">#433E36</span></td>
+            <td><span class="token-desc">Headings, body text, primary content</span></td>
+            <td><span class="status status-figma">Figma</span></td>
+          </tr>
+          <tr>
+            <td><div class="swatch" style="background:#A8A297"></div></td>
+            <td><span class="token-name">text.secondary</span></td>
+            <td><span class="hex">#A8A297</span></td>
+            <td><span class="token-desc">Labels, subtitles, metadata, dates</span></td>
+            <td><span class="status status-figma">Figma</span></td>
+          </tr>
+          <tr>
+            <td><div class="swatch" style="background:#C2BCB2"></div></td>
+            <td><span class="token-name">text.tertiary</span></td>
+            <td><span class="hex">#C2BCB2</span></td>
+            <td><span class="token-desc">Placeholders, disabled text, hints</span></td>
+            <td><span class="status status-new">New</span></td>
+          </tr>
+          <tr>
+            <td><div class="swatch" style="background:#FFFFFF; border:1px solid #ddd"></div></td>
+            <td><span class="token-name">text.inverse</span></td>
+            <td><span class="hex">#FFFFFF</span></td>
+            <td><span class="token-desc">Text on dark backgrounds (headers, dark cards)</span></td>
+            <td><span class="status status-new">New</span></td>
+          </tr>
+          <tr>
+            <td><div class="swatch" style="background:#427EF7"></div></td>
+            <td><span class="token-name">text.link</span></td>
+            <td><span class="hex">#427EF7</span></td>
+            <td><span class="token-desc">Clickable links, interactive text</span></td>
+            <td><span class="status status-gap">Gap</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="info-box" style="margin-top:16px">
+        <strong>Gap note:</strong> Code currently uses #000000 for primary text in many components instead of #433E36. Also uses #0078FF and #007AFF for links instead of #427EF7. These need to be unified.
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SEMANTIC TOKENS: Surfaces                    -->
+    <!-- ============================================ -->
+    <section class="section" id="surface-colors">
+      <div class="section-header">
+        <h2>Surface Colors</h2>
+        <span class="badge">Semantic</span>
+      </div>
+      <p class="section-description">
+        Backgrounds for screens, cards, and overlays.
+      </p>
+
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th style="width:40px">Preview</th>
+            <th>Token Name</th>
+            <th>Value</th>
+            <th>Usage</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="swatch" style="background:#F5F1EA"></div></td>
+            <td><span class="token-name">surface.background</span></td>
+            <td><span class="hex">#F5F1EA</span></td>
+            <td><span class="token-desc">Main app background (cream)</span></td>
+            <td><span class="status status-code">Code</span></td>
+          </tr>
+          <tr>
+            <td><div class="swatch" style="background:#FFFFFF; border:1px solid #ddd"></div></td>
+            <td><span class="token-name">surface.card</span></td>
+            <td><span class="hex">#FFFFFF</span></td>
+            <td><span class="token-desc">Card backgrounds, elevated content</span></td>
+            <td><span class="status status-code">Code</span></td>
+          </tr>
+          <tr>
+            <td><div class="swatch" style="background:#F0EBE2"></div></td>
+            <td><span class="token-name">surface.subtle</span></td>
+            <td><span class="hex">#F0EBE2</span></td>
+            <td><span class="token-desc">Table headers, section backgrounds, subtle grouping</span></td>
+            <td><span class="status status-new">New</span></td>
+          </tr>
+          <tr>
+            <td><div class="swatch" style="background:#8F897D"></div></td>
+            <td><span class="token-name">surface.dark</span></td>
+            <td><span class="hex">#8F897D</span></td>
+            <td><span class="token-desc">Dark headers, overlays</span></td>
+            <td><span class="status status-figma">Figma</span></td>
+          </tr>
+          <tr>
+            <td><div class="swatch" style="background:rgba(0,0,0,0.5)"></div></td>
+            <td><span class="token-name">surface.overlay</span></td>
+            <td><span class="hex">rgba(0,0,0,0.5)</span></td>
+            <td><span class="token-desc">Modal overlays, loading screens</span></td>
+            <td><span class="status status-code">Code</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SEMANTIC TOKENS: Data Colors                 -->
+    <!-- ============================================ -->
+    <section class="section" id="data-colors">
+      <div class="section-header">
+        <h2>Data Colors</h2>
+        <span class="badge">Semantic</span>
+      </div>
+      <p class="section-description">
+        Used in charts, graphs, and metric visualizations.
+      </p>
+
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th style="width:40px">Preview</th>
+            <th>Token Name</th>
+            <th>Value</th>
+            <th>Usage</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="swatch" style="background:#427EF7"></div></td>
+            <td><span class="token-name">data.blue</span></td>
+            <td><span class="hex">#427EF7</span></td>
+            <td><span class="token-desc">Charts, bar fills, line graphs, primary data</span></td>
+            <td><span class="status status-figma">Figma</span></td>
+          </tr>
+          <tr>
+            <td><div class="swatch" style="background:#E4EEFF"></div></td>
+            <td><span class="token-name">data.blue.subtle</span></td>
+            <td><span class="hex">#E4EEFF</span></td>
+            <td><span class="token-desc">Chart backgrounds, empty bar fills</span></td>
+            <td><span class="status status-figma">Figma</span></td>
+          </tr>
+          <tr>
+            <td><div class="swatch" style="background:#56B683"></div></td>
+            <td><span class="token-name">data.green</span></td>
+            <td><span class="hex">#56B683</span></td>
+            <td><span class="token-desc">Progress, nutrition, positive metrics</span></td>
+            <td><span class="status status-figma">Figma</span></td>
+          </tr>
+          <tr>
+            <td><div class="swatch" style="background:#E1F9EB"></div></td>
+            <td><span class="token-name">data.green.subtle</span></td>
+            <td><span class="hex">#E1F9EB</span></td>
+            <td><span class="token-desc">Stat card backgrounds, green surface</span></td>
+            <td><span class="status status-figma">Figma</span></td>
+          </tr>
+          <tr>
+            <td><div class="swatch" style="background:#A280FF"></div></td>
+            <td><span class="token-name">data.purple</span></td>
+            <td><span class="hex">#A280FF</span></td>
+            <td><span class="token-desc">Third data series, alternative category</span></td>
+            <td><span class="status status-figma">Figma</span></td>
+          </tr>
+          <tr>
+            <td><div class="swatch" style="background:#F9EDFE"></div></td>
+            <td><span class="token-name">data.purple.subtle</span></td>
+            <td><span class="hex">#F9EDFE</span></td>
+            <td><span class="token-desc">Purple surface, category background</span></td>
+            <td><span class="status status-figma">Figma</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="info-box" style="margin-top:16px">
+        <strong>Gap note:</strong> Code currently uses #75A6FF for charts instead of Figma's #427EF7. Also uses #6793E1 for bar borders — not in Figma at all. Need to decide: align code to Figma, or update Figma to match what's shipped.
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SEMANTIC TOKENS: Status Colors               -->
+    <!-- ============================================ -->
+    <section class="section" id="status-colors">
+      <div class="section-header">
+        <h2>Status Colors</h2>
+        <span class="badge">Semantic</span>
+      </div>
+      <p class="section-description">
+        Communicate success, warning, error, and informational states.
+      </p>
+
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th style="width:40px">Preview</th>
+            <th>Token Name</th>
+            <th>Value</th>
+            <th>Usage</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="swatch" style="background:#56B683"></div></td>
+            <td><span class="token-name">status.success</span></td>
+            <td><span class="hex">#56B683</span></td>
+            <td><span class="token-desc">Positive states, achieved goals, on-track</span></td>
+            <td><span class="status status-code">Code</span></td>
+          </tr>
+          <tr>
+            <td><div class="swatch" style="background:#E1F9EB"></div></td>
+            <td><span class="token-name">status.success.subtle</span></td>
+            <td><span class="hex">#E1F9EB</span></td>
+            <td><span class="token-desc">Success background, achievement chips</span></td>
+            <td><span class="status status-code">Code</span></td>
+          </tr>
+          <tr>
+            <td><div class="swatch" style="background:#E4763A"></div></td>
+            <td><span class="token-name">status.warning</span></td>
+            <td><span class="hex">#E4763A</span></td>
+            <td><span class="token-desc">Chronic conditions, attention needed</span></td>
+            <td><span class="status status-figma">Figma</span></td>
+          </tr>
+          <tr>
+            <td><div class="swatch" style="background:#FFD1B8"></div></td>
+            <td><span class="token-name">status.warning.subtle</span></td>
+            <td><span class="hex">#FFD1B8</span></td>
+            <td><span class="token-desc">Warning background, condition chips</span></td>
+            <td><span class="status status-code">Code</span></td>
+          </tr>
+          <tr>
+            <td><div class="swatch" style="background:#FF755D"></div></td>
+            <td><span class="token-name">status.error</span></td>
+            <td><span class="hex">#FF755D</span></td>
+            <td><span class="token-desc">Delete actions, destructive states</span></td>
+            <td><span class="status status-code">Code</span></td>
+          </tr>
+          <tr>
+            <td><div class="swatch" style="background:#FCE7B5"></div></td>
+            <td><span class="token-name">status.highlight</span></td>
+            <td><span class="hex">#FCE7B5</span></td>
+            <td><span class="token-desc">Chat highlights, emphasis in markdown</span></td>
+            <td><span class="status status-figma">Figma</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SEMANTIC TOKENS: Borders                     -->
+    <!-- ============================================ -->
+    <section class="section" id="border-colors">
+      <div class="section-header">
+        <h2>Border Colors</h2>
+        <span class="badge">Semantic</span>
+      </div>
+
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th style="width:40px">Preview</th>
+            <th>Token Name</th>
+            <th>Value</th>
+            <th>Usage</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="swatch" style="background:#E7DFD0"></div></td>
+            <td><span class="token-name">border.default</span></td>
+            <td><span class="hex">#E7DFD0</span></td>
+            <td><span class="token-desc">Card borders, chart borders</span></td>
+            <td><span class="status status-code">Code</span></td>
+          </tr>
+          <tr>
+            <td><div class="swatch" style="background:#F0EBE4"></div></td>
+            <td><span class="token-name">border.subtle</span></td>
+            <td><span class="hex">#F0EBE4</span></td>
+            <td><span class="token-desc">Dividers between list items, light separators</span></td>
+            <td><span class="status status-new">New</span></td>
+          </tr>
+          <tr>
+            <td><div class="swatch" style="background:#CBAC9B"></div></td>
+            <td><span class="token-name">border.strong</span></td>
+            <td><span class="hex">#CBAC9B</span></td>
+            <td><span class="token-desc">Active borders, selected states, date pickers</span></td>
+            <td><span class="status status-code">Code</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="info-box" style="margin-top:16px">
+        <strong>Gap note:</strong> Code uses #F1F1F1, #f2f2f2, #E7DFD0, #DFD6C4, #CDC2AF for borders — 5 different values that should be consolidated to 2-3 tokens.
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- TYPOGRAPHY                                   -->
+    <!-- ============================================ -->
+    <section class="section" id="typography">
+      <div class="section-header">
+        <h2>Typography</h2>
+        <span class="badge">Foundations</span>
+      </div>
+      <p class="section-description">
+        Two font families, 6 sizes, 3 weights. That's it.
+      </p>
+
+      <h3 style="font-size:15px; font-weight:600; margin:24px 0 16px; color:#433E36;">Font Families</h3>
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>Token Name</th>
+            <th>Value</th>
+            <th>Usage</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="token-name">font.display</span></td>
+            <td><span class="hex">SF Pro Display</span></td>
+            <td><span class="token-desc">Headings, metrics, data values, most UI text</span></td>
+            <td><span class="status status-gap">Gap</span></td>
+          </tr>
+          <tr>
+            <td><span class="token-name">font.body</span></td>
+            <td><span class="hex">Poppins</span></td>
+            <td><span class="token-desc">Body text, labels, secondary content</span></td>
+            <td><span class="status status-code">Code</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="info-box" style="margin-top:16px">
+        <strong>Gap note:</strong> Code uses 3 different names for SF Pro: SFProDisplay, SFUIDisplay, and SFPro. These need to be consolidated to one reference per weight.
+      </div>
+
+      <h3 style="font-size:15px; font-weight:600; margin:24px 0 16px; color:#433E36;">Type Scale</h3>
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>Token Name</th>
+            <th>Size</th>
+            <th>Line Height</th>
+            <th>Usage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="token-name">type.2xl</span></td>
+            <td><span class="hex">34px</span></td>
+            <td><span class="hex">40px</span></td>
+            <td><span class="token-desc">Page titles, hero numbers</span></td>
+          </tr>
+          <tr>
+            <td><span class="token-name">type.xl</span></td>
+            <td><span class="hex">26px</span></td>
+            <td><span class="hex">32px</span></td>
+            <td><span class="token-desc">Section headers, screen titles</span></td>
+          </tr>
+          <tr>
+            <td><span class="token-name">type.lg</span></td>
+            <td><span class="hex">20px</span></td>
+            <td><span class="hex">28px</span></td>
+            <td><span class="token-desc">Subsection headers, prominent labels</span></td>
+          </tr>
+          <tr>
+            <td><span class="token-name">type.md</span></td>
+            <td><span class="hex">17px</span></td>
+            <td><span class="hex">24px</span></td>
+            <td><span class="token-desc">Body text, default size</span></td>
+          </tr>
+          <tr>
+            <td><span class="token-name">type.sm</span></td>
+            <td><span class="hex">14px</span></td>
+            <td><span class="hex">20px</span></td>
+            <td><span class="token-desc">Secondary text, chart labels, metadata</span></td>
+          </tr>
+          <tr>
+            <td><span class="token-name">type.xs</span></td>
+            <td><span class="hex">12px</span></td>
+            <td><span class="hex">16px</span></td>
+            <td><span class="token-desc">Captions, fine print, hex values</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="info-box" style="margin-top:16px">
+        <strong>Gap note:</strong> Code currently uses 11 different font sizes (13, 14, 16, 17, 18, 19, 20, 22, 26, 29, 34px). This scale consolidates them to 6.
+      </div>
+
+      <h3 style="font-size:15px; font-weight:600; margin:24px 0 16px; color:#433E36;">Font Weights</h3>
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>Token Name</th>
+            <th>Value</th>
+            <th>SF Pro File</th>
+            <th>Poppins File</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="token-name">weight.regular</span></td>
+            <td><span class="hex">400</span></td>
+            <td><span class="hex">SFProDisplay-Regular</span></td>
+            <td><span class="hex">Poppins-Regular</span></td>
+          </tr>
+          <tr>
+            <td><span class="token-name">weight.medium</span></td>
+            <td><span class="hex">500</span></td>
+            <td><span class="hex">SFProDisplay-Medium</span></td>
+            <td><span class="hex">Poppins-Medium</span></td>
+          </tr>
+          <tr>
+            <td><span class="token-name">weight.bold</span></td>
+            <td><span class="hex">600-700</span></td>
+            <td><span class="hex">SFProDisplay-Semibold</span></td>
+            <td><span class="hex">Poppins-Bold</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SPACING                                      -->
+    <!-- ============================================ -->
+    <section class="section" id="spacing">
+      <div class="section-header">
+        <h2>Spacing</h2>
+        <span class="badge">Foundations</span>
+      </div>
+      <p class="section-description">
+        Consistent spacing scale based on a 4px grid. Applied via responsive scaling (widthRatio / heightRatio) in React Native.
+      </p>
+
+      <div class="spacing-preview" style="margin-bottom:32px; padding:24px; background:white; border-radius:12px; border:1px solid #F0EBE4;">
+        <div style="text-align:center">
+          <div class="spacing-box" style="width:4px; height:4px; margin:0 auto;"></div>
+          <div class="spacing-label">xs<br>4px</div>
+        </div>
+        <div style="text-align:center">
+          <div class="spacing-box" style="width:8px; height:8px; margin:0 auto;"></div>
+          <div class="spacing-label">sm<br>8px</div>
+        </div>
+        <div style="text-align:center">
+          <div class="spacing-box" style="width:12px; height:12px; margin:0 auto;"></div>
+          <div class="spacing-label">md<br>12px</div>
+        </div>
+        <div style="text-align:center">
+          <div class="spacing-box" style="width:16px; height:16px; margin:0 auto;"></div>
+          <div class="spacing-label">lg<br>16px</div>
+        </div>
+        <div style="text-align:center">
+          <div class="spacing-box" style="width:20px; height:20px; margin:0 auto;"></div>
+          <div class="spacing-label">xl<br>20px</div>
+        </div>
+        <div style="text-align:center">
+          <div class="spacing-box" style="width:24px; height:24px; margin:0 auto;"></div>
+          <div class="spacing-label">2xl<br>24px</div>
+        </div>
+        <div style="text-align:center">
+          <div class="spacing-box" style="width:32px; height:32px; margin:0 auto;"></div>
+          <div class="spacing-label">3xl<br>32px</div>
+        </div>
+        <div style="text-align:center">
+          <div class="spacing-box" style="width:48px; height:48px; margin:0 auto;"></div>
+          <div class="spacing-label">4xl<br>48px</div>
+        </div>
+      </div>
+
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>Token Name</th>
+            <th>Value</th>
+            <th>Usage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="token-name">spacing.xs</span></td><td><span class="hex">4px</span></td><td><span class="token-desc">Tight gaps, icon padding</span></td></tr>
+          <tr><td><span class="token-name">spacing.sm</span></td><td><span class="hex">8px</span></td><td><span class="token-desc">Related items, chip padding</span></td></tr>
+          <tr><td><span class="token-name">spacing.md</span></td><td><span class="hex">12px</span></td><td><span class="token-desc">Default internal padding</span></td></tr>
+          <tr><td><span class="token-name">spacing.lg</span></td><td><span class="hex">16px</span></td><td><span class="token-desc">Card padding, list item padding</span></td></tr>
+          <tr><td><span class="token-name">spacing.xl</span></td><td><span class="hex">20px</span></td><td><span class="token-desc">Screen horizontal padding, section gaps</span></td></tr>
+          <tr><td><span class="token-name">spacing.2xl</span></td><td><span class="hex">24px</span></td><td><span class="token-desc">Section separation</span></td></tr>
+          <tr><td><span class="token-name">spacing.3xl</span></td><td><span class="hex">32px</span></td><td><span class="token-desc">Major section gaps</span></td></tr>
+          <tr><td><span class="token-name">spacing.4xl</span></td><td><span class="hex">48px</span></td><td><span class="token-desc">Screen top/bottom padding</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- RADIUS                                       -->
+    <!-- ============================================ -->
+    <section class="section" id="radius">
+      <div class="section-header">
+        <h2>Border Radius</h2>
+        <span class="badge">Foundations</span>
+      </div>
+
+      <div style="display:flex; gap:24px; margin-bottom:24px; padding:24px; background:white; border-radius:12px; border:1px solid #F0EBE4; align-items:flex-end;">
+        <div style="text-align:center;">
+          <div style="width:48px; height:48px; background:#CBAC9B; border-radius:4px; opacity:0.5;"></div>
+          <div class="spacing-label" style="margin-top:8px">sm<br>4px</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:48px; height:48px; background:#CBAC9B; border-radius:8px; opacity:0.5;"></div>
+          <div class="spacing-label" style="margin-top:8px">md<br>8px</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:48px; height:48px; background:#CBAC9B; border-radius:12px; opacity:0.5;"></div>
+          <div class="spacing-label" style="margin-top:8px">lg<br>12px</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:80px; height:48px; background:#CBAC9B; border-radius:24px; opacity:0.5;"></div>
+          <div class="spacing-label" style="margin-top:8px">xl<br>24px</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:80px; height:48px; background:#CBAC9B; border-radius:9999px; opacity:0.5;"></div>
+          <div class="spacing-label" style="margin-top:8px">full<br>9999px</div>
+        </div>
+      </div>
+
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>Token Name</th>
+            <th>Value</th>
+            <th>Usage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="token-name">radius.sm</span></td><td><span class="hex">4px</span></td><td><span class="token-desc">Color swatches, small elements</span></td></tr>
+          <tr><td><span class="token-name">radius.md</span></td><td><span class="hex">8px</span></td><td><span class="token-desc">Buttons, inputs, small cards</span></td></tr>
+          <tr><td><span class="token-name">radius.lg</span></td><td><span class="hex">12px</span></td><td><span class="token-desc">Date pickers, medium containers</span></td></tr>
+          <tr><td><span class="token-name">radius.xl</span></td><td><span class="hex">24px</span></td><td><span class="token-desc">Cards, bottom sheets, modals</span></td></tr>
+          <tr><td><span class="token-name">radius.full</span></td><td><span class="hex">9999px</span></td><td><span class="token-desc">Pills, chips, toggles, avatars</span></td></tr>
+        </tbody>
+      </table>
+
+      <div class="info-box" style="margin-top:16px">
+        <strong>Gap note:</strong> Code uses 6, 10, 12, 18, 19, 20, 22, 24, 28, 50, 54, 200 for border radius. This consolidates to 5 values.
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- GAPS SUMMARY                                 -->
+    <!-- ============================================ -->
+    <section class="section" id="gaps">
+      <div class="section-header">
+        <h2>Figma vs Code Gaps</h2>
+        <span class="badge">Action Needed</span>
+      </div>
+      <p class="section-description">
+        Key mismatches between what's designed and what's built. Each needs a decision.
+      </p>
+
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Issue</th>
+            <th>Figma Value</th>
+            <th>Code Value</th>
+            <th>Decision Needed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="token-desc">Text</span></td>
+            <td><span class="token-desc">Primary text color mismatch</span></td>
+            <td><span class="hex">#433E36</span></td>
+            <td><span class="hex">#000000</span></td>
+            <td><span class="status status-gap">Choose one</span></td>
+          </tr>
+          <tr>
+            <td><span class="token-desc">Link</span></td>
+            <td><span class="token-desc">Link color inconsistency</span></td>
+            <td><span class="hex">#427EF7</span></td>
+            <td><span class="hex">#0078FF / #007AFF</span></td>
+            <td><span class="status status-gap">Choose one</span></td>
+          </tr>
+          <tr>
+            <td><span class="token-desc">Data</span></td>
+            <td><span class="token-desc">Chart blue mismatch</span></td>
+            <td><span class="hex">#427EF7</span></td>
+            <td><span class="hex">#75A6FF</span></td>
+            <td><span class="status status-gap">Choose one</span></td>
+          </tr>
+          <tr>
+            <td><span class="token-desc">Fonts</span></td>
+            <td><span class="token-desc">3 names for same font family</span></td>
+            <td><span class="hex">SF Pro Display</span></td>
+            <td><span class="hex">SFProDisplay / SFUIDisplay / SFPro</span></td>
+            <td><span class="status status-gap">Consolidate</span></td>
+          </tr>
+          <tr>
+            <td><span class="token-desc">Borders</span></td>
+            <td><span class="token-desc">5 different border colors</span></td>
+            <td><span class="hex">Not defined</span></td>
+            <td><span class="hex">#F1F1F1, #f2f2f2, #E7DFD0, #DFD6C4, #CDC2AF</span></td>
+            <td><span class="status status-gap">Reduce to 2-3</span></td>
+          </tr>
+          <tr>
+            <td><span class="token-desc">Type</span></td>
+            <td><span class="token-desc">11 font sizes in code</span></td>
+            <td><span class="hex">Not defined</span></td>
+            <td><span class="hex">13-34px (11 values)</span></td>
+            <td><span class="status status-gap">Reduce to 6</span></td>
+          </tr>
+          <tr>
+            <td><span class="token-desc">Radius</span></td>
+            <td><span class="token-desc">12 radius values in code</span></td>
+            <td><span class="hex">Not defined</span></td>
+            <td><span class="hex">6-200px (12 values)</span></td>
+            <td><span class="status status-gap">Reduce to 5</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <footer class="page-footer">
+      <p>Ottavia Design Tokens v0.1 - Generated 2026-03-03 - Source: Figma + ottavia-client codebase</p>
+      <p style="margin-top:4px;">This page is your working document. We'll update it as decisions are made.</p>
+    </footer>
+  </div>
+</body>
+</html>
