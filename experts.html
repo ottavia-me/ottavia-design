@@ -1732,6 +1732,9 @@
     box-shadow: 0 12px 36px rgba(106,134,147,0.16);
     font-family: var(--font-display);
   }
+  /* In playground/preview embed mode the iframe viewport IS the phone, so this
+     fixed left-rail control would overlap the screen. Hide it when embedded. */
+  body.embed .pt-ext { display: none; }
   .pt-ext-title {
     font-weight: 700;
     font-size: 11px;
@@ -6980,21 +6983,37 @@
   .surface[data-surface="chat-subscribed"] .chat-scroll-inner,
   .surface[data-surface="expert-rebuild-plan"] .chat-scroll-inner,
   .surface[data-surface="chat-question"] .chat-scroll-inner,
-  .surface[data-surface="post-run-analysis"] .chat-scroll-inner {
+  .surface[data-surface="post-run-analysis"] .chat-scroll-inner,
+  .surface[data-surface="x-plan"] .chat-scroll-inner,
+  .surface[data-surface="x-qa"] .chat-scroll-inner {
     padding: 0;
     min-height: 100%;
   }
 
   /* No banner in these chat surfaces, so the first element starts a bit
-     higher with more breathing room from the header. */
+     higher with more breathing room from the header. (x-plan HAS a banner,
+     like chat-subscribed, so it is intentionally excluded here.) */
   .surface[data-surface="expert-rebuild-plan"] .cs-body,
   .surface[data-surface="chat-question"] .cs-body,
-  .surface[data-surface="post-run-analysis"] .cs-body {
+  .surface[data-surface="post-run-analysis"] .cs-body,
+  .surface[data-surface="x-qa"] .cs-body {
     padding-top: 154px;
   }
-  /* Background for the new chat surfaces (#7, #8). */
+  /* Background for the new chat surfaces (#7, #8, and templated x-plan/x-qa). */
   .surface[data-surface="chat-question"],
-  .surface[data-surface="post-run-analysis"] { background: var(--surface-background); }
+  .surface[data-surface="post-run-analysis"],
+  .surface[data-surface="x-plan"],
+  .surface[data-surface="x-qa"] { background: var(--surface-background); }
+
+  /* ===== Templated-expert avatar / portrait fallbacks (no portrait assets yet) ===== */
+  .x-fallback { display: inline-flex !important; align-items: center; justify-content: center;
+    color: #fff; font-weight: 700; font-family: var(--font-display); letter-spacing: 0.3px; line-height: 1; }
+  .cs-banner-avatar.x-fallback { font-size: 10px; }
+  .experts-pill .avatar.x-fallback { font-size: 10px; }
+  .cs-attribution .avatar.x-fallback { font-size: 9px; }
+  .p3-bow-img.x-fallback { font-size: 13px; }
+  .p3-portrait .x-portrait-fallback { width: 100%; height: 100%; display: flex; align-items: center;
+    justify-content: center; color: #fff; font-weight: 700; font-size: 60px; font-family: var(--font-display); }
 
   /* User's question bubble (#7, Type-1 chat) — a regular white user bubble,
      right-aligned, at the same font size as Ottavia's body text. */
@@ -11292,6 +11311,17 @@
       </div>
 
       <!-- =====================================================================
+           TEMPLATED EXPERT SURFACES (data-driven) — filled by renderExpert()
+           from the EXPERTS config when the prototype is opened with ?expert=<id>.
+           Matt stays static above (Example 1); Scott / Aric / Cheri render into
+           these three shells. Profile = persona-independent; Plan & Q&A swap on
+           the set-persona message from the preview stage.
+           ===================================================================== -->
+      <div class="surface" data-surface="x-profile"><div class="p3" id="xProfileRoot"></div></div>
+      <div class="surface" data-surface="x-plan"><div class="chat-baseline" id="xPlanRoot"></div></div>
+      <div class="surface" data-surface="x-qa"><div class="chat-baseline" id="xQaRoot"></div></div>
+
+      <!-- =====================================================================
            Surface: CHAT · POST-RUN (8) — proactive post-run analysis.
            Communication Type 3 (training ended → agency insight), read through
            Matt's 80/20 lens. Reuses #5 chat patterns + a run-summary header
@@ -12033,16 +12063,480 @@
   // open subscribe-sheet which no longer has a visible chip).
   window.switchSurface = activateSurface;
 
-  // Deep-link a surface via ?surface=NAME — used by the User Journey page.
-  const initialSurface = new URLSearchParams(location.search).get('surface');
-  if (initialSurface && document.querySelector(`.state-chip[data-surface="${initialSurface}"]`)) {
+  /* =====================================================================
+     EXPERT ENGINE — data-driven templated surfaces.
+     Matt stays static (Example 1). Scott / Aric / Cheri render into the
+     x-profile / x-plan / x-qa shells from this config, reusing Matt's exact
+     component classes (.p3-*, .cs-*). Profile is persona-independent; Plan
+     and Q&A swap between Tom and Mariah on the set-persona message.
+     ===================================================================== */
+  const X_PERSONAS = { tom: true, mariah: true };
+
+  const X_EXPERTS = {
+    scott: {
+      name: `Scott Fauble`, first: `Scott`, initials: `SF`, accent: `#C2603A`, accent2: `#9C4A2C`, portrait: `assets/experts/portraits/scott.jpg`,
+      profession: `Elite Marathoner & Author`,
+      tagline: `How a professional actually trains for the marathon — applied to your plan, not just talked about.`,
+      stats: [`12.1K followers`, `4.9★ rating`], price: `$12.00`,
+      partOfProduct: `Scott isn't an advisor you message. Ottavia has read his published work — including <em>Inside a Marathon</em> — and applies his training approach inside your plan, always with attribution.`,
+      whatYouGet: [
+        `Scott's marathon-build approach applied to your weekly running plan`,
+        `Tailored answers on long runs, workouts, fueling and race strategy`,
+        `His book and writing surfaced when they're relevant to your question`,
+        `When you set a goal — a half or a full — your plan is built with his approach baked in`,
+      ],
+      bodyOfWork: [{ tag: `IM`, title: `Inside a Marathon`, sub: `A transparent, day-by-day look at a professional marathon build, with coach Ben Rosario · 2018` }],
+      about: `Scott Fauble is an American professional marathoner who has finished in the top 10 at both the Boston and New York City Marathons, with a personal best of 2:08. He trains at altitude in Flagstaff, Arizona, and is known for an unusually transparent, process-driven approach to the marathon — captured in his book Inside a Marathon.`,
+      aboutBullets: [`2:08 marathon personal best`, `Top-10 at Boston & NYC Marathons`, `Co-author of Inside a Marathon`, `Trains at altitude in Flagstaff, AZ`],
+      chips: [`Marathon`, `Aerobic Base`, `Workouts`, `Long Run`, `Fueling`, `Consistency`],
+      cases: {
+        tom: {
+          plan: {
+            title: `I read your last four weeks of training the way Scott approaches a marathon build, Tom.`,
+            intro: `Your marathon is 14 weeks out and the shape of your training is mostly right — but there are two things Scott's approach would tighten first.`,
+            points: [
+              `① Your easy days are creeping too quick. Scott protects easy pace fiercely so the hard days can be truly hard — right now your "easy" runs sit only ~25s/km slower than your steady runs.`,
+              `② Your long run is flat. Scott's long runs build a purpose — a progression, or marathon-pace late — rather than staying one steady effort.`,
+              `③ Your weekly volume is stable and consistent, which is the part he'd least want to change.`,
+            ],
+            close: `Nothing here changes your plan yet. I can show you what next week looks like with Scott's structure, or we can talk through any of these first.`,
+            chips: [`Show next week with Scott's structure`, `What makes a long run "purposeful"?`, `Walk through these one by one`],
+          },
+          qa: {
+            ask: `I've got a 32k long run Saturday — should I put marathon-pace miles in it?`,
+            title: `Yes — but late, and not the whole thing. This is exactly where Scott's long runs earn their value.`,
+            intro: `You're 14 weeks out and your aerobic base is solid, so a marathon-pace block fits. Two things shape how to do it:`,
+            points: [
+              `① Run the first 20-22k as a genuinely easy effort, then close with 8-10k at marathon pace. Finishing fast teaches your body to hold form when tired — Scott's "earn the pace" idea.`,
+              `② Don't race it. If marathon pace feels like a 7/10 effort late in the run, that's the target — not the fastest you can run.`,
+            ],
+            close: `Fuel it like a race rehearsal — take something in around 60-90 minutes. That makes Saturday a dress rehearsal, not just a long run.`,
+            chips: [`What should I eat during it?`, `Why finish fast, not start fast?`, `Set this as Saturday's plan`],
+          },
+        },
+        mariah: {
+          plan: {
+            title: `I looked at your running with Scott's approach in mind, Mariah — built around the three days you've got.`,
+            intro: `Training for your first half on three runs a week is absolutely enough. Scott's approach is about making each run count, and yours can do more with small changes.`,
+            points: [
+              `① Make one run your long run and let it grow slowly — about 1km every couple of weeks. That single run does most of the work for the half.`,
+              `② Keep the other two genuinely easy. Scott protects easy days so the body absorbs the training instead of just collecting fatigue.`,
+              `③ Add one short stretch of faster running every couple of weeks — nothing fancy, just enough to remind your legs what "quicker" feels like.`,
+            ],
+            close: `That's the whole plan in spirit: one long, two easy, a touch of speed. I can lay out the next two weeks this way whenever you want.`,
+            chips: [`Show me the next two weeks`, `How long should my long run get?`, `How do I know if a run is easy enough?`],
+          },
+          qa: {
+            ask: `I can only run three times a week with the kids — is that really enough for a half marathon?`,
+            title: `Yes, honestly — three consistent runs a week will get you to the finish strong.`,
+            intro: `Consistency matters far more than volume here, and three runs you actually do beats five you don't. Here's how Scott's approach makes three count:`,
+            points: [
+              `① One of the three is your long run — that's the run that builds the endurance for race day.`,
+              `② The other two keep the habit and the aerobic base; they should feel comfortable, not draining.`,
+            ],
+            close: `If a fourth easy day ever opens up, great — but it's a bonus, not a requirement. Show up for your three and the half is very achievable.`,
+            chips: [`Build me a 3-day week`, `What pace for my long run?`, `What if I miss a run?`],
+          },
+        },
+      },
+    },
+
+    aric: {
+      name: `Aric Prather`, first: `Aric`, initials: `AP`, accent: `#4E5A9E`, accent2: `#343E78`, portrait: `assets/experts/portraits/aric.jpg`,
+      profession: `Sleep Scientist & Author`,
+      tagline: `The science of sleep, turned into a plan you can actually follow — and stick to.`,
+      stats: [`9.6K followers`, `4.9★ rating`], price: `$12.00`,
+      partOfProduct: `Aric isn't an advisor you message. Ottavia has read his published work — including <em>The Sleep Prescription</em> — and applies his evidence-based methods inside your guidance, always with attribution.`,
+      whatYouGet: [
+        `Aric's sleep methods applied to your own sleep and schedule`,
+        `Practical answers when sleep is off — night waking, a racing mind, rough weeks`,
+        `His book and research surfaced when they're relevant to your question`,
+        `A wind-down and schedule that fits your real life, not an ideal one`,
+      ],
+      bodyOfWork: [{ tag: `SP`, title: `The Sleep Prescription`, sub: `Seven Days to Unlocking Your Best Rest · Penguin Life · 2022` }],
+      about: `Aric Prather is a professor of psychiatry and behavioral sciences at UC San Francisco, where he runs a sleep and health laboratory and treats insomnia using cognitive behavioral therapy for insomnia (CBT-I). His book The Sleep Prescription distills that evidence-based approach into practical daily steps.`,
+      aboutBullets: [`Professor of Psychiatry, UCSF`, `Runs a sleep & health research lab`, `Treats insomnia with CBT-I`, `Author of The Sleep Prescription`],
+      chips: [`Sleep`, `CBT-I`, `Wind-down`, `Consistency`, `Night Waking`, `Recovery`],
+      cases: {
+        tom: {
+          plan: {
+            title: `I looked at your last two weeks of sleep the way Aric approaches it, Tom.`,
+            intro: `You're averaging about 6 hours, and with a marathon build that's the lever most worth pulling. Aric's approach starts with the two things that move sleep the most:`,
+            points: [
+              `① Your wake time swings by over an hour across the week. Aric's first move is a consistent wake time — even on weekends — because it anchors everything else.`,
+              `② Your last hour before bed runs right up to lights-out on screens. A genuine wind-down — dimmer, slower, off-screens — tells your system the day is ending.`,
+              `③ Your training load is climbing, which raises your need for sleep, not lowers it. Right now the two are moving in opposite directions.`,
+            ],
+            close: `None of this is about more time in bed tonight. It's about making the sleep you get deeper and more reliable. I can build a simple wind-down and wake schedule with you.`,
+            chips: [`Build my wind-down routine`, `Why a fixed wake time?`, `How much sleep does my training need?`],
+          },
+          qa: {
+            ask: `I keep waking around 3am and can't get back to sleep. What should I do?`,
+            title: `The counterintuitive part: if you're wide awake, don't lie there fighting it.`,
+            intro: `Waking in the night is normal; the trouble starts when we lie there trying to force sleep. Aric's approach is to protect the link between your bed and sleep:`,
+            points: [
+              `① If you're still awake after about 20 minutes, get up. Go to another room, keep the lights low, and do something calm and boring until you feel sleepy — then go back.`,
+              `② Don't check the clock or your phone. The numbers and the light both make it harder to drift back off.`,
+            ],
+            close: `One rough night won't set back your training. Keeping your wake time steady tomorrow matters far more than chasing the sleep you lost tonight.`,
+            chips: [`What counts as a calm activity?`, `Why not just stay in bed?`, `Help me wind down earlier`],
+          },
+        },
+        mariah: {
+          plan: {
+            title: `I looked at your sleep with Aric's approach in mind, Mariah — around a house with three kids.`,
+            intro: `Your sleep is broken up more than it is short, and a perfect eight hours isn't the goal here. Aric's approach is about protecting the quality of what you can get:`,
+            points: [
+              `① Anchor your wake time as best you can. With unpredictable nights, a steady morning is the one reliable signal that keeps your sleep on track.`,
+              `② Give yourself a short, real wind-down — even ten minutes. After a full day, your system needs a buffer between "on" and "asleep".`,
+              `③ A brief early-afternoon rest, if you can grab one, helps far more than sleeping in — which tends to scatter the next night.`,
+            ],
+            close: `The aim is steadier, not longer. Small anchors make fragmented nights add up to more real rest. I can shape a routine around your evenings whenever you want.`,
+            chips: [`Build a 10-minute wind-down`, `How do I handle night wake-ups?`, `Is napping okay?`],
+          },
+          qa: {
+            ask: `I only get about six broken hours with the kids. How do I make that sleep count for my running?`,
+            title: `Make the hours you do get more solid — that's where the gains are for you.`,
+            intro: `You may not control how long you sleep right now, but you can improve how restorative it is. Aric's approach focuses there:`,
+            points: [
+              `① Keep your wake time steady. It's the single habit that most improves how deep and efficient your sleep is, even when total time is short.`,
+              `② Protect the wind-down. Walking into bed straight from chores keeps your mind racing; a few quiet minutes first helps you fall asleep faster and wake less.`,
+            ],
+            close: `Better-quality sleep shows up in your running as steadier energy and easier recovery — often more than an extra fragmented hour would.`,
+            chips: [`Help me wind down faster`, `Does sleep really affect my runs?`, `Build my evening routine`],
+          },
+        },
+      },
+    },
+
+    cheri: {
+      name: `Cheri Mah`, first: `Cheri`, initials: `CM`, accent: `#2F7E8C`, accent2: `#1E5A65`, portrait: `assets/experts/portraits/cheri.jpg`,
+      profession: `Sleep & Performance Scientist`,
+      tagline: `Sleep as a performance tool — backed by the research on real athletes.`,
+      stats: [`7.8K followers`, `4.9★ rating`], price: `$12.00`,
+      partOfProduct: `Cheri isn't an advisor you message. Ottavia has read her published research — including her landmark sleep-extension studies — and applies her findings inside your guidance, always with attribution.`,
+      whatYouGet: [
+        `Cheri's sleep-extension research applied to your training and recovery`,
+        `Answers grounded in how sleep actually affects performance`,
+        `Her studies surfaced when they're relevant to your question`,
+        `A realistic sleep target for the weeks that matter most — like race week`,
+      ],
+      bodyOfWorkLabel: `Selected research`,
+      bodyOfWork: [
+        { tag: `★`, title: `Sleep extension improves athletic performance`, sub: `Stanford men's basketball — faster sprints and better shooting accuracy after weeks of extended sleep · SLEEP, 2011` },
+        { tag: `Zz`, title: `Sleep & the elite athlete`, sub: `Reviews of sleep, recovery and performance across professional sport` },
+      ],
+      about: `Cheri Mah is a researcher at the Stanford Sleep Medicine Center who studies sleep and performance in elite athletes, including NBA and NFL teams. Her landmark study extending the sleep of Stanford basketball players showed measurable gains in speed, accuracy and reaction time — helping make sleep a serious part of athletic training.`,
+      aboutBullets: [`Researcher, Stanford Sleep Medicine Center`, `Landmark basketball sleep-extension study`, `Works with elite & professional teams`, `Focus on sleep, recovery & performance`],
+      chips: [`Sleep Extension`, `Performance`, `Recovery`, `Banking Sleep`, `Travel & Jet Lag`, `Reaction Time`],
+      cases: {
+        tom: {
+          plan: {
+            title: `I looked at your sleep and training together the way Cheri's research frames it, Tom.`,
+            intro: `You're averaging about 6 hours while your marathon load climbs — and Cheri's work suggests that's leaving real performance on the table. Her angle is sleep extension:`,
+            points: [
+              `① In her studies, athletes who pushed toward 8-9 hours for several weeks got measurably faster and sharper. You're training hard on the low end of that.`,
+              `② The gains came from consistency over weeks, not one big night. A gradual shift — to bed 20-30 minutes earlier — compounds.`,
+              `③ Your hardest blocks and your shortest sleep are landing in the same weeks, which is exactly when extension helps most.`,
+            ],
+            close: `Think of sleep as a training input you're under-using, not a luxury. I can set a realistic extension target and ease you toward it.`,
+            chips: [`Set a sleep-extension target`, `What did her study find?`, `When does this matter most?`],
+          },
+          qa: {
+            ask: `How much sleep do I actually need to run my best?`,
+            title: `For someone training as hard as you, the honest answer is more than you're getting — likely 8 to 9 hours.`,
+            intro: `General guidance says 7-9 hours, but Cheri's research on athletes points to the upper end while you're training hard:`,
+            points: [
+              `① Her sleep-extension studies showed gains in speed, accuracy and reaction time when athletes moved toward 8-9 hours for several weeks.`,
+              `② Hard training raises your sleep need rather than lowering it — recovery, adaptation and tissue repair all happen there.`,
+            ],
+            close: `You don't have to jump straight to 9 hours. Adding 30-45 minutes consistently is enough to start seeing the difference she measured.`,
+            chips: [`Help me add 45 minutes`, `Bank sleep before my race?`, `What about naps?`],
+          },
+        },
+        mariah: {
+          plan: {
+            title: `I looked at your sleep and running together through Cheri's research, Mariah.`,
+            intro: `Your sleep is short and broken, and Cheri's work is reassuring here: even small, steady gains in sleep show up in performance. The realistic version for you:`,
+            points: [
+              `① Aim to add a little, consistently — even 20-30 minutes earlier to bed across the week beats one long catch-up night.`,
+              `② Protect the nights before your longer runs and your race. Cheri's "banking sleep" idea means the rest you get beforehand is what carries you through.`,
+              `③ Track it loosely, not anxiously. The trend over weeks is what matters, not any single night.`,
+            ],
+            close: `You don't need a perfect eight hours to benefit. Steady, slightly longer sleep is a genuine training aid. I can set a gentle target with you.`,
+            chips: [`Set a gentle sleep target`, `How do I bank sleep before a race?`, `Does a little more really help?`],
+          },
+          qa: {
+            ask: `Does sleeping a bit more actually make a difference to my running, or is that overstated?`,
+            title: `It genuinely helps — and you don't need much more to feel it.`,
+            intro: `Cheri's research is some of the clearest evidence that sleep is a performance tool, not just recovery:`,
+            points: [
+              `① When athletes extended their sleep, they ran faster and reacted quicker — real, measured changes, not just feeling better.`,
+              `② The same direction holds for everyday runners: more consistent sleep tends to mean steadier energy and fewer flat, heavy-legged runs.`,
+            ],
+            close: `For you, even 20-30 extra minutes on most nights is a reasonable target — small enough to keep, big enough to notice.`,
+            chips: [`Help me find 30 minutes`, `Which nights matter most?`, `Set a weekly sleep goal`],
+          },
+        },
+      },
+    },
+  };
+
+  /* Follow-up answers for the three quick-action chips, per expert × persona ×
+     use case. Index-aligned with the `chips` arrays above. Tapping a chip appends
+     the question + this answer to the thread (see xFollow). */
+  const X_ANSWERS = {
+    scott: {
+      tom: {
+        plan: [
+          { title: `Here's next week through Scott's lens.`, body: `Same volume, just re-shaped: your two hard days move to Tuesday and Saturday so they bracket easy days, your easy runs drop ~20s/km, and Saturday's long run finishes with a 6k marathon-pace block.`, points: [`Tue — workout (the week's main quality)`, `Wed / Thu / Fri — easy, genuinely easy`, `Sat — long run with a fast finish`, `Sun — easy or rest`] },
+          { title: `A long run should rehearse something, not just log distance.`, body: `Scott's long runs always have a job — a steady aerobic build, marathon-pace miles late, or fueling practice. The point is to reach race day having already practiced the demand you'll face.` },
+          { title: `Let's start with the easy-pace one — it's the highest-leverage.`, body: `If your easy days run too quick, every hard day starts slightly fatigued, so the quality sessions can't be truly hard. Slow the easy runs ~20s/km for a week and the next workout will land better. Want me to do the same for the long run next?` },
+        ],
+        qa: [
+          { title: `Treat it like the race: 30-60g of carbs an hour, starting early.`, body: `Take a gel or equivalent around 45 minutes in and every ~40 minutes after, with water. Practicing this now is how you learn what your stomach tolerates before it matters on race day.` },
+          { title: `Because the marathon is decided in the last 10k, not the first.`, body: `Finishing at marathon pace on tired legs trains the exact skill you need late in a race — holding form and pace under fatigue. Starting fast just teaches you to fade.` },
+          { title: `Done — Saturday is now an easy 22k + 10k at marathon pace.`, body: `I've added a fueling reminder at 45 minutes and a note to keep the first two-thirds genuinely easy. I'll check in Sunday to see how the marathon-pace block felt.` },
+        ],
+      },
+      mariah: {
+        plan: [
+          { title: `Here are your next two weeks — one long, two easy each.`, body: `Week 1: long run 12k, two easy 5-6k. Week 2: long run 13k, two easy 6k, with a few short pickups added to one midweek run. Nothing dramatic — just steady, repeatable progress.` },
+          { title: `Build toward about 18-19k before your half.`, body: `Grow it ~1k every couple of weeks, with an easier week every third week so it never becomes a grind. You don't need to run the full 21.1k in training — race-day adrenaline covers the rest.` },
+          { title: `The talk test: you can hold a full conversation.`, body: `If you could chat in complete sentences the whole way, it's easy enough. If you're snatching breaths between words, ease off — easy runs are meant to feel almost too gentle.` },
+        ],
+        qa: [
+          { title: `Here's a simple, sustainable three-day week.`, body: `Tue — easy 5k. Thu — easy 6k with a few short pickups. Sat — long run. The same three slots every week, so it becomes a rhythm you don't have to think about.` },
+          { title: `Easy — slower than feels natural.`, body: `Your long run is about time on feet, not speed. Run it at a comfortable, conversational pace; if anything, start too slow. The endurance comes from the duration, not the effort.` },
+          { title: `Let it go — don't try to make it up.`, body: `One missed run changes nothing over a 12-week build. Don't cram it into the next day; just pick the schedule back up where it is. Consistency over weeks beats any single session.` },
+        ],
+      },
+    },
+    aric: {
+      tom: {
+        plan: [
+          { title: `Here's a 30-minute wind-down you can actually keep.`, body: `Same time each night, lights low, screens away, nothing demanding:`, points: [`−30 min: lights down, phone charging across the room`, `−20 min: shower or stretch, nothing work-related`, `−10 min: read a few pages or breathe slowly until drowsy`] },
+          { title: `Because your wake time sets your whole body clock.`, body: `Getting up at the same time every day — even after a rough night — anchors your circadian rhythm, which makes falling asleep easier the next night. Aric treats it as the one non-negotiable.` },
+          { title: `While you're building, aim for the top of your range — 7.5 to 8.5 hours.`, body: `Hard training raises your sleep need because adaptation and repair happen there. Right now you're asking your body to do more on less, which is the gap most worth closing.` },
+        ],
+        qa: [
+          { title: `Anything boring, dim, and off-screen.`, body: `Reading something undemanding, slow breathing, gentle stretching, or just sitting in low light. The goal is to feel sleepy without stimulation — so no phone, no news, no problem-solving.` },
+          { title: `To keep your bed linked to sleep, not to lying awake.`, body: `Long stretches awake and frustrated in bed train your brain to associate the bed with wakefulness. Getting up briefly and returning when sleepy protects that link — it's core to Aric's approach.` },
+          { title: `Let's move your wind-down to 30 minutes before lights-out.`, body: `I'll set a gentle nudge then to dim the lights and put your phone down. Starting the descent earlier is usually what settles 3am waking over a couple of weeks.` },
+        ],
+      },
+      mariah: {
+        plan: [
+          { title: `Ten minutes is enough — here's a realistic version.`, body: `Once the kids are down: lights low, phone away, and two or three slow minutes of breathing or stretching before bed. Short and repeatable beats long and skipped.` },
+          { title: `Keep it dark, dull, and brief.`, body: `If a child wakes you, keep the lights as low as possible and stay off your phone so you can drift back faster. If you're wide awake a while, a few minutes of slow breathing helps more than lying there tense.` },
+          { title: `Yes — short and early.`, body: `A 10-20 minute nap before mid-afternoon can take the edge off a rough night without hurting that night's sleep. Avoid long or late naps, which tend to scatter your bedtime.` },
+        ],
+        qa: [
+          { title: `Put a hard stop between chores and bed.`, body: `Even five minutes of low light and slow breathing signals your body to shift gears. The racing mind usually comes from going straight from "doing" to lying down with nothing in between.` },
+          { title: `Yes — more than almost any other recovery factor.`, body: `Sleep is when your body repairs and adapts to training. Short, broken sleep shows up as heavier legs and lower drive; steadier sleep tends to make the same runs feel easier.` },
+          { title: `Here's a simple one built around your evenings.`, body: `Kids down → 10 minutes to yourself (low light, no screens) → the same bedtime most nights → a fixed wake time. Four small anchors, nothing that needs hours you don't have.` },
+        ],
+      },
+    },
+    cheri: {
+      tom: {
+        plan: [
+          { title: `Let's aim for 7.5 hours to start, then nudge toward 8.`, body: `From your current ~6, we'll add 30 minutes for two weeks by shifting bedtime earlier, then another 30 once that sticks. Gradual is exactly what made the difference in Cheri's research.` },
+          { title: `Stanford basketball players measurably improved when they slept more.`, body: `After several weeks of extending sleep toward 8-9 hours, players sprinted faster, shot more accurately, and reacted quicker — clear, measured gains, not just feeling fresher.` },
+          { title: `In your hardest training weeks and the days before your race.`, body: `That's when your body's repair demand peaks. Banking consistent sleep through a heavy block — and especially the two nights before race day — is where extension pays off most.` },
+        ],
+        qa: [
+          { title: `Move bedtime 15 minutes earlier every few nights.`, body: `Three small steps gets you to 45 extra minutes without a jarring change. I'll nudge you at the new bedtime; the trick is protecting it on nights you'd normally push later.` },
+          { title: `Yes — the week before matters more than the night before.`, body: `Build a sleep cushion across the days leading in. One anxious pre-race night is normal and won't hurt you if you arrive well-rested, so prioritize the two or three nights before.` },
+          { title: `A 20-minute nap is a useful top-up, not a replacement.`, body: `Short early-afternoon naps can add to your daily total and aid recovery on hard days. Keep them brief and before mid-afternoon so they don't eat into night sleep.` },
+        ],
+      },
+      mariah: {
+        plan: [
+          { title: `Let's aim for 20-30 more minutes, most nights.`, body: `Not every night, not perfectly — just a realistic nudge earlier to bed when you can. The trend over a few weeks is what shows up in your running, and it's very achievable.` },
+          { title: `Protect the two or three nights before your long runs and your race.`, body: `You can't control every night, but you can prioritize the ones that matter most. A little extra in the days before is what carries you through — Cheri calls it banking sleep.` },
+          { title: `Yes — even small, steady gains are real.`, body: `You don't need a perfect eight hours. The research direction is clear: consistently a bit more sleep means steadier energy and better recovery, which you'll feel on your runs.` },
+        ],
+        qa: [
+          { title: `Usually it's the evening scroll, not real free time.`, body: `For most people those 30 minutes are hiding in late-night phone time. Moving lights-out 30 minutes earlier — and leaving the phone outside the room — is the simplest place to find them.` },
+          { title: `The nights before your long run and your race.`, body: `Those are when good sleep most directly helps performance and recovery. If a week gets messy, aim your best sleep at those specific nights.` },
+          { title: `Goal set: 20-30 minutes earlier to bed, five nights a week.`, body: `I'll track the trend, not police every night. Five good nights out of seven is a genuine win — and enough to feel the difference in your running.` },
+        ],
+      },
+    },
+  };
+
+  // ---- Shared markup helpers (reuse Matt's exact component classes) ----
+  function xIconRow() {
+    return `<div class="cs-icon-row">
+      <button class="cs-icon-btn" title="Copy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+      <button class="cs-icon-btn" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.6L5 21V4a1 1 0 0 1 1-1z"/></svg></button>
+      <button class="cs-icon-btn up" title="Helpful"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 22H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h3"/><path d="M7 12l4.2-8.1a2.4 2.4 0 0 1 3 2.2V9h4.6a2 2 0 0 1 2 2.4l-1.3 7A2 2 0 0 1 19.2 20H7z"/></svg></button>
+      <button class="cs-icon-btn down" title="Not helpful"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2h3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-3"/><path d="M17 12l-4.2 8.1a2.4 2.4 0 0 1-3-2.2V15H5.2a2 2 0 0 1-2-2.4l1.3-7A2 2 0 0 1 6.8 4H17z"/></svg></button>
+    </div>`;
+  }
+  // Real portrait when we have one, else an initials/accent fallback.
+  function xAvatar(ex, cls) {
+    return ex.portrait
+      ? `<img class="${cls}" src="${ex.portrait}" alt="${ex.name}" />`
+      : `<span class="${cls} x-fallback" style="background:${ex.accent}">${ex.initials}</span>`;
+  }
+  function xFooter(ex) {
+    return `<div class="cs-msg-footer">${xIconRow()}
+      <div class="cs-attribution" title="Where ${ex.first}'s work shaped this">
+        ${xAvatar(ex, 'avatar')}
+        <span class="cs-attribution-label">With ${ex.first}</span>
+      </div></div>`;
+  }
+  function xChatHeader(ex) {
+    return `<div class="chat-header"><span class="chh-blur b1"></span><span class="chh-blur b2"></span><span class="chh-blur b3"></span><div class="chat-header-gradient"></div></div>
+      <div class="chat-header-row">
+        <div class="header-pill date" style="cursor:default"><span class="day-num">19</span><span class="day-wd">wed</span></div>
+        <div class="header-pill experts-pill" title="Experts mode">
+          ${xAvatar(ex, 'avatar')}
+          <span class="label">Experts</span>
+          <span class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </div>
+        <button class="header-icon-btn" title="Profile"><img src="assets/experts/icons/user-profile-03.svg" alt="" /></button>
+      </div>`;
+  }
+  function xQaComposer() {
+    return `<div class="qa-scrim" aria-hidden="true"><span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="tint"></span></div>
+      <div class="suggestion-row"><div class="suggestion-track">
+        <div class="suggestion-pill active">How is my progress today?</div>
+        <div class="suggestion-pill">Log 200ml water</div>
+        <div class="suggestion-pill">My report this morning</div>
+      </div></div>
+      <div class="composer"><div class="composer-box">
+        <div class="composer-circle left" title="More"><img src="assets/experts/icons/more.svg" alt="" /></div>
+        <div class="composer-input-wrap"><div class="composer-input"></div><div class="composer-mic" title="Voice"><img src="assets/experts/icons/microphone-01.svg" alt="" /></div></div>
+        <div class="composer-circle right" title="Camera"><img src="assets/experts/icons/camera.svg" alt="" /></div>
+      </div></div>`;
+  }
+  const xLis = arr => arr.map(li => `<li>${li}</li>`).join('');
+  // Quick-action chips that, when tapped, append a real follow-up answer.
+  let xUsed = { plan: new Set(), qa: new Set() };
+  function xChips(uc, labels) {
+    return labels.map((label, i) => xUsed[uc].has(i) ? '' : `<button class="cs-action" onclick="xFollow('${uc}',${i})">${label}</button>`).join('');
+  }
+  function xAnswerBlock(ex, a) {
+    return `<h1 class="cs-title">${a.title}</h1>
+      <p class="cs-para">${a.body}</p>
+      ${a.points ? `<ul class="cs-list">${xLis(a.points)}</ul>` : ''}
+      ${xFooter(ex)}`;
+  }
+  function xFollow(uc, i) {
+    const id = window.__expertId, pid = window.__personaId;
+    const ex = X_EXPERTS[id]; if (!ex) return;
+    const labels = ex.cases[pid][uc].chips;
+    const ans = X_ANSWERS[id] && X_ANSWERS[id][pid] && X_ANSWERS[id][pid][uc] && X_ANSWERS[id][pid][uc][i];
+    if (!ans || xUsed[uc].has(i)) return;
+    xUsed[uc].add(i);
+    const thread = document.getElementById(uc === 'plan' ? 'xPlanThread' : 'xQaThread');
+    const actions = document.getElementById(uc === 'plan' ? 'xPlanActions' : 'xQaActions');
+    if (thread) thread.insertAdjacentHTML('beforeend', `<div class="cs-ask">${labels[i]}</div>${xAnswerBlock(ex, ans)}`);
+    if (actions) actions.innerHTML = xChips(uc, labels);
+    const scroll = thread && thread.closest('.chat-scroll');
+    if (scroll) requestAnimationFrame(() => { scroll.scrollTop = scroll.scrollHeight; });
+  }
+  window.xFollow = xFollow;
+
+  function renderXProfile(ex) {
+    return `
+      <div class="p3-topbar"><button class="p3-back" onclick="window.switchSurface('chat-baseline')" title="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button></div>
+      <div class="p3-scroll">
+        <div class="p3-hero-bg"><div class="p3-hero-glow"></div></div>
+        <div class="p3-portrait">${ex.portrait ? `<img src="${ex.portrait}" alt="${ex.name}" />` : `<div class="x-portrait-fallback" style="background:linear-gradient(150deg, ${ex.accent}, ${ex.accent2})">${ex.initials}</div>`}</div>
+        <div class="p3-hero"><h1 class="p3-name">${ex.name}</h1><p class="p3-profession">${ex.profession}</p></div>
+        <div class="p3-subscribe-card">
+          <p class="p3-tagline">${ex.tagline}</p>
+          <div class="p3-stats-row"><span class="p3-stat-text">${ex.stats[0]}</span><span class="p3-stat-divider"></span><span class="p3-stat-text">${ex.stats[1]}</span></div>
+          <button class="p3-subscribe-btn" onclick="window.switchSurface('x-plan')">Subscribe — ${ex.price} /month</button>
+        </div>
+        <p class="p3-cancel-note">Cancel anytime. Manage in <a>Experts Hub</a>.</p>
+        <div class="p3-what-card">
+          <h2 class="p3-section-title">What you get</h2>
+          <p class="p3-about-bio" style="margin-bottom:16px;">${ex.partOfProduct}</p>
+          <ul class="p3-checklist">${xLis(ex.whatYouGet)}</ul>
+        </div>
+        <div class="p3-block">
+          <h2 class="p3-section-title">${ex.bodyOfWorkLabel || 'Body of work'}</h2>
+          <div class="p3-bow-list">${ex.bodyOfWork.map(b => `<div class="p3-bow-item"><span class="p3-bow-img x-fallback" style="background:${ex.accent}">${b.tag || ex.initials}</span><div class="p3-bow-text"><h3 class="p3-bow-title">${b.title}</h3><p class="p3-bow-sub">${b.sub}</p></div></div>`).join('')}</div>
+        </div>
+        <div class="p3-block"><h2 class="p3-section-title">About</h2><p class="p3-about-bio">${ex.about}</p><ul class="p3-about-bullets">${xLis(ex.aboutBullets)}</ul></div>
+        <div class="p3-block"><div class="p3-topic-chips">${ex.chips.map(c => `<span class="p3-topic-chip">${c}</span>`).join('')}</div></div>
+      </div>
+      <div class="home-indicator"></div>`;
+  }
+  function renderXPlan(ex, pid) {
+    const c = ex.cases[pid].plan;
+    return `${xChatHeader(ex)}
+      <div class="chat-scroll"><div class="chat-scroll-inner"><div class="cs-body">
+        <div class="cs-banner">
+          <span class="cs-banner-line">${xAvatar(ex, 'cs-banner-avatar')}<strong>${ex.name}</strong> is now part of your guidance.</span>
+          <span class="cs-banner-line">You can always change in the <a>Expert Hub</a>.</span>
+        </div>
+        <h1 class="cs-title">${c.title}</h1>
+        <p class="cs-para">${c.intro}</p>
+        <ul class="cs-list">${xLis(c.points)}</ul>
+        <p class="cs-para">${c.close}</p>
+        ${xFooter(ex)}
+        <div id="xPlanThread"></div>
+        <div class="cs-actions" id="xPlanActions">${xChips('plan', c.chips)}</div>
+      </div></div></div>
+      ${xQaComposer()}
+      <div class="home-indicator"></div>`;
+  }
+  function renderXQa(ex, pid) {
+    const c = ex.cases[pid].qa;
+    return `${xChatHeader(ex)}
+      <div class="chat-scroll"><div class="chat-scroll-inner"><div class="cs-body">
+        <div class="cs-ask">${c.ask}</div>
+        <h1 class="cs-title">${c.title}</h1>
+        <p class="cs-para">${c.intro}</p>
+        <ul class="cs-list">${xLis(c.points)}</ul>
+        <p class="cs-para">${c.close}</p>
+        ${xFooter(ex)}
+        <div id="xQaThread"></div>
+        <div class="cs-actions" id="xQaActions">${xChips('qa', c.chips)}</div>
+      </div></div></div>
+      ${xQaComposer()}
+      <div class="home-indicator"></div>`;
+  }
+  function renderExpert(id, pid) {
+    const ex = X_EXPERTS[id];
+    if (!ex) return;
+    pid = X_PERSONAS[pid] ? pid : 'tom';
+    window.__expertId = id; window.__personaId = pid;
+    xUsed = { plan: new Set(), qa: new Set() }; // reset tapped chips on (re)render
+    const pr = document.getElementById('xProfileRoot');
+    const pl = document.getElementById('xPlanRoot');
+    const qa = document.getElementById('xQaRoot');
+    if (pr) pr.innerHTML = renderXProfile(ex);
+    if (pl) pl.innerHTML = renderXPlan(ex, pid);
+    if (qa) qa.innerHTML = renderXQa(ex, pid);
+  }
+
+  // Render the templated expert (if any) BEFORE deep-linking so its surfaces exist.
+  const _params = new URLSearchParams(location.search);
+  const _expertId = _params.get('expert');
+  if (_expertId && X_EXPERTS[_expertId]) renderExpert(_expertId, 'tom');
+
+  // Deep-link a surface via ?surface=NAME — used by the User Journey page and the
+  // preview stage. Checks for the surface element so templated x-* surfaces work.
+  const initialSurface = _params.get('surface');
+  if (initialSurface && document.querySelector(`.surface[data-surface="${initialSurface}"]`)) {
     activateSurface(initialSurface);
   }
 
-  // Allow the journey page to switch surfaces without reloading the iframe.
+  // Messages from the preview stage / journey page.
   window.addEventListener('message', (e) => {
-    if (e.data && e.data.type === 'set-surface' && typeof e.data.surface === 'string') {
+    if (!e.data) return;
+    if (e.data.type === 'set-surface' && typeof e.data.surface === 'string') {
       activateSurface(e.data.surface);
+    }
+    if (e.data.type === 'set-persona' && typeof e.data.persona === 'string' && window.__expertId) {
+      renderExpert(window.__expertId, e.data.persona);
     }
   });
 

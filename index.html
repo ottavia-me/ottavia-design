@@ -322,6 +322,172 @@
             font-size: 18px;
         }
 
+        /* ===== EXPERTS DIRECTORY ===== */
+        .expert-card { gap: 4px; }
+        .expert-card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+        .expert-card-id { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+        .expert-av { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; object-position: center top; flex-shrink: 0; }
+        .expert-av-fb { display: inline-flex; align-items: center; justify-content: center; background: #ECE7DE; color: #8A7E6B; font-weight: 700; font-size: 15px; }
+        .expert-card .expert-domain {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+        .expert-card .expert-name {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.3px;
+        }
+        .expert-card .expert-intro {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.45;
+            margin-top: 2px;
+        }
+        .expert-card .expert-foot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--card-border);
+        }
+        .expert-copy {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            background: var(--bg);
+            cursor: pointer;
+            font-family: inherit;
+            transition: all var(--transition);
+            white-space: nowrap;
+        }
+        .expert-copy:hover { border-color: var(--accent); color: var(--accent); }
+        .expert-copy svg { width: 14px; height: 14px; }
+
+        /* ===== EXPERT PREVIEW STAGE ===== */
+        .preview-stage {
+            height: 100%;
+            background: #F5F1EA;
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 24px;
+            padding: 40px 48px;
+            overflow: hidden;
+        }
+        .ps-back {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border: 1px solid rgba(67,62,54,0.18);
+            border-radius: 20px;
+            background: rgba(255,255,255,0.6);
+            color: #433E36;
+            font-size: 13px;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        .ps-back:hover { background: #fff; }
+        .ps-left { display: flex; flex-direction: column; height: 100%; justify-content: flex-start; padding-top: 8px; }
+        .ps-expert-head { display: flex; align-items: center; gap: 14px; margin-bottom: 56px; }
+        .ps-expert-head img, .ps-expert-head .ps-avatar-fallback {
+            width: 64px; height: 64px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
+            background: #E4DCCD; display: flex; align-items: center; justify-content: center;
+            font-size: 22px; font-weight: 700; color: #8A7E6B;
+        }
+        .ps-expert-head .ps-name { font-size: 26px; font-weight: 700; color: #433E36; letter-spacing: -0.5px; line-height: 1.1; }
+        .ps-expert-head .ps-intro { font-size: 14px; color: #766F64; margin-top: 4px; max-width: 260px; line-height: 1.4; }
+        .ps-usecases { display: flex; flex-direction: column; gap: 14px; max-width: 240px; }
+        .ps-uc {
+            padding: 16px 22px;
+            border-radius: 16px;
+            border: 1.5px solid rgba(67,62,54,0.18);
+            background: rgba(255,255,255,0.35);
+            font-size: 17px;
+            font-weight: 500;
+            color: #433E36;
+            text-align: center;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all var(--transition);
+        }
+        .ps-uc:hover { background: rgba(255,255,255,0.7); }
+        .ps-uc.active {
+            background: #fff;
+            border: 1.5px solid transparent;
+            background-image: linear-gradient(#fff,#fff), linear-gradient(120deg, #8E8BFF, #6FB0E8);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            box-shadow: 0 4px 16px rgba(97,97,255,0.1);
+        }
+        /* The phone matches experts.html's real device frame exactly (History uses
+           the same one): 402×874 logical, embed-scaled to 390 wide. We mirror the
+           iOS bezel (4px rgba(10,10,10,0.5), 53.33px radius) + dynamic island here,
+           because in embed mode experts.html hides its own bezel ("playground
+           provides its own bezel"). The whole phone is then scaled by JS to fit. */
+        .ps-phone-wrap { display: flex; align-items: center; justify-content: center; height: 100%; overflow: hidden; }
+        .ps-phone-scale { transform-origin: center center; flex-shrink: 0; }
+        .ps-phone {
+            position: relative;
+            width: 390px;            /* = 402 × 0.9701, the embed-scaled screen width */
+            height: 848px;           /* = 874 × 0.9701, keeps the true 402:874 ratio */
+            border-radius: 54px;
+            border: 4px solid rgba(10,10,10,0.5);
+            background: #F5F1EA;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.18);
+            overflow: hidden;
+        }
+        .ps-phone iframe { display: block; width: 390px; height: 848px; border: none; }
+        .ps-phone::before { /* dynamic island — 125×37, 11px from top, matches device-ios */
+            content: ""; position: absolute; top: 11px; left: 50%; transform: translateX(-50%);
+            width: 125px; height: 37px; background: #000; border-radius: 100px; z-index: 50; pointer-events: none;
+        }
+        .ps-phone-placeholder {
+            width: 390px; height: 848px; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; text-align: center; padding: 40px; gap: 12px;
+        }
+        .ps-phone-placeholder .pl-title { font-size: 18px; font-weight: 700; color: #433E36; }
+        .ps-phone-placeholder .pl-sub { font-size: 14px; color: #766F64; line-height: 1.5; }
+        .ps-right { display: flex; flex-direction: column; gap: 18px; align-items: flex-end; max-width: 360px; margin-left: auto; }
+        .ps-persona {
+            width: 100%; max-width: 340px; padding: 20px 22px; border-radius: 18px;
+            border: 1.5px solid rgba(67,62,54,0.16); background: rgba(255,255,255,0.45);
+            cursor: pointer; font-family: inherit; text-align: left; transition: all var(--transition);
+        }
+        .ps-persona:hover { background: rgba(255,255,255,0.75); }
+        .ps-persona.active {
+            border: 1.5px solid transparent;
+            background-image: linear-gradient(rgba(255,255,255,0.95),rgba(255,255,255,0.95)), linear-gradient(120deg, #8E8BFF, #6FB0E8);
+            background-origin: border-box; background-clip: padding-box, border-box;
+            box-shadow: 0 6px 20px rgba(97,97,255,0.1);
+        }
+        .ps-persona-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+        .ps-persona-head img, .ps-persona-head .ps-pa-fallback {
+            width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
+            background: #DCE4EC; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; color: #5B6B7B;
+        }
+        .ps-persona-head .ps-pname { font-size: 19px; font-weight: 700; color: #4A2E5A; }
+        .ps-persona-desc { font-size: 13.5px; color: #6A6258; line-height: 1.5; }
+        .ps-persona-meta { font-size: 12px; color: #8A8275; margin-top: 8px; font-weight: 600; }
+
         /* ===== COMMENT BUTTON ===== */
         .comment-btn {
             position: absolute;
@@ -598,6 +764,10 @@
                 <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg></span>
                 Experts
             </a>
+            <a class="nav-item" data-page="history" onclick="navigate(this, 'history')">
+                <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg></span>
+                History
+            </a>
         </div>
     </nav>
 
@@ -608,6 +778,7 @@
             <option value="design-system">Design System</option>
             <option value="tools">Tools</option>
             <option value="experts">Experts</option>
+            <option value="history">History</option>
         </select>
     </div>
 
@@ -643,8 +814,30 @@
     <script>
         const pages = {
             'design-system': 'design-system.html',
-            'experts': 'experts.html',
+            // History = the full expert-explorations prototype exactly as it was, opened
+            // directly (no embed) so the state-bar, all explorations, and the hours-of-day
+            // panel are all visible — nothing was removed from experts.html.
+            'history': 'experts.html',
         };
+
+        // Expert directory — single source of truth for the cards on the Experts page.
+        // `updated` is the last time that expert's demo was touched (shown on the card).
+        // `status` drives the small colored label. `ready` = the focused prototype is wired up.
+        const EXPERTS_META = {
+            matt:  { name: 'Matt Fitzgerald', domain: 'Endurance nutrition · 80-20',        intro: 'Author of Racing Weight. The original Ottavia expert demo.', updated: 'May 25', status: 'Live',  statusColor: '#58A471', ready: true },
+            scott: { name: 'Scott Fauble',     domain: 'Marathon · training',                intro: 'Elite U.S. marathoner, author of Inside a Marathon.',         updated: 'Jun 1',  status: 'Ready', statusColor: '#58A471', ready: true, portrait: 'assets/experts/portraits/scott.jpg' },
+            aric:  { name: 'Aric Prather',     domain: 'Sleep science',                      intro: 'UCSF sleep researcher, author of The Sleep Prescription.',    updated: 'Jun 1',  status: 'Ready', statusColor: '#58A471', ready: true, portrait: 'assets/experts/portraits/aric.jpg' },
+            cheri: { name: 'Cheri Mah',        domain: 'Sleep & athletic performance',       intro: 'Stanford researcher behind the basketball sleep-extension study.', updated: 'Jun 1', status: 'Ready', statusColor: '#58A471', ready: true, portrait: 'assets/experts/portraits/cheri.jpg' },
+        };
+
+        // Which prototype surfaces each use-case button maps to. Matt uses his
+        // static surfaces (Example 1); everyone else uses the templated x-* shells.
+        const EXPERT_SURFACES = {
+            matt: { profile: 'expert-profile-v3', plan: 'chat-subscribed', qa: 'chat-question' },
+            _x:   { profile: 'x-profile',         plan: 'x-plan',          qa: 'x-qa' },
+        };
+        const surfacesFor = id => EXPERT_SURFACES[id] || EXPERT_SURFACES._x;
+        let psActiveExpert = null;
 
         const inlinePages = {
             'home': `<div class="home-gradient"><div class="home-hero">
@@ -658,12 +851,6 @@
 
                 <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-bottom:10px;">Screens</div>
                 <div class="card-grid" style="margin-bottom:32px;">
-                    <a class="sub-card" onclick="openPage('experts.html')">
-
-                        Experts
-                        <span style="font-size:12px;color:var(--text-secondary);line-height:1.4;">Hub (V1–V8), profile, subscribe, chat chip, calendar marker — plus User Journey path</span>
-                        <span class="card-date">May 25 · <span style="color:#D4A163;font-weight:600;">In Progress</span></span>
-                    </a>
                     <a class="sub-card" onclick="openPage('design explorations/v14-claude-design.html')">
 
                         Calendar
@@ -755,6 +942,117 @@
                 </div>
             </div>`,
         };
+
+        // Two example users (personas) shown on the right of the preview stage.
+        const PERSONAS_META = {
+            tom:    { name: 'Tom, 52',    initials: 'T', desc: 'Experienced marathoner, health-conscious. Has followed several coaches; wants one coherent plan tying together how to run, eat, and recover.', meta: 'Knowledge 7/10 · marathon' },
+            mariah: { name: 'Mariah, 37', initials: 'M', desc: 'Mother of three, runs 3×/week, training for her first half marathon. Wants a holistic plan that fits her life and reaches her goal.', meta: 'Knowledge 5/10 · half marathon' },
+        };
+
+        const COPY_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+
+        function expertCard(id) {
+            const e = EXPERTS_META[id];
+            const initials = e.name.split(' ').map(w => w[0]).slice(0, 2).join('');
+            const av = e.portrait ? `<img class="expert-av" src="${e.portrait}" alt="${e.name}" />` : `<span class="expert-av expert-av-fb">${initials}</span>`;
+            return `<a class="sub-card expert-card" onclick="openExpert('${id}')">
+                <div class="expert-card-head">${av}<div class="expert-card-id"><span class="expert-domain">${e.domain}</span><span class="expert-name">${e.name}</span></div></div>
+                <span class="expert-intro">${e.intro}</span>
+                <div class="expert-foot">
+                    <span class="card-date">Updated ${e.updated} · <span style="color:${e.statusColor};font-weight:600;">${e.status}</span></span>
+                    <button class="expert-copy" onclick="copyExpertLink(event,'${id}')" title="Copy preview link">${COPY_ICON} Copy link</button>
+                </div>
+            </a>`;
+        }
+
+        function renderExpertsDirectory() {
+            const cards = Object.keys(EXPERTS_META).map(expertCard).join('');
+            return `<div class="playground-page">
+                <h2>Experts</h2>
+                <p class="page-desc">Each expert's in-product demo — Profile, Plan, and Q&amp;A, shown for two example users. Tap a card to preview.</p>
+                <button class="comment-btn" onclick="toggleComments()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Comments</button>
+                <div class="card-grid">${cards}</div>
+            </div>`;
+        }
+
+        function openExpert(id) { setHash('experts/' + id); }
+
+        function copyExpertLink(ev, id) {
+            ev.stopPropagation();
+            const url = location.origin + location.pathname + '#experts/' + id;
+            const btn = ev.currentTarget;
+            const restore = () => { btn.innerHTML = COPY_ICON + ' Copy link'; };
+            const ok = () => { btn.innerHTML = '✓ Copied'; setTimeout(restore, 1400); };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(ok).catch(() => { window.prompt('Copy this preview link:', url); });
+            } else {
+                window.prompt('Copy this preview link:', url);
+            }
+        }
+
+        function renderExpertPreview(id) {
+            const e = EXPERTS_META[id];
+            if (!e) { renderNav('experts'); return; }
+            psActiveExpert = id;
+            const profileSurface = surfacesFor(id).profile;
+            const content = document.getElementById('content');
+            const cb = Date.now(); // cache-buster: playground is edited constantly, always load latest
+            if (isMobile()) {
+                content.innerHTML = `<iframe src="experts.html?expert=${id}&surface=${profileSurface}&embed=1&cb=${cb}" style="width:100%;height:100%;border:none;background:#F5F1EA"></iframe>`;
+                showBottomBar(true);
+                return;
+            }
+            const ucs = [['Profile','profile'],['Plan','plan'],['Q&A','qa']];
+            const ucBtns = ucs.map((u,i)=>`<button class="ps-uc${i===0?' active':''}" onclick="setPreviewSurface('${u[1]}',this)">${u[0]}</button>`).join('');
+            const personaCards = Object.keys(PERSONAS_META).map((pid,i)=>{
+                const p = PERSONAS_META[pid];
+                return `<button class="ps-persona${i===0?' active':''}" onclick="setPreviewPersona('${pid}',this)">
+                    <div class="ps-persona-head"><span class="ps-pa-fallback">${p.initials}</span><span class="ps-pname">${p.name}</span></div>
+                    <div class="ps-persona-desc">${p.desc}</div>
+                    <div class="ps-persona-meta">${p.meta}</div>
+                </button>`;
+            }).join('');
+            const initials = e.name.split(' ').map(w=>w[0]).slice(0,2).join('');
+            const phone = e.ready
+                ? `<iframe id="psPhone" src="experts.html?expert=${id}&surface=${profileSurface}&embed=1&cb=${cb}"></iframe>`
+                : `<div class="ps-phone-placeholder"><div class="pl-title">${e.name}</div><div class="pl-sub">Profile, Plan &amp; Q&amp;A are being built for this expert.<br>The navigation around the phone is final — the screens drop in next.</div></div>`;
+            content.innerHTML = `<div class="preview-stage">
+                <button class="ps-back" onclick="setHash('experts')">← Experts</button>
+                <div class="ps-left">
+                    <div class="ps-expert-head">${e.portrait ? `<img src="${e.portrait}" alt="${e.name}" />` : `<span class="ps-avatar-fallback">${initials}</span>`}<div><div class="ps-name">${e.name}</div><div class="ps-intro">${e.intro}</div></div></div>
+                    <div class="ps-usecases">${ucBtns}</div>
+                </div>
+                <div class="ps-phone-wrap"><div class="ps-phone-scale"><div class="ps-phone">${phone}</div></div></div>
+                <div class="ps-right">${personaCards}</div>
+            </div>`;
+            scalePreviewPhone();
+        }
+
+        // The phone is rendered at its true size (848px tall incl. embed scale) and
+        // then scaled down to fit the viewport height, preserving the device ratio.
+        function scalePreviewPhone() {
+            const el = document.querySelector('.ps-phone-scale');
+            if (!el) return;
+            const PHONE_H = 848 + 8;            // screen + 2×4px bezel
+            const avail = window.innerHeight - 80;
+            el.style.transform = 'scale(' + Math.min(1, avail / PHONE_H) + ')';
+        }
+        window.addEventListener('resize', scalePreviewPhone);
+
+        function setPreviewSurface(uc, btn) {
+            document.querySelectorAll('.ps-uc').forEach(b=>b.classList.remove('active'));
+            btn.classList.add('active');
+            const map = surfacesFor(psActiveExpert);
+            const iframe = document.getElementById('psPhone');
+            if (iframe && iframe.contentWindow) iframe.contentWindow.postMessage({ type:'set-surface', surface: map[uc] }, '*');
+        }
+
+        function setPreviewPersona(pid, btn) {
+            document.querySelectorAll('.ps-persona').forEach(b=>b.classList.remove('active'));
+            btn.classList.add('active');
+            const iframe = document.getElementById('psPhone');
+            if (iframe && iframe.contentWindow) iframe.contentWindow.postMessage({ type:'set-persona', persona: pid }, '*');
+        }
 
         const COMMENTS_API = 'https://jsonblob.com/api/jsonBlob/019ce877-1093-7328-b1c3-349d34de0f58';
 
@@ -900,6 +1198,8 @@
             const content = document.getElementById('content');
             if (pages[page]) {
                 content.innerHTML = `<iframe src="${pages[page]}"></iframe>`;
+            } else if (page === 'experts') {
+                content.innerHTML = renderExpertsDirectory();
             } else if (inlinePages[page]) {
                 content.innerHTML = inlinePages[page];
                 if (page === 'playground' && isMobile()) {
@@ -918,7 +1218,7 @@
             const page = slashIdx === -1 ? hash : hash.slice(0, slashIdx);
             const sub = slashIdx === -1 ? '' : decodeURIComponent(hash.slice(slashIdx + 1));
 
-            if (!inlinePages[page] && !pages[page]) {
+            if (!inlinePages[page] && !pages[page] && page !== 'experts') {
                 renderNav('home');
                 return;
             }
@@ -928,6 +1228,7 @@
             if (sub) {
                 if (page === 'tools') renderTool(sub);
                 else if (page === 'playground') renderPage(sub);
+                else if (page === 'experts') renderExpertPreview(sub);
             }
         }
 
