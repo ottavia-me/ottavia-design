@@ -5936,7 +5936,8 @@
        6. About — bio paragraph + credentials bullet list
        7. Topic chips
      ===================================================================== */
-  .surface[data-surface="expert-profile-v3"] {
+  .surface[data-surface="expert-profile-v3"],
+  .surface[data-surface="x-profile"] {
     background: var(--surface-background);
   }
   .p3 {
@@ -6119,7 +6120,8 @@
   }
   /* V3 override: no top border, exact Figma 21px left/right gutters.
      Per-block top margins applied via :nth-of-type (Figma 39 / 46 / 24). */
-  .surface[data-surface="expert-profile-v3"] .p3-block {
+  .surface[data-surface="expert-profile-v3"] .p3-block,
+  .surface[data-surface="x-profile"] .p3-block {
     padding: 0 21px;
     border-top: none;
   }
@@ -6127,16 +6129,225 @@
      so the old :nth-of-type(1/2/3) rules silently targeted the hero divs and
      never applied — sections rendered with ~0px gaps. Use sibling combinators
      that actually select the blocks. (Figma 2110:22500.) */
-  .surface[data-surface="expert-profile-v3"] .p3-what-card + .p3-block { margin-top: 20px; }            /* What-card → "Body of work" (Vika: 20px above title) */
-  .surface[data-surface="expert-profile-v3"] .p3-block + .p3-block { margin-top: 30px; }                /* Body of work → "About" (Vika: 30px below last book) */
-  .surface[data-surface="expert-profile-v3"] .p3-block + .p3-block + .p3-block { margin-top: 32px; }    /* About → topic chips */
+  .surface[data-surface="expert-profile-v3"] .p3-what-card + .p3-block,
+  .surface[data-surface="x-profile"] .p3-what-card + .p3-block { margin-top: 20px; }            /* What-card → "Body of work" (Vika: 20px above title) */
+  .surface[data-surface="expert-profile-v3"] .p3-block + .p3-block,
+  .surface[data-surface="x-profile"] .p3-block + .p3-block { margin-top: 30px; }                /* Body of work → "About" (Vika: 30px below last book) */
+  .surface[data-surface="expert-profile-v3"] .p3-block + .p3-block + .p3-block,
+  .surface[data-surface="x-profile"] .p3-block + .p3-block + .p3-block { margin-top: 32px; }    /* About → topic chips */
   /* Every section title gets a 20px breather to whatever sits under it
      (image, paragraph, list) — Vika: "titles have at least 20px gap". */
-  .surface[data-surface="expert-profile-v3"] .p3-section-title { margin-bottom: 20px; }
+  .surface[data-surface="expert-profile-v3"] .p3-section-title,
+  .surface[data-surface="x-profile"] .p3-section-title { margin-bottom: 20px; }
   /* Kill the 13px top/bottom paddings on the first and last book rows so the
      20px-above-first-image and 30px-below-last-image land exactly. */
-  .surface[data-surface="expert-profile-v3"] .p3-bow-item:first-child { padding-top: 0; }
-  .surface[data-surface="expert-profile-v3"] .p3-bow-item:last-child { padding-bottom: 0; }
+  .surface[data-surface="expert-profile-v3"] .p3-bow-item:first-child,
+  .surface[data-surface="x-profile"] .p3-bow-item:first-child { padding-top: 0; }
+  .surface[data-surface="expert-profile-v3"] .p3-bow-item:last-child,
+  .surface[data-surface="x-profile"] .p3-bow-item:last-child { padding-bottom: 0; }
+  /* ---- x-profile fidelity overrides ----
+     Match the matt-fitzgerald.html reference (assets/experts/HTMLs/) exactly:
+     softer hero green, SOLID name color (not the v3 gradient), and tighter
+     name→title spacing. Scoped to x-profile so Matt's static expert-profile-v3
+     surface stays untouched. */
+  .surface[data-surface="x-profile"] .p3-hero-bg {
+    background: linear-gradient(180deg, #A0D7AD 0%, #F5F1EA 100%);
+  }
+  /* Glow halo — match the reference .profile-glow::after exactly: a large,
+     blurred, cream-tinted white ellipse (this is what makes the green read
+     soft instead of flat). Reference: 398×238, top 28, radial white→cream, blur 8. */
+  .surface[data-surface="x-profile"] .p3-hero-glow {
+    top: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 398px;
+    height: 238px;
+    background: radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.92) 0%, rgba(245,241,234,0.62) 56%, rgba(245,241,234,0) 74%);
+    filter: blur(8px);
+  }
+  .surface[data-surface="x-profile"] .p3-hero { padding-top: 19px; }
+  .surface[data-surface="x-profile"] .p3-name {
+    background-image: none;
+    -webkit-text-fill-color: #433E36;
+    color: #433E36;
+  }
+  .surface[data-surface="x-profile"] .p3-profession { margin-top: 14px; }
+  /* Subscribe card + cancel note — match reference (.profile-subscription / .profile-cancel):
+     card 22px below the hero, min-height 185, padding 18/21/23; cancel sits 10px
+     below the card, centered, bold #A8A297. */
+  /* Both white cards share identical 21px side gutters (so they're the same
+     width and centered, aligned with the Body of work / About sections). The
+     cancel note now lives INSIDE the subscribe card. */
+  .surface[data-surface="x-profile"] .p3-subscribe-card {
+    box-sizing: border-box;
+    margin: 22px 21px 0;
+    padding: 18px 21px 18px;
+  }
+  .surface[data-surface="x-profile"] .p3-what-card {
+    margin: 20px 21px 0;
+    padding-left: 21px;
+    padding-right: 21px;
+  }
+  .surface[data-surface="x-profile"] .p3-cancel-note {
+    margin-top: 10px;
+    color: #A8A297;
+    font-weight: 800;
+  }
+  .surface[data-surface="x-profile"] .p3-cancel-note a { color: #A8A297; font-weight: 800; }
+
+  /* ---- Feature hero (Figma 2155:30156) — blue→cream gradient band + white glow
+     + a centered cutout figure that fades into cream. Opt-in via heroStyle:'feature'. ---- */
+  .p3-feature-hero {
+    position: relative;
+    width: 100%;
+    height: 292px;
+    overflow: hidden;
+    background: linear-gradient(180deg, #738BCD 7.692%, #F5F1EA 66%);
+  }
+  .p3-feature-glow {
+    position: absolute;
+    top: 44px; left: 50%; transform: translateX(-50%);
+    width: 86%; max-width: 366px; height: 207px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0) 66%);
+    z-index: 1; pointer-events: none;
+  }
+  .p3-feature-img {
+    position: absolute;
+    bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 63%; max-width: 268px; height: auto;
+    z-index: 2; display: block;
+  }
+  .p3-feature-fade {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 92px;
+    background: linear-gradient(180deg, rgba(245,241,234,0) 0%, #F5F1EA 78%);
+    z-index: 3; pointer-events: none;
+  }
+  .p3-feature-head {
+    text-align: center;
+    padding: 4px 30px 0;
+    margin-top: -6px;
+  }
+  .p3-eyebrow {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #8F897D;
+    margin: 0 0 12px;
+  }
+  .p3-headline {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.18;
+    letter-spacing: -0.4px;
+    color: #433E36;
+    margin: 0;
+  }
+
+  /* ---- Convert flow: subscribe confirm sheet (.xs) + welcome (.xw) ---- */
+  .surface[data-surface="x-subscribe"] { background: rgba(38,34,28,0.5); }
+  .surface[data-surface="x-welcome"]   { background: var(--surface-background); }
+  .xs { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; }
+  .xs-sheet {
+    background: #FFFFFF;
+    border-radius: 28px 28px 0 0;
+    padding: 12px 24px 26px;
+    box-shadow: 0 -12px 40px rgba(0,0,0,0.18);
+  }
+  .xs-grab { width: 38px; height: 5px; border-radius: 3px; background: #E0DAD0; margin: 0 auto 18px; }
+  .xs-expert { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+  .xs-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; object-position: center top; flex-shrink: 0; }
+  .xs-name { font-family: var(--font-display); font-weight: 700; font-size: 17px; color: #433E36; }
+  .xs-role { font-family: var(--font-display); font-size: 13px; color: #8F897D; margin-top: 2px; }
+  .xs-title { font-family: var(--font-display); font-weight: 700; font-size: 22px; color: #433E36; letter-spacing: -0.3px; margin: 0 0 16px; }
+  .xs-list { list-style: none; margin: 0 0 20px; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+  .xs-list li { position: relative; padding-left: 28px; font-family: var(--font-display); font-size: 15px; line-height: 1.4; color: #5C564D; }
+  .xs-list li::before { content: ""; position: absolute; left: 0; top: 2px; width: 18px; height: 18px; border-radius: 50%; background: #F0EBE2; border: 1.5px solid #B9A978; box-sizing: border-box; }
+  .xs-list li::after { content: ""; position: absolute; left: 5px; top: 7px; width: 7px; height: 4px; border-left: 1.6px solid #8A7D52; border-bottom: 1.6px solid #8A7D52; transform: rotate(-45deg); }
+  .xs-price-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 18px; }
+  .xs-price { font-family: var(--font-display); font-weight: 700; font-size: 24px; color: #433E36; }
+  .xs-per { font-family: var(--font-display); font-size: 14px; color: #8F897D; }
+  .xs-note { margin-left: auto; align-self: center; font-family: var(--font-display); font-size: 12px; color: #A8A297; }
+  .xs-confirm { display: block; width: 100%; height: 52px; border: none; border-radius: 200px; background: #4B8F61; color: #fff; font-family: var(--font-display); font-weight: 700; font-size: 17px; cursor: pointer; }
+  .xs-cancel { display: block; width: 100%; margin-top: 8px; background: none; border: none; color: #8F897D; font-family: var(--font-display); font-weight: 600; font-size: 15px; cursor: pointer; padding: 10px; }
+
+  .xw { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 32px; }
+  .xw-inner { text-align: center; display: flex; flex-direction: column; align-items: center; }
+  .xw-badge { position: relative; margin-bottom: 26px; }
+  .xw-avatar { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; object-position: center top; }
+  .xw-check { position: absolute; right: -2px; bottom: -2px; width: 34px; height: 34px; border-radius: 50%; background: #4B8F61; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 700; border: 3px solid var(--surface-background); }
+  .xw-title { font-family: var(--font-display); font-weight: 700; font-size: 30px; color: #433E36; letter-spacing: -0.5px; margin: 0 0 14px; }
+  .xw-sub { font-family: var(--font-display); font-size: 16px; line-height: 1.5; color: #5C564D; margin: 0 0 32px; max-width: 300px; }
+  .xw-sub strong { font-weight: 700; color: #433E36; }
+  .xw-cta { width: 100%; max-width: 320px; height: 52px; border: none; border-radius: 200px; background: #4B8F61; color: #fff; font-family: var(--font-display); font-weight: 700; font-size: 17px; cursor: pointer; }
+
+  /* ===== Templated-surface entrance animations (replay on each entry because
+     the rules live under .visible, which activateSurface toggles) ===== */
+  @keyframes xReveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes xFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @keyframes xSheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  @keyframes xDot { 0%,60%,100% { transform: translateY(0); opacity: .45; } 30% { transform: translateY(-4px); opacity: 1; } }
+  @keyframes xTypingShow {
+    0%   { opacity: 0; transform: translateY(8px); max-height: 46px; margin-top: 6px; }
+    14%  { opacity: 1; transform: translateY(0); }
+    80%  { opacity: 1; max-height: 46px; }
+    92%  { opacity: 0; }
+    100% { opacity: 0; max-height: 0; margin: 0; padding-top: 0; padding-bottom: 0; }
+  }
+  @keyframes apPop { 0% { transform: scale(.3); opacity: 0; } 60% { transform: scale(1.12); } 100% { transform: scale(1); opacity: 1; } }
+
+  /* Profile / welcome / sheets */
+  .surface[data-surface="x-profile"].visible .p3-scroll { animation: xFadeIn .42s both; }
+  .surface[data-surface="x-welcome"].visible .xw-inner { animation: xReveal .5s .05s both; }
+  .surface[data-surface="x-subscribe"].visible .xs-sheet { animation: xSheetUp .34s cubic-bezier(.2,.8,.2,1) both; }
+  .surface[data-surface="x-applepay"].visible .ap-sheet { animation: xSheetUp .34s cubic-bezier(.2,.8,.2,1) both; }
+
+  /* Plan & Q&A: the first bubble (system message / user question) lands, a typing
+     indicator appears, then Ottavia's message reveals. */
+  .surface[data-surface="x-plan"].visible .cs-banner,
+  .surface[data-surface="x-qa"].visible .cs-ask { animation: xReveal .5s .1s both; }
+  .surface[data-surface="x-plan"].visible .x-typing,
+  .surface[data-surface="x-qa"].visible .x-typing { animation: xTypingShow 1.3s both; }
+  .surface[data-surface="x-plan"].visible .x-msg,
+  .surface[data-surface="x-qa"].visible .x-msg { animation: xReveal .55s 1.2s both; }
+
+  .x-typing { display: flex; gap: 5px; align-items: center; width: fit-content; padding: 11px 15px; margin: 6px 0 4px; background: #fff; border-radius: 16px 16px 16px 4px; box-shadow: 0 1px 4px rgba(67,62,54,0.08); overflow: hidden; }
+  .x-typing span { width: 7px; height: 7px; border-radius: 50%; background: #B9B2A6; animation: xDot 1s infinite; }
+  .x-typing span:nth-child(2) { animation-delay: .15s; }
+  .x-typing span:nth-child(3) { animation-delay: .3s; }
+
+  /* ===== Apple Pay sheet ===== */
+  .surface[data-surface="x-applepay"] { background: rgba(20,18,16,0.55); }
+  .ap { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; }
+  .ap-sheet { position: relative; background: #FFFFFF; border-radius: 18px 18px 0 0; padding: 10px 20px 26px; box-shadow: 0 -12px 40px rgba(0,0,0,0.22); }
+  .ap-grab { width: 38px; height: 5px; border-radius: 3px; background: #E0DAD0; margin: 0 auto 14px; }
+  .ap-head { display: flex; align-items: center; justify-content: center; gap: 5px; position: relative; margin-bottom: 18px; color: #1d1d1f; }
+  .ap-head svg { width: 19px; height: 19px; }
+  .ap-headtitle { font-family: var(--font-display); font-weight: 700; font-size: 19px; }
+  .ap-x { position: absolute; right: 0; top: -2px; background: #EFECE6; border: none; width: 28px; height: 28px; border-radius: 50%; color: #8F897D; font-size: 13px; cursor: pointer; }
+  .ap-card { position: relative; height: 120px; border-radius: 14px; background: linear-gradient(135deg, #4a4a4d 0%, #1d1d1f 100%); color: #fff; padding: 16px; margin-bottom: 6px; box-shadow: 0 10px 24px rgba(0,0,0,0.25); overflow: hidden; }
+  .ap-card-chip { width: 32px; height: 24px; border-radius: 5px; background: linear-gradient(135deg,#EBD18A,#B8923C); margin-bottom: 26px; }
+  .ap-card-num { font-family: var(--font-display); font-size: 16px; letter-spacing: 2px; }
+  .ap-card-brand { position: absolute; top: 15px; right: 16px; font-weight: 800; font-style: italic; font-size: 17px; letter-spacing: -0.5px; }
+  .ap-line { display: flex; justify-content: space-between; align-items: baseline; padding: 13px 2px; border-bottom: 1px solid #F0ECE5; }
+  .ap-line-l { font-family: var(--font-display); font-size: 15px; color: #433E36; font-weight: 600; }
+  .ap-line-r { font-family: var(--font-display); font-size: 17px; color: #1d1d1f; font-weight: 700; }
+  .ap-line.sub { border-bottom: none; padding-top: 6px; }
+  .ap-line.sub .ap-line-l, .ap-line.sub .ap-line-r { font-size: 12.5px; color: #8F897D; font-weight: 500; }
+  .ap-pay { display: flex; align-items: center; justify-content: center; gap: 9px; width: 100%; height: 52px; margin-top: 18px; border: none; border-radius: 12px; background: #000; color: #fff; font-family: var(--font-display); font-weight: 600; font-size: 16px; cursor: pointer; }
+  .ap-pay svg { width: 17px; height: 17px; }
+  .ap-hint { text-align: center; font-family: var(--font-display); font-size: 11.5px; color: #A8A297; margin-top: 11px; letter-spacing: .2px; }
+  .ap-done { position: absolute; inset: 0; background: rgba(255,255,255,0.97); border-radius: 18px 18px 0 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; opacity: 0; pointer-events: none; transition: opacity .2s; }
+  .ap-done.show { opacity: 1; }
+  .ap-done-check { width: 66px; height: 66px; border-radius: 50%; background: #34c759; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 32px; }
+  .ap-done.show .ap-done-check { animation: apPop .42s both; }
+  .ap-done-text { font-family: var(--font-display); font-weight: 700; font-size: 18px; color: #1d1d1f; }
+
   .p3-block-eyebrow {
     font-size: 11px;
     font-weight: 600;
@@ -11320,6 +11531,9 @@
       <div class="surface" data-surface="x-profile"><div class="p3" id="xProfileRoot"></div></div>
       <div class="surface" data-surface="x-plan"><div class="chat-baseline" id="xPlanRoot"></div></div>
       <div class="surface" data-surface="x-qa"><div class="chat-baseline" id="xQaRoot"></div></div>
+      <div class="surface" data-surface="x-subscribe"><div class="xs" id="xSubRoot"></div></div>
+      <div class="surface" data-surface="x-applepay"><div class="ap" id="xApRoot"></div></div>
+      <div class="surface" data-surface="x-welcome"><div class="xw" id="xWelRoot"></div></div>
 
       <!-- =====================================================================
            Surface: CHAT · POST-RUN (8) — proactive post-run analysis.
@@ -12075,9 +12289,12 @@
   const X_EXPERTS = {
     scott: {
       name: `Scott Fauble`, first: `Scott`, initials: `SF`, accent: `#C2603A`, accent2: `#9C4A2C`, portrait: `assets/experts/portraits/scott.jpg`,
+      heroStyle: `feature`, heroImage: `assets/experts/portraits/scott-runner.png`,
+      eyebrow: `Elite Marathoner & Author`, headline: `Train like a pro, with Scott Fauble`,
+      subscribeBg: `#000000`,
       profession: `Elite Marathoner & Author`,
-      tagline: `How a professional actually trains for the marathon — applied to your plan, not just talked about.`,
-      stats: [`12.1K followers`, `4.9★ rating`], price: `$12.00`,
+      tagline: `A professional's marathon training, applied to your weekly plan and races.`,
+      stats: [`12.1K followers`, `4.9★ rating`], price: `$5.99`, priceUnit: `week`,
       partOfProduct: `Scott isn't an advisor you message. Ottavia has read his published work — including <em>Inside a Marathon</em> — and applies his training approach inside your plan, always with attribution.`,
       whatYouGet: [
         `Scott's marathon-build approach applied to your weekly running plan`,
@@ -12085,7 +12302,7 @@
         `His book and writing surfaced when they're relevant to your question`,
         `When you set a goal — a half or a full — your plan is built with his approach baked in`,
       ],
-      bodyOfWork: [{ tag: `IM`, title: `Inside a Marathon`, sub: `A transparent, day-by-day look at a professional marathon build, with coach Ben Rosario · 2018` }],
+      bodyOfWork: [{ cover: `assets/experts/portraits/inside-a-marathon.jpg`, title: `Inside a Marathon`, sub: `An all-access pass to a top-10 finish at NYC, with coach Ben Rosario · 2018` }],
       about: `Scott Fauble is an American professional marathoner who has finished in the top 10 at both the Boston and New York City Marathons, with a personal best of 2:08. He trains at altitude in Flagstaff, Arizona, and is known for an unusually transparent, process-driven approach to the marathon — captured in his book Inside a Marathon.`,
       aboutBullets: [`2:08 marathon personal best`, `Top-10 at Boston & NYC Marathons`, `Co-author of Inside a Marathon`, `Trains at altitude in Flagstaff, AZ`],
       chips: [`Marathon`, `Aerobic Base`, `Workouts`, `Long Run`, `Fueling`, `Consistency`],
@@ -12142,32 +12359,37 @@
     },
 
     aric: {
-      name: `Aric Prather`, first: `Aric`, initials: `AP`, accent: `#4E5A9E`, accent2: `#343E78`, portrait: `assets/experts/portraits/aric.jpg`,
+      name: `Aric Prather`, first: `Aric`, initials: `AP`, accent: `#4E5A9E`, accent2: `#343E78`, portrait: `assets/experts/portraits/aric.jpg`, heroPortrait: `assets/experts/portraits/aric-hero.jpg`, heroBg: `#B1DAFF`,
       profession: `Sleep Scientist & Author`,
       tagline: `The science of sleep, turned into a plan you can actually follow — and stick to.`,
-      stats: [`9.6K followers`, `4.9★ rating`], price: `$12.00`,
+      stats: [`9.6K followers`, `4.9★ rating`], price: `€6,99`, priceUnit: `week`,
       partOfProduct: `Aric isn't an advisor you message. Ottavia has read his published work — including <em>The Sleep Prescription</em> — and applies his evidence-based methods inside your guidance, always with attribution.`,
       whatYouGet: [
-        `Aric's sleep methods applied to your own sleep and schedule`,
-        `Practical answers when sleep is off — night waking, a racing mind, rough weeks`,
+        `Aric's 7-day Sleep Prescription, applied to your own sleep and schedule`,
+        `A consistent wake time and wind-down, built around your real days`,
+        `Practical answers when sleep is off: night waking, a racing mind, rough weeks`,
         `His book and research surfaced when they're relevant to your question`,
-        `A wind-down and schedule that fits your real life, not an ideal one`,
       ],
-      bodyOfWork: [{ tag: `SP`, title: `The Sleep Prescription`, sub: `Seven Days to Unlocking Your Best Rest · Penguin Life · 2022` }],
+      bodyOfWork: [{ cover: `assets/experts/portraits/the-sleep-prescription.jpg`, title: `The Sleep Prescription`, sub: `Seven Days to Unlocking Your Best Rest · Penguin Life · 2022` }],
       about: `Aric Prather is a professor of psychiatry and behavioral sciences at UC San Francisco, where he runs a sleep and health laboratory and treats insomnia using cognitive behavioral therapy for insomnia (CBT-I). His book The Sleep Prescription distills that evidence-based approach into practical daily steps.`,
       aboutBullets: [`Professor of Psychiatry, UCSF`, `Runs a sleep & health research lab`, `Treats insomnia with CBT-I`, `Author of The Sleep Prescription`],
       chips: [`Sleep`, `CBT-I`, `Wind-down`, `Consistency`, `Night Waking`, `Recovery`],
       cases: {
         tom: {
           plan: {
-            title: `I looked at your last two weeks of sleep the way Aric approaches it, Tom.`,
-            intro: `You're averaging about 6 hours, and with a marathon build that's the lever most worth pulling. Aric's approach starts with the two things that move sleep the most:`,
-            points: [
-              `① Your wake time swings by over an hour across the week. Aric's first move is a consistent wake time — even on weekends — because it anchors everything else.`,
-              `② Your last hour before bed runs right up to lights-out on screens. A genuine wind-down — dimmer, slower, off-screens — tells your system the day is ending.`,
-              `③ Your training load is climbing, which raises your need for sleep, not lowers it. Right now the two are moving in opposite directions.`,
+            title: `I turned Aric's 7-day Sleep Prescription into a week built around your training, Tom.`,
+            intro: `You're averaging about 6 hours while your load climbs, so this is the lever worth pulling. Each day layers in one shift from his program, applied to your data:`,
+            weekLabel: `Your 7-day Sleep Prescription · one shift a day`,
+            week: [
+              { day: `Day 1 · tonight`, color: `green`,  title: `Set your clock`,          body: `Lock a 6:30 wake time, weekends included. Yours swings over an hour right now, and steadying it is the biggest win before your load climbs.` },
+              { day: `Day 2`,           color: `purple`, title: `Ease off the gas`,        body: `A 30-minute wind-down: last email sent, screens away, lights down. You go from laptop to pillow in minutes today.` },
+              { day: `Day 3`,           color: `orange`, title: `Energize, the right way`, body: `Daylight within 30 minutes of waking, and cut caffeine by 2pm. Your afternoon espresso is still working at lights-out.` },
+              { day: `Day 4`,           color: `blue`,   title: `Worry early`,             body: `Park tomorrow's plan on paper before dinner, so race-week logistics don't surface at 2am.` },
+              { day: `Day 5`,           color: `purple`, title: `You're not a computer`,   body: `Leave about 3 hours between a hard session and bed. Late workouts keep your system revved past lights-out.` },
+              { day: `Day 6`,           color: `blue`,   title: `Retrain your brain`,      body: `Awake more than 20 minutes? Get up, keep the bed for sleep, and return when sleepy.` },
+              { day: `Day 7`,           color: `gray`,   title: `Stay up late`,            body: `Briefly trim time in bed to rebuild sleep pressure, so the hours you get run deeper and more efficient.` },
             ],
-            close: `None of this is about more time in bed tonight. It's about making the sleep you get deeper and more reliable. I can build a simple wind-down and wake schedule with you.`,
+            close: `It's one change a day, not a whole new routine at once. I'll track your wake-time consistency and deep sleep as we go.`,
             chips: [`Build my wind-down routine`, `Why a fixed wake time?`, `How much sleep does my training need?`],
           },
           qa: {
@@ -12184,14 +12406,19 @@
         },
         mariah: {
           plan: {
-            title: `I looked at your sleep with Aric's approach in mind, Mariah — around a house with three kids.`,
-            intro: `Your sleep is broken up more than it is short, and a perfect eight hours isn't the goal here. Aric's approach is about protecting the quality of what you can get:`,
-            points: [
-              `① Anchor your wake time as best you can. With unpredictable nights, a steady morning is the one reliable signal that keeps your sleep on track.`,
-              `② Give yourself a short, real wind-down — even ten minutes. After a full day, your system needs a buffer between "on" and "asleep".`,
-              `③ A brief early-afternoon rest, if you can grab one, helps far more than sleeping in — which tends to scatter the next night.`,
+            title: `I turned Aric's 7-day Sleep Prescription into a week that fits a house with three kids, Mariah.`,
+            intro: `Your sleep is broken up more than it is short, so a perfect eight hours isn't the goal. Each day adds one realistic shift from his program:`,
+            weekLabel: `Your 7-day Sleep Prescription · one shift a day`,
+            week: [
+              { day: `Day 1 · tonight`, color: `green`,  title: `Set your clock`,          body: `Pick one wake time you can keep even after a broken night. With unpredictable wake-ups, a steady morning is your one reliable signal.` },
+              { day: `Day 2`,           color: `purple`, title: `Ease off the gas`,        body: `A 10-minute wind-down once the kids are down: lights low, phone in another room. Short and repeatable beats long and skipped.` },
+              { day: `Day 3`,           color: `orange`, title: `Energize, the right way`, body: `Morning daylight when you can, and keep caffeine to the early part of the day so it doesn't cost you the night.` },
+              { day: `Day 4`,           color: `blue`,   title: `Worry early`,             body: `Put tomorrow's mental load on paper before bed, so the to-do list doesn't start the moment you lie down.` },
+              { day: `Day 5`,           color: `purple`, title: `You're not a computer`,   body: `Give yourself permission not to drop off instantly. Going straight from chores to bed keeps the mind racing; a few quiet minutes first helps.` },
+              { day: `Day 6`,           color: `blue`,   title: `Retrain your brain`,      body: `If a wake-up leaves you alert a while, get up briefly and come back when sleepy, so the bed stays linked to rest.` },
+              { day: `Day 7`,           color: `gray`,   title: `Stay up late`,            body: `Match time in bed to the sleep you actually get for a week, so it consolidates instead of scattering into light, broken sleep.` },
             ],
-            close: `The aim is steadier, not longer. Small anchors make fragmented nights add up to more real rest. I can shape a routine around your evenings whenever you want.`,
+            close: `The aim is steadier, not longer. One small shift a day, and I'll keep it realistic around your evenings.`,
             chips: [`Build a 10-minute wind-down`, `How do I handle night wake-ups?`, `Is napping okay?`],
           },
           qa: {
@@ -12400,18 +12627,29 @@
         <button class="header-icon-btn" title="Profile"><img src="assets/experts/icons/user-profile-03.svg" alt="" /></button>
       </div>`;
   }
-  function xQaComposer() {
+  function xQaComposer(withSuggestions = true) {
     return `<div class="qa-scrim" aria-hidden="true"><span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="tint"></span></div>
-      <div class="suggestion-row"><div class="suggestion-track">
+      ${withSuggestions ? `<div class="suggestion-row"><div class="suggestion-track">
         <div class="suggestion-pill active">How is my progress today?</div>
         <div class="suggestion-pill">Log 200ml water</div>
         <div class="suggestion-pill">My report this morning</div>
-      </div></div>
+      </div></div>` : ''}
       <div class="composer"><div class="composer-box">
         <div class="composer-circle left" title="More"><img src="assets/experts/icons/more.svg" alt="" /></div>
         <div class="composer-input-wrap"><div class="composer-input"></div><div class="composer-mic" title="Voice"><img src="assets/experts/icons/microphone-01.svg" alt="" /></div></div>
         <div class="composer-circle right" title="Camera"><img src="assets/experts/icons/camera.svg" alt="" /></div>
       </div></div>`;
+  }
+  // 7-day program calendar (reuses the .rp- week-card pattern from expert-rebuild-plan).
+  function renderXWeek(days, label) {
+    return `<div class="rp-week">
+      ${label ? `<div class="rp-week-label">${label}</div>` : ''}
+      ${days.map(d => `<div class="rp-card ${d.color || 'blue'} compact">
+        <div class="rp-card-day">${d.day}</div>
+        <h3 class="rp-card-title">${d.title}</h3>
+        <p class="rp-card-body">${d.body}</p>
+      </div>`).join('')}
+    </div>`;
   }
   const xLis = arr => arr.map(li => `<li>${li}</li>`).join('');
   // Quick-action chips that, when tapped, append a real follow-up answer.
@@ -12445,23 +12683,25 @@
     return `
       <div class="p3-topbar"><button class="p3-back" onclick="window.switchSurface('chat-baseline')" title="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button></div>
       <div class="p3-scroll">
-        <div class="p3-hero-bg"><div class="p3-hero-glow"></div></div>
-        <div class="p3-portrait">${ex.portrait ? `<img src="${ex.portrait}" alt="${ex.name}" />` : `<div class="x-portrait-fallback" style="background:linear-gradient(150deg, ${ex.accent}, ${ex.accent2})">${ex.initials}</div>`}</div>
-        <div class="p3-hero"><h1 class="p3-name">${ex.name}</h1><p class="p3-profession">${ex.profession}</p></div>
+        ${ex.heroStyle === 'feature'
+          ? `<div class="p3-feature-hero"><div class="p3-feature-glow"></div><img class="p3-feature-img" src="${ex.heroImage}" alt="${ex.name}" /><div class="p3-feature-fade"></div></div>
+        <div class="p3-feature-head"><p class="p3-eyebrow">${ex.eyebrow}</p><h1 class="p3-headline">${ex.headline}</h1></div>`
+          : `<div class="p3-hero-bg"${ex.heroBg ? ` style="background:linear-gradient(180deg, ${ex.heroBg} 0%, #F5F1EA 100%)"` : ''}><div class="p3-hero-glow"></div></div>
+        <div class="p3-portrait">${(ex.heroPortrait || ex.portrait) ? `<img src="${ex.heroPortrait || ex.portrait}" alt="${ex.name}" />` : `<div class="x-portrait-fallback" style="background:linear-gradient(150deg, ${ex.accent}, ${ex.accent2})">${ex.initials}</div>`}</div>
+        <div class="p3-hero"><h1 class="p3-name">${ex.name}</h1><p class="p3-profession">${ex.profession}</p></div>`}
         <div class="p3-subscribe-card">
           <p class="p3-tagline">${ex.tagline}</p>
           <div class="p3-stats-row"><span class="p3-stat-text">${ex.stats[0]}</span><span class="p3-stat-divider"></span><span class="p3-stat-text">${ex.stats[1]}</span></div>
-          <button class="p3-subscribe-btn" onclick="window.switchSurface('x-plan')">Subscribe — ${ex.price} /month</button>
+          <button class="p3-subscribe-btn"${ex.subscribeBg ? ` style="background:${ex.subscribeBg}"` : ''} onclick="window.switchSurface('x-subscribe')">Subscribe — ${ex.price} /${ex.priceUnit || 'month'}</button>
+          <p class="p3-cancel-note">Cancel anytime. Manage in <a>Experts Hub</a>.</p>
         </div>
-        <p class="p3-cancel-note">Cancel anytime. Manage in <a>Experts Hub</a>.</p>
         <div class="p3-what-card">
           <h2 class="p3-section-title">What you get</h2>
-          <p class="p3-about-bio" style="margin-bottom:16px;">${ex.partOfProduct}</p>
           <ul class="p3-checklist">${xLis(ex.whatYouGet)}</ul>
         </div>
         <div class="p3-block">
           <h2 class="p3-section-title">${ex.bodyOfWorkLabel || 'Body of work'}</h2>
-          <div class="p3-bow-list">${ex.bodyOfWork.map(b => `<div class="p3-bow-item"><span class="p3-bow-img x-fallback" style="background:${ex.accent}">${b.tag || ex.initials}</span><div class="p3-bow-text"><h3 class="p3-bow-title">${b.title}</h3><p class="p3-bow-sub">${b.sub}</p></div></div>`).join('')}</div>
+          <div class="p3-bow-list">${ex.bodyOfWork.map(b => `<div class="p3-bow-item">${b.cover ? `<img class="p3-bow-img" src="${b.cover}" alt="${b.title}" />` : `<span class="p3-bow-img x-fallback" style="background:${ex.accent}">${b.tag || ex.initials}</span>`}<div class="p3-bow-text"><h3 class="p3-bow-title">${b.title}</h3><p class="p3-bow-sub">${b.sub}</p></div></div>`).join('')}</div>
         </div>
         <div class="p3-block"><h2 class="p3-section-title">About</h2><p class="p3-about-bio">${ex.about}</p><ul class="p3-about-bullets">${xLis(ex.aboutBullets)}</ul></div>
         <div class="p3-block"><div class="p3-topic-chips">${ex.chips.map(c => `<span class="p3-topic-chip">${c}</span>`).join('')}</div></div>
@@ -12476,15 +12716,19 @@
           <span class="cs-banner-line">${xAvatar(ex, 'cs-banner-avatar')}<strong>${ex.name}</strong> is now part of your guidance.</span>
           <span class="cs-banner-line">You can always change in the <a>Expert Hub</a>.</span>
         </div>
-        <h1 class="cs-title">${c.title}</h1>
-        <p class="cs-para">${c.intro}</p>
-        <ul class="cs-list">${xLis(c.points)}</ul>
-        <p class="cs-para">${c.close}</p>
-        ${xFooter(ex)}
-        <div id="xPlanThread"></div>
-        <div class="cs-actions" id="xPlanActions">${xChips('plan', c.chips)}</div>
+        <div class="x-typing"><span></span><span></span><span></span></div>
+        <div class="x-msg">
+          <h1 class="cs-title">${c.title}</h1>
+          <p class="cs-para">${c.intro}</p>
+          ${c.points ? `<ul class="cs-list">${xLis(c.points)}</ul>` : ''}
+          ${c.week ? renderXWeek(c.week, c.weekLabel) : ''}
+          ${c.close ? `<p class="cs-para">${c.close}</p>` : ''}
+          ${xFooter(ex)}
+          <div id="xPlanThread"></div>
+          <div class="cs-actions" id="xPlanActions">${xChips('plan', c.chips)}</div>
+        </div>
       </div></div></div>
-      ${xQaComposer()}
+      ${xQaComposer(false)}
       <div class="home-indicator"></div>`;
   }
   function renderXQa(ex, pid) {
@@ -12492,16 +12736,65 @@
     return `${xChatHeader(ex)}
       <div class="chat-scroll"><div class="chat-scroll-inner"><div class="cs-body">
         <div class="cs-ask">${c.ask}</div>
-        <h1 class="cs-title">${c.title}</h1>
-        <p class="cs-para">${c.intro}</p>
-        <ul class="cs-list">${xLis(c.points)}</ul>
-        <p class="cs-para">${c.close}</p>
-        ${xFooter(ex)}
-        <div id="xQaThread"></div>
-        <div class="cs-actions" id="xQaActions">${xChips('qa', c.chips)}</div>
+        <div class="x-typing"><span></span><span></span><span></span></div>
+        <div class="x-msg">
+          <h1 class="cs-title">${c.title}</h1>
+          <p class="cs-para">${c.intro}</p>
+          ${c.points ? `<ul class="cs-list">${xLis(c.points)}</ul>` : ''}
+          <p class="cs-para">${c.close}</p>
+          ${xFooter(ex)}
+          <div id="xQaThread"></div>
+          <div class="cs-actions" id="xQaActions">${xChips('qa', c.chips)}</div>
+        </div>
       </div></div></div>
-      ${xQaComposer()}
+      ${xQaComposer(false)}
       <div class="home-indicator"></div>`;
+  }
+  // Convert flow — subscribe confirm sheet, then the "you're in" welcome.
+  function renderXSubscribe(ex) {
+    const unit = ex.priceUnit || 'month';
+    const btn = ex.subscribeBg ? ` style="background:${ex.subscribeBg}"` : '';
+    return `<div class="xs-sheet">
+      <div class="xs-grab"></div>
+      <div class="xs-expert">${xAvatar(ex, 'xs-avatar')}<div><div class="xs-name">${ex.name}</div><div class="xs-role">${ex.profession}</div></div></div>
+      <h2 class="xs-title">Add ${ex.first} to your guidance</h2>
+      <ul class="xs-list">
+        <li>${ex.first}'s approach shapes your weekly plan</li>
+        <li>Ask ${ex.first} anything, anytime, always with attribution</li>
+        <li>Cancel whenever from the Experts Hub</li>
+      </ul>
+      <div class="xs-price-row"><span class="xs-price">${ex.price}</span><span class="xs-per">/ ${unit}</span><span class="xs-note">billed ${unit}ly</span></div>
+      <button class="ap-pay" onclick="window.switchSurface('x-applepay')">${APPLE_LOGO} Pay</button>
+      <button class="xs-cancel" onclick="window.switchSurface('x-profile')">Not now</button>
+    </div>`;
+  }
+  const APPLE_LOGO = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 12.04c-.03-2.6 2.12-3.85 2.22-3.91-1.21-1.77-3.09-2.01-3.76-2.04-1.6-.16-3.12.94-3.93.94-.81 0-2.06-.92-3.39-.89-1.74.03-3.35 1.01-4.25 2.57-1.81 3.14-.46 7.79 1.3 10.34.86 1.25 1.88 2.65 3.22 2.6 1.29-.05 1.78-.83 3.34-.83 1.56 0 2 .83 3.37.81 1.39-.03 2.27-1.27 3.12-2.53.98-1.45 1.39-2.85 1.41-2.92-.03-.01-2.7-1.04-2.72-4.14zM14.6 4.62c.71-.86 1.19-2.06 1.06-3.25-1.02.04-2.26.68-2.99 1.54-.66.76-1.23 1.97-1.08 3.14 1.14.09 2.3-.58 3.01-1.43z"/></svg>`;
+  function renderXApplePay(ex) {
+    const unit = ex.priceUnit || 'month';
+    return `<div class="ap-sheet">
+      <div class="ap-grab"></div>
+      <div class="ap-head">${APPLE_LOGO}<span class="ap-headtitle">Pay</span><button class="ap-x" onclick="window.switchSurface('x-subscribe')">&#10005;</button></div>
+      <div class="ap-card"><div class="ap-card-chip"></div><div class="ap-card-brand">VISA</div><div class="ap-card-num">&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; 4242</div></div>
+      <div class="ap-line"><span class="ap-line-l">Pay Ottavia</span><span class="ap-line-r">${ex.price}</span></div>
+      <div class="ap-line sub"><span class="ap-line-l">${ex.name} subscription</span><span class="ap-line-r">per ${unit}</span></div>
+      <button class="ap-pay" onclick="window.apConfirm()">${APPLE_LOGO} Confirm with Face ID</button>
+      <div class="ap-hint">Double-click the side button to confirm</div>
+      <div class="ap-done"><div class="ap-done-check">&#10003;</div><div class="ap-done-text">Done</div></div>
+    </div>`;
+  }
+  window.apConfirm = function () {
+    const done = document.querySelector('#xApRoot .ap-done');
+    if (done) done.classList.add('show');
+    setTimeout(function () { if (window.switchSurface) window.switchSurface('x-welcome'); }, 950);
+  };
+  function renderXWelcome(ex) {
+    const btn = ex.subscribeBg ? ` style="background:${ex.subscribeBg}"` : '';
+    return `<div class="xw-inner">
+      <div class="xw-badge">${xAvatar(ex, 'xw-avatar')}<span class="xw-check">&#10003;</span></div>
+      <h1 class="xw-title">You're in.</h1>
+      <p class="xw-sub"><strong>${ex.name}</strong> is now part of your guidance. From here, ${ex.first}'s approach shapes your plan, your answers, and your race prep, always with attribution.</p>
+      <button class="xw-cta"${btn} onclick="window.switchSurface('x-plan')">See your week with ${ex.first}</button>
+    </div>`;
   }
   function renderExpert(id, pid) {
     const ex = X_EXPERTS[id];
@@ -12512,9 +12805,15 @@
     const pr = document.getElementById('xProfileRoot');
     const pl = document.getElementById('xPlanRoot');
     const qa = document.getElementById('xQaRoot');
+    const sub = document.getElementById('xSubRoot');
+    const ap = document.getElementById('xApRoot');
+    const wel = document.getElementById('xWelRoot');
     if (pr) pr.innerHTML = renderXProfile(ex);
     if (pl) pl.innerHTML = renderXPlan(ex, pid);
     if (qa) qa.innerHTML = renderXQa(ex, pid);
+    if (sub) sub.innerHTML = renderXSubscribe(ex);
+    if (ap) ap.innerHTML = renderXApplePay(ex);
+    if (wel) wel.innerHTML = renderXWelcome(ex);
   }
 
   // Render the templated expert (if any) BEFORE deep-linking so its surfaces exist.
