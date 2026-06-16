@@ -1180,6 +1180,18 @@
   .qa-scrim .tint {
     background: linear-gradient(to top, rgb(245,241,234) 0%, rgba(245,241,234,0) 100%);
   }
+  /* Templated expert chat surfaces (all experts): a shorter blur band, sitting
+     just above the composer (the masks are percentage-based so the ramp scales). */
+  .surface[data-surface="x-plan"] .qa-scrim,
+  .surface[data-surface="x-qa"] .qa-scrim { height: 40px; bottom: 94px; }
+  /* Frosted composer bar: ~80% transparent cream + a little backdrop blur, so
+     content scrolling underneath shows through softly. */
+  .surface[data-surface="x-plan"] .composer,
+  .surface[data-surface="x-qa"] .composer {
+    background: rgba(245,241,234,0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
 
   /* =====================================================================
      Surface 9 — "Ottavia in a nutshell": the hero / representative screen.
@@ -6245,7 +6257,12 @@
     font-weight: 700;
     line-height: 1.18;
     letter-spacing: -0.4px;
-    color: #433E36;
+    /* Figma-spec'd headline gradient: dark espresso → warm taupe, diagonal */
+    background: linear-gradient(135deg, #302B23 0%, #857C6F 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
     margin: 0;
   }
 
@@ -6254,11 +6271,14 @@
   .surface[data-surface="x-welcome"]   { background: var(--surface-background); }
   .xs { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; }
   .xs-sheet {
+    position: relative;
     background: #FFFFFF;
     border-radius: 28px 28px 0 0;
-    padding: 12px 24px 26px;
+    padding: 12px 24px 24px;
     box-shadow: 0 -12px 40px rgba(0,0,0,0.18);
   }
+  .xs-x { position: absolute; top: 16px; right: 18px; background: #EFECE6; border: none; width: 30px; height: 30px; border-radius: 50%; color: #8F897D; font-size: 13px; cursor: pointer; z-index: 2; }
+  .xs-fine { margin: 14px 6px 0; text-align: center; font-family: var(--font-display); font-size: 12.5px; line-height: 1.45; color: #A8A297; }
   .xs-grab { width: 38px; height: 5px; border-radius: 3px; background: #E0DAD0; margin: 0 auto 18px; }
   .xs-expert { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
   .xs-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; object-position: center top; flex-shrink: 0; }
@@ -6291,14 +6311,6 @@
   @keyframes xReveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes xFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
   @keyframes xSheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-  @keyframes xDot { 0%,60%,100% { transform: translateY(0); opacity: .45; } 30% { transform: translateY(-4px); opacity: 1; } }
-  @keyframes xTypingShow {
-    0%   { opacity: 0; transform: translateY(8px); max-height: 46px; margin-top: 6px; }
-    14%  { opacity: 1; transform: translateY(0); }
-    80%  { opacity: 1; max-height: 46px; }
-    92%  { opacity: 0; }
-    100% { opacity: 0; max-height: 0; margin: 0; padding-top: 0; padding-bottom: 0; }
-  }
   @keyframes apPop { 0% { transform: scale(.3); opacity: 0; } 60% { transform: scale(1.12); } 100% { transform: scale(1); opacity: 1; } }
 
   /* Profile / welcome / sheets */
@@ -6307,19 +6319,21 @@
   .surface[data-surface="x-subscribe"].visible .xs-sheet { animation: xSheetUp .34s cubic-bezier(.2,.8,.2,1) both; }
   .surface[data-surface="x-applepay"].visible .ap-sheet { animation: xSheetUp .34s cubic-bezier(.2,.8,.2,1) both; }
 
-  /* Plan & Q&A: the first bubble (system message / user question) lands, a typing
-     indicator appears, then Ottavia's message reveals. */
+  /* Plan & Q&A: the system message / user question lands first, then Ottavia's
+     answer generates LINE BY LINE — each block reveals in sequence (no typing dots,
+     since the real app streams text, it doesn't show a typing bubble). */
   .surface[data-surface="x-plan"].visible .cs-banner,
-  .surface[data-surface="x-qa"].visible .cs-ask { animation: xReveal .5s .1s both; }
-  .surface[data-surface="x-plan"].visible .x-typing,
-  .surface[data-surface="x-qa"].visible .x-typing { animation: xTypingShow 1.3s both; }
-  .surface[data-surface="x-plan"].visible .x-msg,
-  .surface[data-surface="x-qa"].visible .x-msg { animation: xReveal .55s 1.2s both; }
-
-  .x-typing { display: flex; gap: 5px; align-items: center; width: fit-content; padding: 11px 15px; margin: 6px 0 4px; background: #fff; border-radius: 16px 16px 16px 4px; box-shadow: 0 1px 4px rgba(67,62,54,0.08); overflow: hidden; }
-  .x-typing span { width: 7px; height: 7px; border-radius: 50%; background: #B9B2A6; animation: xDot 1s infinite; }
-  .x-typing span:nth-child(2) { animation-delay: .15s; }
-  .x-typing span:nth-child(3) { animation-delay: .3s; }
+  .surface[data-surface="x-qa"].visible .cs-ask { animation: xReveal .45s .1s both; }
+  .surface[data-surface="x-plan"].visible .x-msg > *,
+  .surface[data-surface="x-qa"].visible .x-msg > * { animation-name: xReveal; animation-duration: .42s; animation-fill-mode: both; animation-timing-function: ease; }
+  .x-msg > *:nth-child(1) { animation-delay: .5s; }
+  .x-msg > *:nth-child(2) { animation-delay: .72s; }
+  .x-msg > *:nth-child(3) { animation-delay: .94s; }
+  .x-msg > *:nth-child(4) { animation-delay: 1.14s; }
+  .x-msg > *:nth-child(5) { animation-delay: 1.32s; }
+  .x-msg > *:nth-child(6) { animation-delay: 1.48s; }
+  .x-msg > *:nth-child(7) { animation-delay: 1.62s; }
+  .x-msg > *:nth-child(8) { animation-delay: 1.74s; }
 
   /* ===== Apple Pay sheet ===== */
   .surface[data-surface="x-applepay"] { background: rgba(20,18,16,0.55); }
@@ -6408,7 +6422,7 @@
     height: 45px;
     border: none;
     border-radius: 200px;
-    background: #4B8F61;       /* nutrition/primary green per Figma 2110 */
+    background: #36322B;       /* Figma: subscribe button dark espresso, applies to all experts */
     color: #FFFFFF;
     font-family: var(--font-display);
     font-weight: 700;
@@ -7229,8 +7243,9 @@
   /* User's question bubble (#7, Type-1 chat) — a regular white user bubble,
      right-aligned, at the same font size as Ottavia's body text. */
   .cs-ask {
+    width: fit-content;          /* shrink to content, no awkward white space for short asks */
     max-width: 82%;
-    margin: 0 0 22px auto;
+    margin: 24px 0 24px auto;     /* equal breathing room above + below */
     background: #FFFFFF;
     border: 1px solid rgba(0,0,0,0.04);
     box-shadow: 0 1px 3px rgba(186,178,164,0.18);
@@ -7242,6 +7257,123 @@
     line-height: 25px;
     letter-spacing: -0.18px;
     color: #000000;
+  }
+
+  /* ---- Appended chip answer — chat-style staggered reveal + calendar event card ---- */
+  .x-appended                   { animation: none !important; }   /* neutralize inherited .x-msg > * fade-in */
+  .x-appended > .cs-ask         { animation: xReveal .42s .05s both ease; }
+  .x-appended > .cs-title       { animation: xReveal .42s .60s both ease; }
+  .x-appended > .x-event-card   { animation: xReveal .42s .80s both ease; }
+  .x-appended > .cs-para        { animation: xReveal .42s 1.00s both ease; }
+  .x-appended > .cs-list        { animation: xReveal .42s 1.20s both ease; }
+  .x-appended > .cs-foot,
+  .x-appended > .cs-icon-row    { animation: xReveal .42s 1.40s both ease; }
+
+  /* Calendar event card — movement/orange variant. Three zones:
+     1) event identity (when + what)  2) sequence (time → action phase rows)
+     3) outcome (totals). Filled peach, dark-orange text. */
+  .x-event-card {
+    position: relative;
+    margin: 4px 0 18px;
+    background: #F9EFE0;                /* matches .rp-card.orange */
+    border: 2px solid #E2C191;
+    border-radius: 20px;
+    padding: 18px 20px 18px;
+    font-family: var(--font-display);
+    color: #C08A48;
+  }
+  /* Zone 1 — eyebrow + title */
+  .x-event-card .ev-when {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+    text-transform: uppercase; color: #C08A48;
+    margin-bottom: 8px;
+  }
+  .x-event-card .ev-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #D4A163; flex-shrink: 0;
+  }
+  .x-event-card .ev-when .ev-rel {
+    color: #D4A163; opacity: .85;
+  }
+  .x-event-card .ev-chev {
+    margin-left: auto; opacity: .55;
+    display: inline-flex; align-items: center;
+  }
+  .x-event-card .ev-chev svg { width: 16px; height: 16px; }
+  .x-event-card .ev-title {
+    font-size: 22px; font-weight: 700;
+    line-height: 1.22; letter-spacing: -0.3px;
+    color: #C08A48; margin: 0 0 14px;
+  }
+  /* Zone 2 — sections (each with a label + phase rows). Hairline dividers frame the block. */
+  .x-event-card .ev-sections {
+    border-top: 1px solid rgba(192,138,72,0.20);
+    border-bottom: 1px solid rgba(192,138,72,0.20);
+    padding: 4px 0 6px;
+    margin-bottom: 12px;
+  }
+  .x-event-card .ev-section + .ev-section {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed rgba(192,138,72,0.18);
+  }
+  .x-event-card .ev-section-label {
+    font-size: 10.5px; font-weight: 700; letter-spacing: 1.3px;
+    text-transform: uppercase; color: #C08A48;
+    margin: 8px 0 8px;
+    opacity: .85;
+  }
+  /* Zone 2b — phase rows (time → action). Used both inside sections and standalone. */
+  .x-event-card .ev-phases {
+    border-top: 1px solid rgba(192,138,72,0.18);
+    border-bottom: 1px solid rgba(192,138,72,0.18);
+    padding: 12px 0;
+    margin-bottom: 12px;
+  }
+  .x-event-card .ev-section .ev-phase { padding: 4px 0; }
+  .x-event-card .ev-phase {
+    display: grid;
+    grid-template-columns: 116px 1fr;
+    align-items: baseline;
+    gap: 12px;
+    padding: 6px 0;
+  }
+  .x-event-card .ev-phase + .ev-phase { padding-top: 8px; }
+  .x-event-card .ev-phase-when {
+    font-size: 10.5px; font-weight: 700; letter-spacing: 1.1px;
+    text-transform: uppercase; color: #C08A48;
+    line-height: 1.4;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .x-event-card .ev-phase-when::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(192,138,72,0.35);
+    box-shadow: inset 0 0 0 1px #C08A48;
+    flex-shrink: 0;
+  }
+  .x-event-card .ev-phase-do {
+    font-size: 15px; font-weight: 500;
+    line-height: 21px; letter-spacing: -0.18px;
+    color: #8C6A3F;
+  }
+  /* Zone 3 — outcome (totals) */
+  .x-event-card .ev-total {
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  .x-event-card .ev-total-label {
+    font-size: 10.5px; font-weight: 700; letter-spacing: 1.2px;
+    text-transform: uppercase; color: #C08A48; opacity: .8;
+  }
+  .x-event-card .ev-total-value {
+    font-size: 15px; font-weight: 700; letter-spacing: -0.1px;
+    color: #C08A48;
+  }
+  /* Backwards-compat: legacy event cards that only use ev.body (no phases) */
+  .x-event-card .ev-body {
+    font-size: 15px; font-weight: 500;
+    line-height: 22px; letter-spacing: -0.2px;
+    color: #D4A163; margin: 0;
   }
 
   /* Run-summary header (#8) — the activity that triggered the proactive analysis. */
@@ -7415,9 +7547,9 @@
   .cs-title {
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: 18px;
-    line-height: 25px;
-    letter-spacing: -0.18px;
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: -0.2px;
     color: #000000;
     margin: 0 0 14px;
   }
@@ -7443,7 +7575,9 @@
     line-height: 25px;
     letter-spacing: -0.18px;
     color: #000000;
+    margin-bottom: 16px;
   }
+  .cs-list li:last-child { margin-bottom: 0; }
 
   /* Action chips — Figma 2029:13783-13788. h:46, padding 8 18, radius 22.
      Vertical stack with 8px gap between (Figma spacing: 54px between tops). */
@@ -12291,7 +12425,6 @@
       name: `Scott Fauble`, first: `Scott`, initials: `SF`, accent: `#C2603A`, accent2: `#9C4A2C`, portrait: `assets/experts/portraits/scott.jpg`,
       heroStyle: `feature`, heroImage: `assets/experts/portraits/scott-runner.png`,
       eyebrow: `Elite Marathoner & Author`, headline: `Train like a pro, with Scott Fauble`,
-      subscribeBg: `#000000`,
       profession: `Elite Marathoner & Author`,
       tagline: `A professional's marathon training, applied to your weekly plan and races.`,
       stats: [`12.1K followers`, `4.9★ rating`], price: `$5.99`, priceUnit: `week`,
@@ -12432,6 +12565,60 @@
             close: `Better-quality sleep shows up in your running as steadier energy and easier recovery — often more than an extra fragmented hour would.`,
             chips: [`Help me wind down faster`, `Does sleep really affect my runs?`, `Build my evening routine`],
           },
+        },
+      },
+    },
+
+    nancy: {
+      name: `Nancy Clark`, first: `Nancy`, initials: `NC`, accent: `#5C7A3E`, accent2: `#3D5526`, portrait: `assets/experts/portraits/nancy.jpg`,
+      heroStyle: `feature`, heroImage: `assets/experts/portraits/nancy_profile.png`,
+      featureBg: `#A8D49B`, featureFadeH: 150, featureFadeStart: 100, featureImgOffsetX: -12,
+      eyebrow: `Sports Dietitian & Author`, headline: `Fuel your training, with Nancy Clark`,
+      profession: `Sports Dietitian & Author`,
+      tagline: `Real-food sports nutrition, applied to your training and your week.`,
+      stats: [`800K+ books sold`, `4.9★ rating`], price: `$9.90`, priceUnit: `month`,
+      partOfProduct: `Nancy isn't an advisor you message. Ottavia has read her published work — including <em>Nancy Clark's Sports Nutrition Guidebook</em> — and applies her sports nutrition approach inside your guidance, always with attribution.`,
+      whatYouGet: [
+        `Nancy's sports nutrition guidance applied to how you actually eat and train`,
+        `Practical answers on pre-run, during, and post-run fueling, hydration, and recovery`,
+        `Race-week and long-run fueling — what to eat, when, and why`,
+        `Her book and writing surfaced when they're relevant to your question`,
+      ],
+      bodyOfWork: [
+        { cover: `assets/experts/portraits/sports-nutrition-guidebook.jpg`, title: `Nancy Clark's Sports Nutrition Guidebook`, sub: `The #1 nutrition guide for active people · Human Kinetics · 6th ed., 2020 · 750K+ copies sold` },
+        { cover: `assets/experts/portraits/food-guide-marathoners.jpg`,    title: `Nancy Clark's Food Guide for Marathoners`,    sub: `Tips for everyday champions — eat well, even when pressed for time · Meyer & Meyer Sport · 2011 · foreword by Jeff Galloway` },
+      ],
+      about: `Nancy Clark is one of the original sports dietitians in the United States — a registered dietitian (MS, RD, CSSD) running a sports nutrition practice outside Boston for over four decades. She's worked with the Boston Red Sox, Celtics, and Bruins, advised Olympic athletes, and is a Fellow of both the Academy of Nutrition and Dietetics and the American College of Sports Medicine. Her Sports Nutrition Guidebook has sold over 750,000 copies and her column The Athlete's Kitchen runs in 150+ sports publications.`,
+      aboutBullets: [`MS, RD, CSSD — board-certified sports dietitian`, `Fellow, Academy of Nutrition and Dietetics & ACSM`, `Boston-area private practice, 40+ years`, `Team nutritionist: Boston Red Sox, Celtics, Bruins`, `Monthly column in 150+ sports publications`],
+      chips: [`Fueling`, `Pre-workout`, `Hydration`, `Recovery`, `Race-week`, `Real food`],
+      cases: {
+        tom: {
+          plan: {
+            title: `You now have access to Nancy's training and nutrition approach.`,
+            intro: `Let's build your race week around your training, your goals, and the principles she teaches.`,
+            points: [
+              `<strong>① Your long run is under-fueled.</strong> Nancy's target for endurance runs over an hour is 30–60g of carbs an hour — 40–80 calories every 20 minutes, started after the first hour. On race day, at 4+ hours, that climbs toward 60–90g/hr. Practice it now so your gut is ready.`,
+              `<strong>② Your recovery window is getting missed.</strong> Nancy's window is the first 60–90 minutes after a hard session, carbs + protein together. Chocolate milk is her shorthand — the natural and added sugars combined with the protein make it an excellent recovery food for runners.`,
+              `<strong>③ You're hydrating reactively.</strong> Nancy's rule during exercise is 8 oz of fluid every 15 minutes. Post-run she has you weigh in — each pound lost is about 16 oz of sweat to replace. Across the day, pale urine every 2–4 hours means you're on track.`,
+            ],
+            close: `These three shifts compound across the build. Race-week fueling is a separate plan I can lay out closer to the date.`,
+            chips: [`Plan tomorrow's long run`, `What should I eat after a workout?`, `Build my race-week`],
+          },
+          qa:   { ask: `What should I eat before a long run?`, title: `Nancy's Q&A is being built next.`, intro: `Her answers will draw from Sports Nutrition Guidebook and four decades of coaching marathoners and triathletes.`, close: `For now, the Profile shows what Nancy adds to your guidance.`, chips: [`Pre-run fueling`, `Hydration on long runs`, `Post-workout recovery`] },
+        },
+        mariah: {
+          plan: {
+            title: `You now have access to Nancy's training and nutrition approach.`,
+            intro: `Let's build your race week around your training, your goals, and the principles she teaches.`,
+            points: [
+              `<strong>① Eat something before your runs, even if it's small.</strong> Nancy's starting target is 50–100 calories of simple carbs — crackers, pretzels, half a banana — within the hour before. Once that sits well, work toward 200–300 calories: a packet of oatmeal, a granola bar, or an English muffin with peanut butter.`,
+              `<strong>② Refuel inside the first 60–90 minutes after your long run.</strong> Nancy treats this as the window when food does the most for recovery — carbs plus protein together. Chocolate milk is her go-to: the sugars combined with the protein make it an excellent recovery food.`,
+              `<strong>③ Hydrate across the day, not just around runs.</strong> Nancy's check is urine color — pale every 2 to 4 hours means you're hydrated. During the run itself, aim for 8 ounces of fluid every 15 minutes.`,
+            ],
+            close: `Nothing here asks you to track or change what you cook for the family. The shifts are all in the hour before and the 90 minutes after your runs.`,
+            chips: [`Simple pre-run meals`, `Post-run recovery snacks`, `Hydration on long runs`],
+          },
+          qa:   { ask: `How do I fuel for a half marathon without overhauling my whole kitchen?`, title: `Nancy's Q&A is being built next.`, intro: `Her answers will draw from Sports Nutrition Guidebook and four decades of coaching everyday athletes.`, close: `For now, the Profile shows what Nancy adds to your guidance.`, chips: [`Simple pre-run meals`, `Hydration basics`, `Recovery snacks`] },
         },
       },
     },
@@ -12591,6 +12778,24 @@
         ],
       },
     },
+    nancy: {
+      tom: {
+        plan: [
+          { title: `Tomorrow's long run is at 7am — here's the plan, Tom.`, event: { when: `Thu · 7:00 AM`, rel: `tomorrow`, title: `Long run · 32k`, sections: [ { label: `Before the run`, phases: [ { when: `Tonight, 6:30 PM`, do: `Carb-forward dinner. Pasta + lean protein, light on fiber.` }, { when: `Tonight, 9:30 PM`, do: `Kit laid out — vest pre-loaded with gels, flasks mixed, watch charging.` }, { when: `4:00 AM`, do: `Wake. 16 oz water + electrolyte. Coffee 30 min later if you use it.` }, { when: `4:15 AM`, do: `Breakfast — oatmeal + banana + honey, ~500 cal. Low fiber.` }, { when: `6:30 AM`, do: `Bathroom. Anti-chafe on. Kit on.` }, { when: `6:55 AM`, do: `5-min easy jog warm-up.` } ] }, { label: `During the run`, phases: [ { when: `0–45 min`, do: `Easy effort. No fuel needed.` }, { when: `45 min onward`, do: `1 gel (~25g carb) every 30 min.` }, { when: `Every 15 min`, do: `Sip 6–8 oz water + sports drink.` } ] }, { label: `Post-run`, phases: [ { when: `Within 30 min`, do: `Chocolate milk + banana — ~24g carb + 8g protein.` }, { when: `Within 60 min`, do: `Real breakfast — eggs, toast, fruit.` }, { when: `Within 90 min`, do: `Shower. Weigh-in — replace 16 oz fluid per pound lost.` } ] } ], total: `~125g carb during · ~2L fluid · ~3000 cal across the day` }, body: `It's all on your calendar. I'll nudge you when each block starts — tonight's dinner cue, your morning alarm, and each fueling cue during the run.` },
+          { title: `Get something in within an hour after — carbs plus a little protein.`, body: `Nancy's shorthand is chocolate milk: ~24g carb + 8g protein in a cup. Same idea: cereal with milk and fruit, or yogurt + granola + banana. For your frame after a hard session, aim for ~30–40g carb and ~15–20g protein in that first window.` },
+          { title: `Race week is where Nancy doesn't bend.`, body: `Final 2–3 days: ramp daily carb to 7–10g per kg of body weight. At your weight that's roughly 630–900g carb a day — heavy carb meals, less fiber so the gut feels light on race morning. I'll lay out the day-by-day when you're 7 days out.` },
+        ],
+        qa: [],
+      },
+      mariah: {
+        plan: [
+          { title: `Three pre-run options to try, starting really small.`, body: `Pick the one your gut tolerates earliest — work up over a few weeks:`, points: [`Half a banana + a swallow of water (≈50 cal — the starter)`, `A slice of dry toast with honey (≈100 cal)`, `Overnight oats from the fridge, eaten while the kettle boils (≈200 cal)`] },
+          { title: `Three combos that work in the kid-breakfast hour.`, body: `All inside Nancy's 60–90 minute window, all roughly 25–30g carb + 8–12g protein:`, points: [`A glass of milk + a banana (Nancy's pattern, simplest)`, `Yogurt + granola + berries (eat while you pour cereal)`, `Toast + peanut butter + half a banana (one-handed)`] },
+          { title: `Anything over an hour, sip every 15 minutes.`, body: `On a 90-minute long run that's about 750ml total — a small handheld bottle covers it. Plain water is fine for under 90 min; over that, switch to a sports drink so you're replacing sodium too. After: weigh in if you can, replace 16 oz of fluid per pound lost.` },
+        ],
+        qa: [],
+      },
+    },
   };
 
   // ---- Shared markup helpers (reuse Matt's exact component classes) ----
@@ -12657,9 +12862,32 @@
   function xChips(uc, labels) {
     return labels.map((label, i) => xUsed[uc].has(i) ? '' : `<button class="cs-action" onclick="xFollow('${uc}',${i})">${label}</button>`).join('');
   }
+  function xEventCard(ev) {
+    if (!ev) return '';
+    const chev = `<span class="ev-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>`;
+    const rel = ev.rel ? ` <span class="ev-rel">· ${ev.rel}</span>` : '';
+    const phaseRow = p => `<div class="ev-phase"><div class="ev-phase-when">${p.when}</div><div class="ev-phase-do">${p.do}</div></div>`;
+    // Sections: an array of { label, phases }. Preferred for richer plans.
+    const sections = (ev.sections || []).map(s =>
+      `<div class="ev-section">
+        <div class="ev-section-label">${s.label}</div>
+        ${(s.phases || []).map(phaseRow).join('')}
+      </div>`
+    ).join('');
+    // Flat phases — fallback for simpler events.
+    const phases = (ev.phases || []).map(phaseRow).join('');
+    return `<div class="x-event-card">
+      <div class="ev-when"><span class="ev-dot"></span>${ev.when}${rel}${chev}</div>
+      <h3 class="ev-title">${ev.title}</h3>
+      ${sections ? `<div class="ev-sections">${sections}</div>` : (phases ? `<div class="ev-phases">${phases}</div>` : '')}
+      ${ev.total ? `<div class="ev-total"><span class="ev-total-label">Total</span><span class="ev-total-value">${ev.total}</span></div>` : ''}
+      ${(!sections && !phases && ev.body) ? `<p class="ev-body">${ev.body}</p>` : ''}
+    </div>`;
+  }
   function xAnswerBlock(ex, a) {
     return `<h1 class="cs-title">${a.title}</h1>
-      <p class="cs-para">${a.body}</p>
+      ${a.event ? xEventCard(a.event) : ''}
+      ${a.body ? `<p class="cs-para">${a.body}</p>` : ''}
       ${a.points ? `<ul class="cs-list">${xLis(a.points)}</ul>` : ''}
       ${xFooter(ex)}`;
   }
@@ -12672,10 +12900,20 @@
     xUsed[uc].add(i);
     const thread = document.getElementById(uc === 'plan' ? 'xPlanThread' : 'xQaThread');
     const actions = document.getElementById(uc === 'plan' ? 'xPlanActions' : 'xQaActions');
-    if (thread) thread.insertAdjacentHTML('beforeend', `<div class="cs-ask">${labels[i]}</div>${xAnswerBlock(ex, ans)}`);
+    if (thread) thread.insertAdjacentHTML('beforeend', `<div class="x-appended"><div class="cs-ask">${labels[i]}</div>${xAnswerBlock(ex, ans)}</div>`);
     if (actions) actions.innerHTML = xChips(uc, labels);
+    // Smooth-scroll to follow the staggered reveal. Anchor multiple times across the
+    // ~1.5s animation timeline so the viewport keeps tracking new content as it appears.
     const scroll = thread && thread.closest('.chat-scroll');
-    if (scroll) requestAnimationFrame(() => { scroll.scrollTop = scroll.scrollHeight; });
+    if (scroll) {
+      const goBottom = () => {
+        const target = scroll.scrollHeight - scroll.clientHeight;
+        scroll.scrollTo({ top: target, behavior: 'smooth' });
+      };
+      requestAnimationFrame(() => requestAnimationFrame(goBottom));   // wait one layout pass
+      setTimeout(goBottom, 700);                                       // mid-reveal (card lands)
+      setTimeout(goBottom, 1500);                                      // final settle (footer)
+    }
   }
   window.xFollow = xFollow;
 
@@ -12684,8 +12922,15 @@
       <div class="p3-topbar"><button class="p3-back" onclick="window.switchSurface('chat-baseline')" title="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button></div>
       <div class="p3-scroll">
         ${ex.heroStyle === 'feature'
-          ? `<div class="p3-feature-hero"><div class="p3-feature-glow"></div><img class="p3-feature-img" src="${ex.heroImage}" alt="${ex.name}" /><div class="p3-feature-fade"></div></div>
-        <div class="p3-feature-head"><p class="p3-eyebrow">${ex.eyebrow}</p><h1 class="p3-headline">${ex.headline}</h1></div>`
+          ? (() => {
+              const heroStyle = ex.featureBg ? ` style="background:linear-gradient(180deg, ${ex.featureBg} 7.692%, #F5F1EA 66%)"` : '';
+              const imgStyle = ex.featureImgOffsetX ? ` style="transform:translateX(calc(-50% + ${ex.featureImgOffsetX}px))"` : '';
+              const fadeH = ex.featureFadeH || 92;
+              const fadeStart = ex.featureFadeStart != null ? ex.featureFadeStart : 78;
+              const fadeStyle = (ex.featureFadeH || ex.featureFadeStart != null) ? ` style="height:${fadeH}px;background:linear-gradient(180deg, rgba(245,241,234,0) 0%, #F5F1EA ${fadeStart}%)"` : '';
+              return `<div class="p3-feature-hero"${heroStyle}><div class="p3-feature-glow"></div><img class="p3-feature-img" src="${ex.heroImage}" alt="${ex.name}"${imgStyle} /><div class="p3-feature-fade"${fadeStyle}></div></div>
+        <div class="p3-feature-head"><p class="p3-eyebrow">${ex.eyebrow}</p><h1 class="p3-headline">${ex.headline}</h1></div>`;
+            })()
           : `<div class="p3-hero-bg"${ex.heroBg ? ` style="background:linear-gradient(180deg, ${ex.heroBg} 0%, #F5F1EA 100%)"` : ''}><div class="p3-hero-glow"></div></div>
         <div class="p3-portrait">${(ex.heroPortrait || ex.portrait) ? `<img src="${ex.heroPortrait || ex.portrait}" alt="${ex.name}" />` : `<div class="x-portrait-fallback" style="background:linear-gradient(150deg, ${ex.accent}, ${ex.accent2})">${ex.initials}</div>`}</div>
         <div class="p3-hero"><h1 class="p3-name">${ex.name}</h1><p class="p3-profession">${ex.profession}</p></div>`}
@@ -12716,7 +12961,6 @@
           <span class="cs-banner-line">${xAvatar(ex, 'cs-banner-avatar')}<strong>${ex.name}</strong> is now part of your guidance.</span>
           <span class="cs-banner-line">You can always change in the <a>Expert Hub</a>.</span>
         </div>
-        <div class="x-typing"><span></span><span></span><span></span></div>
         <div class="x-msg">
           <h1 class="cs-title">${c.title}</h1>
           <p class="cs-para">${c.intro}</p>
@@ -12736,7 +12980,6 @@
     return `${xChatHeader(ex)}
       <div class="chat-scroll"><div class="chat-scroll-inner"><div class="cs-body">
         <div class="cs-ask">${c.ask}</div>
-        <div class="x-typing"><span></span><span></span><span></span></div>
         <div class="x-msg">
           <h1 class="cs-title">${c.title}</h1>
           <p class="cs-para">${c.intro}</p>
@@ -12755,17 +12998,19 @@
     const unit = ex.priceUnit || 'month';
     const btn = ex.subscribeBg ? ` style="background:${ex.subscribeBg}"` : '';
     return `<div class="xs-sheet">
+      <button class="xs-x" onclick="window.switchSurface('x-profile')" aria-label="Close">&#10005;</button>
       <div class="xs-grab"></div>
       <div class="xs-expert">${xAvatar(ex, 'xs-avatar')}<div><div class="xs-name">${ex.name}</div><div class="xs-role">${ex.profession}</div></div></div>
       <h2 class="xs-title">Add ${ex.first} to your guidance</h2>
       <ul class="xs-list">
-        <li>${ex.first}'s approach shapes your weekly plan</li>
-        <li>Ask ${ex.first} anything, anytime, always with attribution</li>
-        <li>Cancel whenever from the Experts Hub</li>
+        <li>${ex.first}'s approach baked into your weekly plan and workouts</li>
+        <li>Tailored answers whenever you ask, grounded in your own data</li>
+        <li>${ex.first}'s book and research surfaced right when they're relevant</li>
+        <li>Every insight clearly attributed to ${ex.first}</li>
       </ul>
       <div class="xs-price-row"><span class="xs-price">${ex.price}</span><span class="xs-per">/ ${unit}</span><span class="xs-note">billed ${unit}ly</span></div>
       <button class="ap-pay" onclick="window.switchSurface('x-applepay')">${APPLE_LOGO} Pay</button>
-      <button class="xs-cancel" onclick="window.switchSurface('x-profile')">Not now</button>
+      <p class="xs-fine">You can always change it in the expert settings, or cancel and manage in the Experts Hub.</p>
     </div>`;
   }
   const APPLE_LOGO = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 12.04c-.03-2.6 2.12-3.85 2.22-3.91-1.21-1.77-3.09-2.01-3.76-2.04-1.6-.16-3.12.94-3.93.94-.81 0-2.06-.92-3.39-.89-1.74.03-3.35 1.01-4.25 2.57-1.81 3.14-.46 7.79 1.3 10.34.86 1.25 1.88 2.65 3.22 2.6 1.29-.05 1.78-.83 3.34-.83 1.56 0 2 .83 3.37.81 1.39-.03 2.27-1.27 3.12-2.53.98-1.45 1.39-2.85 1.41-2.92-.03-.01-2.7-1.04-2.72-4.14zM14.6 4.62c.71-.86 1.19-2.06 1.06-3.25-1.02.04-2.26.68-2.99 1.54-.66.76-1.23 1.97-1.08 3.14 1.14.09 2.3-.58 3.01-1.43z"/></svg>`;
