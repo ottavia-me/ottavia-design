@@ -2,7 +2,7 @@
   "name": "ottavia-design",
   "private": true,
   "scripts": {
-    "dev": "npx serve -l 8090 .",
+    "dev": "npx serve -l 8090 Playground",
     "sim": "node sim-server.js"
   },
   "dependencies": {
