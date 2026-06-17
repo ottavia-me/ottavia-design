@@ -12604,7 +12604,18 @@
             close: `These three shifts compound across the build. Race-week fueling is a separate plan I can lay out closer to the date.`,
             chips: [`Plan tomorrow's long run`, `What should I eat after a workout?`, `Build my race-week`],
           },
-          qa:   { ask: `What should I eat before a long run?`, title: `Nancy's Q&A is being built next.`, intro: `Her answers will draw from Sports Nutrition Guidebook and four decades of coaching marathoners and triathletes.`, close: `For now, the Profile shows what Nancy adds to your guidance.`, chips: [`Pre-run fueling`, `Hydration on long runs`, `Post-workout recovery`] },
+          qa: {
+            ask: `What should I eat the night before my long run?`,
+            title: `Carb-forward dinner, light on fiber, eaten earlier than usual.`,
+            intro: `Nancy's pre-long-run dinner is about topping up glycogen and giving your gut a calm runway to morning. Three things she'd shift from your usual Friday:`,
+            points: [
+              `<strong>① Carb-forward plate.</strong> Pasta, rice, or potatoes as the base, with a moderate portion of lean protein. White breads and grains are fine here — save the high-fiber whole grains for normal days.`,
+              `<strong>② Eat earlier.</strong> Ideally 6–7pm, not 8 or 9. Gives the gut 12+ hours to process before the run.`,
+              `<strong>③ Skip what you'd normally test.</strong> No new restaurant, no extra spice, no alcohol. Pre-run dinner isn't the night to be adventurous.`,
+            ],
+            close: `Same approach scales for race-week, just stricter. Want me to pre-load tonight's dinner cue on your calendar?`,
+            chips: [`Should I take caffeine before my long run?`, `I get gut issues mid-run — what to do?`, `What about race-day breakfast?`],
+          },
         },
         mariah: {
           plan: {
@@ -12618,7 +12629,18 @@
             close: `Nothing here asks you to track or change what you cook for the family. The shifts are all in the hour before and the 90 minutes after your runs.`,
             chips: [`Simple pre-run meals`, `Post-run recovery snacks`, `Hydration on long runs`],
           },
-          qa:   { ask: `How do I fuel for a half marathon without overhauling my whole kitchen?`, title: `Nancy's Q&A is being built next.`, intro: `Her answers will draw from Sports Nutrition Guidebook and four decades of coaching everyday athletes.`, close: `For now, the Profile shows what Nancy adds to your guidance.`, chips: [`Simple pre-run meals`, `Hydration basics`, `Recovery snacks`] },
+          qa: {
+            ask: `What's the simplest pre-run snack I can do at 5:30am?`,
+            title: `Half a banana and a sip of water — that's the floor.`,
+            intro: `Nancy's "work up from nothing" principle is built for exactly this. The aim isn't a full breakfast — just a tiny carb signal so your run feels better than running on empty:`,
+            points: [
+              `<strong>① Start with about 50 calories of simple carbs.</strong> Half a banana, two crackers, or a small piece of bread. Five minutes before is fine if your gut tolerates it.`,
+              `<strong>② Sip 4–8 oz of water with it.</strong> Don't chug.`,
+              `<strong>③ Work up once that sits well.</strong> After a couple of weeks, bump to 100 cal — a slice of toast with honey, or a small granola bar.`,
+            ],
+            close: `Keep it tiny and consistent. Coffee can come right after if you use it. I'll track what sits well for you over the next few runs.`,
+            chips: [`Can I run on completely empty?`, `What about coffee before?`, `What if I feel hungry mid-run?`],
+          },
         },
       },
     },
@@ -12782,18 +12804,26 @@
       tom: {
         plan: [
           { title: `Tomorrow's long run is at 7am — here's the plan, Tom.`, event: { when: `Thu · 7:00 AM`, rel: `tomorrow`, title: `Long run · 32k`, sections: [ { label: `Before the run`, phases: [ { when: `Tonight, 6:30 PM`, do: `Carb-forward dinner. Pasta + lean protein, light on fiber.` }, { when: `Tonight, 9:30 PM`, do: `Kit laid out — vest pre-loaded with gels, flasks mixed, watch charging.` }, { when: `4:00 AM`, do: `Wake. 16 oz water + electrolyte. Coffee 30 min later if you use it.` }, { when: `4:15 AM`, do: `Breakfast — oatmeal + banana + honey, ~500 cal. Low fiber.` }, { when: `6:30 AM`, do: `Bathroom. Anti-chafe on. Kit on.` }, { when: `6:55 AM`, do: `5-min easy jog warm-up.` } ] }, { label: `During the run`, phases: [ { when: `0–45 min`, do: `Easy effort. No fuel needed.` }, { when: `45 min onward`, do: `1 gel (~25g carb) every 30 min.` }, { when: `Every 15 min`, do: `Sip 6–8 oz water + sports drink.` } ] }, { label: `Post-run`, phases: [ { when: `Within 30 min`, do: `Chocolate milk + banana — ~24g carb + 8g protein.` }, { when: `Within 60 min`, do: `Real breakfast — eggs, toast, fruit.` }, { when: `Within 90 min`, do: `Shower. Weigh-in — replace 16 oz fluid per pound lost.` } ] } ], total: `~125g carb during · ~2L fluid · ~3000 cal across the day` }, body: `It's all on your calendar. I'll nudge you when each block starts — tonight's dinner cue, your morning alarm, and each fueling cue during the run.` },
-          { title: `Get something in within an hour after — carbs plus a little protein.`, body: `Nancy's shorthand is chocolate milk: ~24g carb + 8g protein in a cup. Same idea: cereal with milk and fruit, or yogurt + granola + banana. For your frame after a hard session, aim for ~30–40g carb and ~15–20g protein in that first window.` },
-          { title: `Race week is where Nancy doesn't bend.`, body: `Final 2–3 days: ramp daily carb to 7–10g per kg of body weight. At your weight that's roughly 630–900g carb a day — heavy carb meals, less fiber so the gut feels light on race morning. I'll lay out the day-by-day when you're 7 days out.` },
+          { title: `Get something in within an hour after — carbs plus a little protein.`, body: `Aim for ~30–40g carb plus ~15–20g protein in that first window. Three of Nancy's go-to combos for your frame:`, points: [`Chocolate milk — Nancy's shorthand. ~24g carb + 8g protein in a cup.`, `Cereal with milk and a piece of fruit.`, `Yogurt + granola + banana.`] },
+          { title: `What you do in the final days matters.`, body: `The final 2–3 days before a race, Nancy's playbook is concrete:`, points: [`Ramp daily carb to 7–10g per kg of body weight — at your weight, roughly 630–900g a day.`, `Heavier carb meals, less fiber, so the gut feels light on race morning.`, `I'll lay out the day-by-day when you're 7 days out.`] },
         ],
-        qa: [],
+        qa: [
+          { title: `Yes — if you tolerate it, take it 30–60 min before.`, body: `Nancy follows the research here: roughly 3–6 mg of caffeine per kg of body weight, ~45 minutes before the start. For you (~150 lb / 68 kg), that's about 200–400mg — a strong coffee or a small pre-workout. A few rules from her:`, points: [`Practice it on training long runs first — race day is not the day to test.`, `If you don't normally drink coffee, don't introduce it on a run day.`, `Skip it on shorter easy runs; save it for long sessions and races where it matters.`] },
+          { title: `Three things almost always help.`, body: `Mid-run GI distress is usually one of three things. Nancy's gut-trouble checklist:`, points: [`Switch fuels. If gels bother you, try chews, real food (banana, dates, salt-coated pretzels), or sports drink only.`, `Cut fiber the day before — whole grains, raw salads, beans. Save them for non-run days.`, `Ease the pace for 5 minutes. Most mid-run gut issues come from running too fast; slowing briefly lets blood flow back to the gut.`] },
+          { title: `What you've already practiced — 3 hours before the start.`, body: `Nancy's race-day breakfast rule: nothing new. Whatever you've eaten before your hardest training long runs is what you eat race morning. Aim for ~500 cal, low fiber, mostly carbs, 3 hours before the gun. A few that work:`, points: [`Oatmeal + banana + honey + a splash of milk.`, `A bagel with honey and peanut butter.`, `White rice with a small amount of protein (a couple of eggs, or a small piece of meat).`] },
+        ],
       },
       mariah: {
         plan: [
           { title: `Three pre-run options to try, starting really small.`, body: `Pick the one your gut tolerates earliest — work up over a few weeks:`, points: [`Half a banana + a swallow of water (≈50 cal — the starter)`, `A slice of dry toast with honey (≈100 cal)`, `Overnight oats from the fridge, eaten while the kettle boils (≈200 cal)`] },
           { title: `Three combos that work in the kid-breakfast hour.`, body: `All inside Nancy's 60–90 minute window, all roughly 25–30g carb + 8–12g protein:`, points: [`A glass of milk + a banana (Nancy's pattern, simplest)`, `Yogurt + granola + berries (eat while you pour cereal)`, `Toast + peanut butter + half a banana (one-handed)`] },
-          { title: `Anything over an hour, sip every 15 minutes.`, body: `On a 90-minute long run that's about 750ml total — a small handheld bottle covers it. Plain water is fine for under 90 min; over that, switch to a sports drink so you're replacing sodium too. After: weigh in if you can, replace 16 oz of fluid per pound lost.` },
+          { title: `Anything over an hour, sip every 15 minutes.`, body: `For a 90-minute long run that's about 750ml total — a small handheld bottle covers it. A few rules of thumb:`, points: [`Under 90 min — plain water is fine.`, `Over 90 min — switch to a sports drink so you're replacing sodium too.`, `After: weigh in if you can, and replace 16 oz of fluid per pound lost.`] },
         ],
-        qa: [],
+        qa: [
+          { title: `You can — but most runners feel meaningfully better with even 50 calories.`, body: `Running fasted is fine for under 60 min if you've practiced it. For your long runs (over 75 min), Nancy is firm: even a tiny carb makes the run feel easier, the pace more consistent, and the next day's recovery cleaner. A few caveats:`, points: [`Don't run fasted on hard days or your long-run days during half marathon build.`, `If your gut won't tolerate anything pre-run, practice mid-run fueling more aggressively instead.`, `If you're trying fasted, do it on easy short runs first — not your weekend long run.`] },
+          { title: `Yes — if you use it normally, drink it 20–30 min before.`, body: `If coffee is part of your normal mornings, having it 20–30 min before a run gives you a small performance boost (~3–6 mg of caffeine per kg of body weight, per the research Nancy follows). For your weight (~140 lb / 63 kg), one cup is plenty. Things to keep in mind:`, points: [`Don't introduce caffeine on a run day if you don't normally drink it.`, `If you're sensitive, half a cup is enough.`, `Hot or iced is fine — take it with water so you start hydrated.`] },
+          { title: `Plan a mid-run snack — a banana, half a granola bar, or sports drink.`, body: `If you feel hungry past 45 min, that's a real signal Nancy treats as fueling debt. For runs over 60 min, carry one small carb option. You don't need much — the gut just wants the signal that fuel is coming:`, points: [`Half a banana, broken into bites you can chew while running.`, `A quarter of a granola bar tucked in a pocket.`, `8 oz of sports drink — the simplest option and it covers fluid too.`] },
+        ],
       },
     },
   };
@@ -12902,17 +12932,20 @@
     const actions = document.getElementById(uc === 'plan' ? 'xPlanActions' : 'xQaActions');
     if (thread) thread.insertAdjacentHTML('beforeend', `<div class="x-appended"><div class="cs-ask">${labels[i]}</div>${xAnswerBlock(ex, ans)}</div>`);
     if (actions) actions.innerHTML = xChips(uc, labels);
-    // Smooth-scroll to follow the staggered reveal. Anchor multiple times across the
-    // ~1.5s animation timeline so the viewport keeps tracking new content as it appears.
+    // Chat-style reveal: scroll so the user's own ask bubble sits near the top of the
+    // visible area. The answer then animates in BELOW it (title → card → body → footer),
+    // matching how real chat threads read — top-down — instead of bottom-up.
+    // setTimeout (not rAF — rAF gets throttled when the iframe loses focus, e.g. when
+    // hosted inside the preview-stage chrome). Instant scrollTop assignment because
+    // scrollTo({behavior:'smooth'}) silently no-ops on this absolutely-positioned scroller.
+    // The visible "animation" comes from the CSS xReveal stagger on the appended children.
     const scroll = thread && thread.closest('.chat-scroll');
-    if (scroll) {
-      const goBottom = () => {
-        const target = scroll.scrollHeight - scroll.clientHeight;
-        scroll.scrollTo({ top: target, behavior: 'smooth' });
-      };
-      requestAnimationFrame(() => requestAnimationFrame(goBottom));   // wait one layout pass
-      setTimeout(goBottom, 700);                                       // mid-reveal (card lands)
-      setTimeout(goBottom, 1500);                                      // final settle (footer)
+    const newAsk = thread && thread.querySelector('.x-appended:last-child .cs-ask');
+    if (scroll && newAsk) {
+      setTimeout(() => {
+        const askTop = newAsk.getBoundingClientRect().top - scroll.getBoundingClientRect().top + scroll.scrollTop;
+        scroll.scrollTop = Math.max(0, askTop - 24);                   // 24px breathing room at top
+      }, 50);
     }
   }
   window.xFollow = xFollow;
