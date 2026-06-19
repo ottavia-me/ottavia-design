@@ -694,6 +694,11 @@
     height: 129px;
     z-index: 2;
     pointer-events: none;
+    /* Round top corners to match the phone bezel curve — prevents the cream
+       backdrop + blur from bleeding past the bezel at the rounded corners. */
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    overflow: hidden;
   }
   .chat-header .chh-blur { position: absolute; inset: 0; display: block; }
   /* Blur strongest at the TOP edge → 0 at the bottom (content fades as it
@@ -1183,22 +1188,38 @@
   /* Templated expert chat surfaces (all experts): a shorter blur band, sitting
      just above the composer (the masks are percentage-based so the ramp scales). */
   .surface[data-surface="x-plan"] .qa-scrim,
-  .surface[data-surface="x-qa"] .qa-scrim { height: 40px; bottom: 94px; }
+  .surface[data-surface="x-qa"] .qa-scrim,
+  .surface[data-surface="x-challenge"] .qa-scrim { height: 40px; bottom: 94px; }
   /* Frosted composer bar: ~80% transparent cream + a little backdrop blur, so
      content scrolling underneath shows through softly. */
   .surface[data-surface="x-plan"] .composer,
-  .surface[data-surface="x-qa"] .composer {
+  .surface[data-surface="x-qa"] .composer,
+  .surface[data-surface="x-challenge"] .composer {
     background: rgba(245,241,234,0.8);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
   }
+  /* Challenge surface — placeholder card, centered. Content TBD per expert. */
+  .surface[data-surface="x-challenge"] { background: var(--surface-background); }
+  .surface[data-surface="x-challenge"] .chat-scroll-inner {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100%;
+  }
+  .surface[data-surface="x-challenge"] .cs-body { width: 100%; }
+  .xc-placeholder {
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
+    padding: 48px 24px; text-align: center;
+  }
+  .xc-avatar { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; }
+  .xc-title { font-family: 'DM Sans', sans-serif; font-size: 28px; line-height: 1.15; font-weight: 600; color: #302B23; margin: 0; }
+  .xc-sub { font-family: 'DM Sans', sans-serif; font-size: 16px; line-height: 1.4; color: #857C6F; margin: 0; }
 
   /* =====================================================================
      Surface 9 — "Ottavia in a nutshell": the hero / representative screen.
      The essence: your data → ONE confident call + why + the next move.
      Deliberately NOT a dashboard (no metric grid), NOT a chat (no bubbles).
      ===================================================================== */
-  .surface[data-surface="ottavia-nutshell"] { background: var(--surface-background); }
+  .surface[data-surface^="ottavia-nutshell"] { background: var(--surface-background); }
   .nut {
     position: absolute;
     inset: 0;
@@ -1264,8 +1285,8 @@
   .nut-report .t { font-weight: 700; }
   .nut-report .time { font-weight: 500; color: #B89A66; }
   /* Full-bleed progress bar inside the nutshell's 24px padding. */
-  .surface[data-surface="ottavia-nutshell"] .cs-progress { margin: 8px 0 22px; }
-  .surface[data-surface="ottavia-nutshell"] .cs-progress-bar { margin: 0 -24px; }
+  .surface[data-surface^="ottavia-nutshell"] .cs-progress { margin: 8px 0 22px; }
+  .surface[data-surface^="ottavia-nutshell"] .cs-progress-bar { margin: 0 -24px; }
   .nut-headline {
     font-family: var(--font-display);
     font-weight: 700;
@@ -1379,7 +1400,27 @@
      A vertical timeline (Morning / Midday / Evening) of color-coded cards.
      Figma 2004:12665.
      ===================================================================== */
-  .surface[data-surface="plan-today"] { background: var(--surface-background); }
+  .surface[data-surface^="plan-today"] { background: var(--surface-background); }
+
+  /* ---- iOS-style slide-in for plan-today.
+     Always rendered (display:block) so transforms work; off-screen to the left
+     by default; transitions to translateX(0) when .visible is added; sits
+     above other surfaces with a soft left-edge shadow while sliding. ---- */
+  .surface[data-surface="plan-today"],
+  .surface[data-surface="plan-today-mariah"] {
+    display: block;                         /* override default .surface { display: none } */
+    transform: translateX(-100%);
+    transition: transform .38s cubic-bezier(.32, .72, 0, 1);
+    z-index: 50;
+    pointer-events: none;
+    box-shadow: -6px 0 28px rgba(0,0,0,0.10);    /* shadow on the leading edge */
+    will-change: transform;
+  }
+  .surface[data-surface="plan-today"].visible,
+  .surface[data-surface="plan-today-mariah"].visible {
+    transform: translateX(0);
+    pointer-events: auto;
+  }
   .pt {
     position: absolute;
     inset: 0;
@@ -1510,6 +1551,48 @@
     font-size: 15px;
     letter-spacing: -0.1px;
   }
+
+  /* ---- Expert attribution footer — small avatar + name on Ottavia event
+     cards that carry an expert's guidance. Used on .pt-card (nutshell) and
+     .pt-ev (plan-today). Sits as a small footer line at the bottom of the
+     card, separated by a dashed hairline. ---- */
+  .pt-card-attr,
+  .pt-ev-attr {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(0,0,0,0.10);
+    font-family: var(--font-display);
+  }
+  .pt-attr-avatar {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 1.5px rgba(255,255,255,0.65);
+  }
+  .pt-attr-text {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: rgba(67,62,54,0.55);
+  }
+  .pt-attr-text strong {
+    font-weight: 700;
+    color: rgba(67,62,54,0.78);
+  }
+  /* On colored cards the attribution borrows the card's accent for legibility */
+  .pt-card.orange .pt-attr-text { color: rgba(194,134,42,0.70); }
+  .pt-card.orange .pt-attr-text strong { color: #C2862A; }
+  .pt-card.green  .pt-attr-text { color: rgba(74,154,109,0.70); }
+  .pt-card.green  .pt-attr-text strong { color: #2F8F58; }
+  .pt-card.blue   .pt-attr-text { color: rgba(54,103,156,0.70); }
+  .pt-card.blue   .pt-attr-text strong { color: #36679C; }
+  .pt-card.purple .pt-attr-text { color: rgba(89,90,165,0.70); }
+  .pt-card.purple .pt-attr-text strong { color: #585A99; }
+
   /* Color variants — water / activity / nutrition / evening */
   .pt-card.blue   { background: #E5EFFB; border-color: #ABCBEE; }
   .pt-card.blue   .pt-card-title, .pt-card.blue .pt-card-time { color: #36679C; }
@@ -1926,6 +2009,11 @@
     background: var(--surface-background);
     padding: 12px 10px 52px;
     z-index: 5; /* above scrolling chat content */
+    /* Round bottom corners to match the phone bezel curve — prevents the cream
+       composer background from bleeding past the bezel at the rounded corners.
+       Mirror of the .chat-header fix at the top. */
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
   }
   .composer-box {
     position: relative;
@@ -2096,7 +2184,7 @@
   .hub-close-btn:hover { background: #ECE8E0; }
   .hub-close-btn img { width: 24px; height: 24px; display: block; }
 
-  /* Hub close X — single SVG asset (X.svg) at native 44×44.
+  /* Hub close X — single SVG asset (close.svg) at native 44×44.
      Lives INSIDE the sheet so it animates with the sheet slide.
      Position is sheet-relative: top:20 inside the sheet = screen y=79 when sheet is open. */
   .hub-close-x {
@@ -4404,7 +4492,7 @@
     transform: translateY(0);
   }
 
-  /* Header — title + X close (Ottavia X.svg) */
+  /* Header — title + X close (Ottavia close.svg) */
   .me-header {
     position: relative;
     height: 58px;
@@ -5216,7 +5304,7 @@
     width: 19px;
     height: 19px;
     margin-top: 2px;
-    background: url('assets/experts/images/checkmark.png') center/contain no-repeat;
+    background: url('assets/icons/checkmark.png') center/contain no-repeat;
   }
 
   /* Sample preview */
@@ -7266,6 +7354,7 @@
   .x-appended > .x-event-card   { animation: xReveal .42s .80s both ease; }
   .x-appended > .cs-para        { animation: xReveal .42s 1.00s both ease; }
   .x-appended > .cs-list        { animation: xReveal .42s 1.20s both ease; }
+  .x-appended > .cs-msg-footer,
   .x-appended > .cs-foot,
   .x-appended > .cs-icon-row    { animation: xReveal .42s 1.40s both ease; }
 
@@ -7617,6 +7706,59 @@
     justify-content: flex-start; /* pack left so spacing is exact, not stretched */
     gap: 8px;                    /* 8px between last icon and "With Matt" */
   }
+
+  /* ---- Expert attribution card inside chat-baseline / log flows.
+     Carries an expert's specific take on what the user just logged or asked.
+     Olive-tinted background so it visually pairs with Nancy's accent palette. */
+  .cs-expert-attr {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin: 18px 0 8px;
+    padding: 14px 16px;
+    background: #F1EEDA;                       /* soft olive-cream */
+    border: 1px solid rgba(92,122,62,0.20);    /* Nancy accent edge */
+    border-radius: 14px;
+  }
+  .cs-attr-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 2px #fff;
+  }
+  .cs-attr-content {
+    flex: 1;
+    min-width: 0;
+  }
+  .cs-attr-name {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #5C7A3E;                            /* Nancy accent */
+    margin: 2px 0 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .cs-attr-name::after {
+    content: '· sports nutrition';
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+    color: rgba(67,62,54,0.55);
+  }
+  .cs-attr-body {
+    font-family: var(--font-display);
+    font-size: 15px;
+    line-height: 22px;
+    color: #433E36;
+    letter-spacing: -0.18px;
+    margin: 0;
+  }
+  .cs-attr-body strong { font-weight: 700; }
 
   /* Attribution — ChatGPT "Sources" style: flat (no pill), small round avatar
      + just "With Matt". No background, no border, no domain text. */
@@ -8638,7 +8780,7 @@
             </div>
 
             <button class="header-icon-btn" title="Profile">
-              <img src="assets/experts/icons/user-profile-03.svg" alt="" />
+              <img src="assets/icons/user-profile.svg" alt="" />
             </button>
           </div>
 
@@ -8688,7 +8830,7 @@
 
               <!-- User's logged food: photo + "log this" bubble -->
               <div class="cs-log">
-                <img class="cs-log-photo" src="assets/experts/images/meal-steak.jpg" alt="Logged meal" />
+                <img class="cs-log-photo" src="assets/images/meal-steak.jpg" alt="Logged meal" />
                 <div class="cs-ask">log this</div>
               </div>
 
@@ -8707,6 +8849,14 @@
               </ul>
 
               <p class="cs-para">A large protein load from the steak, with veg for fiber and micronutrients — strong fuel for muscle repair on an easy day.</p>
+
+              <div class="cs-expert-attr">
+                <img class="cs-attr-avatar" src="assets/images/nancy.jpg" alt="Nancy Clark" />
+                <div class="cs-attr-content">
+                  <div class="cs-attr-name">Nancy Clark</div>
+                  <p class="cs-attr-body">Solid choice on a recovery day. One tweak: <strong>cap any single sitting around 30–40g</strong> — beyond that, the body just stores rather than uses it. Spread the rest across an afternoon snack and a moderate dinner.</p>
+                </div>
+              </div>
 
               <div class="cs-progress">
                 <div class="cs-progress-label">Protein progress today</div>
@@ -8752,7 +8902,7 @@
           <div class="suggestion-row" id="suggestionRow">
             <div class="suggestion-track">
               <div class="suggestion-pill active">What gets me to 140 g?</div>
-              <div class="suggestion-pill">Suggest a high-protein dinner</div>
+              <div class="suggestion-pill">Nancy's recovery shake idea</div>
               <div class="suggestion-pill">Log an afternoon snack</div>
               <div class="suggestion-pill">Save this meal</div>
             </div>
@@ -8762,21 +8912,484 @@
           <div class="composer">
             <div class="composer-box">
               <div class="composer-circle left" title="More">
-                <img src="assets/experts/icons/more.svg" alt="" />
+                <img src="assets/icons/more.svg" alt="" />
               </div>
               <div class="composer-input-wrap">
                 <div class="composer-input"></div>
                 <div class="composer-mic" title="Voice">
-                  <img src="assets/experts/icons/microphone-01.svg" alt="" />
+                  <img src="assets/icons/microphone.svg" alt="" />
                 </div>
               </div>
               <div class="composer-circle right" title="Camera">
-                <img src="assets/experts/icons/camera.svg" alt="" />
+                <img src="assets/icons/camera.svg" alt="" />
               </div>
             </div>
           </div>
 
           <!-- Home indicator -->
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+
+      <!-- =====================================================================
+           Surface: ARIC-CHAT-BASELINE (Tom). Sleep-log flow instead of food-log.
+           User logs last night's sleep, Ottavia breaks it down with Aric's
+           interpretation and tracks wake-time consistency for the week.
+           ===================================================================== -->
+      <div class="surface" data-surface="aric-chat-baseline">
+        <div class="chat-baseline">
+
+          <div class="chat-header">
+            <span class="chh-blur b1"></span><span class="chh-blur b2"></span><span class="chh-blur b3"></span><div class="chat-header-gradient"></div>
+          </div>
+
+          <div class="chat-header-row">
+            <div class="header-pill date" onclick="window.switchSurface('aric-plan-today')" style="cursor:pointer" title="Wed Jun 25"><span class="day-num">25</span><span class="day-wd">wed</span></div>
+
+            <div class="header-pill ottavia-mode-pill" data-mode-pill title="Switch mode">
+              <span class="label">Ottavia</span>
+              <span class="chevron">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+            </div>
+
+            <button class="header-icon-btn" title="Profile">
+              <img src="assets/icons/user-profile.svg" alt="" />
+            </button>
+          </div>
+
+          <div class="mode-scrim" data-mode-scrim></div>
+
+          <div class="ottavia-mode-menu" data-mode-menu>
+            <div class="mode-option selected" data-mode="ottavia">
+              <div class="check-slot">
+                <svg viewBox="0 0 11.6 9.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 1 L3.44 8.2 L1 5.74"/></svg>
+              </div>
+              <div class="text">
+                <div class="title">Ottavia</div>
+                <div class="sub">Intelligent personalized guidance</div>
+              </div>
+            </div>
+            <div class="mode-option" data-mode="ottavia-experts">
+              <div class="check-slot">
+                <svg viewBox="0 0 11.6 9.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 1 L3.44 8.2 L1 5.74"/></svg>
+              </div>
+              <div class="text">
+                <div class="title">Ottavia + Experts</div>
+                <div class="sub">Deeper domain-specific interpretation</div>
+                <span class="coming-soon">coming soon</span>
+              </div>
+            </div>
+
+            <div class="mode-menu-divider"></div>
+
+            <div class="mode-link" data-mode-link onclick="document.querySelector('.state-chip[data-surface=hub-home]').click()">
+              <span class="title">Experts hub</span>
+              <span class="chevron">
+                <svg viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 1 7 7 1 13"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <div class="chat-scroll" id="chatScroll">
+            <div class="chat-scroll-inner">
+              <!-- User asks Ottavia about last night's sleep. -->
+              <div class="cs-ask">how did I sleep last night?</div>
+
+              <div class="cs-eyebrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.5a4 4 0 0 1-5 5 4 4 0 0 0 5-5z"/></svg>
+                From <a>Sleep & Recovery</a>
+              </div>
+              <h1 class="cs-title">6h 22m, slipped wake time. The shape of the night matters more than the number.</h1>
+              <p class="cs-para">You were in bed for 7h 10m, asleep for 6h 22m. Stages broke down:</p>
+              <ul class="cs-list">
+                <li>· Deep · 1h 14m (within range)</li>
+                <li>· REM · 1h 02m (a touch low)</li>
+                <li>· Light · 4h 06m</li>
+                <li>· Awake during the window · 48m</li>
+              </ul>
+
+              <p class="cs-para">Your wake time was 7:08, about 38 minutes later than your race-week target. That single drift costs more than the 38 minutes — it pushes tonight's sleep onset later too.</p>
+
+              <div class="cs-expert-attr">
+                <img class="cs-attr-avatar" src="assets/images/aric.jpg" alt="Aric Prather" />
+                <div class="cs-attr-content">
+                  <div class="cs-attr-name">Aric Prather</div>
+                  <p class="cs-attr-body">Wake-time consistency is the single most reliable lever for sleep quality. <strong>Hold 6:30 tomorrow even if you're tired</strong> — your sleep system is reading the morning, not the night before.</p>
+                </div>
+              </div>
+
+              <div class="cs-progress">
+                <div class="cs-progress-label">Wake-time consistency this week</div>
+                <div class="cs-progress-bar">
+                  <div class="cs-progress-fill" style="width:62%">
+                    <span class="cs-progress-current">62%</span>
+                  </div>
+                  <span class="cs-progress-target">90% target</span>
+                </div>
+                <div class="cs-progress-delta">Yesterday slipped the average by 12 pts</div>
+              </div>
+
+              <div class="cs-msg-footer">
+                <div class="cs-icon-row">
+                  <button class="cs-icon-btn" title="Copy">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
+                  <button class="cs-icon-btn" title="Save">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.6L5 21V4a1 1 0 0 1 1-1z"/></svg>
+                  </button>
+                  <button class="cs-icon-btn up" title="Helpful">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 22H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h3"/><path d="M7 12l4.2-8.1a2.4 2.4 0 0 1 3 2.2V9h4.6a2 2 0 0 1 2 2.4l-1.3 7A2 2 0 0 1 19.2 20H7z"/></svg>
+                  </button>
+                  <button class="cs-icon-btn down" title="Not helpful">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2h3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-3"/><path d="M17 12l-4.2 8.1a2.4 2.4 0 0 1-3-2.2V15H5.2a2 2 0 0 1-2-2.4l1.3-7A2 2 0 0 1 6.8 4H17z"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="qa-scrim" aria-hidden="true">
+            <span class="b1"></span>
+            <span class="b2"></span>
+            <span class="b3"></span>
+            <span class="tint"></span>
+          </div>
+
+          <div class="suggestion-row">
+            <div class="suggestion-track">
+              <div class="suggestion-pill active">Why does wake time matter?</div>
+              <div class="suggestion-pill">Aric's wind-down checklist</div>
+              <div class="suggestion-pill">Will this affect my race?</div>
+              <div class="suggestion-pill">Log tonight's plan</div>
+            </div>
+          </div>
+
+          <div class="composer">
+            <div class="composer-box">
+              <div class="composer-circle left" title="More">
+                <img src="assets/icons/more.svg" alt="" />
+              </div>
+              <div class="composer-input-wrap">
+                <div class="composer-input"></div>
+                <div class="composer-mic" title="Voice">
+                  <img src="assets/icons/microphone.svg" alt="" />
+                </div>
+              </div>
+              <div class="composer-circle right" title="Camera">
+                <img src="assets/icons/camera.svg" alt="" />
+              </div>
+            </div>
+          </div>
+
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+
+      <!-- =====================================================================
+           Surface: CHAT-BASELINE — Mariah variant. Same structure as Tom's
+           food-log flow, with a different meal and smaller protein target.
+           ===================================================================== -->
+      <div class="surface" data-surface="chat-baseline-mariah">
+        <div class="chat-baseline">
+
+          <div class="chat-header">
+            <span class="chh-blur b1"></span><span class="chh-blur b2"></span><span class="chh-blur b3"></span><div class="chat-header-gradient"></div>
+          </div>
+
+          <div class="chat-header-row">
+            <div class="header-pill date" onclick="window.switchSurface('plan-today-mariah')" style="cursor:pointer" title="Wed Jun 19"><span class="day-num">19</span><span class="day-wd">wed</span></div>
+
+            <div class="header-pill ottavia-mode-pill" data-mode-pill title="Switch mode">
+              <span class="label">Ottavia</span>
+              <span class="chevron">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+            </div>
+
+            <button class="header-icon-btn" title="Profile">
+              <img src="assets/icons/user-profile.svg" alt="" />
+            </button>
+          </div>
+
+          <div class="mode-scrim" data-mode-scrim></div>
+          <div class="ottavia-mode-menu" data-mode-menu>
+            <div class="mode-option selected" data-mode="ottavia">
+              <div class="check-slot">
+                <svg viewBox="0 0 11.6 9.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 1 L3.44 8.2 L1 5.74"/></svg>
+              </div>
+              <div class="text">
+                <div class="title">Ottavia</div>
+                <div class="sub">Intelligent personalized guidance</div>
+              </div>
+            </div>
+            <div class="mode-option" data-mode="ottavia-experts">
+              <div class="check-slot">
+                <svg viewBox="0 0 11.6 9.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 1 L3.44 8.2 L1 5.74"/></svg>
+              </div>
+              <div class="text">
+                <div class="title">Ottavia + Experts</div>
+                <div class="sub">Deeper domain-specific interpretation</div>
+                <span class="coming-soon">coming soon</span>
+              </div>
+            </div>
+            <div class="mode-menu-divider"></div>
+            <div class="mode-link" data-mode-link onclick="document.querySelector('.state-chip[data-surface=hub-home]').click()">
+              <span class="title">Experts hub</span>
+              <span class="chevron">
+                <svg viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 1 7 7 1 13"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <div class="chat-scroll">
+            <div class="chat-scroll-inner">
+              <div class="cs-log">
+                <img class="cs-log-photo" src="assets/images/meal-avocado-toast.jpg" alt="Logged meal" />
+                <div class="cs-ask">log this</div>
+              </div>
+
+              <div class="cs-eyebrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v7a3 3 0 0 0 6 0V3M7 3v18M17 3c-1.5 0-3 1.8-3 5s1 5 3 5m0 0v8"/></svg>
+                Saved in <a>Nutrition</a>
+              </div>
+              <h1 class="cs-title">Avocado toast with egg — logged.</h1>
+              <p class="cs-para">A solid post-run breakfast on a busy morning. Here's what's in it:</p>
+              <ul class="cs-list">
+                <li>· Whole-grain toast · 2 slices</li>
+                <li>· Avocado · ½</li>
+                <li>· Egg · 1, fried</li>
+                <li>· Salt, pepper, chili flakes</li>
+              </ul>
+
+              <p class="cs-para">A nice carb + protein + fat balance after this morning's easy 5k — enough to carry you through to lunch without slowing down for the school run.</p>
+
+              <div class="cs-expert-attr">
+                <img class="cs-attr-avatar" src="assets/images/nancy.jpg" alt="Nancy Clark" />
+                <div class="cs-attr-content">
+                  <div class="cs-attr-name">Nancy Clark</div>
+                  <p class="cs-attr-body">This lands well inside the <strong>60–90 minute recovery window</strong>. The egg + toast covers carbs and protein together — exactly what closes the loop on the run. If lunch slips late, add a piece of fruit at 11 to keep energy steady.</p>
+                </div>
+              </div>
+
+              <div class="cs-progress">
+                <div class="cs-progress-label">Protein progress today</div>
+                <div class="cs-progress-bar">
+                  <div class="cs-progress-fill" style="width:35%">
+                    <span class="cs-progress-current">28 g</span>
+                  </div>
+                  <span class="cs-progress-target">80 g</span>
+                </div>
+                <div class="cs-progress-delta">+12 g from this meal</div>
+              </div>
+
+              <div class="cs-msg-footer">
+                <div class="cs-icon-row">
+                  <button class="cs-icon-btn" title="Copy">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
+                  <button class="cs-icon-btn" title="Save">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.6L5 21V4a1 1 0 0 1 1-1z"/></svg>
+                  </button>
+                  <button class="cs-icon-btn up" title="Helpful">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 22H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h3"/><path d="M7 12l4.2-8.1a2.4 2.4 0 0 1 3 2.2V9h4.6a2 2 0 0 1 2 2.4l-1.3 7A2 2 0 0 1 19.2 20H7z"/></svg>
+                  </button>
+                  <button class="cs-icon-btn down" title="Not helpful">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2h3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-3"/><path d="M17 12l-4.2 8.1a2.4 2.4 0 0 1-3-2.2V15H5.2a2 2 0 0 1-2-2.4l1.3-7A2 2 0 0 1 6.8 4H17z"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="qa-scrim" aria-hidden="true">
+            <span class="b1"></span>
+            <span class="b2"></span>
+            <span class="b3"></span>
+            <span class="tint"></span>
+          </div>
+
+          <div class="suggestion-row">
+            <div class="suggestion-track">
+              <div class="suggestion-pill active">What's an easy dinner?</div>
+              <div class="suggestion-pill">Nancy's quick protein snacks</div>
+              <div class="suggestion-pill">How am I doing this week?</div>
+              <div class="suggestion-pill">Log a snack for the kids' pickup</div>
+            </div>
+          </div>
+
+          <div class="composer">
+            <div class="composer-box">
+              <div class="composer-circle left" title="More">
+                <img src="assets/icons/more.svg" alt="" />
+              </div>
+              <div class="composer-input-wrap">
+                <div class="composer-input"></div>
+                <div class="composer-mic" title="Voice">
+                  <img src="assets/icons/microphone.svg" alt="" />
+                </div>
+              </div>
+              <div class="composer-circle right" title="Camera">
+                <img src="assets/icons/camera.svg" alt="" />
+              </div>
+            </div>
+          </div>
+
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+
+      <!-- =====================================================================
+           Surface: ARIC-CHAT-BASELINE (Mariah). Sleep log conversation: how
+           did I sleep, broken twice by the kids. Aric advice focuses on the
+           hours she DOES get, not the ones she lost.
+           ===================================================================== -->
+      <div class="surface" data-surface="aric-chat-baseline-mariah">
+        <div class="chat-baseline">
+
+          <div class="chat-header">
+            <span class="chh-blur b1"></span><span class="chh-blur b2"></span><span class="chh-blur b3"></span><div class="chat-header-gradient"></div>
+          </div>
+
+          <div class="chat-header-row">
+            <div class="header-pill date" onclick="window.switchSurface('aric-plan-today-mariah')" style="cursor:pointer" title="Wed Jun 25"><span class="day-num">25</span><span class="day-wd">wed</span></div>
+
+            <div class="header-pill ottavia-mode-pill" data-mode-pill title="Switch mode">
+              <span class="label">Ottavia</span>
+              <span class="chevron">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+            </div>
+
+            <button class="header-icon-btn" title="Profile">
+              <img src="assets/icons/user-profile.svg" alt="" />
+            </button>
+          </div>
+
+          <div class="mode-scrim" data-mode-scrim></div>
+
+          <div class="ottavia-mode-menu" data-mode-menu>
+            <div class="mode-option selected" data-mode="ottavia">
+              <div class="check-slot">
+                <svg viewBox="0 0 11.6 9.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 1 L3.44 8.2 L1 5.74"/></svg>
+              </div>
+              <div class="text">
+                <div class="title">Ottavia</div>
+                <div class="sub">Intelligent personalized guidance</div>
+              </div>
+            </div>
+            <div class="mode-option" data-mode="ottavia-experts">
+              <div class="check-slot">
+                <svg viewBox="0 0 11.6 9.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 1 L3.44 8.2 L1 5.74"/></svg>
+              </div>
+              <div class="text">
+                <div class="title">Ottavia + Experts</div>
+                <div class="sub">Deeper domain-specific interpretation</div>
+                <span class="coming-soon">coming soon</span>
+              </div>
+            </div>
+
+            <div class="mode-menu-divider"></div>
+
+            <div class="mode-link" data-mode-link onclick="document.querySelector('.state-chip[data-surface=hub-home]').click()">
+              <span class="title">Experts hub</span>
+              <span class="chevron">
+                <svg viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 1 7 7 1 13"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <div class="chat-scroll" id="chatScroll">
+            <div class="chat-scroll-inner">
+              <!-- User asks Ottavia about last night. -->
+              <div class="cs-ask">how did I sleep last night?</div>
+
+              <div class="cs-eyebrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.5a4 4 0 0 1-5 5 4 4 0 0 0 5-5z"/></svg>
+                From <a>Sleep & Recovery</a>
+              </div>
+              <h1 class="cs-title">5h 50m, broken twice. The hours you got were actually solid.</h1>
+              <p class="cs-para">You were in bed for 7h 40m, asleep for 5h 50m. Stages broke down:</p>
+              <ul class="cs-list">
+                <li>· Deep · 1h 06m (right where you want it)</li>
+                <li>· REM · 58m (slightly low)</li>
+                <li>· Light · 3h 46m</li>
+                <li>· Awake during the window · 1h 50m (two kid wake-ups)</li>
+              </ul>
+
+              <p class="cs-para">Wake-ups aside, the quality of the time you did sleep was fine. The lever isn't more hours, it's protecting the wake time so the hours stay solid.</p>
+
+              <div class="cs-expert-attr">
+                <img class="cs-attr-avatar" src="assets/images/aric.jpg" alt="Aric Prather" />
+                <div class="cs-attr-content">
+                  <div class="cs-attr-name">Aric Prather</div>
+                  <p class="cs-attr-body">Fragmented sleep is solved by consistency, not by lying in. <strong>Hold your 6:15 wake time today</strong>, even after a rough night. The body reads the morning more than the night.</p>
+                </div>
+              </div>
+
+              <div class="cs-progress">
+                <div class="cs-progress-label">Wake-time consistency this week</div>
+                <div class="cs-progress-bar">
+                  <div class="cs-progress-fill" style="width:74%">
+                    <span class="cs-progress-current">74%</span>
+                  </div>
+                  <span class="cs-progress-target">90% target</span>
+                </div>
+                <div class="cs-progress-delta">You've held the wake time 5 of 7 days</div>
+              </div>
+
+              <div class="cs-msg-footer">
+                <div class="cs-icon-row">
+                  <button class="cs-icon-btn" title="Copy">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
+                  <button class="cs-icon-btn" title="Save">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.6L5 21V4a1 1 0 0 1 1-1z"/></svg>
+                  </button>
+                  <button class="cs-icon-btn up" title="Helpful">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 22H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h3"/><path d="M7 12l4.2-8.1a2.4 2.4 0 0 1 3 2.2V9h4.6a2 2 0 0 1 2 2.4l-1.3 7A2 2 0 0 1 19.2 20H7z"/></svg>
+                  </button>
+                  <button class="cs-icon-btn down" title="Not helpful">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2h3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-3"/><path d="M17 12l-4.2 8.1a2.4 2.4 0 0 1-3-2.2V15H5.2a2 2 0 0 1-2-2.4l1.3-7A2 2 0 0 1 6.8 4H17z"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="qa-scrim" aria-hidden="true">
+            <span class="b1"></span>
+            <span class="b2"></span>
+            <span class="b3"></span>
+            <span class="tint"></span>
+          </div>
+
+          <div class="suggestion-row">
+            <div class="suggestion-track">
+              <div class="suggestion-pill active">How do I handle wake-ups?</div>
+              <div class="suggestion-pill">Build a 10-min wind-down</div>
+              <div class="suggestion-pill">Is napping okay?</div>
+              <div class="suggestion-pill">Log tonight's plan</div>
+            </div>
+          </div>
+
+          <div class="composer">
+            <div class="composer-box">
+              <div class="composer-circle left" title="More">
+                <img src="assets/icons/more.svg" alt="" />
+              </div>
+              <div class="composer-input-wrap">
+                <div class="composer-input"></div>
+                <div class="composer-mic" title="Voice">
+                  <img src="assets/icons/microphone.svg" alt="" />
+                </div>
+              </div>
+              <div class="composer-circle right" title="Camera">
+                <img src="assets/icons/camera.svg" alt="" />
+              </div>
+            </div>
+          </div>
+
           <div class="home-indicator"></div>
         </div>
       </div>
@@ -8815,12 +9428,12 @@
             <div class="eh-section">
               <h3 class="eh-section-title">Find your Experts</h3>
               <div class="eh-cats">
-                <div class="eh-cat" style="background-image:url('assets/experts/images/Nutrition%20image.png')"><div class="eh-cat-label">Nutrition</div></div>
-                <div class="eh-cat" style="background-image:url('assets/experts/images/Recovery%20image.png')"><div class="eh-cat-label">Recovery</div></div>
-                <div class="eh-cat" style="background-image:url('assets/experts/images/Activities%20image.png')"><div class="eh-cat-label">Activities</div></div>
-                <div class="eh-cat" style="background-image:url('assets/experts/images/Endurance%20image.png')"><div class="eh-cat-label">Endurance</div></div>
-                <div class="eh-cat" style="background-image:url('assets/experts/images/Mobility%20image.png')"><div class="eh-cat-label">Mobility &amp; movement</div></div>
-                <div class="eh-cat" style="background-image:url('assets/experts/images/Women%27s%20health%20image.png')"><div class="eh-cat-label">Women health</div></div>
+                <div class="eh-cat" style="background-image:url('assets/images/category-nutrition-large.png')"><div class="eh-cat-label">Nutrition</div></div>
+                <div class="eh-cat" style="background-image:url('assets/images/category-recovery-large.png')"><div class="eh-cat-label">Recovery</div></div>
+                <div class="eh-cat" style="background-image:url('assets/images/category-activities-large.png')"><div class="eh-cat-label">Activities</div></div>
+                <div class="eh-cat" style="background-image:url('assets/images/category-endurance-large.png')"><div class="eh-cat-label">Endurance</div></div>
+                <div class="eh-cat" style="background-image:url('assets/images/category-mobility-large.png')"><div class="eh-cat-label">Mobility &amp; movement</div></div>
+                <div class="eh-cat" style="background-image:url('assets/images/category-women-large.png')"><div class="eh-cat-label">Women health</div></div>
               </div>
             </div>
 
@@ -8830,7 +9443,7 @@
               <h3 class="eh-section-title">Experts for you</h3>
               <div class="eh-list">
                 <div class="eh-expert" onclick="window.switchSurface('expert-profile-v3')">
-                  <img class="eh-expert-avatar crop-top" src="assets/experts/images/portraits/matt-fitzgerald.jpg" alt="Matt Fitzgerald" />
+                  <img class="eh-expert-avatar crop-top" src="assets/images/matt-fitzgerald.jpg" alt="Matt Fitzgerald" />
                   <div class="eh-expert-text">
                     <div class="eh-expert-name">Matt Fitzgerald</div>
                     <div class="eh-expert-domain">Endurance Coach &amp; Author</div>
@@ -8841,7 +9454,7 @@
                 </div>
 
                 <div class="eh-expert" onclick="window.switchSurface('expert-profile-v3')">
-                  <img class="eh-expert-avatar crop-top" src="assets/experts/images/portraits/kylee-vanhorn.jpg" alt="Kylee Van Horn" />
+                  <img class="eh-expert-avatar crop-top" src="assets/images/kylee-vanhorn.jpg" alt="Kylee Van Horn" />
                   <div class="eh-expert-text">
                     <div class="eh-expert-name">Kylee Van Horn</div>
                     <div class="eh-expert-domain">Endurance Sports Dietitian (RDN)</div>
@@ -8852,7 +9465,7 @@
                 </div>
 
                 <div class="eh-expert" onclick="window.switchSurface('expert-profile-v3')">
-                  <img class="eh-expert-avatar crop-top" src="assets/experts/images/portraits/stephen-seiler.jpg" alt="Stephen Seiler" />
+                  <img class="eh-expert-avatar crop-top" src="assets/images/stephen-seiler.jpg" alt="Stephen Seiler" />
                   <div class="eh-expert-text">
                     <div class="eh-expert-name">Stephen Seiler</div>
                     <div class="eh-expert-domain">Endurance Science · 80/20 research</div>
@@ -8863,7 +9476,7 @@
                 </div>
 
                 <div class="eh-expert" onclick="window.switchSurface('expert-profile-v3')">
-                  <!-- TODO: drop assets/experts/images/portraits/asker-jeukendrup.jpg
+                  <!-- TODO: drop assets/images/asker-jeukendrup.jpg
                        and replace this div with <img class="eh-expert-avatar" ...> -->
                   <div class="eh-expert-avatar initials" aria-label="Asker Jeukendrup">AJ</div>
                   <div class="eh-expert-text">
@@ -8892,7 +9505,7 @@
         <div class="hub-stage">
 
           <!-- Status bar -->
-          <img class="status-bar-img" src="assets/experts/images/status-bar.png" alt="" />
+          <img class="status-bar-img" src="assets/images/status-bar.png" alt="" />
 
           <!-- Dim backdrop over chat behind sheet -->
           <div class="hub-dim"></div>
@@ -8909,7 +9522,7 @@
                 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
               </button>
               <button class="hub-close-x" onclick="document.querySelector('.state-chip[data-surface=chat-baseline]').click()" title="Close Experts Hub">
-                <img src="assets/experts/icons/X.svg" alt="" />
+                <img src="assets/icons/close.svg" alt="" />
               </button>
             </div>
 
@@ -8928,7 +9541,7 @@
               <div class="hub-hero-row">
                 <div class="hub-hero-track">
                   <div class="hub-hero-card">
-                    <img class="bg" src="assets/experts/images/Rectangle%202815.png" alt="" />
+                    <img class="bg" src="assets/images/hub-card-background.png" alt="" />
                     <div class="overlay"></div>
                     <div class="name-pill">Faye James</div>
                   </div>
@@ -8938,7 +9551,7 @@
               <!-- Recommended for you section -->
               <div class="hub-section">
                 <h2>Recommended for you</h2>
-                <img class="chevron" src="assets/experts/icons/chevron-right.svg" alt="" />
+                <img class="chevron" src="assets/icons/chevron-right.svg" alt="" />
               </div>
 
               <!-- Grid: data-driven from HUB_DATA below.
@@ -8957,7 +9570,7 @@
       <!-- ===== Surface: Hub · V2 — Neutral 20 bg + pill-style tabs ===== -->
       <div class="surface" data-surface="hub-home-v2">
         <div class="hub-stage">
-          <img class="status-bar-img" src="assets/experts/images/status-bar.png" alt="" />
+          <img class="status-bar-img" src="assets/images/status-bar.png" alt="" />
           <div class="hub-dim"></div>
 
           <div class="hub-sheet">
@@ -8965,7 +9578,7 @@
               <h1 class="hub-title">Experts hub</h1>
               <span class="hub-beta">BETA</span>
               <button class="hub-close-x" onclick="document.querySelector('.state-chip[data-surface=chat-baseline]').click()" title="Close Experts Hub">
-                <img src="assets/experts/icons/X.svg" alt="" />
+                <img src="assets/icons/close.svg" alt="" />
               </button>
             </div>
 
@@ -8981,7 +9594,7 @@
               <div class="hub-hero-row">
                 <div class="hub-hero-track">
                   <div class="hub-hero-card">
-                    <img class="bg" src="assets/experts/images/Rectangle%202815.png" alt="" />
+                    <img class="bg" src="assets/images/hub-card-background.png" alt="" />
                     <div class="overlay"></div>
                     <div class="name-pill">Faye James</div>
                   </div>
@@ -8990,7 +9603,7 @@
 
               <div class="hub-section">
                 <h2>Recommended for you</h2>
-                <img class="chevron" src="assets/experts/icons/chevron-right.svg" alt="" />
+                <img class="chevron" src="assets/icons/chevron-right.svg" alt="" />
               </div>
 
               <div class="hub-grid" id="hubGridV2"></div>
@@ -9004,14 +9617,14 @@
       <!-- ===== Surface: Hub · V3 — Library Browse (Apple Books pattern) ===== -->
       <div class="surface" data-surface="hub-home-v3">
         <div class="hub-stage">
-          <img class="status-bar-img" src="assets/experts/images/status-bar.png" alt="" />
+          <img class="status-bar-img" src="assets/images/status-bar.png" alt="" />
           <div class="hub-dim"></div>
           <div class="hub-sheet">
             <div class="hub-header">
               <h1 class="hub-title">Experts hub</h1>
               <span class="hub-beta">BETA</span>
               <button class="hub-close-x" onclick="document.querySelector('.state-chip[data-surface=chat-baseline]').click()" title="Close">
-                <img src="assets/experts/icons/X.svg" alt="" />
+                <img src="assets/icons/close.svg" alt="" />
               </button>
             </div>
             <!-- V3 internal library nav -->
@@ -9027,7 +9640,7 @@
               <div class="hub-hero-row">
                 <div class="hub-hero-track">
                   <div class="hub-hero-card">
-                    <img class="bg" src="assets/experts/images/Rectangle%202815.png" alt="" />
+                    <img class="bg" src="assets/images/hub-card-background.png" alt="" />
                     <div class="overlay"></div>
                     <div class="name-pill">Faye James</div>
                   </div>
@@ -9037,7 +9650,7 @@
               <!-- Recommended for you (existing grid pattern) -->
               <div class="hub-section">
                 <h2>Recommended for you</h2>
-                <img class="chevron" src="assets/experts/icons/chevron-right.svg" alt="" />
+                <img class="chevron" src="assets/icons/chevron-right.svg" alt="" />
               </div>
               <div class="hub-grid"></div>
 
@@ -9065,7 +9678,7 @@
                 <div class="v3-h-scroll">
                   <div class="v3-content-card">
                     <div class="v3-content-card-header">
-                      <div class="v3-content-card-portrait"><img src="assets/experts/images/Rectangle%202538.png" alt="" /></div>
+                      <div class="v3-content-card-portrait"><img src="assets/images/hub-content-card.png" alt="" /></div>
                       <div class="v3-content-card-meta">
                         <span class="v3-content-card-author">Matthew Walker</span>
                         <span class="v3-content-card-type">🎙 New episode</span>
@@ -9075,7 +9688,7 @@
                   </div>
                   <div class="v3-content-card">
                     <div class="v3-content-card-header">
-                      <div class="v3-content-card-portrait"><img src="assets/experts/images/Rectangle%202815.png" alt="" /></div>
+                      <div class="v3-content-card-portrait"><img src="assets/images/hub-card-background.png" alt="" /></div>
                       <div class="v3-content-card-meta">
                         <span class="v3-content-card-author">Faye James</span>
                         <span class="v3-content-card-type">📰 New article</span>
@@ -9085,7 +9698,7 @@
                   </div>
                   <div class="v3-content-card">
                     <div class="v3-content-card-header">
-                      <div class="v3-content-card-portrait"><img src="assets/experts/images/good-to-go.png" alt="" /></div>
+                      <div class="v3-content-card-portrait"><img src="assets/images/good-to-go.png" alt="" /></div>
                       <div class="v3-content-card-meta">
                         <span class="v3-content-card-author">Christie Aschwanden</span>
                         <span class="v3-content-card-type">📰 New article</span>
@@ -9105,25 +9718,25 @@
                 <div class="v3-h-scroll">
                   <div class="v3-bundle-card">
                     <div class="v3-bundle-portraits">
-                      <img src="assets/experts/images/run-fast-eat-slow.png" alt="" />
-                      <img src="assets/experts/images/80-20-running.png" alt="" />
-                      <img src="assets/experts/images/good-to-go.png" alt="" />
+                      <img src="assets/images/run-fast-eat-slow.png" alt="" />
+                      <img src="assets/images/80-20-running.png" alt="" />
+                      <img src="assets/images/good-to-go.png" alt="" />
                     </div>
                     <div class="v3-bundle-title">Endurance reset</div>
                     <div class="v3-bundle-meta">3 Experts · diet, training, recovery</div>
                   </div>
                   <div class="v3-bundle-card">
                     <div class="v3-bundle-portraits">
-                      <img src="assets/experts/images/Rectangle%202815.png" alt="" />
-                      <img src="assets/experts/images/galveston-diet.png" alt="" />
-                      <img src="assets/experts/images/image%2010.png" alt="" />
+                      <img src="assets/images/hub-card-background.png" alt="" />
+                      <img src="assets/images/galveston-diet.png" alt="" />
+                      <img src="assets/images/hub-portrait-trio.png" alt="" />
                     </div>
                     <div class="v3-bundle-title">Perimenopause toolkit</div>
                     <div class="v3-bundle-meta">3 Experts · diet, hormones, body</div>
                   </div>
                   <div class="v3-bundle-card">
                     <div class="v3-bundle-portraits">
-                      <img src="assets/experts/images/Rectangle%202538.png" alt="" />
+                      <img src="assets/images/hub-content-card.png" alt="" />
                     </div>
                     <div class="v3-bundle-title">Sleep deep dive</div>
                     <div class="v3-bundle-meta">Matthew Walker · 7-day program</div>
@@ -9148,7 +9761,7 @@
                     </div>
                     <div class="v3-habit-bottom">
                       <div class="v3-habit-by">
-                        <div class="v3-habit-by-avatar"><img src="assets/experts/images/Rectangle%202539.png" alt="" /></div>
+                        <div class="v3-habit-by-avatar"><img src="assets/images/hub-expert-avatar-1.png" alt="" /></div>
                         <span>With Anthony William</span>
                       </div>
                       <div class="v3-habit-progress"><div class="v3-habit-progress-fill" style="width: 18%"></div></div>
@@ -9193,7 +9806,7 @@
                     </div>
                     <div class="v3-habit-bottom">
                       <div class="v3-habit-by">
-                        <div class="v3-habit-by-avatar"><img src="assets/experts/images/Rectangle%202538.png" alt="" /></div>
+                        <div class="v3-habit-by-avatar"><img src="assets/images/hub-content-card.png" alt="" /></div>
                         <span>With Matthew Walker</span>
                       </div>
                       <div class="v3-habit-progress"><div class="v3-habit-progress-fill" style="width: 57%"></div></div>
@@ -9210,7 +9823,7 @@
                     </div>
                     <div class="v3-habit-bottom">
                       <div class="v3-habit-by">
-                        <div class="v3-habit-by-avatar"><img src="assets/experts/images/run-fast-eat-slow.png" alt="" /></div>
+                        <div class="v3-habit-by-avatar"><img src="assets/images/run-fast-eat-slow.png" alt="" /></div>
                         <span>With Shalane Flanagan</span>
                       </div>
                       <div class="v3-habit-progress"><div class="v3-habit-progress-fill" style="width: 14%"></div></div>
@@ -9299,7 +9912,7 @@
                     </div>
                   </div>
                   <div class="v3-b-plan-footer">
-                    <div class="v3-b-plan-portrait"><img src="assets/experts/images/Rectangle%202815.png" alt="" /></div>
+                    <div class="v3-b-plan-portrait"><img src="assets/images/hub-card-background.png" alt="" /></div>
                     <p class="v3-b-plan-author">Faye James <span>· Perimenopause Nutrition</span></p>
                   </div>
                 </div>
@@ -9317,7 +9930,7 @@
                   <p class="v3-b-habit-feature-sub">16oz on an empty stomach. One habit, every day for 28 days. Track your check-ins, see how your energy shifts.</p>
                   <div class="v3-b-habit-feature-bottom">
                     <div class="v3-b-habit-feature-expert">
-                      <div class="v3-b-habit-feature-expert-avatar"><img src="assets/experts/images/Rectangle%202539.png" alt="" /></div>
+                      <div class="v3-b-habit-feature-expert-avatar"><img src="assets/images/hub-expert-avatar-1.png" alt="" /></div>
                       <span>Curated by Anthony William</span>
                     </div>
                     <button class="v3-b-habit-feature-cta">Continue today</button>
@@ -9330,7 +9943,7 @@
                 <div class="v3-b-pair">
                   <div class="v3-pair-top">
                     <div class="v3-pair-side">
-                      <img class="bg" src="assets/experts/images/Rectangle%202538.png" alt="" />
+                      <img class="bg" src="assets/images/hub-content-card.png" alt="" />
                       <div class="gradient"></div>
                       <div class="content">
                         <p class="v3-pair-side-name">Matthew Walker</p>
@@ -9338,7 +9951,7 @@
                       </div>
                     </div>
                     <div class="v3-pair-side">
-                      <img class="bg" src="assets/experts/images/good-to-go.png" alt="" />
+                      <img class="bg" src="assets/images/good-to-go.png" alt="" />
                       <div class="gradient"></div>
                       <div class="content">
                         <p class="v3-pair-side-name">Christie Aschwanden</p>
@@ -9358,9 +9971,9 @@
               <div class="v3-bundle-card-full">
                 <div class="v3-b-trio">
                   <div class="v3-trio-portraits">
-                    <div class="v3-trio-portrait"><img src="assets/experts/images/Rectangle%202815.png" alt="" /></div>
-                    <div class="v3-trio-portrait"><img src="assets/experts/images/galveston-diet.png" alt="" /></div>
-                    <div class="v3-trio-portrait"><img src="assets/experts/images/image%2010.png" alt="" /></div>
+                    <div class="v3-trio-portrait"><img src="assets/images/hub-card-background.png" alt="" /></div>
+                    <div class="v3-trio-portrait"><img src="assets/images/galveston-diet.png" alt="" /></div>
+                    <div class="v3-trio-portrait"><img src="assets/images/hub-portrait-trio.png" alt="" /></div>
                   </div>
                   <p class="v3-b-trio-eyebrow">Trio · Hormones &amp; cycle</p>
                   <h4 class="v3-b-trio-title">Women's wellness trio</h4>
@@ -9377,8 +9990,8 @@
                     <h4 class="v3-b-photo-title">Reset at the lake</h4>
                     <div class="v3-b-photo-meta">
                       <div class="v3-b-photo-meta-avatars">
-                        <img src="assets/experts/images/Rectangle%202538.png" alt="" />
-                        <img src="assets/experts/images/good-to-go.png" alt="" />
+                        <img src="assets/images/hub-content-card.png" alt="" />
+                        <img src="assets/images/good-to-go.png" alt="" />
                       </div>
                       <span>2 Experts · 2-day program</span>
                     </div>
@@ -9394,9 +10007,9 @@
                   <p class="v3-b-outcome-sub">Backed by clinical sleep science. If your HRV doesn't improve, we'll extend free.</p>
                   <div class="v3-b-outcome-experts">
                     <div class="v3-b-outcome-experts-avatars">
-                      <img src="assets/experts/images/Rectangle%202538.png" alt="" />
-                      <img src="assets/experts/images/good-to-go.png" alt="" />
-                      <img src="assets/experts/images/image%2012.png" alt="" />
+                      <img src="assets/images/hub-content-card.png" alt="" />
+                      <img src="assets/images/good-to-go.png" alt="" />
+                      <img src="assets/images/hub-portrait-row.png" alt="" />
                     </div>
                     <span class="v3-b-outcome-experts-meta">Matthew · Christie · Kelly</span>
                   </div>
@@ -9413,14 +10026,14 @@
       <!-- ===== Surface: Hub · V4 — Daily Journey (Calm Morning Routine pattern) ===== -->
       <div class="surface" data-surface="hub-home-v4">
         <div class="hub-stage">
-          <img class="status-bar-img" src="assets/experts/images/status-bar.png" alt="" />
+          <img class="status-bar-img" src="assets/images/status-bar.png" alt="" />
           <div class="hub-dim"></div>
           <div class="hub-sheet">
             <div class="hub-header">
               <h1 class="hub-title">Experts hub</h1>
               <span class="hub-beta">BETA</span>
               <button class="hub-close-x" onclick="document.querySelector('.state-chip[data-surface=chat-baseline]').click()" title="Close">
-                <img src="assets/experts/icons/X.svg" alt="" />
+                <img src="assets/icons/close.svg" alt="" />
               </button>
             </div>
             <div class="hub-tabs"></div>
@@ -9428,7 +10041,7 @@
               <!-- Today with your Expert -->
               <div class="v4-today">
                 <div class="v4-today-header">
-                  <div class="v4-today-portrait"><img src="assets/experts/images/Rectangle%202538.png" alt="" /></div>
+                  <div class="v4-today-portrait"><img src="assets/images/hub-content-card.png" alt="" /></div>
                   <div>
                     <p class="v4-today-eyebrow">Today with</p>
                     <h3 class="v4-today-name">Matthew Walker</h3>
@@ -9486,17 +10099,17 @@
                 <div class="v3-h-scroll">
                   <div class="v3-bundle-card">
                     <div class="v3-bundle-portraits">
-                      <img src="assets/experts/images/run-fast-eat-slow.png" alt="" />
-                      <img src="assets/experts/images/80-20-running.png" alt="" />
-                      <img src="assets/experts/images/good-to-go.png" alt="" />
+                      <img src="assets/images/run-fast-eat-slow.png" alt="" />
+                      <img src="assets/images/80-20-running.png" alt="" />
+                      <img src="assets/images/good-to-go.png" alt="" />
                     </div>
                     <div class="v3-bundle-title">30-day endurance reset</div>
                     <div class="v3-bundle-meta">3 Experts · daily protocol</div>
                   </div>
                   <div class="v3-bundle-card">
                     <div class="v3-bundle-portraits">
-                      <img src="assets/experts/images/Rectangle%202815.png" alt="" />
-                      <img src="assets/experts/images/galveston-diet.png" alt="" />
+                      <img src="assets/images/hub-card-background.png" alt="" />
+                      <img src="assets/images/galveston-diet.png" alt="" />
                     </div>
                     <div class="v3-bundle-title">21-day hormone reset</div>
                     <div class="v3-bundle-meta">2 Experts · meals + cycle data</div>
@@ -9513,7 +10126,7 @@
       <!-- ===== Surface: Hub · V5 — Cinematic Spotlight (Calm Wonder pattern) ===== -->
       <div class="surface" data-surface="hub-home-v5">
         <div class="hub-stage">
-          <img class="status-bar-img" src="assets/experts/images/status-bar.png" alt="" />
+          <img class="status-bar-img" src="assets/images/status-bar.png" alt="" />
           <div class="hub-dim"></div>
           <div class="hub-sheet">
             <div class="hub-header">
@@ -9523,14 +10136,14 @@
                 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
               </button>
               <button class="hub-close-x" onclick="document.querySelector('.state-chip[data-surface=chat-baseline]').click()" title="Close">
-                <img src="assets/experts/icons/X.svg" alt="" />
+                <img src="assets/icons/close.svg" alt="" />
               </button>
             </div>
             <div class="hub-tabs"></div>
             <div class="hub-scroll" style="overflow-x: hidden;">
               <!-- Cinematic hero with photo -->
               <div class="v5-hero">
-                <img class="v5-hero-img" src="assets/experts/images/Rectangle%202815.png" alt="" />
+                <img class="v5-hero-img" src="assets/images/hub-card-background.png" alt="" />
                 <div class="v5-hero-overlay"></div>
                 <div class="v5-hero-content">
                   <p class="v5-hero-eyebrow">This week's spotlight</p>
@@ -9548,7 +10161,7 @@
 
               <!-- Flagship work -->
               <div class="v5-flagship">
-                <div class="v5-flagship-cover"><img src="assets/experts/images/Rectangle%202815.png" alt="" /></div>
+                <div class="v5-flagship-cover"><img src="assets/images/hub-card-background.png" alt="" /></div>
                 <div class="v5-flagship-text">
                   <p class="v5-flagship-kicker">Her flagship work</p>
                   <h3 class="v5-flagship-title">The Perimenopause Plan</h3>
@@ -9566,21 +10179,21 @@
                 <h3>Or explore other Experts</h3>
                 <div class="v5-others-list">
                   <div class="v5-other-row">
-                    <div class="v5-other-portrait"><img src="assets/experts/images/Rectangle%202538.png" alt="" /></div>
+                    <div class="v5-other-portrait"><img src="assets/images/hub-content-card.png" alt="" /></div>
                     <div class="v5-other-text">
                       <p class="v5-other-name">Matthew Walker</p>
                       <p class="v5-other-domain">Sleep · 1 book, 64 episodes</p>
                     </div>
                   </div>
                   <div class="v5-other-row">
-                    <div class="v5-other-portrait"><img src="assets/experts/images/Rectangle%202539.png" alt="" /></div>
+                    <div class="v5-other-portrait"><img src="assets/images/hub-expert-avatar-1.png" alt="" /></div>
                     <div class="v5-other-text">
                       <p class="v5-other-name">Anthony William</p>
                       <p class="v5-other-domain">Nutrition · 3 books</p>
                     </div>
                   </div>
                   <div class="v5-other-row">
-                    <div class="v5-other-portrait"><img src="assets/experts/images/good-to-go.png" alt="" /></div>
+                    <div class="v5-other-portrait"><img src="assets/images/good-to-go.png" alt="" /></div>
                     <div class="v5-other-text">
                       <p class="v5-other-name">Christie Aschwanden</p>
                       <p class="v5-other-domain">Recovery · 1 book, 12 articles</p>
@@ -9599,14 +10212,14 @@
       <!-- ===== Surface: Hub · V6 — Expert Rows (rich Expert+books showcase) ===== -->
       <div class="surface" data-surface="hub-home-v6">
         <div class="hub-stage">
-          <img class="status-bar-img" src="assets/experts/images/status-bar.png" alt="" />
+          <img class="status-bar-img" src="assets/images/status-bar.png" alt="" />
           <div class="hub-dim"></div>
           <div class="hub-sheet">
             <div class="hub-header">
               <h1 class="hub-title">Experts hub</h1>
               <span class="hub-beta">BETA</span>
               <button class="hub-close-x" onclick="document.querySelector('.state-chip[data-surface=chat-baseline]').click()" title="Close">
-                <img src="assets/experts/icons/X.svg" alt="" />
+                <img src="assets/icons/close.svg" alt="" />
               </button>
             </div>
             <div class="hub-tabs"></div>
@@ -9631,7 +10244,7 @@
               <!-- Matthew Walker row -->
               <div class="v6-expert-row">
                 <div class="v6-row-header">
-                  <div class="v6-row-portrait"><img src="assets/experts/images/Rectangle%202538.png" alt="" /></div>
+                  <div class="v6-row-portrait"><img src="assets/images/hub-content-card.png" alt="" /></div>
                   <div class="v6-row-meta">
                     <p class="v6-row-name">Matthew Walker</p>
                     <p class="v6-row-domain">Sleep · 1 book · 64 episodes · 12 articles</p>
@@ -9642,7 +10255,7 @@
                   <div class="v6-work">
                     <div class="v6-work-cover">
                       <span class="v6-work-type">Book</span>
-                      <img src="assets/experts/images/why-we-sleep.png" alt="" />
+                      <img src="assets/images/why-we-sleep.png" alt="" />
                     </div>
                     <div class="v6-work-title">Why We Sleep</div>
                     <div class="v6-work-meta">Bestseller · 360 pages</div>
@@ -9677,7 +10290,7 @@
               <!-- Faye James row -->
               <div class="v6-expert-row">
                 <div class="v6-row-header">
-                  <div class="v6-row-portrait"><img src="assets/experts/images/Rectangle%202815.png" alt="" /></div>
+                  <div class="v6-row-portrait"><img src="assets/images/hub-card-background.png" alt="" /></div>
                   <div class="v6-row-meta">
                     <p class="v6-row-name">Faye James</p>
                     <p class="v6-row-domain">Perimenopause · 1 book · 24 recipes · 18 articles</p>
@@ -9688,7 +10301,7 @@
                   <div class="v6-work">
                     <div class="v6-work-cover">
                       <span class="v6-work-type">Book</span>
-                      <img src="assets/experts/images/Rectangle%202815.png" alt="" />
+                      <img src="assets/images/hub-card-background.png" alt="" />
                     </div>
                     <div class="v6-work-title">The Perimenopause Plan</div>
                     <div class="v6-work-meta">75 recipes · 320 pages</div>
@@ -9715,7 +10328,7 @@
               <!-- Christie Aschwanden row -->
               <div class="v6-expert-row">
                 <div class="v6-row-header">
-                  <div class="v6-row-portrait"><img src="assets/experts/images/good-to-go.png" alt="" /></div>
+                  <div class="v6-row-portrait"><img src="assets/images/good-to-go.png" alt="" /></div>
                   <div class="v6-row-meta">
                     <p class="v6-row-name">Christie Aschwanden</p>
                     <p class="v6-row-domain">Recovery science · 1 book · 9 articles</p>
@@ -9726,7 +10339,7 @@
                   <div class="v6-work">
                     <div class="v6-work-cover">
                       <span class="v6-work-type">Book</span>
-                      <img src="assets/experts/images/good-to-go.png" alt="" />
+                      <img src="assets/images/good-to-go.png" alt="" />
                     </div>
                     <div class="v6-work-title">Good to Go</div>
                     <div class="v6-work-meta">Recovery science · 288 pages</div>
@@ -9745,7 +10358,7 @@
               <!-- Kelly Starrett row -->
               <div class="v6-expert-row">
                 <div class="v6-row-header">
-                  <div class="v6-row-portrait"><img src="assets/experts/images/image%2012.png" alt="" /></div>
+                  <div class="v6-row-portrait"><img src="assets/images/hub-portrait-row.png" alt="" /></div>
                   <div class="v6-row-meta">
                     <p class="v6-row-name">Kelly Starrett</p>
                     <p class="v6-row-domain">Movement · 1 book · 14 articles · 6 protocols</p>
@@ -9756,7 +10369,7 @@
                   <div class="v6-work">
                     <div class="v6-work-cover">
                       <span class="v6-work-type">Book</span>
-                      <img src="assets/experts/images/image%2012.png" alt="" />
+                      <img src="assets/images/hub-portrait-row.png" alt="" />
                     </div>
                     <div class="v6-work-title">Built to Move</div>
                     <div class="v6-work-meta">10 essential habits · 320 pages</div>
@@ -9783,7 +10396,7 @@
               <!-- Shalane Flanagan row -->
               <div class="v6-expert-row">
                 <div class="v6-row-header">
-                  <div class="v6-row-portrait"><img src="assets/experts/images/run-fast-eat-slow.png" alt="" /></div>
+                  <div class="v6-row-portrait"><img src="assets/images/run-fast-eat-slow.png" alt="" /></div>
                   <div class="v6-row-meta">
                     <p class="v6-row-name">Shalane Flanagan</p>
                     <p class="v6-row-domain">Running nutrition · 1 book · 32 recipes</p>
@@ -9794,7 +10407,7 @@
                   <div class="v6-work">
                     <div class="v6-work-cover">
                       <span class="v6-work-type">Book</span>
-                      <img src="assets/experts/images/run-fast-eat-slow.png" alt="" />
+                      <img src="assets/images/run-fast-eat-slow.png" alt="" />
                     </div>
                     <div class="v6-work-title">Run Fast Eat Slow</div>
                     <div class="v6-work-meta">Cookbook · 256 pages</div>
@@ -9820,7 +10433,7 @@
       <!-- ===== Surface: Hub · V7 — Smart Contextual (time + interests aware) ===== -->
       <div class="surface" data-surface="hub-home-v7">
         <div class="hub-stage">
-          <img class="status-bar-img" src="assets/experts/images/status-bar.png" alt="" />
+          <img class="status-bar-img" src="assets/images/status-bar.png" alt="" />
           <div class="hub-dim"></div>
           <div class="hub-sheet">
             <div class="hub-header">
@@ -9830,7 +10443,7 @@
                 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
               </button>
               <button class="hub-close-x" onclick="document.querySelector('.state-chip[data-surface=chat-baseline]').click()" title="Close">
-                <img src="assets/experts/icons/X.svg" alt="" />
+                <img src="assets/icons/close.svg" alt="" />
               </button>
             </div>
             <div class="hub-tabs"></div>
@@ -9876,7 +10489,7 @@
                   <div class="v6-work">
                     <div class="v6-work-cover">
                       <span class="v6-work-type">Book</span>
-                      <img src="assets/experts/images/why-we-sleep.png" alt="" />
+                      <img src="assets/images/why-we-sleep.png" alt="" />
                     </div>
                     <div class="v6-work-title">Why We Sleep</div>
                     <div class="v6-work-meta">Bestseller · 360 pages</div>
@@ -9910,7 +10523,7 @@
                   <div class="v6-work">
                     <div class="v6-work-cover">
                       <span class="v6-work-type">Book</span>
-                      <img src="assets/experts/images/good-to-go.png" alt="" />
+                      <img src="assets/images/good-to-go.png" alt="" />
                     </div>
                     <div class="v6-work-title">Good to Go</div>
                     <div class="v6-work-meta">Christie Aschwanden</div>
@@ -9918,7 +10531,7 @@
                   <div class="v6-work">
                     <div class="v6-work-cover">
                       <span class="v6-work-type">Book</span>
-                      <img src="assets/experts/images/image%2012.png" alt="" />
+                      <img src="assets/images/hub-portrait-row.png" alt="" />
                     </div>
                     <div class="v6-work-title">Built to Move</div>
                     <div class="v6-work-meta">Kelly Starrett</div>
@@ -9995,7 +10608,7 @@
       <!-- ===== Surface: Hub · V8 — Portrait + Books Fan ===== -->
       <div class="surface" data-surface="hub-home-v8">
         <div class="hub-stage">
-          <img class="status-bar-img" src="assets/experts/images/status-bar.png" alt="" />
+          <img class="status-bar-img" src="assets/images/status-bar.png" alt="" />
           <div class="hub-dim"></div>
           <div class="hub-sheet">
             <div class="hub-header">
@@ -10005,7 +10618,7 @@
                 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
               </button>
               <button class="hub-close-x" onclick="document.querySelector('.state-chip[data-surface=chat-baseline]').click()" title="Close">
-                <img src="assets/experts/icons/X.svg" alt="" />
+                <img src="assets/icons/close.svg" alt="" />
               </button>
             </div>
             <div class="hub-tabs"></div>
@@ -10029,31 +10642,31 @@
 
                 <!-- Anthony William — 4 books fan -->
                 <div class="v8-tile" onclick="document.querySelector('.state-chip[data-surface=expert-profile]').click()">
-                  <img class="v8-tile-portrait" src="assets/experts/images/Rectangle%202539.png" alt="" />
-                  <img class="v8-tile-portrait" src="assets/experts/images/Rectangle%202540.png" alt="" />
+                  <img class="v8-tile-portrait" src="assets/images/hub-expert-avatar-1.png" alt="" />
+                  <img class="v8-tile-portrait" src="assets/images/hub-expert-avatar-2.png" alt="" />
                   <div class="v8-tile-gradient"></div>
                   <div class="v8-tile-meta">
                     <p class="v8-tile-name">Anthony William</p>
                     <p class="v8-tile-domain">Medical Medium · 4 books</p>
                   </div>
                   <div class="v8-tile-books">
-                    <div class="v8-book"><img src="assets/experts/images/image%2020.png" alt="" /></div>
-                    <div class="v8-book"><img src="assets/experts/images/image%2021.png" alt="" /></div>
-                    <div class="v8-book"><img src="assets/experts/images/image%2022.png" alt="" /></div>
-                    <div class="v8-book"><img src="assets/experts/images/image%2023.png" alt="" /></div>
+                    <div class="v8-book"><img src="assets/images/hub-book-cover-1.png" alt="" /></div>
+                    <div class="v8-book"><img src="assets/images/hub-book-cover-2.png" alt="" /></div>
+                    <div class="v8-book"><img src="assets/images/hub-book-cover-3.png" alt="" /></div>
+                    <div class="v8-book"><img src="assets/images/hub-book-cover-4.png" alt="" /></div>
                   </div>
                 </div>
 
                 <!-- Matthew Walker — 1 book + 2 content placeholders -->
                 <div class="v8-tile" onclick="document.querySelector('.state-chip[data-surface=expert-profile]').click()">
-                  <img class="v8-tile-portrait" src="assets/experts/images/Rectangle%202538.png" alt="" />
+                  <img class="v8-tile-portrait" src="assets/images/hub-content-card.png" alt="" />
                   <div class="v8-tile-gradient"></div>
                   <div class="v8-tile-meta">
                     <p class="v8-tile-name">Matthew Walker</p>
                     <p class="v8-tile-domain">Sleep Science · 1 book · 64 episodes · 12 articles</p>
                   </div>
                   <div class="v8-tile-books">
-                    <div class="v8-book"><img src="assets/experts/images/why-we-sleep.png" alt="" /></div>
+                    <div class="v8-book"><img src="assets/images/why-we-sleep.png" alt="" /></div>
                     <div class="v8-book gradient-sleep"><div class="v8-book-emoji">🎙</div></div>
                     <div class="v8-book gradient-sleep"><div class="v8-book-emoji">📰</div></div>
                   </div>
@@ -10067,7 +10680,7 @@
                     <p class="v8-tile-domain">Perimenopause Nutrition · 1 book</p>
                   </div>
                   <div class="v8-tile-books">
-                    <div class="v8-book"><img src="assets/experts/images/Rectangle%202815.png" alt="" /></div>
+                    <div class="v8-book"><img src="assets/images/hub-card-background.png" alt="" /></div>
                   </div>
                 </div>
               </div>
@@ -10105,7 +10718,7 @@
               </span>
             </div>
             <button class="header-icon-btn" title="Profile">
-              <img src="assets/experts/icons/user-profile-03.svg" alt="" />
+              <img src="assets/icons/user-profile.svg" alt="" />
             </button>
           </div>
 
@@ -10251,16 +10864,16 @@
           <div class="composer">
             <div class="composer-box">
               <div class="composer-circle left" title="More">
-                <img src="assets/experts/icons/more.svg" alt="" />
+                <img src="assets/icons/more.svg" alt="" />
               </div>
               <div class="composer-input-wrap">
                 <div class="composer-input"></div>
                 <div class="composer-mic" title="Voice">
-                  <img src="assets/experts/icons/microphone-01.svg" alt="" />
+                  <img src="assets/icons/microphone.svg" alt="" />
                 </div>
               </div>
               <div class="composer-circle right" title="Camera">
-                <img src="assets/experts/icons/camera.svg" alt="" />
+                <img src="assets/icons/camera.svg" alt="" />
               </div>
             </div>
           </div>
@@ -10272,14 +10885,14 @@
       <!-- ===== Surface: My Experts — account-level subscription management ===== -->
       <div class="surface" data-surface="my-experts">
         <div class="me-stage">
-          <img class="status-bar-img" src="assets/experts/images/status-bar.png" alt="" />
+          <img class="status-bar-img" src="assets/images/status-bar.png" alt="" />
           <div class="me-dim"></div>
 
           <div class="me-sheet">
             <div class="me-header">
               <h1 class="me-title">My Experts</h1>
               <button class="me-close-x" onclick="document.querySelector('.state-chip[data-surface=hub-home-v6]').click()" title="Back to Hub">
-                <img src="assets/experts/icons/X.svg" alt="" />
+                <img src="assets/icons/close.svg" alt="" />
               </button>
             </div>
 
@@ -10289,7 +10902,7 @@
 
               <div class="me-card active">
                 <div class="me-card-header">
-                  <div class="me-card-portrait"><img src="assets/experts/images/Rectangle%202538.png" alt="" /></div>
+                  <div class="me-card-portrait"><img src="assets/images/hub-content-card.png" alt="" /></div>
                   <div class="me-card-meta">
                     <p class="me-card-name">Matthew Walker</p>
                     <span class="me-card-status me-status-active"><span class="dot"></span>Active</span>
@@ -10320,7 +10933,7 @@
 
               <div class="me-card inactive">
                 <div class="me-card-header">
-                  <div class="me-card-portrait"><img src="assets/experts/images/Rectangle%202539.png" alt="" /></div>
+                  <div class="me-card-portrait"><img src="assets/images/hub-expert-avatar-1.png" alt="" /></div>
                   <div class="me-card-meta">
                     <p class="me-card-name">Anthony William</p>
                     <span class="me-card-status me-status-inactive"><span class="dot"></span>Inactive · 28 days ago</span>
@@ -10343,7 +10956,7 @@
 
               <div class="me-card inactive">
                 <div class="me-card-header">
-                  <div class="me-card-portrait"><img src="assets/experts/images/Rectangle%202815.png" alt="" /></div>
+                  <div class="me-card-portrait"><img src="assets/images/hub-card-background.png" alt="" /></div>
                   <div class="me-card-meta">
                     <p class="me-card-name">Faye James</p>
                     <span class="me-card-status me-status-inactive"><span class="dot"></span>Inactive · 88 days ago</span>
@@ -10494,7 +11107,7 @@
            Currently mocked with Matthew Walker data (whose portrait we have). -->
       <div class="surface" data-surface="expert-profile">
         <div class="profile-stage">
-          <img class="status-bar-img" src="assets/experts/images/status-bar.png" alt="" />
+          <img class="status-bar-img" src="assets/images/status-bar.png" alt="" />
           <div class="profile-dim"></div>
 
           <div class="profile-sheet">
@@ -10506,7 +11119,7 @@
               <!-- HERO -->
               <div class="profile-hero">
                 <div class="profile-portrait">
-                  <img src="assets/experts/images/Rectangle%202538.png" alt="" />
+                  <img src="assets/images/hub-content-card.png" alt="" />
                 </div>
                 <h1 class="profile-name">Matthew Walker</h1>
                 <p class="profile-domain">Sleep</p>
@@ -10590,7 +11203,7 @@
       <!-- ===== Surface: Expert Profile V2 — Mobbin-inspired synthesis ===== -->
       <div class="surface" data-surface="expert-profile-v2">
         <div class="v2-stage">
-          <img class="status-bar-img" src="assets/experts/images/status-bar.png" alt="" />
+          <img class="status-bar-img" src="assets/images/status-bar.png" alt="" />
           <div class="v2-dim"></div>
 
           <div class="v2-sheet">
@@ -10608,7 +11221,7 @@
               <!-- HERO -->
               <div class="v2-hero">
                 <div class="v2-portrait">
-                  <img src="assets/experts/images/Rectangle%202538.png" alt="" />
+                  <img src="assets/images/hub-content-card.png" alt="" />
                 </div>
                 <h1 class="v2-name">Matthew Walker, PhD</h1>
                 <p class="v2-role">Sleep Scientist · UC Berkeley</p>
@@ -10707,7 +11320,7 @@
                 <h2>Featured work</h2>
                 <div class="v2-featured">
                   <div class="v2-featured-cover">
-                    <img src="assets/experts/images/why-we-sleep.png" alt="" />
+                    <img src="assets/images/why-we-sleep.png" alt="" />
                   </div>
                   <div class="v2-featured-text">
                     <p class="v2-featured-kicker">The foundational book</p>
@@ -10794,21 +11407,21 @@
                 <div class="v2-similar">
                   <div class="v2-similar-card" onclick="document.querySelector('.state-chip[data-surface=expert-profile-v2]').click()">
                     <div class="v2-similar-portrait">
-                      <img src="assets/experts/images/Rectangle%202539.png" alt="" />
+                      <img src="assets/images/hub-expert-avatar-1.png" alt="" />
                     </div>
                     <p class="v2-similar-name">Anthony William</p>
                     <p class="v2-similar-domain">Psychic expert</p>
                   </div>
                   <div class="v2-similar-card">
                     <div class="v2-similar-portrait">
-                      <img src="assets/experts/images/run-fast-eat-slow.png" alt="" />
+                      <img src="assets/images/run-fast-eat-slow.png" alt="" />
                     </div>
                     <p class="v2-similar-name">Shalane Flanagan</p>
                     <p class="v2-similar-domain">Running nutrition</p>
                   </div>
                   <div class="v2-similar-card">
                     <div class="v2-similar-portrait">
-                      <img src="assets/experts/images/good-to-go.png" alt="" />
+                      <img src="assets/images/good-to-go.png" alt="" />
                     </div>
                     <p class="v2-similar-name">Christie Aschwanden</p>
                     <p class="v2-similar-domain">Recovery science</p>
@@ -10850,7 +11463,7 @@
               <div class="p3-hero-glow"></div>
             </div>
             <div class="p3-portrait">
-              <img src="assets/experts/images/pain-performance.jpg" alt="Pain + Performance — Ryan Whited &amp; Matt Fitzgerald" />
+              <img src="assets/images/pain-performance.jpg" alt="Pain + Performance — Ryan Whited &amp; Matt Fitzgerald" />
             </div>
             <div class="p3-hero">
               <h1 class="p3-name">Matt Fitzgerald</h1>
@@ -10885,21 +11498,21 @@
               <h2 class="p3-section-title">Body of work</h2>
               <div class="p3-bow-list">
                 <div class="p3-bow-item">
-                  <img class="p3-bow-img" src="assets/experts/images/80-20-triathlon.jpg" alt="" />
+                  <img class="p3-bow-img" src="assets/images/80-20-triathlon.jpg" alt="" />
                   <div class="p3-bow-text">
                     <h3 class="p3-bow-title">80/20 Triathlon</h3>
                     <p class="p3-bow-sub">The breakthrough elite-training formula for ultimate fitness and performance · with David Warden · Lifelong Books · 2018</p>
                   </div>
                 </div>
                 <div class="p3-bow-item">
-                  <img class="p3-bow-img" src="assets/experts/images/80-20-running.jpg" alt="" />
+                  <img class="p3-bow-img" src="assets/images/80-20-running.jpg" alt="" />
                   <div class="p3-bow-text">
                     <h3 class="p3-bow-title">80/20 Running</h3>
                     <p class="p3-bow-sub">Run Stronger and Race Faster by Training Slower · VeloPress · 2014</p>
                   </div>
                 </div>
                 <div class="p3-bow-item">
-                  <img class="p3-bow-img" src="assets/experts/images/racing-weight-quick-start.jpg" alt="" />
+                  <img class="p3-bow-img" src="assets/images/racing-weight-quick-start.jpg" alt="" />
                   <div class="p3-bow-text">
                     <h3 class="p3-bow-title">Racing Weight Quick Start Guide</h3>
                     <p class="p3-bow-sub">A 4-week weight-loss plan for endurance athletes · VeloPress</p>
@@ -10960,7 +11573,7 @@
             <!-- Hero — the Expert's read on TODAY's context -->
             <div class="dx-hero">
               <div class="dx-hero-avatar">
-                <img src="assets/experts/images/Rectangle%202816.png" alt="" />
+                <img src="assets/images/hub-feature-image.png" alt="" />
                 <div>
                   <div class="dx-hero-name">Dr Stacy Sims</div>
                   <div class="dx-hero-sub">Women's performance · Perimenopause</div>
@@ -11189,7 +11802,7 @@
             <!-- Hero — same context block as the timeline version -->
             <div class="dx-hero">
               <div class="dx-hero-avatar">
-                <img src="assets/experts/images/Rectangle%202816.png" alt="" />
+                <img src="assets/images/hub-feature-image.png" alt="" />
                 <div>
                   <div class="dx-hero-name">Dr Stacy Sims</div>
                   <div class="dx-hero-sub">Women's performance · Perimenopause</div>
@@ -11303,7 +11916,7 @@
             <div class="header-pill date" onclick="window.switchSurface('plan-today')" style="cursor:pointer" title="Wed Jun 19"><span class="day-num">19</span><span class="day-wd">wed</span></div>
 
             <div class="header-pill experts-pill" title="Experts mode">
-              <img class="avatar" src="assets/experts/images/pain-performance.jpg" alt="" />
+              <img class="avatar" src="assets/images/pain-performance.jpg" alt="" />
               <span class="label">Experts</span>
               <span class="chevron">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -11311,7 +11924,7 @@
             </div>
 
             <button class="header-icon-btn" title="Profile">
-              <img src="assets/experts/icons/user-profile-03.svg" alt="" />
+              <img src="assets/icons/user-profile.svg" alt="" />
             </button>
           </div>
 
@@ -11323,7 +11936,7 @@
                 <!-- System message: Expert is now part of your guidance.
                      Figma 2029:13790 — flows in the chat, not sticky. -->
                 <div class="cs-banner">
-                  <span class="cs-banner-line"><img class="cs-banner-avatar" src="assets/experts/images/pain-performance.jpg" alt="Matt Fitzgerald" /><strong>Matt Fitzgerald</strong> is now part of your guidance.</span>
+                  <span class="cs-banner-line"><img class="cs-banner-avatar" src="assets/images/pain-performance.jpg" alt="Matt Fitzgerald" /><strong>Matt Fitzgerald</strong> is now part of your guidance.</span>
                   <span class="cs-banner-line">You can always change in the <a>Expert Hub</a>.</span>
                 </div>
 
@@ -11353,7 +11966,7 @@
                     </button>
                   </div>
                   <div class="cs-attribution" title="Tap to see where Matt's framework shaped this answer">
-                    <img class="avatar" src="assets/experts/images/pain-performance.jpg" alt="" />
+                    <img class="avatar" src="assets/images/pain-performance.jpg" alt="" />
                     <span class="cs-attribution-label">With Matt</span>
                   </div>
                 </div>
@@ -11382,16 +11995,16 @@
           <div class="composer">
             <div class="composer-box">
               <div class="composer-circle left" title="More">
-                <img src="assets/experts/icons/more.svg" alt="" />
+                <img src="assets/icons/more.svg" alt="" />
               </div>
               <div class="composer-input-wrap">
                 <div class="composer-input"></div>
                 <div class="composer-mic" title="Voice">
-                  <img src="assets/experts/icons/microphone-01.svg" alt="" />
+                  <img src="assets/icons/microphone.svg" alt="" />
                 </div>
               </div>
               <div class="composer-circle right" title="Camera">
-                <img src="assets/experts/icons/camera.svg" alt="" />
+                <img src="assets/icons/camera.svg" alt="" />
               </div>
             </div>
           </div>
@@ -11417,14 +12030,14 @@
           <div class="chat-header-row">
             <div class="header-pill date" onclick="window.switchSurface('plan-today')" style="cursor:pointer" title="Wed Jun 19"><span class="day-num">19</span><span class="day-wd">wed</span></div>
             <div class="header-pill experts-pill" title="Experts mode">
-              <img class="avatar" src="assets/experts/images/pain-performance.jpg" alt="" />
+              <img class="avatar" src="assets/images/pain-performance.jpg" alt="" />
               <span class="label">Experts</span>
               <span class="chevron">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
               </span>
             </div>
             <button class="header-icon-btn" title="Profile">
-              <img src="assets/experts/icons/user-profile-03.svg" alt="" />
+              <img src="assets/icons/user-profile.svg" alt="" />
             </button>
           </div>
 
@@ -11506,7 +12119,7 @@
                     </button>
                   </div>
                   <div class="cs-attribution" title="Tap to see where Matt's framework shaped this answer">
-                    <img class="avatar" src="assets/experts/images/pain-performance.jpg" alt="" />
+                    <img class="avatar" src="assets/images/pain-performance.jpg" alt="" />
                     <span class="cs-attribution-label">With Matt</span>
                   </div>
                 </div>
@@ -11535,16 +12148,16 @@
           <div class="composer">
             <div class="composer-box">
               <div class="composer-circle left" title="More">
-                <img src="assets/experts/icons/more.svg" alt="" />
+                <img src="assets/icons/more.svg" alt="" />
               </div>
               <div class="composer-input-wrap">
                 <div class="composer-input"></div>
                 <div class="composer-mic" title="Voice">
-                  <img src="assets/experts/icons/microphone-01.svg" alt="" />
+                  <img src="assets/icons/microphone.svg" alt="" />
                 </div>
               </div>
               <div class="composer-circle right" title="Camera">
-                <img src="assets/experts/icons/camera.svg" alt="" />
+                <img src="assets/icons/camera.svg" alt="" />
               </div>
             </div>
           </div>
@@ -11568,14 +12181,14 @@
           <div class="chat-header-row">
             <div class="header-pill date" onclick="window.switchSurface('plan-today')" style="cursor:pointer" title="Wed Jun 19"><span class="day-num">19</span><span class="day-wd">wed</span></div>
             <div class="header-pill experts-pill" title="Experts mode">
-              <img class="avatar" src="assets/experts/images/pain-performance.jpg" alt="" />
+              <img class="avatar" src="assets/images/pain-performance.jpg" alt="" />
               <span class="label">Experts</span>
               <span class="chevron">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
               </span>
             </div>
             <button class="header-icon-btn" title="Profile">
-              <img src="assets/experts/icons/user-profile-03.svg" alt="" />
+              <img src="assets/icons/user-profile.svg" alt="" />
             </button>
           </div>
 
@@ -11610,7 +12223,7 @@
                     </button>
                   </div>
                   <div class="cs-attribution" title="Tap to see where Matt's framework shaped this answer">
-                    <img class="avatar" src="assets/experts/images/pain-performance.jpg" alt="" />
+                    <img class="avatar" src="assets/images/pain-performance.jpg" alt="" />
                     <span class="cs-attribution-label">With Matt</span>
                   </div>
                 </div>
@@ -11637,16 +12250,16 @@
           <div class="composer">
             <div class="composer-box">
               <div class="composer-circle left" title="More">
-                <img src="assets/experts/icons/more.svg" alt="" />
+                <img src="assets/icons/more.svg" alt="" />
               </div>
               <div class="composer-input-wrap">
                 <div class="composer-input"></div>
                 <div class="composer-mic" title="Voice">
-                  <img src="assets/experts/icons/microphone-01.svg" alt="" />
+                  <img src="assets/icons/microphone.svg" alt="" />
                 </div>
               </div>
               <div class="composer-circle right" title="Camera">
-                <img src="assets/experts/icons/camera.svg" alt="" />
+                <img src="assets/icons/camera.svg" alt="" />
               </div>
             </div>
           </div>
@@ -11665,6 +12278,7 @@
       <div class="surface" data-surface="x-profile"><div class="p3" id="xProfileRoot"></div></div>
       <div class="surface" data-surface="x-plan"><div class="chat-baseline" id="xPlanRoot"></div></div>
       <div class="surface" data-surface="x-qa"><div class="chat-baseline" id="xQaRoot"></div></div>
+      <div class="surface" data-surface="x-challenge"><div class="chat-baseline" id="xChallengeRoot"></div></div>
       <div class="surface" data-surface="x-subscribe"><div class="xs" id="xSubRoot"></div></div>
       <div class="surface" data-surface="x-applepay"><div class="ap" id="xApRoot"></div></div>
       <div class="surface" data-surface="x-welcome"><div class="xw" id="xWelRoot"></div></div>
@@ -11684,14 +12298,14 @@
           <div class="chat-header-row">
             <div class="header-pill date" onclick="window.switchSurface('plan-today')" style="cursor:pointer" title="Wed Jun 19"><span class="day-num">19</span><span class="day-wd">wed</span></div>
             <div class="header-pill experts-pill" title="Experts mode">
-              <img class="avatar" src="assets/experts/images/pain-performance.jpg" alt="" />
+              <img class="avatar" src="assets/images/pain-performance.jpg" alt="" />
               <span class="label">Experts</span>
               <span class="chevron">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
               </span>
             </div>
             <button class="header-icon-btn" title="Profile">
-              <img src="assets/experts/icons/user-profile-03.svg" alt="" />
+              <img src="assets/icons/user-profile.svg" alt="" />
             </button>
           </div>
 
@@ -11734,7 +12348,7 @@
                     </button>
                   </div>
                   <div class="cs-attribution" title="Tap to see where Matt's framework shaped this answer">
-                    <img class="avatar" src="assets/experts/images/pain-performance.jpg" alt="" />
+                    <img class="avatar" src="assets/images/pain-performance.jpg" alt="" />
                     <span class="cs-attribution-label">With Matt</span>
                   </div>
                 </div>
@@ -11761,16 +12375,16 @@
           <div class="composer">
             <div class="composer-box">
               <div class="composer-circle left" title="More">
-                <img src="assets/experts/icons/more.svg" alt="" />
+                <img src="assets/icons/more.svg" alt="" />
               </div>
               <div class="composer-input-wrap">
                 <div class="composer-input"></div>
                 <div class="composer-mic" title="Voice">
-                  <img src="assets/experts/icons/microphone-01.svg" alt="" />
+                  <img src="assets/icons/microphone.svg" alt="" />
                 </div>
               </div>
               <div class="composer-circle right" title="Camera">
-                <img src="assets/experts/icons/camera.svg" alt="" />
+                <img src="assets/icons/camera.svg" alt="" />
               </div>
             </div>
           </div>
@@ -11789,13 +12403,45 @@
 
           <div class="nut-top">
             <div class="header-pill date" onclick="window.switchSurface('plan-today')" style="cursor:pointer" title="Wed Jun 19"><span class="day-num">19</span><span class="day-wd">wed</span></div>
-            <div class="header-pill nut-mode">
-              <span>Ottavia</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            <div class="header-pill nut-mode ottavia-mode-pill" data-mode-pill title="Switch mode">
+              <span class="label">Ottavia</span>
+              <span class="chevron">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
             </div>
             <button class="header-icon-btn" title="Profile">
-              <img src="assets/experts/icons/user-profile-03.svg" alt="" />
+              <img src="assets/icons/user-profile.svg" alt="" />
             </button>
+          </div>
+
+          <div class="mode-scrim" data-mode-scrim></div>
+          <div class="ottavia-mode-menu" data-mode-menu>
+            <div class="mode-option selected" data-mode="ottavia">
+              <div class="check-slot">
+                <svg viewBox="0 0 11.6 9.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 1 L3.44 8.2 L1 5.74"/></svg>
+              </div>
+              <div class="text">
+                <div class="title">Ottavia</div>
+                <div class="sub">Intelligent personalized guidance</div>
+              </div>
+            </div>
+            <div class="mode-option" data-mode="ottavia-experts">
+              <div class="check-slot">
+                <svg viewBox="0 0 11.6 9.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 1 L3.44 8.2 L1 5.74"/></svg>
+              </div>
+              <div class="text">
+                <div class="title">Ottavia + Experts</div>
+                <div class="sub">Deeper domain-specific interpretation</div>
+                <span class="coming-soon">coming soon</span>
+              </div>
+            </div>
+            <div class="mode-menu-divider"></div>
+            <div class="mode-link" data-mode-link onclick="document.querySelector('.state-chip[data-surface=hub-home]').click()">
+              <span class="title">Experts hub</span>
+              <span class="chevron">
+                <svg viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 1 7 7 1 13"/></svg>
+              </span>
+            </div>
           </div>
 
           <div class="nut-body">
@@ -11854,16 +12500,401 @@
           <div class="composer">
             <div class="composer-box">
               <div class="composer-circle left" title="More">
-                <img src="assets/experts/icons/more.svg" alt="" />
+                <img src="assets/icons/more.svg" alt="" />
               </div>
               <div class="composer-input-wrap">
                 <div class="composer-input"></div>
                 <div class="composer-mic" title="Voice">
-                  <img src="assets/experts/icons/microphone-01.svg" alt="" />
+                  <img src="assets/icons/microphone.svg" alt="" />
                 </div>
               </div>
               <div class="composer-circle right" title="Camera">
-                <img src="assets/experts/icons/camera.svg" alt="" />
+                <img src="assets/icons/camera.svg" alt="" />
+              </div>
+            </div>
+          </div>
+
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+
+      <!-- =====================================================================
+           Surface: OTTAVIA-NUTSHELL — Mariah variant. Same shell as Tom, content
+           sized to a 37-yo mother of three training for her first half marathon.
+           ===================================================================== -->
+      <div class="surface" data-surface="ottavia-nutshell-mariah">
+        <div class="nut">
+
+          <div class="nut-top">
+            <div class="header-pill date" onclick="window.switchSurface('plan-today-mariah')" style="cursor:pointer" title="Wed Jun 19"><span class="day-num">19</span><span class="day-wd">wed</span></div>
+            <div class="header-pill nut-mode ottavia-mode-pill" data-mode-pill title="Switch mode">
+              <span class="label">Ottavia</span>
+              <span class="chevron">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+            </div>
+            <button class="header-icon-btn" title="Profile">
+              <img src="assets/icons/user-profile.svg" alt="" />
+            </button>
+          </div>
+
+          <div class="mode-scrim" data-mode-scrim></div>
+          <div class="ottavia-mode-menu" data-mode-menu>
+            <div class="mode-option selected" data-mode="ottavia">
+              <div class="check-slot">
+                <svg viewBox="0 0 11.6 9.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 1 L3.44 8.2 L1 5.74"/></svg>
+              </div>
+              <div class="text">
+                <div class="title">Ottavia</div>
+                <div class="sub">Intelligent personalized guidance</div>
+              </div>
+            </div>
+            <div class="mode-option" data-mode="ottavia-experts">
+              <div class="check-slot">
+                <svg viewBox="0 0 11.6 9.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 1 L3.44 8.2 L1 5.74"/></svg>
+              </div>
+              <div class="text">
+                <div class="title">Ottavia + Experts</div>
+                <div class="sub">Deeper domain-specific interpretation</div>
+                <span class="coming-soon">coming soon</span>
+              </div>
+            </div>
+            <div class="mode-menu-divider"></div>
+            <div class="mode-link" data-mode-link onclick="document.querySelector('.state-chip[data-surface=hub-home]').click()">
+              <span class="title">Experts hub</span>
+              <span class="chevron">
+                <svg viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 1 7 7 1 13"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <div class="nut-body">
+            <div class="nut-report">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v3M4.9 7 7 9.1M2 14h3m14 0h3m-5.1-4.9L19.1 7M12 14a4 4 0 0 0-4 4h8a4 4 0 0 0-4-4z"/><line x1="3" y1="22" x2="21" y2="22"/></svg>
+              <span class="t">Morning report</span>
+              <span class="time">· Wed, 6:45 AM</span>
+            </div>
+
+            <h1 class="nut-headline">Three days in, the half is on track — let's protect what you built this week.</h1>
+            <p class="nut-why">You got <strong>~7 hours</strong> last night, broken twice by the kids, but your resting HR is back at baseline — your body's adapting to the new training. Today's a midweek easy day, sized to what fits the morning.</p>
+            <p class="nut-why">Here's how I'd shape the day, around the kids and Saturday's tempo:</p>
+
+            <div class="nut-plan">
+              <div class="pt-section">Morning</div>
+              <div class="pt-card orange">
+                <h3 class="pt-card-title">Easy 5k · 35 min</h3>
+                <p class="pt-card-body">Conversational pace, after school drop-off. Short and steady — consistency beats distance this week.</p>
+                <div class="pt-card-time">9:00 AM</div>
+              </div>
+              <div class="pt-card green">
+                <h3 class="pt-card-title">Refuel — 15g protein</h3>
+                <p class="pt-card-body">Yogurt + berries while the breakfast dishes pile up. Quick, real, done.</p>
+                <div class="pt-card-time">9:45 AM</div>
+              </div>
+
+              <div class="pt-section">Midday</div>
+              <div class="pt-card blue">
+                <h3 class="pt-card-title">Hydration · 1.5L by 4pm</h3>
+                <p class="pt-card-body">A glass at every kid-meal handoff — easy to remember, easy to hit.</p>
+                <div class="pt-card-time">Through the day</div>
+              </div>
+
+              <div class="pt-section">Evening</div>
+              <div class="pt-card purple">
+                <h3 class="pt-card-title">Lights low by 10</h3>
+                <p class="pt-card-body">Phone outside the bedroom — sleep is where this week's training actually sticks.</p>
+                <div class="pt-card-time">10:00 PM</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="qa-scrim" aria-hidden="true"><span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="tint"></span></div>
+          <div class="suggestion-row">
+            <div class="suggestion-track">
+              <div class="suggestion-pill active">Why a recovery day?</div>
+              <div class="suggestion-pill">Quick protein snacks</div>
+              <div class="suggestion-pill">What if I skip the run?</div>
+              <div class="suggestion-pill">How am I trending?</div>
+            </div>
+          </div>
+          <div class="composer">
+            <div class="composer-box">
+              <div class="composer-circle left" title="More">
+                <img src="assets/icons/more.svg" alt="" />
+              </div>
+              <div class="composer-input-wrap">
+                <div class="composer-input"></div>
+                <div class="composer-mic" title="Voice">
+                  <img src="assets/icons/microphone.svg" alt="" />
+                </div>
+              </div>
+              <div class="composer-circle right" title="Camera">
+                <img src="assets/icons/camera.svg" alt="" />
+              </div>
+            </div>
+          </div>
+
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+
+      <!-- =====================================================================
+           Surface: ARIC-OTTAVIA-NUTSHELL (Tom). Aric variant of the morning
+           report. Scenario: marathon in 10 days, sleep is the lever. Ottavia's
+           voice with Aric's Sleep Prescription threaded through the day.
+           ===================================================================== -->
+      <div class="surface" data-surface="aric-ottavia-nutshell">
+        <div class="nut">
+
+          <div class="nut-top">
+            <div class="header-pill date" onclick="window.switchSurface('aric-plan-today')" style="cursor:pointer" title="Wed Jun 25"><span class="day-num">25</span><span class="day-wd">wed</span></div>
+            <div class="header-pill nut-mode ottavia-mode-pill" data-mode-pill title="Switch mode">
+              <span class="label">Ottavia</span>
+              <span class="chevron">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+            </div>
+            <button class="header-icon-btn" title="Profile">
+              <img src="assets/icons/user-profile.svg" alt="" />
+            </button>
+          </div>
+
+          <div class="mode-scrim" data-mode-scrim></div>
+          <div class="ottavia-mode-menu" data-mode-menu>
+            <div class="mode-option selected" data-mode="ottavia">
+              <div class="check-slot">
+                <svg viewBox="0 0 11.6 9.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 1 L3.44 8.2 L1 5.74"/></svg>
+              </div>
+              <div class="text">
+                <div class="title">Ottavia</div>
+                <div class="sub">Intelligent personalized guidance</div>
+              </div>
+            </div>
+            <div class="mode-option" data-mode="ottavia-experts">
+              <div class="check-slot">
+                <svg viewBox="0 0 11.6 9.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 1 L3.44 8.2 L1 5.74"/></svg>
+              </div>
+              <div class="text">
+                <div class="title">Ottavia + Experts</div>
+                <div class="sub">Deeper domain-specific interpretation</div>
+                <span class="coming-soon">coming soon</span>
+              </div>
+            </div>
+            <div class="mode-menu-divider"></div>
+            <div class="mode-link" data-mode-link onclick="document.querySelector('.state-chip[data-surface=hub-home]').click()">
+              <span class="title">Experts hub</span>
+              <span class="chevron">
+                <svg viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 1 7 7 1 13"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <div class="nut-body">
+            <div class="nut-report">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v3M4.9 7 7 9.1M2 14h3m14 0h3m-5.1-4.9L19.1 7M12 14a4 4 0 0 0-4 4h8a4 4 0 0 0-4-4z"/><line x1="3" y1="22" x2="21" y2="22"/></svg>
+              <span class="t">Morning report</span>
+              <span class="time">· Wed, 6:45 AM</span>
+            </div>
+
+            <h1 class="nut-headline">Race day is ten days out, Tom. Sleep is the lever now.</h1>
+            <p class="nut-why">You averaged <strong>6h 45m</strong> the last three nights, and your wake time has slipped from 6:30 to 7:10 on weekends. Training is dialed in. The biggest gain from here isn't another hard session, it's a steadier sleep window so you arrive at the start line fresh.</p>
+            <p class="nut-why">Here's how I'd shape today, starting <strong>Aric's 7-day Sleep Prescription</strong> on Day 1:</p>
+
+            <div class="nut-plan">
+              <div class="pt-section">Morning</div>
+              <div class="pt-card green">
+                <h3 class="pt-card-title">Wake 6:30 · daylight within 30 min</h3>
+                <p class="pt-card-body">Same wake time every day this week, weekends included. Step outside or by the window for 10 minutes to anchor your body clock.</p>
+                <div class="pt-card-time">6:30 AM</div>
+              </div>
+              <div class="pt-card orange">
+                <h3 class="pt-card-title">Easy Z2 shakeout · 40 min</h3>
+                <p class="pt-card-body">Aerobic, conversational. Race-week priority is freshness, so nothing that digs into recovery.</p>
+                <div class="pt-card-time">7:15 AM</div>
+              </div>
+
+              <div class="pt-section">Midday</div>
+              <div class="pt-card blue">
+                <h3 class="pt-card-title">Last caffeine by 2 PM</h3>
+                <p class="pt-card-body">Caffeine has a long tail. Your afternoon espresso is still working at lights-out.</p>
+                <div class="pt-card-time">By 2:00 PM</div>
+              </div>
+
+              <div class="pt-section">Evening</div>
+              <div class="pt-card purple">
+                <h3 class="pt-card-title">Worry list · before dinner</h3>
+                <p class="pt-card-body">Park tomorrow's plan on paper before 7 PM so race-week logistics don't surface at 2 AM.</p>
+                <div class="pt-card-time">6:30 PM</div>
+              </div>
+              <div class="pt-card purple">
+                <h3 class="pt-card-title">30-min wind-down</h3>
+                <p class="pt-card-body">Screens away, lights down, last email sent. The link between bed and sleep gets stronger the more you protect it.</p>
+                <div class="pt-card-time">10:00 PM</div>
+              </div>
+              <div class="pt-card purple">
+                <h3 class="pt-card-title">Lights out · 22:30</h3>
+                <p class="pt-card-body">Aim for the same lights-out every night this week. Consistency, not duration, is the win.</p>
+                <div class="pt-card-time">10:30 PM</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="qa-scrim" aria-hidden="true"><span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="tint"></span></div>
+          <div class="suggestion-row">
+            <div class="suggestion-track">
+              <div class="suggestion-pill active">Why a fixed wake time?</div>
+              <div class="suggestion-pill">Build my wind-down</div>
+              <div class="suggestion-pill">Track race-week sleep</div>
+              <div class="suggestion-pill">How am I trending?</div>
+            </div>
+          </div>
+          <div class="composer">
+            <div class="composer-box">
+              <div class="composer-circle left" title="More">
+                <img src="assets/icons/more.svg" alt="" />
+              </div>
+              <div class="composer-input-wrap">
+                <div class="composer-input"></div>
+                <div class="composer-mic" title="Voice">
+                  <img src="assets/icons/microphone.svg" alt="" />
+                </div>
+              </div>
+              <div class="composer-circle right" title="Camera">
+                <img src="assets/icons/camera.svg" alt="" />
+              </div>
+            </div>
+          </div>
+
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+
+      <!-- =====================================================================
+           Surface: ARIC-OTTAVIA-NUTSHELL (Mariah). Aric variant for Mariah's
+           half-marathon prep with three kids. Scenario: half is 2 weeks out,
+           sleep is fragmented, the lever is wake-time consistency.
+           ===================================================================== -->
+      <div class="surface" data-surface="aric-ottavia-nutshell-mariah">
+        <div class="nut">
+
+          <div class="nut-top">
+            <div class="header-pill date" onclick="window.switchSurface('aric-plan-today-mariah')" style="cursor:pointer" title="Wed Jun 25"><span class="day-num">25</span><span class="day-wd">wed</span></div>
+            <div class="header-pill nut-mode ottavia-mode-pill" data-mode-pill title="Switch mode">
+              <span class="label">Ottavia</span>
+              <span class="chevron">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+            </div>
+            <button class="header-icon-btn" title="Profile">
+              <img src="assets/icons/user-profile.svg" alt="" />
+            </button>
+          </div>
+
+          <div class="mode-scrim" data-mode-scrim></div>
+          <div class="ottavia-mode-menu" data-mode-menu>
+            <div class="mode-option selected" data-mode="ottavia">
+              <div class="check-slot">
+                <svg viewBox="0 0 11.6 9.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 1 L3.44 8.2 L1 5.74"/></svg>
+              </div>
+              <div class="text">
+                <div class="title">Ottavia</div>
+                <div class="sub">Intelligent personalized guidance</div>
+              </div>
+            </div>
+            <div class="mode-option" data-mode="ottavia-experts">
+              <div class="check-slot">
+                <svg viewBox="0 0 11.6 9.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 1 L3.44 8.2 L1 5.74"/></svg>
+              </div>
+              <div class="text">
+                <div class="title">Ottavia + Experts</div>
+                <div class="sub">Deeper domain-specific interpretation</div>
+                <span class="coming-soon">coming soon</span>
+              </div>
+            </div>
+            <div class="mode-menu-divider"></div>
+            <div class="mode-link" data-mode-link onclick="document.querySelector('.state-chip[data-surface=hub-home]').click()">
+              <span class="title">Experts hub</span>
+              <span class="chevron">
+                <svg viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 1 7 7 1 13"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <div class="nut-body">
+            <div class="nut-report">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v3M4.9 7 7 9.1M2 14h3m14 0h3m-5.1-4.9L19.1 7M12 14a4 4 0 0 0-4 4h8a4 4 0 0 0-4-4z"/><line x1="3" y1="22" x2="21" y2="22"/></svg>
+              <span class="t">Morning report</span>
+              <span class="time">· Wed, 6:45 AM</span>
+            </div>
+
+            <h1 class="nut-headline">The half is two weeks out, Mariah. Steadier sleep beats more sleep here.</h1>
+            <p class="nut-why">You averaged <strong>~6h 20m</strong> over the last week, broken once or twice by the kids most nights. We won't fix duration with three small ones in the house, but we can make the hours you get count more.</p>
+            <p class="nut-why">Here's the day, with <strong>Aric's 7-day Sleep Prescription</strong> shaped around your real evenings:</p>
+
+            <div class="nut-plan">
+              <div class="pt-section">Morning</div>
+              <div class="pt-card green">
+                <h3 class="pt-card-title">Wake 6:15 · same every day</h3>
+                <p class="pt-card-body">Pick a wake time you can keep even after a broken night. A steady morning is the one reliable signal your sleep system needs this week.</p>
+                <div class="pt-card-time">6:15 AM</div>
+              </div>
+              <div class="pt-card orange">
+                <h3 class="pt-card-title">Easy 5k · 35 min</h3>
+                <p class="pt-card-body">After school drop-off, conversational pace. Short and steady — consistency matters more than distance this week.</p>
+                <div class="pt-card-time">9:00 AM</div>
+              </div>
+
+              <div class="pt-section">Midday</div>
+              <div class="pt-card blue">
+                <h3 class="pt-card-title">Last caffeine by 12:30 PM</h3>
+                <p class="pt-card-body">Earlier than feels needed. The lift you get later costs you the night.</p>
+                <div class="pt-card-time">By 12:30 PM</div>
+              </div>
+
+              <div class="pt-section">Evening</div>
+              <div class="pt-card purple">
+                <h3 class="pt-card-title">Worry list · before bath time</h3>
+                <p class="pt-card-body">Tomorrow's mental load on paper before the kids' wind-down so the to-do list doesn't start the moment you lie down.</p>
+                <div class="pt-card-time">6:30 PM</div>
+              </div>
+              <div class="pt-card purple">
+                <h3 class="pt-card-title">10-min wind-down</h3>
+                <p class="pt-card-body">Once the kids are down: phone in another room, lights low. Short and repeatable beats long and skipped.</p>
+                <div class="pt-card-time">9:50 PM</div>
+              </div>
+              <div class="pt-card purple">
+                <h3 class="pt-card-title">Lights out · 22:00</h3>
+                <p class="pt-card-body">Match time in bed to the sleep you actually get this week, so it consolidates instead of fragmenting.</p>
+                <div class="pt-card-time">10:00 PM</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="qa-scrim" aria-hidden="true"><span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="tint"></span></div>
+          <div class="suggestion-row">
+            <div class="suggestion-track">
+              <div class="suggestion-pill active">How do I handle night wake-ups?</div>
+              <div class="suggestion-pill">Is napping okay?</div>
+              <div class="suggestion-pill">Build a 10-min wind-down</div>
+              <div class="suggestion-pill">How am I trending?</div>
+            </div>
+          </div>
+          <div class="composer">
+            <div class="composer-box">
+              <div class="composer-circle left" title="More">
+                <img src="assets/icons/more.svg" alt="" />
+              </div>
+              <div class="composer-input-wrap">
+                <div class="composer-input"></div>
+                <div class="composer-mic" title="Voice">
+                  <img src="assets/icons/microphone.svg" alt="" />
+                </div>
+              </div>
+              <div class="composer-circle right" title="Camera">
+                <img src="assets/icons/camera.svg" alt="" />
               </div>
             </div>
           </div>
@@ -11894,7 +12925,21 @@
               <!-- ===== MORNING ===== -->
               <div class="pt-period show" data-period="morning">
                 <div class="pt-ev next orange">
-                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 7:15 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 6:55 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Pre-run nibble · ~100 cal</h3>
+                  <p class="pt-ev-body">A small simple carb 20 min before your run — half a banana or two crackers. Just enough to take the edge off without sitting heavy.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Calories</span><span class="v">~100 cal</span></div>
+                    <div class="row"><span class="k">Carb type</span><span class="v">Simple · fast-empty</span></div>
+                    <div class="row"><span class="k">Timing</span><span class="v">20 min pre-run</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/nancy.jpg" alt="Nancy Clark" />
+                    <span class="pt-attr-text">Per <strong>Nancy Clark</strong> · pre-exercise nibble protocol</span>
+                  </div>
+                </div>
+                <div class="pt-ev orange">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">7:15 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
                   <h3 class="pt-ev-title">Easy Z2 run · 60 min</h3>
                   <p class="pt-ev-body">Sixty minutes at an easy aerobic effort — HR 132–142 bpm, conversational throughout. Builds the endurance base your 100K depends on.</p>
                   <div class="pt-ev-detail">
@@ -11906,15 +12951,27 @@
                 </div>
                 <div class="pt-ev green">
                   <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">8:15 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
-                  <h3 class="pt-ev-title">Refuel — 25g protein</h3>
-                  <p class="pt-ev-body">Within 30 min of finishing, to kickstart repair.</p>
-                  <div class="pt-ev-detail"><div class="row"><span class="k">Protein</span><span class="v">25 g</span></div><div class="row"><span class="k">Window</span><span class="v">Within 30 min</span></div></div>
+                  <h3 class="pt-ev-title">Chocolate milk + banana</h3>
+                  <p class="pt-ev-body">Inside the 60–90 min recovery window — ~25g carb + 8g protein. Nancy's shorthand for "closes the loop on this morning's run."</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Carb</span><span class="v">~25 g</span></div>
+                    <div class="row"><span class="k">Protein</span><span class="v">~8 g</span></div>
+                    <div class="row"><span class="k">Window</span><span class="v">60–90 min post-run</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/nancy.jpg" alt="Nancy Clark" />
+                    <span class="pt-attr-text">Per <strong>Nancy Clark</strong> · recovery window</span>
+                  </div>
                 </div>
                 <div class="pt-ev blue">
                   <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">8:30 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
                   <h3 class="pt-ev-title">Hydration · 500ml to start</h3>
-                  <p class="pt-ev-body">Kick off the day's 2L target early.</p>
-                  <div class="pt-ev-detail"><div class="row"><span class="k">Now</span><span class="v">500 ml</span></div><div class="row"><span class="k">By 4pm</span><span class="v">2 L total</span></div></div>
+                  <p class="pt-ev-body">Kick off the day's 2L target early. Nancy's check: pale-straw urine every 2–4 hours means you're on track.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Now</span><span class="v">500 ml</span></div><div class="row"><span class="k">By 4pm</span><span class="v">2 L total</span></div><div class="row"><span class="k">Check</span><span class="v">Pale urine 2–4 hrs</span></div></div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/nancy.jpg" alt="Nancy Clark" />
+                    <span class="pt-attr-text">Per <strong>Nancy Clark</strong> · hydration check</span>
+                  </div>
                 </div>
               </div>
 
@@ -11977,12 +13034,16 @@
                 <div class="pt-ev next green">
                   <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 6:30 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
                   <h3 class="pt-ev-title">Carb-forward dinner</h3>
-                  <p class="pt-ev-body">Tomorrow's a quality day, so fill the tank tonight: plenty of carbs plus ~30g protein. Eat ~3 hours before bed.</p>
+                  <p class="pt-ev-body">Tomorrow's a quality day, so fill the tank tonight: plenty of carbs plus ~30g protein. Eat ~3 hours before bed. Light on fiber so the gut feels light for tomorrow.</p>
                   <div class="pt-ev-detail">
                     <div class="row"><span class="k">Carbs</span><span class="v">80–100 g</span></div>
                     <div class="row"><span class="k">Protein</span><span class="v">~30 g</span></div>
                     <div class="row"><span class="k">Timing</span><span class="v">3h before bed</span></div>
-                    <div class="row"><span class="k">Why</span><span class="v">Fuels tomorrow's quality</span></div>
+                    <div class="row"><span class="k">Fiber</span><span class="v">Low</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/nancy.jpg" alt="Nancy Clark" />
+                    <span class="pt-attr-text">Per <strong>Nancy Clark</strong> · race-day-eve dinner pattern</span>
                   </div>
                 </div>
                 <div class="pt-ev purple">
@@ -12002,13 +13063,474 @@
           </div>
         </div>
       </div>
+
+      <!-- =====================================================================
+           Surface: ARIC-PLAN-TODAY (Tom). Same calendar shell, Aric attribution
+           on the sleep-driven cards. Race day in 10. Wake-time and wind-down
+           lead. Training is intentionally trimmed for freshness.
+           ===================================================================== -->
+      <div class="surface" data-surface="aric-plan-today">
+        <div class="pt">
+          <div class="pt-header">
+            <div>
+              <h1 class="pt-title">Plan for <strong>Today</strong></h1>
+              <div class="pt-today">Wed 25 · <strong>Today</strong></div>
+            </div>
+            <button class="pt-close" onclick="window.switchSurface('aric-chat-baseline')" title="Close">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+
+          <div class="pt-main">
+            <div class="pt-content">
+              <!-- ===== MORNING ===== -->
+              <div class="pt-period show" data-period="morning">
+                <div class="pt-ev next green">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 6:30 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Wake 6:30 · same every day</h3>
+                  <p class="pt-ev-body">Aric's race-week anchor: hold one wake time, weekends included. Your sleep system reads consistency more than duration.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Wake time</span><span class="v">6:30 AM</span></div>
+                    <div class="row"><span class="k">Weekend drift</span><span class="v">0 min · target</span></div>
+                    <div class="row"><span class="k">Why</span><span class="v">Sleep-pressure timing</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/aric.jpg" alt="Aric Prather" />
+                    <span class="pt-attr-text">Per <strong>Aric Prather</strong> · 7-day Sleep Prescription · Day 1</span>
+                  </div>
+                </div>
+                <div class="pt-ev green">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">6:40 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Daylight · 10 min outside</h3>
+                  <p class="pt-ev-body">Step outside within 30 minutes of waking. Morning light is the strongest cue your body has for "the day has started."</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Duration</span><span class="v">10 min</span></div>
+                    <div class="row"><span class="k">Window</span><span class="v">Within 30 min of wake</span></div>
+                    <div class="row"><span class="k">Tonight's effect</span><span class="v">Earlier sleep drive</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/aric.jpg" alt="Aric Prather" />
+                    <span class="pt-attr-text">Per <strong>Aric Prather</strong> · light cue protocol</span>
+                  </div>
+                </div>
+                <div class="pt-ev orange">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">7:15 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Easy Z2 shakeout · 40 min</h3>
+                  <p class="pt-ev-body">Conversational pace, HR 132–142 bpm. Race-week priority is freshness, so we trim before we add.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Pace</span><span class="v">6:00–6:30 / km</span></div>
+                    <div class="row"><span class="k">HR zone</span><span class="v">Z2 · 132–142 bpm</span></div>
+                    <div class="row"><span class="k">Fueling</span><span class="v">Water only</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ===== MIDDAY ===== -->
+              <div class="pt-period" data-period="midday">
+                <div class="pt-ev next blue">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 1:50 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Last caffeine · by 2 PM</h3>
+                  <p class="pt-ev-body">Caffeine's half-life is ~6 hours. Anything after 2 PM is still circulating at lights-out and shows up as lighter, more fragmented sleep.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Cutoff</span><span class="v">2:00 PM</span></div>
+                    <div class="row"><span class="k">Half-life</span><span class="v">~6 hours</span></div>
+                    <div class="row"><span class="k">Watch for</span><span class="v">Late espresso, soda</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/aric.jpg" alt="Aric Prather" />
+                    <span class="pt-attr-text">Per <strong>Aric Prather</strong> · caffeine timing rule</span>
+                  </div>
+                </div>
+                <div class="pt-ev blue">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">12:30 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Hydration check · 1L in</h3>
+                  <p class="pt-ev-body">Half of today's 2L target. Steady sips, not big glasses, so it doesn't cost you a 3 AM bathroom trip.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">By now</span><span class="v">1 L</span></div><div class="row"><span class="k">By 4 PM</span><span class="v">2 L</span></div></div>
+                </div>
+              </div>
+
+              <!-- ===== AFTERNOON ===== -->
+              <div class="pt-period" data-period="afternoon">
+                <div class="pt-ev next purple">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 3:30 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Short nap window · 20 min max</h3>
+                  <p class="pt-ev-body">If you need it: 20 minutes max, before 4 PM. Anything longer or later eats into tonight's sleep pressure.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Max length</span><span class="v">20 min</span></div>
+                    <div class="row"><span class="k">Latest</span><span class="v">4:00 PM</span></div>
+                    <div class="row"><span class="k">Why short</span><span class="v">Avoid deep sleep stages</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/aric.jpg" alt="Aric Prather" />
+                    <span class="pt-attr-text">Per <strong>Aric Prather</strong> · strategic nap protocol</span>
+                  </div>
+                </div>
+                <div class="pt-ev orange">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">4:30 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Mobility flow · 15 min</h3>
+                  <p class="pt-ev-body">Light hips and calves. Active recovery, finish looser, not tired.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Duration</span><span class="v">15 min · 6 moves</span></div><div class="row"><span class="k">Effort</span><span class="v">Very light</span></div></div>
+                </div>
+              </div>
+
+              <!-- ===== EVENING ===== -->
+              <div class="pt-period" data-period="evening">
+                <div class="pt-ev next purple">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 6:30 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Worry list · before dinner</h3>
+                  <p class="pt-ev-body">Tomorrow's plan on paper for 5 minutes, before 7 PM. Race-week logistics that surface at 2 AM are usually things you didn't write down.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Duration</span><span class="v">5 min</span></div>
+                    <div class="row"><span class="k">Latest</span><span class="v">7:00 PM</span></div>
+                    <div class="row"><span class="k">What goes on it</span><span class="v">Tomorrow's open loops</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/aric.jpg" alt="Aric Prather" />
+                    <span class="pt-attr-text">Per <strong>Aric Prather</strong> · cognitive offload before bed</span>
+                  </div>
+                </div>
+                <div class="pt-ev green">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">7:00 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Carb-forward dinner</h3>
+                  <p class="pt-ev-body">Carbs plus ~30g protein, finished at least 3 hours before bed. Eating later than that pushes core temp back up and delays sleep onset.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Carbs</span><span class="v">80–100 g</span></div>
+                    <div class="row"><span class="k">Protein</span><span class="v">~30 g</span></div>
+                    <div class="row"><span class="k">Finish by</span><span class="v">7:30 PM</span></div>
+                  </div>
+                </div>
+                <div class="pt-ev purple">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">10:00 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">30-min wind-down</h3>
+                  <p class="pt-ev-body">Last email sent, screens away, lights down. The link between bed and sleep gets stronger the more you protect this band.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Start</span><span class="v">10:00 PM</span></div>
+                    <div class="row"><span class="k">Screens off</span><span class="v">By 10:10</span></div>
+                    <div class="row"><span class="k">Lights low</span><span class="v">Bedroom only</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/aric.jpg" alt="Aric Prather" />
+                    <span class="pt-attr-text">Per <strong>Aric Prather</strong> · 30-min wind-down protocol</span>
+                  </div>
+                </div>
+                <div class="pt-ev purple">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">10:30 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Lights out · 22:30</h3>
+                  <p class="pt-ev-body">Same lights-out every night this week. Consistency, not duration, is the race-week win.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Target</span><span class="v">8 h sleep window</span></div><div class="row"><span class="k">Wake</span><span class="v">6:30 AM</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =====================================================================
+           Surface: PLAN FOR TODAY — Mariah variant. Same structure, sized to a
+           3-runs-a-week half-marathon build around three kids.
+           ===================================================================== -->
+      <div class="surface" data-surface="plan-today-mariah">
+        <div class="pt">
+          <div class="pt-header">
+            <div>
+              <h1 class="pt-title">Plan for <strong>Today</strong></h1>
+              <div class="pt-today">Wed 19 · <strong>Today</strong></div>
+            </div>
+            <button class="pt-close" onclick="window.switchSurface('chat-baseline-mariah')" title="Close">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+
+          <div class="pt-main">
+            <div class="pt-content">
+              <!-- ===== MORNING ===== -->
+              <div class="pt-period show" data-period="morning">
+                <div class="pt-ev next orange">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 8:40 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Pre-run starter · ~50 cal</h3>
+                  <p class="pt-ev-body">Half a banana or two crackers, 20 min before. Tiny is fine — the point is just a carb signal so the run feels easier than running on empty.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Calories</span><span class="v">~50 cal</span></div>
+                    <div class="row"><span class="k">Carb type</span><span class="v">Simple · tolerable</span></div>
+                    <div class="row"><span class="k">Timing</span><span class="v">20 min pre-run</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/nancy.jpg" alt="Nancy Clark" />
+                    <span class="pt-attr-text">Per <strong>Nancy Clark</strong> · "work up from nothing" starter</span>
+                  </div>
+                </div>
+                <div class="pt-ev orange">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">9:00 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Easy 5k · 35 min</h3>
+                  <p class="pt-ev-body">Thirty-five minutes after drop-off, conversational throughout. Builds the aerobic base your half marathon stands on — consistency over speed.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Pace</span><span class="v">6:45–7:15 / km</span></div>
+                    <div class="row"><span class="k">Effort</span><span class="v">Easy · talk-test</span></div>
+                    <div class="row"><span class="k">Route</span><span class="v">Park loop · 5 km</span></div>
+                    <div class="row"><span class="k">Fueling</span><span class="v">Water only</span></div>
+                  </div>
+                </div>
+                <div class="pt-ev green">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">9:45 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Yogurt + berries · 15g protein</h3>
+                  <p class="pt-ev-body">Inside the 60–90 min recovery window — carbs + protein together. Same combo as Nancy's chocolate-milk shorthand, just sized to your morning.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Protein</span><span class="v">~15 g</span></div>
+                    <div class="row"><span class="k">Carb</span><span class="v">~25 g</span></div>
+                    <div class="row"><span class="k">Window</span><span class="v">60–90 min post-run</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/nancy.jpg" alt="Nancy Clark" />
+                    <span class="pt-attr-text">Per <strong>Nancy Clark</strong> · recovery window</span>
+                  </div>
+                </div>
+                <div class="pt-ev blue">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">10:00 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Hydration · 400ml to start</h3>
+                  <p class="pt-ev-body">Kick off the day's 1.5L target. Nancy's check: pale-straw urine every 2–4 hours means you're on track.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Now</span><span class="v">400 ml</span></div><div class="row"><span class="k">By 4pm</span><span class="v">1.5 L total</span></div><div class="row"><span class="k">Check</span><span class="v">Pale urine 2–4 hrs</span></div></div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/nancy.jpg" alt="Nancy Clark" />
+                    <span class="pt-attr-text">Per <strong>Nancy Clark</strong> · hydration check</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ===== MIDDAY ===== -->
+              <div class="pt-period" data-period="midday">
+                <div class="pt-ev next green">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 12:30 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Lunch · ~20g protein</h3>
+                  <p class="pt-ev-body">Your biggest protein moment of the day. Pair with whole grains so you're fueled, not bloated for school pickup.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Protein</span><span class="v">~20 g · of 80 today</span></div>
+                    <div class="row"><span class="k">Calories</span><span class="v">~450 kcal</span></div>
+                    <div class="row"><span class="k">Idea</span><span class="v">Chicken wrap + salad</span></div>
+                    <div class="row"><span class="k">Why now</span><span class="v">Steady energy to 3pm</span></div>
+                  </div>
+                </div>
+                <div class="pt-ev blue">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">2:00 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Hydration check · 800ml in</h3>
+                  <p class="pt-ev-body">Halfway to your 1.5L for the day.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Target</span><span class="v">800 ml by 2pm</span></div><div class="row"><span class="k">Day</span><span class="v">1.5 L total</span></div></div>
+                </div>
+                <div class="pt-ev orange">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">1:30 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">10-min walk · easy steps</h3>
+                  <p class="pt-ev-body">Light movement to break up the desk hours.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Duration</span><span class="v">10 min</span></div><div class="row"><span class="k">Effort</span><span class="v">Easy</span></div></div>
+                </div>
+              </div>
+
+              <!-- ===== AFTERNOON ===== -->
+              <div class="pt-period" data-period="afternoon">
+                <div class="pt-ev next purple">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 3:00 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">School pickup walk</h3>
+                  <p class="pt-ev-body">Active commute counts — 12 min each way at a brisk pace. The "extra movement" your week needs without adding a workout.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Duration</span><span class="v">~24 min round trip</span></div>
+                    <div class="row"><span class="k">Pace</span><span class="v">Brisk</span></div>
+                    <div class="row"><span class="k">Counts as</span><span class="v">Easy aerobic</span></div>
+                  </div>
+                </div>
+                <div class="pt-ev green">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">3:30 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Snack with the kids · 10g protein</h3>
+                  <p class="pt-ev-body">Cheese stick + apple. Kid-snack convergence — protein for you, fruit for them.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Protein</span><span class="v">10 g</span></div><div class="row"><span class="k">Idea</span><span class="v">Cheese + apple</span></div></div>
+                </div>
+                <div class="pt-ev blue">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">4:00 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Top up to 1.5L</h3>
+                  <p class="pt-ev-body">Finish the day's hydration target.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Remaining</span><span class="v">~400 ml</span></div><div class="row"><span class="k">By</span><span class="v">4:00 PM</span></div></div>
+                </div>
+              </div>
+
+              <!-- ===== EVENING ===== -->
+              <div class="pt-period" data-period="evening">
+                <div class="pt-ev next green">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 6:30 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Family dinner · ~25g protein</h3>
+                  <p class="pt-ev-body">Saturday's tempo run is two days out — eat what the family eats, just add a runner-portion of the protein. Pasta + chicken works. Light on fiber so the gut feels light for Saturday.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Carbs</span><span class="v">~60 g</span></div>
+                    <div class="row"><span class="k">Protein</span><span class="v">~25 g</span></div>
+                    <div class="row"><span class="k">Timing</span><span class="v">3h before bed</span></div>
+                    <div class="row"><span class="k">Fiber</span><span class="v">Low</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/nancy.jpg" alt="Nancy Clark" />
+                    <span class="pt-attr-text">Per <strong>Nancy Clark</strong> · pre-quality-run dinner</span>
+                  </div>
+                </div>
+                <div class="pt-ev purple">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">9:00 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Kids down · your wind-down starts</h3>
+                  <p class="pt-ev-body">Once the bedtime routine ends, the wind-down clock starts. Lights low, phone away.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Duration</span><span class="v">~60 min</span></div><div class="row"><span class="k">Focus</span><span class="v">Quiet · low light</span></div></div>
+                </div>
+                <div class="pt-ev purple">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">10:00 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Lights out · 7h target</h3>
+                  <p class="pt-ev-body">Aim for seven solid — the kids may have other plans.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Target</span><span class="v">7 h</span></div><div class="row"><span class="k">Lights out</span><span class="v">10:00 PM</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- =====================================================================
+           Surface: ARIC-PLAN-TODAY (Mariah). Same calendar shell, Aric guidance
+           shaped around three kids. Half marathon in 14 days. Sleep is broken,
+           the lever is wake-time consistency + a quick wind-down that survives
+           the kid bedtime.
+           ===================================================================== -->
+      <div class="surface" data-surface="aric-plan-today-mariah">
+        <div class="pt">
+          <div class="pt-header">
+            <div>
+              <h1 class="pt-title">Plan for <strong>Today</strong></h1>
+              <div class="pt-today">Wed 25 · <strong>Today</strong></div>
+            </div>
+            <button class="pt-close" onclick="window.switchSurface('aric-chat-baseline-mariah')" title="Close">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+
+          <div class="pt-main">
+            <div class="pt-content">
+              <!-- ===== MORNING ===== -->
+              <div class="pt-period show" data-period="morning">
+                <div class="pt-ev next green">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 6:15 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Wake 6:15 · same after a rough night</h3>
+                  <p class="pt-ev-body">Aric's rule for fragmented sleep: hold the wake time even if the night was broken. A steady morning is the most reliable signal you can give your sleep system.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Wake time</span><span class="v">6:15 AM</span></div>
+                    <div class="row"><span class="k">After a wake-up</span><span class="v">Same wake time</span></div>
+                    <div class="row"><span class="k">Why</span><span class="v">Tonight's sleep depends on it</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/aric.jpg" alt="Aric Prather" />
+                    <span class="pt-attr-text">Per <strong>Aric Prather</strong> · wake-time consistency</span>
+                  </div>
+                </div>
+                <div class="pt-ev green">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">6:30 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Daylight while the coffee brews</h3>
+                  <p class="pt-ev-body">Step outside or open the blinds for 5–10 min as the kids wake up. Morning light is the strongest cue your body has for "this is the start of the day."</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Duration</span><span class="v">5–10 min</span></div>
+                    <div class="row"><span class="k">Where</span><span class="v">Back door · kitchen window</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/aric.jpg" alt="Aric Prather" />
+                    <span class="pt-attr-text">Per <strong>Aric Prather</strong> · light cue protocol</span>
+                  </div>
+                </div>
+                <div class="pt-ev orange">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">9:00 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Easy 5k · 35 min</h3>
+                  <p class="pt-ev-body">After school drop-off. Conversational pace, short and steady. Consistency beats volume this week.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Pace</span><span class="v">Easy · conversational</span></div><div class="row"><span class="k">Duration</span><span class="v">35 min</span></div></div>
+                </div>
+              </div>
+
+              <!-- ===== MIDDAY ===== -->
+              <div class="pt-period" data-period="midday">
+                <div class="pt-ev next blue">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 12:30 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Last caffeine · by 12:30 PM</h3>
+                  <p class="pt-ev-body">Earlier than feels needed. With sleep already fragmented, the afternoon coffee costs you more than it gives.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Cutoff</span><span class="v">12:30 PM</span></div>
+                    <div class="row"><span class="k">Half-life</span><span class="v">~6 hours</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/aric.jpg" alt="Aric Prather" />
+                    <span class="pt-attr-text">Per <strong>Aric Prather</strong> · caffeine timing rule</span>
+                  </div>
+                </div>
+                <div class="pt-ev orange">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">1:00 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">10-min walk · light steps</h3>
+                  <p class="pt-ev-body">Get outside between school runs. Light movement + daylight aids tonight's sleep onset.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Duration</span><span class="v">10 min</span></div></div>
+                </div>
+              </div>
+
+              <!-- ===== AFTERNOON ===== -->
+              <div class="pt-period" data-period="afternoon">
+                <div class="pt-ev next purple">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 3:00 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Strategic nap · only if needed</h3>
+                  <p class="pt-ev-body">If last night was rough: 20 minutes max, before 3:30 PM. Set a timer. Anything longer or later eats tonight's sleep pressure.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Max length</span><span class="v">20 min</span></div>
+                    <div class="row"><span class="k">Latest</span><span class="v">3:30 PM</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/aric.jpg" alt="Aric Prather" />
+                    <span class="pt-attr-text">Per <strong>Aric Prather</strong> · strategic nap protocol</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ===== EVENING ===== -->
+              <div class="pt-period" data-period="evening">
+                <div class="pt-ev next purple">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 6:00 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Worry list · before bath time</h3>
+                  <p class="pt-ev-body">Tomorrow's mental load on paper for 5 minutes, before the kids' wind-down. The to-do list doesn't get to start at 10:30 PM.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Duration</span><span class="v">5 min</span></div>
+                    <div class="row"><span class="k">When</span><span class="v">Before bath</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/aric.jpg" alt="Aric Prather" />
+                    <span class="pt-attr-text">Per <strong>Aric Prather</strong> · cognitive offload before bed</span>
+                  </div>
+                </div>
+                <div class="pt-ev purple">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">9:50 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">10-min wind-down</h3>
+                  <p class="pt-ev-body">Once the kids are down: phone in another room, lights low. Short and repeatable beats long and skipped.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Duration</span><span class="v">10 min</span></div>
+                    <div class="row"><span class="k">Phone</span><span class="v">Outside the bedroom</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/aric.jpg" alt="Aric Prather" />
+                    <span class="pt-attr-text">Per <strong>Aric Prather</strong> · shortened wind-down for fragmented sleep</span>
+                  </div>
+                </div>
+                <div class="pt-ev purple">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">10:00 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Lights out · 22:00</h3>
+                  <p class="pt-ev-body">Match time in bed to the sleep you actually get this week, so it consolidates instead of fragmenting further.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Target window</span><span class="v">22:00 → 6:15</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <script>
         function ptShowPeriod(p){
-          if (window.switchSurface) window.switchSurface('plan-today');
-          var root = document.querySelector('.surface[data-surface="plan-today"] .pt');
-          if (root) {
-            root.querySelectorAll('.pt-period').forEach(function(b){ b.classList.toggle('show', b.dataset.period === p); });
-            var sc = root.querySelector('.pt-content'); if (sc) sc.scrollTop = 0;
+          // Find whichever plan-today* surface is currently visible (Tom or Mariah, Nancy or Aric).
+          var active = document.querySelector('.surface.visible[data-surface*="plan-today"]')
+                    || document.querySelector('.surface[data-surface="plan-today"]');
+          if (window.switchSurface && active) window.switchSurface(active.dataset.surface);
+          if (active) {
+            var root = active.querySelector('.pt');
+            if (root) {
+              root.querySelectorAll('.pt-period').forEach(function(b){ b.classList.toggle('show', b.dataset.period === p); });
+              var sc = root.querySelector('.pt-content'); if (sc) sc.scrollTop = 0;
+            }
           }
           document.querySelectorAll('.pt-ext-item').forEach(function(i){ i.classList.toggle('active', i.dataset.period === p); });
         }
@@ -12109,7 +13631,7 @@
             <!-- Hero (reused from V1) -->
             <div class="dx-hero">
               <div class="dx-hero-avatar">
-                <img src="assets/experts/images/Rectangle%202816.png" alt="" />
+                <img src="assets/images/hub-feature-image.png" alt="" />
                 <div>
                   <div class="dx-hero-name">Dr Stacy Sims</div>
                   <div class="dx-hero-sub">Women's performance · Perimenopause</div>
@@ -12307,13 +13829,13 @@
   const HUB_DATA = {
     experts: [
       {
-        portrait: 'assets/experts/images/Rectangle%202538.png',
+        portrait: 'assets/images/hub-content-card.png',
         name: 'Matthew Walker',
         domain: 'Sleep'
       },
       {
         // Anthony William — Figma stacks 2539 + 2540 as two layers
-        portrait: ['assets/experts/images/Rectangle%202539.png', 'assets/experts/images/Rectangle%202540.png'],
+        portrait: ['assets/images/hub-expert-avatar-1.png', 'assets/images/hub-expert-avatar-2.png'],
         name: 'Anthony William',
         domain: 'Psychic expert'
       }
@@ -12321,34 +13843,34 @@
     books: [
       // 2 books on running (diet + training)
       {
-        cover: 'assets/experts/images/run-fast-eat-slow.png',
+        cover: 'assets/images/run-fast-eat-slow.png',
         author: 'Shalane Flanagan',
         category: 'Running'
       },
       {
-        cover: 'assets/experts/images/80-20-running.png',
+        cover: 'assets/images/80-20-running.png',
         author: 'Matt Fitzgerald',
         category: 'Running'
       },
       // 2 books on perimenopause diet
       {
-        cover: 'assets/experts/images/galveston-diet.png',
+        cover: 'assets/images/galveston-diet.png',
         author: 'Mary Claire Haver',
         category: 'Perimenopause'
       },
       {
-        cover: 'assets/experts/images/image%2010.png', // Hormone Repair Manual from Figma
+        cover: 'assets/images/hub-portrait-trio.png', // Hormone Repair Manual from Figma
         author: 'Lara Briden',
         category: 'Perimenopause'
       },
       // 2 books on recovery for active people
       {
-        cover: 'assets/experts/images/good-to-go.png',
+        cover: 'assets/images/good-to-go.png',
         author: 'Christie Aschwanden',
         category: 'Recovery'
       },
       {
-        cover: 'assets/experts/images/image%2012.png', // Built to Move from Figma
+        cover: 'assets/images/hub-portrait-row.png', // Built to Move from Figma
         author: 'Kelly Starrett',
         category: 'Recovery'
       }
@@ -12387,7 +13909,32 @@
 
   // Exposed below the definition so inline onclick handlers can navigate
   // to surfaces whose chips have been removed from the state-bar.
+  // Remembers which surface was visible just before a plan-today open, so it can
+  // stay visible underneath while plan-today slides in from the left (iOS-style).
+  let _slideUnderSurface = null;
+
+  // Aric variant of the Ottavia static surfaces. When expert=aric is in the
+  // URL (the Aric demo deck), every Ottavia surface name (with or without
+  // -mariah suffix) is rerouted to its aric-prefixed sibling so the demo
+  // shows sleep-themed content end-to-end without the deck needing to know.
+  const ARIC_OTTAVIA_BASE_SURFACES = new Set([
+    'ottavia-nutshell', 'plan-today', 'chat-baseline',
+    'ottavia-nutshell-mariah', 'plan-today-mariah', 'chat-baseline-mariah',
+  ]);
+  function maybeAricize(target) {
+    if (window.__expertId !== 'aric' || !target) return target;
+    if (!ARIC_OTTAVIA_BASE_SURFACES.has(target)) return target;
+    const aricTarget = 'aric-' + target;
+    return document.querySelector(`.surface[data-surface="${aricTarget}"]`) ? aricTarget : target;
+  }
+
   function activateSurface(target) {
+    target = maybeAricize(target);
+    if (target && target.match(/^(aric-)?plan-today/)) {
+      const currentTop = Array.from(surfaces).find(s => s.classList.contains('visible') && !s.dataset.surface.match(/^(aric-)?plan-today/));
+      if (currentTop) _slideUnderSurface = currentTop.dataset.surface;
+    }
+
     chips.forEach(c => c.classList.toggle('active', c.dataset.surface === target));
     surfaces.forEach(s => {
       const id = s.dataset.surface;
@@ -12395,6 +13942,10 @@
         s.classList.toggle('visible', id === target || id === 'chat-baseline');
       } else if (target === 'expert-profile' || target === 'expert-profile-v2' || target === 'my-experts') {
         s.classList.toggle('visible', id === target || id === 'hub-home' || id === 'chat-baseline');
+      } else if (target && target.match(/^(aric-)?plan-today/)) {
+        // Slide-in: keep whatever was on top before, visible underneath, so the
+        // sliding panel doesn't reveal a blank area as it animates in.
+        s.classList.toggle('visible', id === target || id === _slideUnderSurface);
       } else {
         s.classList.toggle('visible', id === target);
       }
@@ -12422,8 +13973,8 @@
 
   const X_EXPERTS = {
     scott: {
-      name: `Scott Fauble`, first: `Scott`, initials: `SF`, accent: `#C2603A`, accent2: `#9C4A2C`, portrait: `assets/experts/portraits/scott.jpg`,
-      heroStyle: `feature`, heroImage: `assets/experts/portraits/scott-runner.png`,
+      name: `Scott Fauble`, first: `Scott`, initials: `SF`, accent: `#C2603A`, accent2: `#9C4A2C`, portrait: `assets/images/scott.jpg`,
+      heroStyle: `feature`, heroImage: `assets/images/scott-runner.png`,
       eyebrow: `Elite Marathoner & Author`, headline: `Train like a pro, with Scott Fauble`,
       profession: `Elite Marathoner & Author`,
       tagline: `A professional's marathon training, applied to your weekly plan and races.`,
@@ -12435,7 +13986,7 @@
         `His book and writing surfaced when they're relevant to your question`,
         `When you set a goal — a half or a full — your plan is built with his approach baked in`,
       ],
-      bodyOfWork: [{ cover: `assets/experts/portraits/inside-a-marathon.jpg`, title: `Inside a Marathon`, sub: `An all-access pass to a top-10 finish at NYC, with coach Ben Rosario · 2018` }],
+      bodyOfWork: [{ cover: `assets/images/inside-a-marathon.jpg`, title: `Inside a Marathon`, sub: `An all-access pass to a top-10 finish at NYC, with coach Ben Rosario · 2018` }],
       about: `Scott Fauble is an American professional marathoner who has finished in the top 10 at both the Boston and New York City Marathons, with a personal best of 2:08. He trains at altitude in Flagstaff, Arizona, and is known for an unusually transparent, process-driven approach to the marathon — captured in his book Inside a Marathon.`,
       aboutBullets: [`2:08 marathon personal best`, `Top-10 at Boston & NYC Marathons`, `Co-author of Inside a Marathon`, `Trains at altitude in Flagstaff, AZ`],
       chips: [`Marathon`, `Aerobic Base`, `Workouts`, `Long Run`, `Fueling`, `Consistency`],
@@ -12492,7 +14043,7 @@
     },
 
     aric: {
-      name: `Aric Prather`, first: `Aric`, initials: `AP`, accent: `#4E5A9E`, accent2: `#343E78`, portrait: `assets/experts/portraits/aric.jpg`, heroPortrait: `assets/experts/portraits/aric-hero.jpg`, heroBg: `#B1DAFF`,
+      name: `Aric Prather`, first: `Aric`, initials: `AP`, accent: `#4E5A9E`, accent2: `#343E78`, portrait: `assets/images/aric.jpg`, heroPortrait: `assets/images/aric-hero.jpg`, heroBg: `#B1DAFF`,
       profession: `Sleep Scientist & Author`,
       tagline: `The science of sleep, turned into a plan you can actually follow — and stick to.`,
       stats: [`9.6K followers`, `4.9★ rating`], price: `€6,99`, priceUnit: `week`,
@@ -12503,10 +14054,25 @@
         `Practical answers when sleep is off: night waking, a racing mind, rough weeks`,
         `His book and research surfaced when they're relevant to your question`,
       ],
-      bodyOfWork: [{ cover: `assets/experts/portraits/the-sleep-prescription.jpg`, title: `The Sleep Prescription`, sub: `Seven Days to Unlocking Your Best Rest · Penguin Life · 2022` }],
+      bodyOfWork: [{ cover: `assets/images/the-sleep-prescription.jpg`, title: `The Sleep Prescription`, sub: `Seven Days to Unlocking Your Best Rest · Penguin Life · 2022` }],
       about: `Aric Prather is a professor of psychiatry and behavioral sciences at UC San Francisco, where he runs a sleep and health laboratory and treats insomnia using cognitive behavioral therapy for insomnia (CBT-I). His book The Sleep Prescription distills that evidence-based approach into practical daily steps.`,
       aboutBullets: [`Professor of Psychiatry, UCSF`, `Runs a sleep & health research lab`, `Treats insomnia with CBT-I`, `Author of The Sleep Prescription`],
       chips: [`Sleep`, `CBT-I`, `Wind-down`, `Consistency`, `Night Waking`, `Recovery`],
+      challenge: {
+        title: `The 7-day Sleep Prescription`,
+        intro: `Aric's program from his book, mapped to you. One shift a day for seven days. The aim isn't to sleep more, it's to make the sleep you do get more reliable.`,
+        weekLabel: `Day-by-day · one shift at a time`,
+        week: [
+          { day: `Day 1`, color: `green`,  title: `Set your clock`,           body: `Lock a wake time and hold it every day, weekends included. A steady morning is the strongest signal your sleep system reads.` },
+          { day: `Day 2`, color: `purple`, title: `Ease off the gas`,         body: `A 30-minute wind-down before bed: last email sent, screens away, lights down.` },
+          { day: `Day 3`, color: `orange`, title: `Energize, the right way`,  body: `Daylight within 30 minutes of waking, last caffeine by 2 PM. Both signals matter more than they sound.` },
+          { day: `Day 4`, color: `blue`,   title: `Worry early`,              body: `Park tomorrow's plan on paper before dinner so race-week loose ends don't surface at 2 AM.` },
+          { day: `Day 5`, color: `purple`, title: `You're not a computer`,    body: `Leave about three hours between a hard session and bed. Late effort keeps your system revved past lights-out.` },
+          { day: `Day 6`, color: `blue`,   title: `Retrain your brain`,       body: `Awake more than 20 minutes? Get up, keep the bed for sleep, return when sleepy.` },
+          { day: `Day 7`, color: `gray`,   title: `Stay up late`,             body: `Briefly trim time in bed to rebuild sleep pressure. The hours you get run deeper and more efficient.` },
+        ],
+        close: `One shift a day, not seven at once. I'll track your wake-time consistency and deep sleep as you go.`,
+      },
       cases: {
         tom: {
           plan: {
@@ -12570,8 +14136,8 @@
     },
 
     nancy: {
-      name: `Nancy Clark`, first: `Nancy`, initials: `NC`, accent: `#5C7A3E`, accent2: `#3D5526`, portrait: `assets/experts/portraits/nancy.jpg`,
-      heroStyle: `feature`, heroImage: `assets/experts/portraits/nancy_profile.png`,
+      name: `Nancy Clark`, first: `Nancy`, initials: `NC`, accent: `#5C7A3E`, accent2: `#3D5526`, portrait: `assets/images/nancy.jpg`,
+      heroStyle: `feature`, heroImage: `assets/images/nancy-profile.png`,
       featureBg: `#A8D49B`, featureFadeH: 150, featureFadeStart: 100, featureImgOffsetX: -12,
       eyebrow: `Sports Dietitian & Author`, headline: `Fuel your training, with Nancy Clark`,
       profession: `Sports Dietitian & Author`,
@@ -12585,8 +14151,8 @@
         `Her book and writing surfaced when they're relevant to your question`,
       ],
       bodyOfWork: [
-        { cover: `assets/experts/portraits/sports-nutrition-guidebook.jpg`, title: `Nancy Clark's Sports Nutrition Guidebook`, sub: `The #1 nutrition guide for active people · Human Kinetics · 6th ed., 2020 · 750K+ copies sold` },
-        { cover: `assets/experts/portraits/food-guide-marathoners.jpg`,    title: `Nancy Clark's Food Guide for Marathoners`,    sub: `Tips for everyday champions — eat well, even when pressed for time · Meyer & Meyer Sport · 2011 · foreword by Jeff Galloway` },
+        { cover: `assets/images/sports-nutrition-guidebook.jpg`, title: `Nancy Clark's Sports Nutrition Guidebook`, sub: `The #1 nutrition guide for active people · Human Kinetics · 6th ed., 2020 · 750K+ copies sold` },
+        { cover: `assets/images/food-guide-marathoners.jpg`,    title: `Nancy Clark's Food Guide for Marathoners`,    sub: `Tips for everyday champions — eat well, even when pressed for time · Meyer & Meyer Sport · 2011 · foreword by Jeff Galloway` },
       ],
       about: `Nancy Clark is one of the original sports dietitians in the United States — a registered dietitian (MS, RD, CSSD) running a sports nutrition practice outside Boston for over four decades. She's worked with the Boston Red Sox, Celtics, and Bruins, advised Olympic athletes, and is a Fellow of both the Academy of Nutrition and Dietetics and the American College of Sports Medicine. Her Sports Nutrition Guidebook has sold over 750,000 copies and her column The Athlete's Kitchen runs in 150+ sports publications.`,
       aboutBullets: [`MS, RD, CSSD — board-certified sports dietitian`, `Fellow, Academy of Nutrition and Dietetics & ACSM`, `Boston-area private practice, 40+ years`, `Team nutritionist: Boston Red Sox, Celtics, Bruins`, `Monthly column in 150+ sports publications`],
@@ -12646,7 +14212,7 @@
     },
 
     cheri: {
-      name: `Cheri Mah`, first: `Cheri`, initials: `CM`, accent: `#2F7E8C`, accent2: `#1E5A65`, portrait: `assets/experts/portraits/cheri.jpg`,
+      name: `Cheri Mah`, first: `Cheri`, initials: `CM`, accent: `#2F7E8C`, accent2: `#1E5A65`, portrait: `assets/images/cheri.jpg`,
       profession: `Sleep & Performance Scientist`,
       tagline: `Sleep as a performance tool — backed by the research on real athletes.`,
       stats: [`7.8K followers`, `4.9★ rating`], price: `$12.00`,
@@ -12859,7 +14425,7 @@
           <span class="label">Experts</span>
           <span class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
         </div>
-        <button class="header-icon-btn" title="Profile"><img src="assets/experts/icons/user-profile-03.svg" alt="" /></button>
+        <button class="header-icon-btn" title="Profile"><img src="assets/icons/user-profile.svg" alt="" /></button>
       </div>`;
   }
   function xQaComposer(withSuggestions = true) {
@@ -12870,9 +14436,9 @@
         <div class="suggestion-pill">My report this morning</div>
       </div></div>` : ''}
       <div class="composer"><div class="composer-box">
-        <div class="composer-circle left" title="More"><img src="assets/experts/icons/more.svg" alt="" /></div>
-        <div class="composer-input-wrap"><div class="composer-input"></div><div class="composer-mic" title="Voice"><img src="assets/experts/icons/microphone-01.svg" alt="" /></div></div>
-        <div class="composer-circle right" title="Camera"><img src="assets/experts/icons/camera.svg" alt="" /></div>
+        <div class="composer-circle left" title="More"><img src="assets/icons/more.svg" alt="" /></div>
+        <div class="composer-input-wrap"><div class="composer-input"></div><div class="composer-mic" title="Voice"><img src="assets/icons/microphone.svg" alt="" /></div></div>
+        <div class="composer-circle right" title="Camera"><img src="assets/icons/camera.svg" alt="" /></div>
       </div></div>`;
   }
   // 7-day program calendar (reuses the .rp- week-card pattern from expert-rebuild-plan).
@@ -13026,6 +14592,42 @@
       ${xQaComposer(false)}
       <div class="home-indicator"></div>`;
   }
+  // Challenge — a structured behavior-change program from the expert's own
+  // methodology (e.g. Aric's 7-day Sleep Prescription). Renders when the
+  // expert has a `challenge` object; otherwise falls back to a placeholder.
+  function renderXChallenge(ex, pid) {
+    const c = ex.challenge;
+    if (!c) {
+      return `${xChatHeader(ex)}
+        <div class="chat-scroll"><div class="chat-scroll-inner"><div class="cs-body">
+          <div class="x-msg">
+            <div class="xc-placeholder">
+              ${xAvatar(ex, 'xc-avatar')}
+              <h1 class="xc-title">Challenge with ${ex.first}</h1>
+              <p class="xc-sub">Content coming soon.</p>
+            </div>
+          </div>
+        </div></div></div>
+        ${xQaComposer(false)}
+        <div class="home-indicator"></div>`;
+    }
+    return `${xChatHeader(ex)}
+      <div class="chat-scroll"><div class="chat-scroll-inner"><div class="cs-body">
+        <div class="cs-banner">
+          <span class="cs-banner-line">${xAvatar(ex, 'cs-banner-avatar')}<strong>${ex.name}</strong>'s challenge, applied to you.</span>
+          <span class="cs-banner-line">Start anytime from your <a>Plan</a>.</span>
+        </div>
+        <div class="x-msg">
+          <h1 class="cs-title">${c.title}</h1>
+          <p class="cs-para">${c.intro}</p>
+          ${c.week ? renderXWeek(c.week, c.weekLabel) : ''}
+          ${c.close ? `<p class="cs-para">${c.close}</p>` : ''}
+          ${xFooter(ex)}
+        </div>
+      </div></div></div>
+      ${xQaComposer(false)}
+      <div class="home-indicator"></div>`;
+  }
   // Convert flow — subscribe confirm sheet, then the "you're in" welcome.
   function renderXSubscribe(ex) {
     const unit = ex.priceUnit || 'month';
@@ -13083,12 +14685,14 @@
     const pr = document.getElementById('xProfileRoot');
     const pl = document.getElementById('xPlanRoot');
     const qa = document.getElementById('xQaRoot');
+    const ch = document.getElementById('xChallengeRoot');
     const sub = document.getElementById('xSubRoot');
     const ap = document.getElementById('xApRoot');
     const wel = document.getElementById('xWelRoot');
     if (pr) pr.innerHTML = renderXProfile(ex);
     if (pl) pl.innerHTML = renderXPlan(ex, pid);
     if (qa) qa.innerHTML = renderXQa(ex, pid);
+    if (ch) ch.innerHTML = renderXChallenge(ex, pid);
     if (sub) sub.innerHTML = renderXSubscribe(ex);
     if (ap) ap.innerHTML = renderXApplePay(ex);
     if (wel) wel.innerHTML = renderXWelcome(ex);
