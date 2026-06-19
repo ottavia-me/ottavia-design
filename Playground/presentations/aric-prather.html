@@ -762,21 +762,21 @@
     .founding-role-not { font-size: clamp(14px, 1.05vw, 16px); color: var(--ink-soft); font-style: italic; margin: 4px 0 0; }
 
     /* ============================================================
-       SLIDE: SAFETY AND SCOPE + HOW WE KEEP IT GROUNDED
-       Simple text-only slides, single column centered horizontally.
+       SLIDE: SAFETY AND SCOPE
+       Simple text-only slide, single column centered horizontally.
        ============================================================ */
-    .slide-safety, .slide-grounded {
+    .slide-safety {
       align-items: center;
       justify-content: center;
       padding: 80px 96px 96px;
     }
-    .slide-safety-text, .slide-grounded-text {
+    .slide-safety-text {
       max-width: 920px;
       width: 100%;
     }
-    .slide-safety .big-headline, .slide-grounded .big-headline { margin-bottom: 36px; }
-    .slide-safety .bullet-list, .slide-grounded .bullet-list { gap: 20px; }
-    .slide-safety .bullet-list li, .slide-grounded .bullet-list li {
+    .slide-safety .big-headline { margin-bottom: 36px; }
+    .slide-safety .bullet-list { gap: 20px; }
+    .slide-safety .bullet-list li {
       font-size: clamp(17px, 1.4vw, 22px);
       line-height: 1.55;
       color: var(--ink);
@@ -1186,19 +1186,6 @@
   </div>
 </section>
 
-<!-- ====================== SLIDE 11: HOW WE KEEP IT GROUNDED ====================== -->
-<section class="slide slide-content slide-grounded" id="slide-grounded">
-  <div class="slide-grounded-text">
-    <p class="kicker">How we keep it grounded</p>
-    <h1 class="big-headline">Three constraints, applied to every recommendation.</h1>
-    <ul class="bullet-list">
-      <li>Constrained to expert-approved knowledge, not free-form LLM output.</li>
-      <li>The expert lens is the authority inside their own domain.</li>
-      <li>We measure adherence, behavior change, and sleep improvement, not just usage.</li>
-    </ul>
-  </div>
-</section>
-
 <!-- ====================== SLIDE 10: DEMO ====================== -->
 <section class="slide slide-10" id="slide10">
   <div class="preview-stage">
@@ -1319,7 +1306,7 @@
      Slides 2-9 show counter + nav.
      Slide 10 (demo) shows counter + nav too but uses its own preview-stage chrome.
      ---------------------------------------------------------------- */
-  const TOTAL_SLIDES = 12;
+  const TOTAL_SLIDES = 11;
   let current = 1;
 
   const slideEls   = Array.from(document.querySelectorAll('.slide'));
