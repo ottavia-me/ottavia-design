@@ -757,21 +757,26 @@
       gap: 28px;
     }
     .slide-9-left .medium-headline { margin-bottom: 16px; }
-    .slide-9-left .slide-title-left { margin-bottom: 12px; }
+    /* Type ramp aligned with the Safety & scope slide. */
+    .slide-9-left .slide-title-left {
+      font-size: clamp(40px, 4.8vw, 64px);
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
     .slide-9-left .bullet-list { gap: 24px; }
-    .slide-9-left .bullet-list li { font-size: 20px; line-height: 1.5; }
-    .slide-9-left .body-text { font-size: clamp(17px, 1.35vw, 21px); color: #2D2A24; }
+    .slide-9-left .bullet-list li { font-size: clamp(17px, 1.4vw, 22px); line-height: 1.55; }
+    .slide-9-left .body-text { font-size: clamp(17px, 1.4vw, 22px); line-height: 1.55; color: #2D2A24; }
     .slide-9-left .body-text.body-muted { color: var(--ink-soft); }
     .slide-9-left .body-text strong { font-weight: 700; color: var(--ink); }
 
     /* Founding role bullets — slide 9 (Founding Expert) appendix */
     .founding-role { margin-top: 8px; }
-    .founding-role-title { font-size: clamp(18px, 1.4vw, 22px); font-weight: 700; color: var(--ink); margin: 0 0 12px; letter-spacing: -0.01em; }
-    .founding-role-bullets { list-style: none; padding: 0; margin: 0 0 10px; display: flex; flex-direction: column; gap: 8px; }
+    .founding-role-title { font-size: clamp(20px, 1.6vw, 26px); font-weight: 700; color: var(--ink); margin: 0 0 14px; letter-spacing: -0.01em; }
+    .founding-role-bullets { list-style: none; padding: 0; margin: 0 0 10px; display: flex; flex-direction: column; gap: 10px; }
     .founding-role-bullets li {
       position: relative;
-      padding-left: 18px;
-      font-size: clamp(15px, 1.15vw, 18px);
+      padding-left: 22px;
+      font-size: clamp(17px, 1.4vw, 22px);
       color: #2D2A24; line-height: 1.4; letter-spacing: -0.01em;
     }
     .founding-role-bullets li::before {
@@ -1244,7 +1249,6 @@
         <button class="ps-uc"        data-surface="x-profile">Expert Profile</button>
         <button class="ps-uc"        data-surface="x-plan">Plan</button>
         <button class="ps-uc"        data-surface="x-qa">Q&amp;A</button>
-        <button class="ps-uc"        data-surface="x-challenge">Challenge</button>
       </div>
       <div class="pt-hour-picker" id="hourPicker">
         <div class="pt-hour-title">Plan · Hour</div>
