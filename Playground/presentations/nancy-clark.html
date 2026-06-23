@@ -195,12 +195,9 @@
     }
     .splash-title {
       position: relative;
-      font-size: clamp(56px, 8vw, 104px);
-      font-weight: 700;
-      line-height: 1;
-      letter-spacing: -0.02em;
-      color: #F5F1EA;
-      text-shadow: 0 2px 24px rgba(0,0,0,0.35);
+      width: clamp(280px, 36vw, 480px);
+      height: auto;
+      filter: drop-shadow(0 2px 24px rgba(0,0,0,0.35));
       opacity: 0;
       animation: splashRise .9s .15s both cubic-bezier(.2,.7,.2,1);
     }
@@ -922,7 +919,7 @@
 
 <!-- ====================== SLIDE 1: SPLASH ====================== -->
 <section class="slide splash visible" id="slide1" data-slide-id="splash">
-  <h1 class="splash-title">Ottavia</h1>
+  <img class="splash-title" src="../assets/icons/ottavia-brand.svg" alt="Ottavia" />
   <p class="splash-sub">Demo for Nancy Clark</p>
   <button class="splash-start" id="startBtn">Start</button>
 </section>
