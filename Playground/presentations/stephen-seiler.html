@@ -341,21 +341,30 @@
        SLIDE 3 — WHAT IS OTTAVIA
        ============================================================ */
     .slide-3 {
+      --content-min: 1100px;
+      --content-max: 1600px;
       flex-direction: row;
-      gap: 60px;
+      gap: 0;
       align-items: center;
     }
     .slide-3-text {
-      flex: 1;
+      flex: 0 0 auto;
       max-width: 620px;
     }
     .slide-3-phone-area {
-      flex: 1;
+      flex: 1 1 auto;
       position: relative;
       height: 100%;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
+      margin-left: 0;
+    }
+    .slide-3-phone-area .slide-asset-fill {
+      max-height: 100%;
+      max-width: 100%;
+      width: auto;
+      height: auto;
     }
     .floating-chip {
       position: absolute;
