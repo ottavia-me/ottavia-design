@@ -6626,6 +6626,15 @@
     color: rgba(0,0,0,0.5);
   }
   .p3-bow-img.green-badge svg { width: 36px; height: 36px; }
+  /* Color-block cover for published work without a book image (articles). */
+  .p3-bow-img.x-bow-fallback {
+    width: 76px; height: 100px;
+    border-radius: 10px;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.92);
+    font-size: 13px; font-weight: 700;
+  }
+  .p3-bow-img.x-bow-fallback svg { width: 34px; height: 34px; }
   .p3-bow-text { min-width: 0; }
   .p3-bow-title {
     font-family: var(--font-display);
@@ -9370,6 +9379,297 @@
               <div class="suggestion-pill">Build a 10-min wind-down</div>
               <div class="suggestion-pill">Is napping okay?</div>
               <div class="suggestion-pill">Log tonight's plan</div>
+            </div>
+          </div>
+
+          <div class="composer">
+            <div class="composer-box">
+              <div class="composer-circle left" title="More">
+                <img src="assets/icons/more.svg" alt="" />
+              </div>
+              <div class="composer-input-wrap">
+                <div class="composer-input"></div>
+                <div class="composer-mic" title="Voice">
+                  <img src="assets/icons/microphone.svg" alt="" />
+                </div>
+              </div>
+              <div class="composer-circle right" title="Camera">
+                <img src="assets/icons/camera.svg" alt="" />
+              </div>
+            </div>
+          </div>
+
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+
+      <!-- =====================================================================
+           Surface: STEPHEN-CHAT-BASELINE (Tom). Day-to-day chat adapted to
+           Stephen's polarized 80/20 lens. Scenario: Tom's "easy" run this
+           morning drifted into Zone 3. Ottavia leads (the "I" voice), Stephen
+           is the knowledge the call is grounded in.
+           ===================================================================== -->
+      <div class="surface" data-surface="stephen-chat-baseline">
+        <div class="chat-baseline">
+
+          <div class="chat-header">
+            <span class="chh-blur b1"></span><span class="chh-blur b2"></span><span class="chh-blur b3"></span><div class="chat-header-gradient"></div>
+          </div>
+
+          <div class="chat-header-row">
+            <div class="header-pill date" onclick="window.switchSurface('stephen-plan-today')" style="cursor:pointer" title="Wed Jun 25"><span class="day-num">25</span><span class="day-wd">wed</span></div>
+            <div class="header-pill ottavia-mode-pill" data-mode-pill title="Switch mode">
+              <span class="label">Ottavia</span>
+              <span class="chevron">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+            </div>
+            <button class="header-icon-btn" title="Profile">
+              <img src="assets/icons/user-profile.svg" alt="" />
+            </button>
+          </div>
+
+          <div class="mode-scrim" data-mode-scrim></div>
+          <div class="ottavia-mode-menu" data-mode-menu>
+            <div class="mode-option selected" data-mode="ottavia">
+              <div class="check-slot">
+                <svg viewBox="0 0 11.6 9.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 1 L3.44 8.2 L1 5.74"/></svg>
+              </div>
+              <div class="text">
+                <div class="title">Ottavia</div>
+                <div class="sub">Intelligent personalized guidance</div>
+              </div>
+            </div>
+            <div class="mode-option" data-mode="ottavia-experts">
+              <div class="check-slot">
+                <svg viewBox="0 0 11.6 9.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 1 L3.44 8.2 L1 5.74"/></svg>
+              </div>
+              <div class="text">
+                <div class="title">Ottavia + Experts</div>
+                <div class="sub">Deeper domain-specific interpretation</div>
+                <span class="coming-soon">coming soon</span>
+              </div>
+            </div>
+            <div class="mode-menu-divider"></div>
+            <div class="mode-link" data-mode-link onclick="document.querySelector('.state-chip[data-surface=hub-home]').click()">
+              <span class="title">Experts hub</span>
+              <span class="chevron">
+                <svg viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 1 7 7 1 13"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <div class="chat-scroll">
+            <div class="chat-scroll-inner">
+              <div class="cs-ask">how was my easy run this morning?</div>
+
+              <div class="cs-eyebrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h4l2 6 4-14 2 8h4"/></svg>
+                From <a>Training</a>
+              </div>
+              <h1 class="cs-title">Good run, but it wasn't an easy run. A third of it crept into hard.</h1>
+              <p class="cs-para">You logged it as Zone 1, but here's where the 52 minutes actually landed:</p>
+              <ul class="cs-list">
+                <li>· Zone 1 (easy) · 34 min</li>
+                <li>· Zone 2 (moderate) · 11 min</li>
+                <li>· Zone 3 (hard) · 7 min</li>
+              </ul>
+
+              <p class="cs-para">That drift into the middle is the most common pattern I see in your easy days — it feels productive, but it quietly taxes the recovery your one hard session this week depends on.</p>
+
+              <div class="cs-expert-attr">
+                <img class="cs-attr-avatar" src="assets/images/stephen.png" alt="Stephen Seiler" />
+                <div class="cs-attr-content">
+                  <div class="cs-attr-name">Stephen Seiler</div>
+                  <p class="cs-attr-body">The polarized model only works if easy is genuinely easy. <strong>Keep the slow days slow so the hard days can be truly hard</strong> — the middle zone is where most endurance athletes leave adaptation on the table.</p>
+                </div>
+              </div>
+
+              <div class="cs-progress">
+                <div class="cs-progress-label">Easy-day discipline this week</div>
+                <div class="cs-progress-bar">
+                  <div class="cs-progress-fill" style="width:74%">
+                    <span class="cs-progress-current">74%</span>
+                  </div>
+                  <span class="cs-progress-target">80/20 target</span>
+                </div>
+                <div class="cs-progress-delta">This run pulled the easy share down 6 pts</div>
+              </div>
+
+              <div class="cs-msg-footer">
+                <div class="cs-icon-row">
+                  <button class="cs-icon-btn" title="Copy">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
+                  <button class="cs-icon-btn" title="Save">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.6L5 21V4a1 1 0 0 1 1-1z"/></svg>
+                  </button>
+                  <button class="cs-icon-btn up" title="Helpful">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 22H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h3"/><path d="M7 12l4.2-8.1a2.4 2.4 0 0 1 3 2.2V9h4.6a2 2 0 0 1 2 2.4l-1.3 7A2 2 0 0 1 19.2 20H7z"/></svg>
+                  </button>
+                  <button class="cs-icon-btn down" title="Not helpful">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2h3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-3"/><path d="M17 12l-4.2 8.1a2.4 2.4 0 0 1-3-2.2V15H5.2a2 2 0 0 1-2-2.4l1.3-7A2 2 0 0 1 6.8 4H17z"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="qa-scrim" aria-hidden="true">
+            <span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="tint"></span>
+          </div>
+
+          <div class="suggestion-row">
+            <div class="suggestion-track">
+              <div class="suggestion-pill active">What pace keeps me in Zone 1?</div>
+              <div class="suggestion-pill">Why does the middle hurt me?</div>
+              <div class="suggestion-pill">When's my next hard day?</div>
+              <div class="suggestion-pill">Log this run</div>
+            </div>
+          </div>
+
+          <div class="composer">
+            <div class="composer-box">
+              <div class="composer-circle left" title="More">
+                <img src="assets/icons/more.svg" alt="" />
+              </div>
+              <div class="composer-input-wrap">
+                <div class="composer-input"></div>
+                <div class="composer-mic" title="Voice">
+                  <img src="assets/icons/microphone.svg" alt="" />
+                </div>
+              </div>
+              <div class="composer-circle right" title="Camera">
+                <img src="assets/icons/camera.svg" alt="" />
+              </div>
+            </div>
+          </div>
+
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+
+      <!-- =====================================================================
+           Surface: STEPHEN-CHAT-BASELINE (Mariah). Same polarized lens sized to
+           a 3-runs-a-week half-marathon build around three kids. Scenario: she
+           ran her easy day faster to "make it count" in limited time.
+           ===================================================================== -->
+      <div class="surface" data-surface="stephen-chat-baseline-mariah">
+        <div class="chat-baseline">
+
+          <div class="chat-header">
+            <span class="chh-blur b1"></span><span class="chh-blur b2"></span><span class="chh-blur b3"></span><div class="chat-header-gradient"></div>
+          </div>
+
+          <div class="chat-header-row">
+            <div class="header-pill date" onclick="window.switchSurface('stephen-plan-today-mariah')" style="cursor:pointer" title="Wed Jun 25"><span class="day-num">25</span><span class="day-wd">wed</span></div>
+            <div class="header-pill ottavia-mode-pill" data-mode-pill title="Switch mode">
+              <span class="label">Ottavia</span>
+              <span class="chevron">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+            </div>
+            <button class="header-icon-btn" title="Profile">
+              <img src="assets/icons/user-profile.svg" alt="" />
+            </button>
+          </div>
+
+          <div class="mode-scrim" data-mode-scrim></div>
+          <div class="ottavia-mode-menu" data-mode-menu>
+            <div class="mode-option selected" data-mode="ottavia">
+              <div class="check-slot">
+                <svg viewBox="0 0 11.6 9.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 1 L3.44 8.2 L1 5.74"/></svg>
+              </div>
+              <div class="text">
+                <div class="title">Ottavia</div>
+                <div class="sub">Intelligent personalized guidance</div>
+              </div>
+            </div>
+            <div class="mode-option" data-mode="ottavia-experts">
+              <div class="check-slot">
+                <svg viewBox="0 0 11.6 9.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 1 L3.44 8.2 L1 5.74"/></svg>
+              </div>
+              <div class="text">
+                <div class="title">Ottavia + Experts</div>
+                <div class="sub">Deeper domain-specific interpretation</div>
+                <span class="coming-soon">coming soon</span>
+              </div>
+            </div>
+            <div class="mode-menu-divider"></div>
+            <div class="mode-link" data-mode-link onclick="document.querySelector('.state-chip[data-surface=hub-home]').click()">
+              <span class="title">Experts hub</span>
+              <span class="chevron">
+                <svg viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 1 7 7 1 13"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <div class="chat-scroll">
+            <div class="chat-scroll-inner">
+              <div class="cs-ask">I only had 30 min so I pushed the pace — was that smart?</div>
+
+              <div class="cs-eyebrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h4l2 6 4-14 2 8h4"/></svg>
+                From <a>Training</a>
+              </div>
+              <h1 class="cs-title">I get the instinct, but today was meant to be easy, not faster.</h1>
+              <p class="cs-para">With three runs a week, each one has a job. Today's job was easy aerobic, and pushing it turns it into a third moderate day, which is exactly the trap to avoid:</p>
+              <ul class="cs-list">
+                <li>· Mon · easy (the one you just ran hard)</li>
+                <li>· Wed · easy aerobic</li>
+                <li>· Sat · your one hard session</li>
+              </ul>
+
+              <p class="cs-para">When time is short, the win isn't a faster easy run, it's protecting Saturday's hard session so it can actually be hard. That's where the fitness for your half comes from.</p>
+
+              <div class="cs-expert-attr">
+                <img class="cs-attr-avatar" src="assets/images/stephen.png" alt="Stephen Seiler" />
+                <div class="cs-attr-content">
+                  <div class="cs-attr-name">Stephen Seiler</div>
+                  <p class="cs-attr-body">On low volume the temptation is to make every run count by going harder. <strong>Resist it</strong> — keeping easy days easy is what lets the few hard sessions deliver, even on three runs a week.</p>
+                </div>
+              </div>
+
+              <div class="cs-progress">
+                <div class="cs-progress-label">Easy-day discipline this week</div>
+                <div class="cs-progress-bar">
+                  <div class="cs-progress-fill" style="width:66%">
+                    <span class="cs-progress-current">66%</span>
+                  </div>
+                  <span class="cs-progress-target">80/20 target</span>
+                </div>
+                <div class="cs-progress-delta">Two easy runs pushed harder this week</div>
+              </div>
+
+              <div class="cs-msg-footer">
+                <div class="cs-icon-row">
+                  <button class="cs-icon-btn" title="Copy">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
+                  <button class="cs-icon-btn" title="Save">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.6L5 21V4a1 1 0 0 1 1-1z"/></svg>
+                  </button>
+                  <button class="cs-icon-btn up" title="Helpful">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 22H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h3"/><path d="M7 12l4.2-8.1a2.4 2.4 0 0 1 3 2.2V9h4.6a2 2 0 0 1 2 2.4l-1.3 7A2 2 0 0 1 19.2 20H7z"/></svg>
+                  </button>
+                  <button class="cs-icon-btn down" title="Not helpful">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2h3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-3"/><path d="M17 12l-4.2 8.1a2.4 2.4 0 0 1-3-2.2V15H5.2a2 2 0 0 1-2-2.4l1.3-7A2 2 0 0 1 6.8 4H17z"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="qa-scrim" aria-hidden="true">
+            <span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="tint"></span>
+          </div>
+
+          <div class="suggestion-row">
+            <div class="suggestion-track">
+              <div class="suggestion-pill active">What should easy feel like?</div>
+              <div class="suggestion-pill">How hard is Saturday?</div>
+              <div class="suggestion-pill">Can I split runs around the kids?</div>
+              <div class="suggestion-pill">Log this run</div>
             </div>
           </div>
 
@@ -13519,6 +13819,177 @@
           </div>
         </div>
       </div>
+
+      <!-- =====================================================================
+           Surface: STEPHEN-PLAN-TODAY (Tom). Ottavia guidance calendar shaped
+           around Stephen's polarized 80/20 model. Scenario: Tom's in a 100K
+           build, today is an easy aerobic day protecting Thursday's one hard
+           session. Ottavia leads; Stephen is the lens the calls are grounded in.
+           ===================================================================== -->
+      <div class="surface" data-surface="stephen-plan-today">
+        <div class="pt">
+          <div class="pt-header">
+            <div>
+              <h1 class="pt-title">Plan for <strong>Today</strong></h1>
+              <div class="pt-today">Wed 25 · <strong>Today</strong></div>
+            </div>
+            <button class="pt-close" onclick="window.switchSurface('stephen-chat-baseline')" title="Close">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+
+          <div class="pt-main">
+            <div class="pt-content">
+              <!-- ===== MORNING ===== -->
+              <div class="pt-period show" data-period="morning">
+                <div class="pt-ev next orange">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 7:15 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Easy aerobic run · 70 min</h3>
+                  <p class="pt-ev-body">Today is an easy day, and it should feel almost too easy. Keep HR under 142 and hold a full conversation. This is the 80% that builds your aerobic engine for the 100K.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Zone</span><span class="v">Z1 · &lt;142 bpm</span></div>
+                    <div class="row"><span class="k">Pace feel</span><span class="v">Conversational</span></div>
+                    <div class="row"><span class="k">If HR drifts up</span><span class="v">Slow down, don't push</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/stephen.png" alt="Stephen Seiler" />
+                    <span class="pt-attr-text">Per <strong>Stephen Seiler</strong> · polarized 80/20 · easy day</span>
+                  </div>
+                </div>
+                <div class="pt-ev blue">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">8:30 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Log how it felt · 1–10</h3>
+                  <p class="pt-ev-body">A quick effort rating helps me confirm you actually stayed easy. If it felt above a 4, we eased too little.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Target RPE</span><span class="v">3–4 / 10</span></div><div class="row"><span class="k">Logs to</span><span class="v">Training history</span></div></div>
+                </div>
+              </div>
+
+              <!-- ===== MIDDAY ===== -->
+              <div class="pt-period" data-period="midday">
+                <div class="pt-ev next purple">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 1:00 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Recovery is today's real work</h3>
+                  <p class="pt-ev-body">Easy days aren't filler. They're when your body absorbs the hard sessions. Stay off your feet where you can and keep the legs fresh for Thursday.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Goal</span><span class="v">Full recovery</span></div>
+                    <div class="row"><span class="k">Protect</span><span class="v">Thursday's intervals</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/stephen.png" alt="Stephen Seiler" />
+                    <span class="pt-attr-text">Per <strong>Stephen Seiler</strong> · easy days enable hard days</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ===== AFTERNOON ===== -->
+              <div class="pt-period" data-period="afternoon">
+                <div class="pt-ev next blue">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 4:00 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Tomorrow is hard — preview</h3>
+                  <p class="pt-ev-body">Thursday is your one genuinely hard session this week: 5 × 4 min at threshold. It only delivers if today stays easy, so we keep the contrast sharp.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Thursday</span><span class="v">5 × 4 min · Z3</span></div>
+                    <div class="row"><span class="k">The 20%</span><span class="v">Genuinely hard</span></div>
+                    <div class="row"><span class="k">Depends on</span><span class="v">Today being easy</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/stephen.png" alt="Stephen Seiler" />
+                    <span class="pt-attr-text">Per <strong>Stephen Seiler</strong> · the 20% that drives adaptation</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ===== EVENING ===== -->
+              <div class="pt-period" data-period="evening">
+                <div class="pt-ev next green">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 9:30 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Protect tonight's sleep</h3>
+                  <p class="pt-ev-body">Recovery between hard days happens in your sleep. Aim for 8 hours tonight so Thursday's session lands on fresh legs and a fresh system.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Target</span><span class="v">8 h</span></div><div class="row"><span class="k">Why tonight</span><span class="v">Pre-hard-session recovery</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =====================================================================
+           Surface: STEPHEN-PLAN-TODAY (Mariah). Polarized model sized to three
+           runs a week around three kids, half marathon in ~2 weeks. Today is
+           one of her two easy runs; Saturday holds the single hard session.
+           ===================================================================== -->
+      <div class="surface" data-surface="stephen-plan-today-mariah">
+        <div class="pt">
+          <div class="pt-header">
+            <div>
+              <h1 class="pt-title">Plan for <strong>Today</strong></h1>
+              <div class="pt-today">Wed 25 · <strong>Today</strong></div>
+            </div>
+            <button class="pt-close" onclick="window.switchSurface('stephen-chat-baseline-mariah')" title="Close">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+
+          <div class="pt-main">
+            <div class="pt-content">
+              <!-- ===== MORNING ===== -->
+              <div class="pt-period show" data-period="morning">
+                <div class="pt-ev next orange">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 9:00 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Easy 5k · after drop-off</h3>
+                  <p class="pt-ev-body">One of your two easy runs this week. Keep it conversational, even if 30 minutes feels too short to "count." On three runs a week, easy days protect the one that's hard.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Zone</span><span class="v">Z1 · conversational</span></div>
+                    <div class="row"><span class="k">Duration</span><span class="v">~30 min</span></div>
+                    <div class="row"><span class="k">Don't</span><span class="v">Push to "make it count"</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/stephen.png" alt="Stephen Seiler" />
+                    <span class="pt-attr-text">Per <strong>Stephen Seiler</strong> · polarized 80/20 · easy day</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ===== MIDDAY ===== -->
+              <div class="pt-period" data-period="midday">
+                <div class="pt-ev next blue">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 12:30 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">School-run walk counts</h3>
+                  <p class="pt-ev-body">The afternoon pickup on foot is easy aerobic movement too. It adds to your week without touching the energy Saturday's hard session needs.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Counts as</span><span class="v">Easy aerobic</span></div><div class="row"><span class="k">Cost to Saturday</span><span class="v">None</span></div></div>
+                </div>
+              </div>
+
+              <!-- ===== AFTERNOON ===== -->
+              <div class="pt-period" data-period="afternoon">
+                <div class="pt-ev next purple">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 3:30 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Saturday is your hard day</h3>
+                  <p class="pt-ev-body">Your one quality session this week is Saturday: a steady tempo block while the kids are at activities. Everything easy between now and then is in service of that run.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Saturday</span><span class="v">Tempo · the 20%</span></div>
+                    <div class="row"><span class="k">Window</span><span class="v">Kids' activities</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/stephen.png" alt="Stephen Seiler" />
+                    <span class="pt-attr-text">Per <strong>Stephen Seiler</strong> · one hard session, fully earned</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ===== EVENING ===== -->
+              <div class="pt-period" data-period="evening">
+                <div class="pt-ev next green">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 10:00 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Rest is part of the plan</h3>
+                  <p class="pt-ev-body">Broken sleep with the kids is a given, so consistency matters more than a perfect eight hours. Keep a steady lights-out and let the easy days do their job.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Aim</span><span class="v">Steady bedtime</span></div><div class="row"><span class="k">Over</span><span class="v">Chasing 8 h exactly</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <script>
         function ptShowPeriod(p){
           // Find whichever plan-today* surface is currently visible (Tom or Mariah, Nancy or Aric).
@@ -13913,25 +14384,28 @@
   // stay visible underneath while plan-today slides in from the left (iOS-style).
   let _slideUnderSurface = null;
 
-  // Aric variant of the Ottavia static surfaces. When expert=aric is in the
-  // URL (the Aric demo deck), every Ottavia surface name (with or without
-  // -mariah suffix) is rerouted to its aric-prefixed sibling so the demo
-  // shows sleep-themed content end-to-end without the deck needing to know.
-  const ARIC_OTTAVIA_BASE_SURFACES = new Set([
+  // Expert-specific variants of the Ottavia static surfaces. When a demo deck
+  // sets ?expert=<id>, each generic Ottavia surface name (with or without the
+  // -mariah suffix) is rerouted to its <id>-prefixed sibling *if one exists*,
+  // so the demo can show domain-themed content end-to-end. Experts without a
+  // sibling fall through to the generic surface (e.g. Stephen's Ottavia home
+  // stays the generic morning report).
+  const EXPERT_OTTAVIA_BASE_SURFACES = new Set([
     'ottavia-nutshell', 'plan-today', 'chat-baseline',
     'ottavia-nutshell-mariah', 'plan-today-mariah', 'chat-baseline-mariah',
   ]);
-  function maybeAricize(target) {
-    if (window.__expertId !== 'aric' || !target) return target;
-    if (!ARIC_OTTAVIA_BASE_SURFACES.has(target)) return target;
-    const aricTarget = 'aric-' + target;
-    return document.querySelector(`.surface[data-surface="${aricTarget}"]`) ? aricTarget : target;
+  function maybeExpertize(target) {
+    const id = window.__expertId;
+    if (!id || !target) return target;
+    if (!EXPERT_OTTAVIA_BASE_SURFACES.has(target)) return target;
+    const expertTarget = id + '-' + target;
+    return document.querySelector(`.surface[data-surface="${expertTarget}"]`) ? expertTarget : target;
   }
 
   function activateSurface(target) {
-    target = maybeAricize(target);
-    if (target && target.match(/^(aric-)?plan-today/)) {
-      const currentTop = Array.from(surfaces).find(s => s.classList.contains('visible') && !s.dataset.surface.match(/^(aric-)?plan-today/));
+    target = maybeExpertize(target);
+    if (target && target.match(/plan-today/)) {
+      const currentTop = Array.from(surfaces).find(s => s.classList.contains('visible') && !s.dataset.surface.match(/plan-today/));
       if (currentTop) _slideUnderSurface = currentTop.dataset.surface;
     }
 
@@ -13942,7 +14416,7 @@
         s.classList.toggle('visible', id === target || id === 'chat-baseline');
       } else if (target === 'expert-profile' || target === 'expert-profile-v2' || target === 'my-experts') {
         s.classList.toggle('visible', id === target || id === 'hub-home' || id === 'chat-baseline');
-      } else if (target && target.match(/^(aric-)?plan-today/)) {
+      } else if (target && target.match(/plan-today/)) {
         // Slide-in: keep whatever was on top before, visible underneath, so the
         // sliding panel doesn't reveal a blank area as it animates in.
         s.classList.toggle('visible', id === target || id === _slideUnderSurface);
@@ -14215,6 +14689,7 @@
       name: `Stephen Seiler`, first: `Stephen`, initials: `SS`, accent: `#1F5F8B`, accent2: `#103E5C`,
       portrait: `assets/images/stephen.png`, heroBg: `#C9DEF2`,
       heroStyle: `feature`, heroImage: `assets/images/stephen-hero.png`, featureBg: `#C9DEF2`,
+      featureHeroH: 320, featureImgW: `82%`,
       eyebrow: `Exercise Physiologist`, headline: `Train polarized, with Stephen Seiler`,
       profession: `Exercise Physiologist & Author`,
       tagline: `The 80/20 polarized model, applied to your week and your real data.`,
@@ -14226,57 +14701,70 @@
         `Recovery cues from HRV and session load so you back off before you dig a hole`,
         `His papers and talks surfaced when they're relevant to your question`,
       ],
-      bodyOfWork: [],
+      bodyOfWorkLabel: `Selected work`,
+      bodyOfWork: [
+        { icon: `article`, title: `What is Best Practice for Training-Intensity and Duration Distribution?`, sub: `Int. Journal of Sports Physiology & Performance · 2010` },
+        { icon: `article`, title: `Quantifying Training Intensity Distribution in Elite Endurance Athletes`, sub: `Scand. Journal of Medicine & Science in Sports` },
+        { icon: `article`, title: `The Hierarchy of Endurance Training Needs`, sub: `Lectures & talks · the polarized model explained` },
+      ],
       about: `Stephen Seiler is a Professor of Exercise Physiology at the University of Agder in Norway. He's the pioneer of the polarized training model — the observation, built from years of studying world-class endurance athletes, that most training time should be very easy (Zone 1) and a small share should be genuinely hard (Zone 3), with very little moderate-intensity threshold work in between.`,
       aboutBullets: [`Professor of Exercise Physiology, University of Agder`, `Pioneer of the polarized 80/20 model`, `Studies endurance adaptation and recovery balance`, `Widely cited across endurance sport`],
       chips: [`Polarized 80/20`, `Intensity distribution`, `Recovery`, `HRV`, `Easy aerobic`, `Threshold`],
       cases: {
         tom: {
           plan: {
-            title: `I shaped your week around Stephen's 80/20 split, Tom — placeholder for Vika to fill in.`,
-            intro: `Seed plan structure — replace bullets with the actual polarized week.`,
-            points: [
-              `Easy aerobic days at conversational HR, no threshold drift.`,
-              `One hard session (intervals) per week, fully recovered around it.`,
-              `Long run at Z1, not "comfortably hard" — keep the engine relaxed.`,
+            title: `I built your week on Stephen's polarized 80/20 model, Tom.`,
+            intro: `You're deep in the 100K build, so most of your running should be genuinely easy and a small slice genuinely hard. Here's how the week distributes, applied to your training load:`,
+            weekLabel: `Your polarized week · ~80% easy, ~20% hard`,
+            week: [
+              { day: `Mon`, color: `green`,  title: `Easy aerobic · 60 min`, body: `Conversational, HR under 142. The base that everything else is built on.` },
+              { day: `Tue`, color: `blue`,   title: `Rest or easy 40 min`,  body: `Optional shakeout. If you run, keep it fully easy — no creeping into the middle.` },
+              { day: `Thu`, color: `orange`, title: `Hard · 5 × 4 min`,      body: `Your one genuinely hard session. Threshold-to-VO2 reps with full recoveries. This is the 20% that drives adaptation.` },
+              { day: `Fri`, color: `green`,  title: `Easy aerobic · 50 min`, body: `Recovery pace. The day after hard is easy, no exceptions.` },
+              { day: `Sat`, color: `green`,  title: `Long run · easy`,        body: `Your longest run, but at Z1 — relaxed and conversational the whole way, not "comfortably hard."` },
+              { day: `Sun`, color: `blue`,   title: `Rest`,                   body: `Recovery is where the hard work gets absorbed. Protect it.` },
             ],
-            close: `Placeholder close line.`,
+            close: `Five of six runs are easy. That's not under-training, it's what lets Thursday's hard session actually be hard, week after week.`,
             chips: [`Why 80/20?`, `What about tempo runs?`, `How do I know it's easy enough?`],
           },
           qa: {
-            ask: `Should I do a threshold session this week?`,
-            title: `Probably not — the 80/20 evidence is pretty clear on this.`,
-            intro: `Placeholder Q&A for Vika to write.`,
+            ask: `Should I add a threshold day this week to feel sharper?`,
+            title: `I'd hold off. The middle zone is exactly what Stephen's model trims.`,
+            intro: `Threshold work feels productive, which is why it's so tempting. But on the polarized model it's the zone you do least, and here's the reasoning:`,
             points: [
-              `Threshold work feels productive but tends to crowd out easy aerobic volume.`,
-              `Stephen's data on elite endurance athletes shows very little time at threshold.`,
+              `A threshold day sits in the moderate middle, hard enough to need recovery but not hard enough to drive top-end adaptation.`,
+              `Add it and it quietly taxes the easy days, so your one truly hard session loses its edge.`,
+              `Stephen's work on elite endurance athletes shows them spending very little time at threshold, and a lot at the two ends.`,
             ],
-            close: `Placeholder close line.`,
-            chips: [`What's a true Z1 effort?`, `How often should I go hard?`, `What does Stephen say about tempo?`],
+            close: `Keep your easy days easy and your one hard day hard. That contrast, not more moderate work, is what makes you sharper for the 100K.`,
+            chips: [`What's a true Z1 effort?`, `How often should I go hard?`, `What about race-pace work?`],
           },
         },
         mariah: {
           plan: {
-            title: `Your week sized to ~5h, with Stephen's split protected — placeholder.`,
-            intro: `Seed plan structure for Mariah — replace with actual content.`,
-            points: [
-              `Three easy aerobic runs around the kids.`,
-              `One short hard session when you have a clean window.`,
-              `Saturday long run kept easy, not "race-pace adjacent."`,
+            title: `On three runs a week, the polarized split matters even more, Mariah.`,
+            intro: `With limited time, the instinct is to make every run count by pushing. Stephen's model says the opposite: keep two runs easy so the one hard run can deliver. Here's your week around the kids:`,
+            weekLabel: `Your polarized week · 3 runs, the split protected`,
+            week: [
+              { day: `Mon`, color: `green`,  title: `Easy 5k · after drop-off`, body: `Conversational pace. Short and genuinely easy, even when 30 minutes feels too quick to matter.` },
+              { day: `Wed`, color: `green`,  title: `Easy 5k · midweek`,        body: `Same easy effort. Two easy runs are the 80% that protects Saturday.` },
+              { day: `Sat`, color: `orange`, title: `Hard · tempo block`,       body: `Your one quality session, while the kids are at activities. This is the run that builds your half-marathon fitness.` },
+              { day: `Sun`, color: `blue`,   title: `Rest / family walk`,        body: `Easy movement only. Recovery is part of the plan, not a gap in it.` },
             ],
-            close: `Placeholder close line.`,
-            chips: [`Is 5h/wk enough?`, `What if I miss the hard session?`, `Why not more tempo?`],
+            close: `Two easy, one hard. That's the whole week, and it's enough, because the easy runs are what let Saturday be genuinely hard.`,
+            chips: [`Is three runs enough?`, `What if I miss the hard one?`, `Why not push the easy days?`],
           },
           qa: {
-            ask: `Should I run faster on my easy days to get more from less time?`,
-            title: `It's the most tempting and most common mistake — placeholder.`,
-            intro: `Placeholder Q&A for Vika to write.`,
+            ask: `I only have 30 minutes most days. Shouldn't I run those harder to get more from them?`,
+            title: `It's the most natural instinct on low volume, and the one to resist.`,
+            intro: `When time is tight, a faster easy run feels like a smart trade. But it turns your easy days into moderate days, and that's the trap Stephen's model is built to avoid:`,
             points: [
-              `Faster easy days compromise the recovery the hard day depends on.`,
-              `Stephen's framing: keep easy genuinely easy so hard can be genuinely hard.`,
+              `Push the easy runs and you arrive at Saturday's hard session already fatigued, so it can't be truly hard.`,
+              `The fitness for your half comes from that one quality run being sharp, not from three moderate ones.`,
+              `On three runs a week especially, protecting the easy days is what makes the hard day count.`,
             ],
-            close: `Placeholder close line.`,
-            chips: [`What pace counts as easy?`, `How hard should hard be?`, `Why does this matter for a half?`],
+            close: `Keep the short runs easy and let Saturday be the hard one. Less intensity spread across the week, more where it actually matters.`,
+            chips: [`What should easy feel like?`, `How hard is Saturday?`, `Why does this work on low volume?`],
           },
         },
       },
@@ -14593,8 +15081,12 @@
       <div class="p3-scroll">
         ${ex.heroStyle === 'feature'
           ? (() => {
-              const heroStyle = ex.featureBg ? ` style="background:linear-gradient(180deg, ${ex.featureBg} 7.692%, #F5F1EA 66%)"` : '';
-              const imgStyle = ex.featureImgOffsetX ? ` style="transform:translateX(calc(-50% + ${ex.featureImgOffsetX}px))"` : '';
+              const bgRule = ex.featureBg ? `background:linear-gradient(180deg, ${ex.featureBg} 7.692%, #F5F1EA 66%);` : '';
+              const hRule = ex.featureHeroH ? `height:${ex.featureHeroH}px;` : '';
+              const heroStyle = (bgRule || hRule) ? ` style="${bgRule}${hRule}"` : '';
+              const wRule = ex.featureImgW ? `width:${ex.featureImgW};max-width:none;` : '';
+              const tRule = ex.featureImgOffsetX ? `transform:translateX(calc(-50% + ${ex.featureImgOffsetX}px));` : '';
+              const imgStyle = (wRule || tRule) ? ` style="${wRule}${tRule}"` : '';
               const fadeH = ex.featureFadeH || 92;
               const fadeStart = ex.featureFadeStart != null ? ex.featureFadeStart : 78;
               const fadeStyle = (ex.featureFadeH || ex.featureFadeStart != null) ? ` style="height:${fadeH}px;background:linear-gradient(180deg, rgba(245,241,234,0) 0%, #F5F1EA ${fadeStart}%)"` : '';
@@ -14616,7 +15108,7 @@
         </div>
         <div class="p3-block">
           <h2 class="p3-section-title">${ex.bodyOfWorkLabel || 'Body of work'}</h2>
-          <div class="p3-bow-list">${ex.bodyOfWork.map(b => `<div class="p3-bow-item">${b.cover ? `<img class="p3-bow-img" src="${b.cover}" alt="${b.title}" />` : `<span class="p3-bow-img x-fallback" style="background:${ex.accent}">${b.tag || ex.initials}</span>`}<div class="p3-bow-text"><h3 class="p3-bow-title">${b.title}</h3><p class="p3-bow-sub">${b.sub}</p></div></div>`).join('')}</div>
+          <div class="p3-bow-list">${ex.bodyOfWork.map(b => `<div class="p3-bow-item">${b.cover ? `<img class="p3-bow-img" src="${b.cover}" alt="${b.title}" />` : `<span class="p3-bow-img x-bow-fallback" style="background:${ex.accent}">${b.icon === 'article' ? ARTICLE_ICON : (b.tag || ex.initials)}</span>`}<div class="p3-bow-text"><h3 class="p3-bow-title">${b.title}</h3><p class="p3-bow-sub">${b.sub}</p></div></div>`).join('')}</div>
         </div>
         <div class="p3-block"><h2 class="p3-section-title">About</h2><p class="p3-about-bio">${ex.about}</p><ul class="p3-about-bullets">${xLis(ex.aboutBullets)}</ul></div>
         <div class="p3-block"><div class="p3-topic-chips">${ex.chips.map(c => `<span class="p3-topic-chip">${c}</span>`).join('')}</div></div>
@@ -14720,6 +15212,8 @@
     </div>`;
   }
   const APPLE_LOGO = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 12.04c-.03-2.6 2.12-3.85 2.22-3.91-1.21-1.77-3.09-2.01-3.76-2.04-1.6-.16-3.12.94-3.93.94-.81 0-2.06-.92-3.39-.89-1.74.03-3.35 1.01-4.25 2.57-1.81 3.14-.46 7.79 1.3 10.34.86 1.25 1.88 2.65 3.22 2.6 1.29-.05 1.78-.83 3.34-.83 1.56 0 2 .83 3.37.81 1.39-.03 2.27-1.27 3.12-2.53.98-1.45 1.39-2.85 1.41-2.92-.03-.01-2.7-1.04-2.72-4.14zM14.6 4.62c.71-.86 1.19-2.06 1.06-3.25-1.02.04-2.26.68-2.99 1.54-.66.76-1.23 1.97-1.08 3.14 1.14.09 2.3-.58 3.01-1.43z"/></svg>`;
+  // Published-article glyph for body-of-work covers that aren't books.
+  const ARTICLE_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z"/><path d="M14 2v6h6"/><line x1="8.5" y1="13" x2="15.5" y2="13"/><line x1="8.5" y1="16.5" x2="13.5" y2="16.5"/></svg>`;
   function renderXApplePay(ex) {
     const unit = ex.priceUnit || 'month';
     return `<div class="ap-sheet">
