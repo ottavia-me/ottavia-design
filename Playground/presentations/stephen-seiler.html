@@ -485,6 +485,8 @@
        SLIDE 6 — OUR MISSION
        ============================================================ */
     .slide-6 {
+      --content-min: 1100px;
+      --content-max: 1600px;
       gap: 24px;
       align-items: center;
     }
@@ -495,6 +497,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+    .slide-6-grid .slide-asset {
+      max-height: 100%;
+      max-width: 100%;
+      width: auto;
+      height: auto;
     }
     .signals-left,
     .knowledge-right {
@@ -809,7 +817,7 @@
       color: var(--ink);
     }
     .slide-safety-art {
-      flex: 0 0 580px;
+      flex: 0 0 760px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -817,7 +825,7 @@
     .slide-safety-art img {
       width: 100%;
       height: auto;
-      max-height: 70vh;
+      max-height: 85vh;
       object-fit: contain;
     }
     .slide-9-right {
