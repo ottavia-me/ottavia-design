@@ -51,13 +51,17 @@
     }
     .slide.visible { opacity: 1; pointer-events: auto; z-index: 5; }
 
-    /* Generic content-slide padding.
-       Horizontal padding grows on wide screens so the content block sits
-       in a centered ~960px column instead of hugging the left edge.
-       Slides with two-column image layouts (slide-7, slide-9, slide-safety)
-       override this with a wider inner so the image+text row still fits. */
+    /* Fluid content column. Each slide reserves a centered column whose
+       width scales with the viewport between --content-min and --content-max.
+       Padding is whatever's left over, with a small safety floor so the
+       block can't bump the edge on tiny screens.
+       Slides with two-column image layouts (7, 9, safety) override these
+       vars to a wider column so the image+text row still fits. */
     .slide-content {
-      padding: 80px max(96px, calc((100vw - 1152px) / 2));
+      --content-min: 820px;
+      --content-max: 1280px;
+      --content-w: clamp(var(--content-min), 84vw, var(--content-max));
+      padding: 80px max(48px, calc((100vw - var(--content-w)) / 2));
       display: flex;
       flex-direction: column;
     }
@@ -540,7 +544,9 @@
        SLIDE 7 — TWO INTERCONNECTED MODES
        ============================================================ */
     .slide-7 {
-      padding: 40px max(64px, calc((100vw - 1320px) / 2)) 96px;
+      --content-min: 1100px;
+      --content-max: 1600px;
+      padding: 40px max(48px, calc((100vw - var(--content-w)) / 2)) 96px;
       align-items: center;
       gap: 16px;
       overflow: hidden;
@@ -728,10 +734,12 @@
        SLIDE 9 — WHY IT MATTERS FOR EXPERTS
        ============================================================ */
     .slide-9 {
+      --content-min: 1100px;
+      --content-max: 1600px;
       flex-direction: row;
       gap: 100px;
       align-items: center;
-      padding: 80px max(96px, calc((100vw - 1584px) / 2));
+      padding: 80px max(48px, calc((100vw - var(--content-w)) / 2));
     }
     .slide-9-left {
       flex: 1;
@@ -771,7 +779,9 @@
       flex-direction: row;
       align-items: center;
       gap: clamp(40px, 5vw, 96px);
-      padding: 80px max(96px, calc((100vw - 1584px) / 2)) 96px;
+      --content-min: 1100px;
+      --content-max: 1600px;
+      padding: 80px max(48px, calc((100vw - var(--content-w)) / 2)) 96px;
     }
     .slide-safety-text {
       flex: 1 1 0;
