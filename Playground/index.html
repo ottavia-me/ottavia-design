@@ -374,6 +374,13 @@
         }
         .expert-copy:hover { border-color: var(--accent); color: var(--accent); }
         .expert-copy svg { width: 14px; height: 14px; }
+        a.expert-copy { text-decoration: none; }
+        .expert-copy.is-disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            pointer-events: auto;
+        }
+        .expert-copy.is-disabled:hover { border-color: var(--card-border); color: var(--text-secondary); }
 
         /* ===== EXPERT PREVIEW STAGE ===== */
         .preview-stage {
@@ -763,6 +770,10 @@
                 <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
                 Tools
             </a>
+            <a class="nav-item" data-page="sprints" onclick="navigate(this, 'sprints')">
+                <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></span>
+                Sprints
+            </a>
             <a class="nav-item" data-page="experts" onclick="navigate(this, 'experts')">
                 <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg></span>
                 Experts
@@ -780,6 +791,7 @@
             <option value="playground">Design Playground</option>
             <option value="design-system">Design System</option>
             <option value="tools">Tools</option>
+            <option value="sprints">Sprints</option>
             <option value="experts">Experts</option>
             <option value="history">History</option>
         </select>
@@ -829,9 +841,9 @@
         const EXPERTS_META = {
             matt:  { name: 'Matt Fitzgerald', domain: 'Endurance nutrition · 80-20',        intro: 'Author of Racing Weight. The original Ottavia expert demo.', updated: 'May 25', status: 'Live',  statusColor: '#58A471', ready: true },
             scott: { name: 'Scott Fauble',     domain: 'Marathon · training',                intro: 'Elite U.S. marathoner, author of Inside a Marathon.',         updated: 'Jun 1',  status: 'Ready', statusColor: '#58A471', ready: true, portrait: 'assets/images/scott.jpg' },
-            aric:  { name: 'Aric Prather',     domain: 'Sleep science',                      intro: 'UCSF sleep researcher, author of The Sleep Prescription.',    updated: 'Jun 1',  status: 'Ready', statusColor: '#58A471', ready: true, portrait: 'assets/images/aric.jpg' },
+            aric:  { name: 'Aric Prather',     domain: 'Sleep science',                      intro: 'UCSF sleep researcher, author of The Sleep Prescription.',    updated: 'Jun 1',  status: 'Ready', statusColor: '#58A471', ready: true, portrait: 'assets/images/aric.jpg', demo: 'presentations/aric-prather.html' },
             cheri: { name: 'Cheri Mah',        domain: 'Sleep & athletic performance',       intro: 'Stanford researcher behind the basketball sleep-extension study.', updated: 'Jun 1', status: 'Ready', statusColor: '#58A471', ready: true, portrait: 'assets/images/cheri.jpg' },
-            nancy: { name: 'Nancy Clark',      domain: 'Sports nutrition · fueling',         intro: 'Boston-area sports dietitian, author of Sports Nutrition Guidebook.', updated: 'Jun 16', status: 'Profile ready', statusColor: '#58A471', ready: true, portrait: 'assets/images/nancy.jpg' },
+            nancy: { name: 'Nancy Clark',      domain: 'Sports nutrition · fueling',         intro: 'Boston-area sports dietitian, author of Sports Nutrition Guidebook.', updated: 'Jun 16', status: 'Profile ready', statusColor: '#58A471', ready: true, portrait: 'assets/images/nancy.jpg', demo: 'presentations/nancy-clark.html' },
         };
 
         // Which prototype surfaces each use-case button maps to. Matt uses his
@@ -945,6 +957,18 @@
                     </a>
                 </div>
             </div>`,
+            'sprints': `<div class="playground-page">
+                <h2>Sprints</h2>
+                <p class="page-desc">Design sprint plans and post-sprint retros</p>
+                <div class="card-grid">
+                    <a class="sub-card" onclick="openSprint('2026-06-22-redesign-v1.html')">
+
+                        Redesign v1 — Visual Refresh
+                        <span style="font-size:12px;color:var(--text-secondary);line-height:1.4;">Clean-break visual refresh: tokens, typography sweep, three anchor surfaces (onboarding, calendar, chat)</span>
+                        <span class="card-date">Jun 22 → Jul 3 · <span style="color:#D4A163;font-weight:600;">Planning</span></span>
+                    </a>
+                </div>
+            </div>`,
         };
 
         // Two example users (personas) shown on the right of the preview stage.
@@ -953,18 +977,21 @@
             mariah: { name: 'Mariah, 37', initials: 'M', desc: 'Mother of three, runs 3×/week, training for her first half marathon. Wants a holistic plan that fits her life and reaches her goal.', meta: 'Knowledge 5/10 · half marathon' },
         };
 
-        const COPY_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+        const DEMO_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 4 20 12 6 20 6 4"/></svg>`;
 
         function expertCard(id) {
             const e = EXPERTS_META[id];
             const initials = e.name.split(' ').map(w => w[0]).slice(0, 2).join('');
             const av = e.portrait ? `<img class="expert-av" src="${e.portrait}" alt="${e.name}" />` : `<span class="expert-av expert-av-fb">${initials}</span>`;
+            const demoBtn = e.demo
+                ? `<button class="expert-copy" onclick="event.stopPropagation(); window.open('${e.demo}','_blank','noopener')" title="Open demo deck">${DEMO_ICON} Demo</button>`
+                : `<button class="expert-copy is-disabled" disabled title="Demo not ready yet" onclick="event.stopPropagation()">${DEMO_ICON} Demo</button>`;
             return `<a class="sub-card expert-card" onclick="openExpert('${id}')">
                 <div class="expert-card-head">${av}<div class="expert-card-id"><span class="expert-domain">${e.domain}</span><span class="expert-name">${e.name}</span></div></div>
                 <span class="expert-intro">${e.intro}</span>
                 <div class="expert-foot">
                     <span class="card-date">Updated ${e.updated} · <span style="color:${e.statusColor};font-weight:600;">${e.status}</span></span>
-                    <button class="expert-copy" onclick="copyExpertLink(event,'${id}')" title="Copy preview link">${COPY_ICON} Copy link</button>
+                    ${demoBtn}
                 </div>
             </a>`;
         }
@@ -980,19 +1007,6 @@
         }
 
         function openExpert(id) { setHash('experts/' + id); }
-
-        function copyExpertLink(ev, id) {
-            ev.stopPropagation();
-            const url = location.origin + location.pathname + '#experts/' + id;
-            const btn = ev.currentTarget;
-            const restore = () => { btn.innerHTML = COPY_ICON + ' Copy link'; };
-            const ok = () => { btn.innerHTML = '✓ Copied'; setTimeout(restore, 1400); };
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(url).then(ok).catch(() => { window.prompt('Copy this preview link:', url); });
-            } else {
-                window.prompt('Copy this preview link:', url);
-            }
-        }
 
         function renderExpertPreview(id) {
             const e = EXPERTS_META[id];
@@ -1088,6 +1102,10 @@
             setHash('tools/' + src);
         }
 
+        function openSprint(src) {
+            setHash('sprints/' + src);
+        }
+
         function openPage(src) {
             setHash('playground/' + src);
         }
@@ -1095,6 +1113,11 @@
         function renderTool(src) {
             const content = document.getElementById('content');
             content.innerHTML = `<iframe src="tools/${src}" style="width:100%;height:100%;border:none"></iframe>`;
+        }
+
+        function renderSprint(src) {
+            const content = document.getElementById('content');
+            content.innerHTML = `<iframe src="sprints/${src}" style="width:100%;height:100%;border:none"></iframe>`;
         }
 
         function renderPage(src) {
@@ -1231,6 +1254,7 @@
 
             if (sub) {
                 if (page === 'tools') renderTool(sub);
+                else if (page === 'sprints') renderSprint(sub);
                 else if (page === 'playground') renderPage(sub);
                 else if (page === 'experts') renderExpertPreview(sub);
             }

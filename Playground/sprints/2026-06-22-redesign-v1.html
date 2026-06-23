@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Redesign v1: Visual Refresh</title>
+<style>
+  :root {
+    --primary-80: #433E36;
+    --primary-70: #5C564D;
+    --primary-60: #766F64;
+    --primary-50: #8F897D;
+    --primary-40: #A8A297;
+    --primary-30: #C2BCB2;
+    --primary-20: #DBD6CD;
+    --primary-10: #F5F1EA;
+    --terracotta-60: #A17A5B;
+    --terracotta-30: #C4A08E;
+    --terracotta-10: #F5E6DC;
+    --green: #58A471;
+    --amber: #D4A163;
+    --red: #B9554D;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--primary-10); color: var(--primary-80); font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+  body { padding: 56px 64px 96px; line-height: 1.5; }
+  .wrap { max-width: 1080px; margin: 0 auto; }
+
+  /* Icons */
+  .ico { width: 14px; height: 14px; stroke-width: 2; flex-shrink: 0; }
+  .ico-md { width: 18px; height: 18px; stroke-width: 2; flex-shrink: 0; }
+  .ico-lg { width: 22px; height: 22px; stroke-width: 1.8; flex-shrink: 0; }
+
+  /* Header */
+  .header { border-bottom: 1px solid var(--primary-30); padding-bottom: 32px; margin-bottom: 48px; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; color: var(--terracotta-60); margin-bottom: 16px; }
+  h1 { font-size: 64px; font-weight: 600; letter-spacing: -1.5px; line-height: 1.05; margin: 0 0 24px; }
+  h1 .title-accent { color: var(--terracotta-60); }
+  .meta { display: flex; flex-wrap: wrap; gap: 24px; font-size: 13px; color: var(--primary-60); }
+  .meta-item { display: inline-flex; align-items: center; gap: 6px; }
+  .meta .label { color: var(--primary-50); margin-right: 4px; }
+  .meta .value { color: var(--primary-80); font-weight: 500; }
+  .meta-item .ico { color: var(--primary-50); }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 4px; background: var(--terracotta-10); color: var(--terracotta-60); font-size: 11px; font-weight: 600; letter-spacing: 0.3px; margin-left: 6px; }
+
+  /* Section */
+  section { margin-bottom: 56px; }
+  .section-label { display: flex; align-items: center; gap: 12px; font-size: 28px; font-weight: 600; letter-spacing: -0.5px; color: var(--primary-80); margin-bottom: 24px; }
+  .section-label .ico { color: var(--terracotta-60); width: 24px; height: 24px; }
+  h2 { font-size: 24px; font-weight: 600; letter-spacing: -0.3px; margin: 0 0 20px; }
+  h3 { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; margin: 0 0 12px; color: var(--primary-80); }
+  h3 .ico-md { color: var(--terracotta-60); }
+  p { margin: 0 0 12px; color: var(--primary-70); }
+
+  /* Goal */
+  .goal-card { background: white; border: 1px solid var(--primary-20); border-radius: 12px; padding: 28px 32px; }
+  .goal-card p { font-size: 15px; line-height: 1.6; }
+  .goal-card strong { color: var(--primary-80); }
+
+  /* Foundation + Anchors */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .foundation-card, .anchors-card { background: white; border: 1px solid var(--primary-20); border-radius: 12px; padding: 24px 28px; }
+  .foundation-card ul, .anchors-card ul { margin: 0; padding: 0; list-style: none; }
+  .foundation-card li, .anchors-card li { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; font-size: 14px; color: var(--primary-70); }
+  .foundation-card li .ico, .anchors-card li .ico { color: var(--terracotta-60); margin-top: 4px; }
+  .foundation-card li strong, .anchors-card li strong { color: var(--primary-80); }
+  .foundation-card li .li-body, .anchors-card li .li-body { flex: 1; }
+  .swatch-row { display: flex; gap: 4px; margin-top: 8px; }
+  .swatch { width: 22px; height: 22px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.06); }
+
+  /* Buckets */
+  .buckets { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .bucket-col { background: white; border: 1px solid var(--primary-20); border-radius: 12px; overflow: hidden; }
+  .bucket-head { padding: 16px 20px 14px; border-bottom: 1px solid var(--primary-20); background: var(--primary-10); }
+  .bucket-head .head-row { display: flex; align-items: center; gap: 10px; }
+  .bucket-head .head-row .ico-lg { color: var(--terracotta-60); }
+  .bucket-head .name { font-size: 16px; font-weight: 600; color: var(--primary-80); }
+  .bucket-head .count { font-size: 11px; color: var(--primary-50); font-weight: 600; letter-spacing: 0.4px; margin-top: 4px; padding-left: 32px; }
+  .bucket-head .owner { font-size: 11px; color: var(--terracotta-60); font-weight: 600; letter-spacing: 0.4px; margin-top: 4px; padding-left: 32px; text-transform: uppercase; }
+  .bucket-list { padding: 8px 0; }
+  .bucket-item { padding: 12px 20px; border-bottom: 1px solid var(--primary-10); }
+  .bucket-item:last-child { border-bottom: none; }
+  .bucket-item .b-num { font-size: 10px; color: var(--primary-50); font-weight: 700; letter-spacing: 1px; }
+  .bucket-item .b-name { font-size: 14px; font-weight: 600; color: var(--primary-80); margin: 2px 0 4px; }
+  .bucket-item .b-detail { font-size: 12px; color: var(--primary-60); line-height: 1.45; }
+  .bucket-item .b-meta { font-size: 11px; color: var(--primary-50); margin-top: 6px; }
+
+  /* Timeline */
+  .timeline { background: white; border: 1px solid var(--primary-20); border-radius: 12px; padding: 24px 28px; }
+  .week-grid { display: grid; grid-template-columns: 80px repeat(5, 1fr); gap: 12px; align-items: stretch; }
+  .week-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--terracotta-60); text-transform: uppercase; padding-top: 16px; }
+  .day { padding: 14px 12px; background: var(--primary-10); border-radius: 8px; min-height: 110px; display: flex; flex-direction: column; }
+  .day.gate { background: var(--terracotta-10); border: 1px solid var(--terracotta-30); }
+  .day-name { display: flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; letter-spacing: 0.8px; color: var(--primary-50); text-transform: uppercase; margin-bottom: 8px; }
+  .day.gate .day-name { color: var(--terracotta-60); }
+  .day .ico { width: 11px; height: 11px; }
+  .day-content { font-size: 12px; color: var(--primary-70); line-height: 1.45; }
+  .day-content .who { display: inline-block; font-size: 10px; font-weight: 700; color: var(--primary-80); margin-right: 4px; }
+
+  /* Roles */
+  .roles-table { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--primary-20); border-radius: 12px; overflow: hidden; }
+  .roles-table th, .roles-table td { padding: 14px 20px; text-align: left; font-size: 13px; border-bottom: 1px solid var(--primary-10); }
+  .roles-table th { background: var(--primary-10); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-50); font-weight: 700; }
+  .roles-table td:first-child { width: 160px; }
+  .roles-table .role-name { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: var(--primary-80); }
+  .roles-table .role-name .ico-md { color: var(--terracotta-60); }
+  .roles-table tr:last-child td { border-bottom: none; }
+
+  /* Workflow */
+  .workflow-flow { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+  .flow-step { display: inline-flex; align-items: center; gap: 8px; background: white; border: 1px solid var(--primary-20); border-radius: 8px; padding: 12px 16px; font-size: 13px; font-weight: 600; color: var(--primary-80); }
+  .flow-step .ico-md { color: var(--terracotta-60); }
+  .flow-arrow { color: var(--primary-40); font-size: 18px; font-weight: 300; }
+  .workflow-detail { background: white; border: 1px solid var(--primary-20); border-radius: 12px; padding: 24px 28px; }
+  .workflow-detail dl { margin: 0; }
+  .workflow-detail dt { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--primary-80); margin-top: 16px; }
+  .workflow-detail dt .ico { color: var(--terracotta-60); }
+  .workflow-detail dt:first-child { margin-top: 0; }
+  .workflow-detail dd { font-size: 13px; color: var(--primary-60); margin: 4px 0 0 22px; padding-left: 0; }
+
+  /* Out of scope */
+  .out-of-scope { background: white; border: 1px solid var(--primary-20); border-radius: 12px; padding: 24px 28px; }
+  .out-of-scope ul { columns: 2; column-gap: 32px; margin: 0; padding: 0; list-style: none; }
+  .out-of-scope li { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: var(--primary-70); margin-bottom: 8px; break-inside: avoid; }
+  .out-of-scope li .ico { color: var(--red); margin-top: 4px; opacity: 0.7; }
+
+  /* Gates callout */
+  .gates { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
+  .gate-card { padding: 16px 20px; background: var(--terracotta-10); border: 1px solid var(--terracotta-30); border-radius: 10px; }
+  .gate-card .g-when { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--terracotta-60); text-transform: uppercase; }
+  .gate-card .g-title { font-size: 14px; font-weight: 600; color: var(--primary-80); margin: 4px 0; }
+  .gate-card .g-detail { font-size: 12px; color: var(--primary-60); }
+
+  /* Experts (later) section */
+  .experts-section { background: linear-gradient(to bottom, #FFF8E7, white); border: 1px solid var(--amber); border-radius: 12px; overflow: hidden; margin-top: 20px; }
+  .experts-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 18px 22px; border-bottom: 1px solid var(--primary-20); background: rgba(212, 161, 99, 0.10); }
+  .experts-head-left { display: flex; align-items: center; gap: 12px; }
+  .experts-head-left .ico-lg { color: var(--amber); }
+  .experts-head .e-name { font-size: 17px; font-weight: 600; color: var(--primary-80); }
+  .experts-head .e-count { font-size: 11px; color: var(--primary-50); font-weight: 600; letter-spacing: 0.4px; margin-top: 2px; }
+  .later-pill { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; background: var(--amber); color: white; font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; border-radius: 6px; }
+  .later-pill .ico { color: white; }
+  .experts-buckets-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; }
+  .experts-bucket { padding: 16px 22px; border-right: 1px solid var(--primary-20); }
+  .experts-bucket:last-child { border-right: none; }
+  .experts-bucket .b-num { font-size: 10px; color: var(--primary-50); font-weight: 700; letter-spacing: 1px; }
+  .experts-bucket .b-name { font-size: 14px; font-weight: 600; color: var(--primary-80); margin: 2px 0 4px; }
+  .experts-bucket .b-detail { font-size: 12px; color: var(--primary-60); line-height: 1.45; }
+  .experts-bucket .b-meta { font-size: 11px; color: var(--primary-50); margin-top: 6px; }
+  .experts-disclaimer { padding: 14px 22px; background: rgba(212, 161, 99, 0.06); border-top: 1px solid var(--primary-20); font-size: 12px; color: var(--primary-70); display: flex; align-items: flex-start; gap: 8px; }
+  .experts-disclaimer .ico { color: var(--amber); margin-top: 2px; flex-shrink: 0; }
+  .experts-disclaimer strong { color: var(--primary-80); }
+
+  /* Comparison table */
+  .comparison { background: white; border: 1px solid var(--primary-20); border-radius: 12px; overflow: hidden; }
+  .comp-row { display: grid; grid-template-columns: 220px 1fr 1fr; gap: 20px; padding: 24px 28px; border-bottom: 1px solid var(--primary-10); align-items: start; }
+  .comp-row:last-child { border-bottom: none; }
+  .comp-meta { padding-top: 6px; }
+  .comp-num { font-size: 10px; color: var(--primary-50); font-weight: 700; letter-spacing: 1px; }
+  .comp-name { font-size: 15px; font-weight: 600; color: var(--primary-80); margin-top: 4px; line-height: 1.3; }
+  .comp-surface { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--primary-50); margin-top: 8px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; }
+  .comp-surface .ico { width: 12px; height: 12px; color: var(--terracotta-60); }
+  .comp-cell { display: flex; flex-direction: column; gap: 8px; }
+  .comp-label { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--primary-50); }
+  .comp-label.new { color: var(--terracotta-60); }
+  .comp-img-slot { aspect-ratio: 9 / 16; max-height: 360px; background: var(--primary-10); border: 1px dashed var(--primary-30); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px; color: var(--primary-40); font-size: 10px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; }
+  .comp-img-slot .ico { width: 18px; height: 18px; opacity: 0.5; }
+
+  /* Figma embeds */
+  .figma-embed { background: white; border: 1px solid var(--primary-20); border-radius: 12px; overflow: hidden; }
+  .figma-embed iframe { width: 100%; height: 760px; border: none; display: block; }
+  .figma-embed .embed-foot { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; border-top: 1px solid var(--primary-20); font-size: 12px; color: var(--primary-60); background: var(--primary-10); }
+  .figma-embed .embed-foot a { color: var(--terracotta-60); text-decoration: none; font-weight: 600; }
+  .figma-embed .embed-foot a:hover { text-decoration: underline; }
+
+  /* Tomorrow */
+  .tomorrow { background: var(--primary-80); color: white; border-radius: 12px; padding: 24px 28px; }
+  .tomorrow h3 { color: white; }
+  .tomorrow ol { margin: 0; padding-left: 20px; }
+  .tomorrow li { font-size: 14px; line-height: 1.6; margin-bottom: 6px; color: rgba(255,255,255,0.85); }
+  .tomorrow li strong { color: white; }
+  .tomorrow .ico { color: var(--terracotta-30); }
+
+  @media (max-width: 900px) {
+    body { padding: 32px 24px 64px; }
+    h1 { font-size: 44px; }
+    .section-label { font-size: 22px; }
+    .two-col, .buckets, .gates { grid-template-columns: 1fr; }
+    .week-grid { grid-template-columns: 1fr; }
+    .week-label { padding-top: 0; }
+    .out-of-scope ul { columns: 1; }
+    .comp-row { grid-template-columns: 1fr; }
+    .experts-buckets-grid { grid-template-columns: 1fr; }
+    .experts-bucket { border-right: none; border-bottom: 1px solid var(--primary-20); }
+    .experts-bucket:last-child { border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="eyebrow">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      Design Sprint, Sprint 1
+    </div>
+    <h1>Redesign v1<br/><span class="title-accent">Visual Refresh</span></h1>
+    <div class="meta">
+      <span class="meta-item">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span class="label">Dates</span><span class="value">Jun 22 to Jul 3</span>
+      </span>
+      <span class="meta-item">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="label">Team</span><span class="value">Vika + 2 Frontend</span>
+      </span>
+      <span class="meta-item">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="3" r="3"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="6" r="3"/><path d="M6 6v12"/><path d="M18 9v3a3 3 0 0 1-3 3h-6"/></svg>
+        <span class="label">Branch</span><span class="value">redesign/v1</span>
+      </span>
+      <span class="meta-item">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span class="label">Ship target</span><span class="value">Parallel track <span class="pill">v2</span></span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Goal -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+      Goal
+    </div>
+    <div class="goal-card">
+      <p>
+        <strong>Primary goal: prepare the app for experts.</strong>
+        This sprint lays the visual foundation that the experts surfaces (profile, management, hub) will eventually sit on.
+        The experts buckets themselves are not in the 2-week scope, they come later.
+      </p>
+      <p>
+        Alongside that, we are <strong>refreshing the app's look and feel</strong> on a clean-break design language, and <strong>reflecting feedback</strong> from the 100 initial testers.
+        Visual refresh runs in parallel to production. Current testers stay on the live build. This work ships as v2 a few weeks after they re-engage.
+      </p>
+      <p>
+        Hard rule: this is a <strong>re-skin</strong>, not a system rebuild. Existing components get new tokens and new visual treatment.
+        We do not invent new components, change information architecture, or rework patterns.
+        If a surface needs a new component to look right, it goes on the v2 backlog.
+      </p>
+    </div>
+  </section>
+
+  <!-- Foundation + Anchors -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+      What's changing
+    </div>
+    <div class="two-col">
+      <div class="foundation-card">
+        <h3>
+          <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          Foundation, touches every screen
+        </h3>
+        <ul>
+          <li>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+            <div class="li-body">
+              <strong>Color palette</strong>, clean break, new tokens
+              <div class="swatch-row">
+                <div class="swatch" style="background:#F5F1EA"></div>
+                <div class="swatch" style="background:#DBD6CD"></div>
+                <div class="swatch" style="background:#A8A297"></div>
+                <div class="swatch" style="background:#766F64"></div>
+                <div class="swatch" style="background:#433E36"></div>
+                <div class="swatch" style="background:#A17A5B"></div>
+                <div class="swatch" style="background:#C4A08E"></div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+            <div class="li-body"><strong>Typography</strong>, separate workstream, sweeps all 54 screens</div>
+          </li>
+          <li>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+            <div class="li-body"><strong>Spacing scale</strong></div>
+          </li>
+          <li>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V8a4 4 0 0 1 4-4h12"/></svg>
+            <div class="li-body"><strong>Border radii</strong></div>
+          </li>
+        </ul>
+      </div>
+      <div class="anchors-card">
+        <h3>
+          <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Anchor surfaces, fully re-skinned
+        </h3>
+        <ul>
+          <li>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8h6l-4.9 3.6 1.9 5.8L12 14.6 7.1 18.2l1.9-5.8L4.1 8.8h6z"/></svg>
+            <div class="li-body"><strong>Onboarding</strong>, 3 buckets</div>
+          </li>
+          <li>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <div class="li-body"><strong>Calendar</strong>, 3 buckets</div>
+          </li>
+          <li>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <div class="li-body"><strong>Chat</strong>, 9 buckets</div>
+          </li>
+          <li>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="color:var(--amber);"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>
+            <div class="li-body"><strong>Experts</strong>, 3 buckets <span style="display:inline-block;margin-left:6px;padding:1px 7px;background:var(--amber);color:white;font-size:10px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;border-radius:4px;">Later</span></div>
+          </li>
+        </ul>
+        <p style="font-size:13px; margin-top:16px; color:var(--primary-60);">
+          All other 50 screens get the typography sweep this sprint. Color + spacing + radius pass comes surface by surface in later sprints.
+          The Experts surfaces are flagged for later, beyond this 2-week scope.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Buckets -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Buckets, 18 total · 15 this sprint · 3 later
+    </div>
+    <div class="buckets">
+
+      <div class="bucket-col">
+        <div class="bucket-head">
+          <div class="head-row">
+            <svg class="ico-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8h6l-4.9 3.6 1.9 5.8L12 14.6 7.1 18.2l1.9-5.8L4.1 8.8h6z"/></svg>
+            <div class="name">Onboarding</div>
+          </div>
+          <div class="count">3 buckets</div>
+          <div class="owner">FE1</div>
+        </div>
+        <div class="bucket-list">
+          <div class="bucket-item">
+            <div class="b-num">01</div>
+            <div class="b-name">Splash screen</div>
+            <div class="b-detail">Brand first-frame moment. Logo, optional loading.</div>
+            <div class="b-meta">States: Loading, Error</div>
+          </div>
+          <div class="bucket-item">
+            <div class="b-num">02</div>
+            <div class="b-name">Onboarding questionnaire</div>
+            <div class="b-detail">4 to 6 steps. One template, multiple steps.</div>
+            <div class="b-meta">States: Step, Empty, Error, Back/Skip, Complete</div>
+          </div>
+          <div class="bucket-item">
+            <div class="b-num">03</div>
+            <div class="b-name">Connect device</div>
+            <div class="b-detail">Garmin OAuth + sync confirmation.</div>
+            <div class="b-meta">States: Idle, Connecting, Success, Error, Skip</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bucket-col">
+        <div class="bucket-head">
+          <div class="head-row">
+            <svg class="ico-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <div class="name">Calendar</div>
+          </div>
+          <div class="count">3 buckets</div>
+          <div class="owner">FE2</div>
+        </div>
+        <div class="bucket-list">
+          <div class="bucket-item">
+            <div class="b-num">04</div>
+            <div class="b-name">Calendar surface</div>
+            <div class="b-detail">Grid / timeline view.</div>
+            <div class="b-meta">States: Today, Past, Future, Empty, Loading</div>
+          </div>
+          <div class="bucket-item">
+            <div class="b-num">05</div>
+            <div class="b-name">Top card, collapsed</div>
+            <div class="b-detail">Compact summary on top of calendar.</div>
+            <div class="b-meta">States: Default, No-data</div>
+          </div>
+          <div class="bucket-item">
+            <div class="b-num">06</div>
+            <div class="b-name">Top card, expanded</div>
+            <div class="b-detail">Full detail open state of the same card.</div>
+            <div class="b-meta">States: Default, No-data, Collapse/expand transition</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bucket-col">
+        <div class="bucket-head">
+          <div class="head-row">
+            <svg class="ico-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <div class="name">Chat</div>
+          </div>
+          <div class="count">9 buckets</div>
+          <div class="owner">FE1</div>
+        </div>
+        <div class="bucket-list">
+          <div class="bucket-item">
+            <div class="b-num">07</div>
+            <div class="b-name">Navigation</div>
+            <div class="b-detail">Visual-only refresh. No backend, no pattern changes.</div>
+            <div class="b-meta">States: Default, Scrolled</div>
+          </div>
+          <div class="bucket-item">
+            <div class="b-num">08</div>
+            <div class="b-name">Charts &amp; graphs</div>
+            <div class="b-detail">Three primitives: Line, Bar, Progress bar. Reusable across reports + calendar.</div>
+            <div class="b-meta">Per chart: Empty, Loading, Populated, No-data, Error</div>
+          </div>
+          <div class="bucket-item">
+            <div class="b-num">09</div>
+            <div class="b-name">Reports</div>
+            <div class="b-detail">Four types: Morning, Evening, Post-workout, Post-weight. Also the structured pattern for long proactive messages.</div>
+            <div class="b-meta">Per type: Loading, Populated, Partial-data, Error, Collapsed/Expanded</div>
+          </div>
+          <div class="bucket-item">
+            <div class="b-num">10</div>
+            <div class="b-name">Plan</div>
+            <div class="b-detail">Structured plan component rendered in chat (training plan, nutrition plan, weekly view).</div>
+            <div class="b-meta">States: Loading, Populated, Partial-data, Error, Day vs Week view</div>
+          </div>
+          <div class="bucket-item">
+            <div class="b-num">11</div>
+            <div class="b-name">Interview</div>
+            <div class="b-detail">In-chat questionnaire pattern when Ottavia gathers context mid-conversation.</div>
+            <div class="b-meta">States: Question, In-progress, Completed, Skipped</div>
+          </div>
+          <div class="bucket-item">
+            <div class="b-num">12</div>
+            <div class="b-name">System message</div>
+            <div class="b-detail">Single variant this sprint: new incoming messages. Backend scaling deferred.</div>
+            <div class="b-meta">States: Default</div>
+          </div>
+          <div class="bucket-item">
+            <div class="b-num">13</div>
+            <div class="b-name">Day separator</div>
+            <div class="b-detail">Inline divider between message groups by date.</div>
+            <div class="b-meta">States: Today, Yesterday, Specific date</div>
+          </div>
+          <div class="bucket-item">
+            <div class="b-num">14</div>
+            <div class="b-name">Notification</div>
+            <div class="b-detail">In-chat notification banner for alerts and system events.</div>
+            <div class="b-meta">States: Default, With action, Dismissible</div>
+          </div>
+          <div class="bucket-item">
+            <div class="b-num">15</div>
+            <div class="b-name">Composer</div>
+            <div class="b-detail">Visual refresh only. No new inputs, no new flows.</div>
+            <div class="b-meta">States: Empty, Typing, With-attachment, Sending, Disabled</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Experts (later, not this sprint) -->
+    <div class="experts-section">
+      <div class="experts-head">
+        <div class="experts-head-left">
+          <svg class="ico-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>
+          <div>
+            <div class="e-name">Experts</div>
+            <div class="e-count">3 buckets · primary goal of this sprint to prepare for</div>
+          </div>
+        </div>
+        <span class="later-pill">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Later, not in 2-week scope
+        </span>
+      </div>
+      <div class="experts-buckets-grid">
+        <div class="experts-bucket">
+          <div class="b-num">16</div>
+          <div class="b-name">Expert profile</div>
+          <div class="b-detail">Expert homepage. Bio, domain, ways to engage.</div>
+          <div class="b-meta">States: Default, Loading, Empty</div>
+        </div>
+        <div class="experts-bucket">
+          <div class="b-num">17</div>
+          <div class="b-name">Expert management</div>
+          <div class="b-detail">Screen for managing followed/subscribed experts.</div>
+          <div class="b-meta">States: Default, Empty, Editing</div>
+        </div>
+        <div class="experts-bucket">
+          <div class="b-num">18</div>
+          <div class="b-name">Expert hub</div>
+          <div class="b-detail">Directory and discovery of all experts.</div>
+          <div class="b-meta">States: Default, Loading, Empty, Filtered</div>
+        </div>
+      </div>
+      <div class="experts-disclaimer">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span>
+          <strong>Big disclaimer.</strong> The 3 experts buckets are NOT in the 2-week sprint scope. They are shown here because preparing the app for experts is the strategic goal of this sprint. The visual foundation we build now (tokens, typography, components) is what these surfaces will eventually sit on. Build dates are TBD.
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Timeline, 2 weeks
+    </div>
+    <div class="timeline">
+
+      <div class="week-grid" style="margin-bottom:16px;">
+        <div class="week-label">Week 1<br/>Define + Mock</div>
+        <div class="day">
+          <div class="day-name">Mon Jun 22</div>
+          <div class="day-content"><span class="who">Vika</span> Token audit (color + type). Lock both.</div>
+        </div>
+        <div class="day">
+          <div class="day-name">Tue Jun 23</div>
+          <div class="day-content"><span class="who">Vika</span> Seed DESIGN.md v0.1.<br/><span class="who">FE2</span> Build TYPOGRAPHY export.</div>
+        </div>
+        <div class="day">
+          <div class="day-name">Wed Jun 24</div>
+          <div class="day-content"><span class="who">Vika</span> Mock onboarding.<br/><span class="who">FE2</span> Typography sweep begins.</div>
+        </div>
+        <div class="day">
+          <div class="day-name">Thu Jun 25</div>
+          <div class="day-content"><span class="who">Vika</span> Mock chat.<br/><span class="who">FE2</span> Typography sweep continues.</div>
+        </div>
+        <div class="day gate">
+          <div class="day-name">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Fri Jun 26, Gate 1
+          </div>
+          <div class="day-content"><span class="who">All</span> Mock calendar. Review tokens + mocks. Lock or revise.</div>
+        </div>
+      </div>
+
+      <div class="week-grid">
+        <div class="week-label">Week 2<br/>Build + Ship</div>
+        <div class="day">
+          <div class="day-name">Mon Jun 29</div>
+          <div class="day-content"><span class="who">FE1</span> Onboarding build.<br/><span class="who">FE2</span> Calendar build + finish typography sweep.</div>
+        </div>
+        <div class="day">
+          <div class="day-name">Tue Jun 30</div>
+          <div class="day-content"><span class="who">FE1</span> Onboarding done, chat starts.<br/><span class="who">FE2</span> Calendar.</div>
+        </div>
+        <div class="day">
+          <div class="day-name">Wed Jul 1</div>
+          <div class="day-content"><span class="who">FE1</span> Chat.<br/><span class="who">FE2</span> Calendar.<br/><span class="who">Vika</span> PR reviews.</div>
+        </div>
+        <div class="day gate">
+          <div class="day-name">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Thu Jul 2, Gate 2
+          </div>
+          <div class="day-content"><span class="who">All</span> On-device review. Fix list.</div>
+        </div>
+        <div class="day">
+          <div class="day-name">Fri Jul 3</div>
+          <div class="day-content"><span class="who">All</span> Parity audit. Merge to develop. Ship to staging.</div>
+        </div>
+      </div>
+
+      <div class="gates">
+        <div class="gate-card">
+          <div class="g-when">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Gate 1, Fri Jun 26
+          </div>
+          <div class="g-title">Tokens + mocks locked</div>
+          <div class="g-detail">Color, type, spacing, radii frozen. Onboarding, chat, and calendar mocks approved. Engineering can build with confidence.</div>
+        </div>
+        <div class="gate-card">
+          <div class="g-when">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Gate 2, Thu Jul 2
+          </div>
+          <div class="g-title">On-device walkthrough</div>
+          <div class="g-detail">Real devices, all three surfaces. Fix list generated. No new scope.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Roles -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Roles
+    </div>
+    <table class="roles-table">
+      <thead>
+        <tr><th>Person</th><th>Owns</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <span class="role-name">
+              <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+              Vika
+            </span>
+          </td>
+          <td>Color + type + spacing + radii tokens. Figma mocks. DESIGN.md. Playground updates. Daily handoff. Both gate reviews.</td>
+        </tr>
+        <tr>
+          <td>
+            <span class="role-name">
+              <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              FE1
+            </span>
+          </td>
+          <td>Onboarding (3 buckets) + Chat (9 buckets). Heaviest design complexity sits with one head.</td>
+        </tr>
+        <tr>
+          <td>
+            <span class="role-name">
+              <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              FE2
+            </span>
+          </td>
+          <td>Calendar (3 buckets) + typography centralization + typography sweep across 50 non-anchor screens.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Workflow -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="6" height="6" rx="1"/><rect x="16" y="4" width="6" height="6" rx="1"/><rect x="9" y="14" width="6" height="6" rx="1"/><path d="M5 10v2a2 2 0 0 0 2 2h2"/><path d="M19 10v2a2 2 0 0 1-2 2h-2"/></svg>
+      Workflow, order of edits is non-negotiable
+    </div>
+
+    <div class="workflow-flow">
+      <div class="flow-step">
+        <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5.5A3.5 3.5 0 0 1 8.5 2H12v7H8.5A3.5 3.5 0 0 1 5 5.5z"/><path d="M12 2h3.5a3.5 3.5 0 1 1 0 7H12V2z"/><path d="M12 12.5a3.5 3.5 0 1 1 7 0 3.5 3.5 0 1 1-7 0z"/><path d="M5 19.5A3.5 3.5 0 0 1 8.5 16H12v3.5a3.5 3.5 0 1 1-7 0z"/><path d="M5 12.5A3.5 3.5 0 0 1 8.5 9H12v7H8.5A3.5 3.5 0 0 1 5 12.5z"/></svg>
+        Figma
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        DESIGN.md
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Playground
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        Code
+      </div>
+    </div>
+
+    <div class="workflow-detail">
+      <dl>
+        <dt>
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5.5A3.5 3.5 0 0 1 8.5 2H12v7H8.5A3.5 3.5 0 0 1 5 5.5z"/><path d="M12 2h3.5a3.5 3.5 0 1 1 0 7H12V2z"/><path d="M12 12.5a3.5 3.5 0 1 1 7 0 3.5 3.5 0 1 1-7 0z"/><path d="M5 19.5A3.5 3.5 0 0 1 8.5 16H12v3.5a3.5 3.5 0 1 1-7 0z"/><path d="M5 12.5A3.5 3.5 0 0 1 8.5 9H12v7H8.5A3.5 3.5 0 0 1 5 12.5z"/></svg>
+          Figma
+        </dt>
+        <dd>Canonical visual source. Vika mocks every screen and state here first. Engineers do not start a bucket until its Figma frame is approved.</dd>
+
+        <dt>
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          DESIGN.md <span style="color:var(--terracotta-60); font-weight:600;">(new file, created day 1)</span>
+        </dt>
+        <dd>Lives in <code>ottavia-client/DESIGN.md</code>. Vika writes/updates the relevant section the same day she finalizes a Figma frame. Reviewers check PRs against it. No PRs merge to <code>redesign/v1</code> without DESIGN.md updated.</dd>
+
+        <dt>
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Playground
+        </dt>
+        <dd>Lives in <code>ottavia-design/Playground/</code>. Vika ports stabilized tokens + components into the HTML so FE has a live, copy-paste-able reference. Updated weekly, not per change.</dd>
+
+        <dt>
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          Code
+        </dt>
+        <dd>Production truth. Branch <code>redesign/v1</code> off <code>develop</code>. Parallel to current production. Each PR cites the DESIGN.md section it implements.</dd>
+      </dl>
+      <p style="margin-top:20px; font-size:13px; color:var(--primary-60); display:flex; align-items:center; gap:6px;">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="color:var(--terracotta-60);"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span><strong style="color:var(--primary-80);">Daily rhythm:</strong> 15-min standup at 9am. 15-min end-of-day handoff at 5pm.</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- Out of scope -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+      Out of scope, scope guard
+    </div>
+    <div class="out-of-scope">
+      <ul>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg> New components or new screen templates</li>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg> IA / navigation changes</li>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg> New chat patterns or response types</li>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg> Health-data detail screens (sleep, HRV, nutrition detail, body comp)</li>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg> Profile, settings, goals editing</li>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg> Dark mode (unless tokens give it for free)</li>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg> New animations beyond what's already in code</li>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg> Backend changes for system messages or reports</li>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg> New voice input or composer flows</li>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg> Color + spacing pass on non-anchor screens (typography only this sprint)</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Onboarding flow (live Figma embed) -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8h6l-4.9 3.6 1.9 5.8L12 14.6 7.1 18.2l1.9-5.8L4.1 8.8h6z"/></svg>
+      Onboarding flow
+    </div>
+    <div class="figma-embed">
+      <iframe src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2F8zdDzD913vMpWD1I8EtbDJ%2FOttavia--Redesign-v1--Visual-Refresh%3Fnode-id%3D2-4" allowfullscreen></iframe>
+      <div class="embed-foot">
+        <span>Live from Figma: Ottavia, Redesign v1, Visual Refresh → 🎯 Onboarding</span>
+        <a href="https://www.figma.com/design/8zdDzD913vMpWD1I8EtbDJ/Ottavia--Redesign-v1--Visual-Refresh?node-id=2-4" target="_blank">Open in Figma</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tomorrow -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      Tomorrow, first three moves after kickoff
+    </div>
+    <div class="tomorrow">
+      <ol>
+        <li><strong>Vika</strong>, Token audit. Diff Figma variables against <code>MarkdownStyles.ts</code> COLORS. Output: drift report.</li>
+        <li><strong>Vika</strong>, Create <code>ottavia-client/DESIGN.md</code> v0.1 with new tokens.</li>
+        <li><strong>All</strong>, Three Jira tickets in OTRD, one per anchor surface, using the handoff template.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Before and after -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="9" height="18" rx="1.5"/><rect x="13" y="3" width="9" height="18" rx="1.5"/><line x1="7" y1="11" x2="17" y2="11"/></svg>
+      Before and after
+    </div>
+    <div class="comparison">
+
+      <div class="comp-row">
+        <div class="comp-meta">
+          <div class="comp-num">01</div>
+          <div class="comp-name">Splash screen</div>
+          <div class="comp-surface">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8h6l-4.9 3.6 1.9 5.8L12 14.6 7.1 18.2l1.9-5.8L4.1 8.8h6z"/></svg>
+            Onboarding
+          </div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label">Old</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label new">New</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-meta">
+          <div class="comp-num">02</div>
+          <div class="comp-name">Onboarding questionnaire</div>
+          <div class="comp-surface">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8h6l-4.9 3.6 1.9 5.8L12 14.6 7.1 18.2l1.9-5.8L4.1 8.8h6z"/></svg>
+            Onboarding
+          </div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label">Old</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label new">New</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-meta">
+          <div class="comp-num">03</div>
+          <div class="comp-name">Connect device</div>
+          <div class="comp-surface">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8h6l-4.9 3.6 1.9 5.8L12 14.6 7.1 18.2l1.9-5.8L4.1 8.8h6z"/></svg>
+            Onboarding
+          </div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label">Old</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label new">New</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-meta">
+          <div class="comp-num">04</div>
+          <div class="comp-name">Calendar surface</div>
+          <div class="comp-surface">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Calendar
+          </div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label">Old</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label new">New</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-meta">
+          <div class="comp-num">05</div>
+          <div class="comp-name">Top card, collapsed</div>
+          <div class="comp-surface">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Calendar
+          </div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label">Old</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label new">New</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-meta">
+          <div class="comp-num">06</div>
+          <div class="comp-name">Top card, expanded</div>
+          <div class="comp-surface">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Calendar
+          </div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label">Old</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label new">New</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-meta">
+          <div class="comp-num">07</div>
+          <div class="comp-name">Navigation</div>
+          <div class="comp-surface">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Chat
+          </div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label">Old</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label new">New</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-meta">
+          <div class="comp-num">08</div>
+          <div class="comp-name">Charts &amp; graphs</div>
+          <div class="comp-surface">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Chat
+          </div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label">Old</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label new">New</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-meta">
+          <div class="comp-num">09</div>
+          <div class="comp-name">Reports</div>
+          <div class="comp-surface">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Chat
+          </div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label">Old</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label new">New</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-meta">
+          <div class="comp-num">10</div>
+          <div class="comp-name">Plan</div>
+          <div class="comp-surface">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Chat
+          </div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label">Old</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label new">New</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-meta">
+          <div class="comp-num">11</div>
+          <div class="comp-name">Interview</div>
+          <div class="comp-surface">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Chat
+          </div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label">Old</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label new">New</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-meta">
+          <div class="comp-num">12</div>
+          <div class="comp-name">System message</div>
+          <div class="comp-surface">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Chat
+          </div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label">Old</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label new">New</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-meta">
+          <div class="comp-num">13</div>
+          <div class="comp-name">Day separator</div>
+          <div class="comp-surface">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Chat
+          </div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label">Old</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label new">New</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-meta">
+          <div class="comp-num">14</div>
+          <div class="comp-name">Notification</div>
+          <div class="comp-surface">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Chat
+          </div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label">Old</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label new">New</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-meta">
+          <div class="comp-num">15</div>
+          <div class="comp-name">Composer</div>
+          <div class="comp-surface">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Chat
+          </div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label">Old</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label new">New</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-meta">
+          <div class="comp-num">16</div>
+          <div class="comp-name">Expert profile</div>
+          <div class="comp-surface">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="color:var(--amber);"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>
+            Experts · Later
+          </div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label">Old</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label new">New</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-meta">
+          <div class="comp-num">17</div>
+          <div class="comp-name">Expert management</div>
+          <div class="comp-surface">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="color:var(--amber);"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>
+            Experts · Later
+          </div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label">Old</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label new">New</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-meta">
+          <div class="comp-num">18</div>
+          <div class="comp-name">Expert hub</div>
+          <div class="comp-surface">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="color:var(--amber);"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>
+            Experts · Later
+          </div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label">Old</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+        <div class="comp-cell">
+          <div class="comp-label new">New</div>
+          <div class="comp-img-slot"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Pending</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
