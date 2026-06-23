@@ -1423,6 +1423,14 @@
      ---------------------------------------------------------------- */
   const iframe = document.getElementById('psPhone');
 
+  // Cache-bust the phone iframe so a refresh always loads the latest
+  // experts.html (GitHub Pages + the browser cache the file aggressively,
+  // which otherwise leaves the demo showing stale surfaces).
+  (function () {
+    const base = iframe.getAttribute('src');
+    iframe.setAttribute('src', base + '&cb=' + Date.now());
+  })();
+
   const PERSONA_AWARE_OTTAVIA_SURFACES = new Set(['ottavia-nutshell', 'plan-today', 'chat-baseline']);
   function getActivePersona() {
     const el = document.querySelector('.ps-persona.active');
