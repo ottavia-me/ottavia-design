@@ -763,16 +763,17 @@
 
     /* ============================================================
        SLIDE: SAFETY AND SCOPE
-       Simple text-only slide, single column centered horizontally.
+       Two-column: text on the left, safety image on the right.
        ============================================================ */
     .slide-safety {
+      flex-direction: row;
       align-items: center;
-      justify-content: center;
+      gap: clamp(40px, 5vw, 96px);
       padding: 80px 96px 96px;
     }
     .slide-safety-text {
-      max-width: 920px;
-      width: 100%;
+      flex: 1 1 0;
+      max-width: 680px;
     }
     .slide-safety .big-headline { margin-bottom: 36px; }
     .slide-safety .bullet-list { gap: 20px; }
@@ -780,6 +781,18 @@
       font-size: clamp(17px, 1.4vw, 22px);
       line-height: 1.55;
       color: var(--ink);
+    }
+    .slide-safety-art {
+      flex: 0 0 580px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .slide-safety-art img {
+      width: 100%;
+      height: auto;
+      max-height: 70vh;
+      object-fit: contain;
     }
     .slide-9-right {
       flex: 0 0 552px;
@@ -1156,6 +1169,9 @@
       <li>Users with clinical conditions are routed to their clinician, not Ottavia.</li>
       <li>Every recommendation is attributed to its source, so users see exactly whose lens shaped it.</li>
     </ul>
+  </div>
+  <div class="slide-safety-art">
+    <img src="../assets/images/safety.png" alt="" />
   </div>
 </section>
 
