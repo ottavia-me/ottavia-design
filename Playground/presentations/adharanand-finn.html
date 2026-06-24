@@ -88,7 +88,8 @@
     }
     .deck-nav {
       position: fixed;
-      bottom: 20px; left: 50%; transform: translateX(-50%);
+      bottom: 20px; left: 50%; transform: translateX(-50%) scale(1.3);
+      transform-origin: bottom center;
       z-index: 100;
       display: flex; align-items: center; gap: 12px;
       padding: 8px;
@@ -311,7 +312,7 @@
       max-width: 540px;
     }
     .built-shipped {
-      margin-top: auto;
+      margin-top: 8px;
       padding-top: 40px;
     }
     .bs-label {
@@ -395,9 +396,12 @@
        SLIDE 4 — THE PROBLEM
        ============================================================ */
     .slide-4 {
+      --content-min: 1100px;
+      --content-max: 1600px;
       flex-direction: row;
       gap: 60px;
       align-items: center;
+      justify-content: center;
     }
     .slide-4-text {
       flex: 1;
@@ -444,9 +448,12 @@
        SLIDE 5 — WHO IS IT FOR
        ============================================================ */
     .slide-5 {
+      --content-min: 1100px;
+      --content-max: 1600px;
       flex-direction: row;
       gap: 80px;
       align-items: center;
+      justify-content: center;
     }
     .slide-5-text { flex: 1; max-width: 720px; }
     .slide-5-text .big-headline { margin-bottom: 32px; }
@@ -652,7 +659,9 @@
        the disclaimer pinned to the bottom of the slide.
        ============================================================ */
     .slide-8 {
-      padding: 32px 48px 32px;
+      --content-min: 1100px;
+      --content-max: 1600px;
+      padding: 32px max(48px, calc((100vw - var(--content-w)) / 2));
       display: flex;
       flex-direction: column;
       gap: 0;
@@ -789,6 +798,7 @@
       width: 5px; height: 5px; border-radius: 50%; background: #2D2A24;
     }
     .founding-role-not { font-size: clamp(14px, 1.05vw, 16px); color: var(--ink-soft); font-style: italic; margin: 4px 0 0; }
+    .founding-role-lead { font-size: clamp(15px, 1.2vw, 18px); color: var(--ink-soft); line-height: 1.5; margin: 0 0 16px; letter-spacing: -0.01em; }
 
     /* ============================================================
        SLIDE: NEXT STEPS — horizontal phase timeline (no dates).
@@ -860,6 +870,7 @@
     .slide-safety {
       flex-direction: row;
       align-items: center;
+      justify-content: center;
       gap: clamp(40px, 5vw, 96px);
       --content-min: 1100px;
       --content-max: 1600px;
@@ -1274,21 +1285,14 @@
   <div class="slide-9-left">
     <h1 class="big-headline">Become a Founding Expert</h1>
     <p class="body-text">We are assembling a select group of leading experts to join us at the beginning of this journey. As a founding partner, you'll have early access to cutting-edge AI technology, a direct voice in product development, and the opportunity to establish your presence before the platform expands.</p>
-    <p class="body-text">The experts who join now won't simply participate in the future of health guidance, <strong>they'll help create it.</strong></p>
     <div class="founding-role">
       <h3 class="founding-role-title">Your role as a Founding Expert</h3>
+      <p class="founding-role-lead">Capture your principles, frameworks, decision-making patterns, and examples worth modeling, then refine them over time. No weekly content to produce.</p>
       <ul class="founding-role-bullets">
-        <li>Capture your principles.</li>
-        <li>Capture your frameworks.</li>
-        <li>Capture your decision-making patterns.</li>
-        <li>Capture examples worth modeling.</li>
-        <li>Refine over time.</li>
+        <li><strong>A new way to scale your expertise</strong>, turning your knowledge into a lasting source of income that reaches people far beyond coaching, consulting, or publishing.</li>
+        <li><strong>An evolving model</strong>, refresh and adapt your guidance whenever your thinking changes, so your audience always stays current with you.</li>
+        <li><strong>A founding voice</strong>, join a select team of leading experts with real influence over where the platform goes.</li>
       </ul>
-      <p class="founding-role-not">Not: write weekly content.</p>
-    </div>
-    <div class="founders-tag">
-      <div class="founders-tag-label">Founding team</div>
-      <div class="founders-tag-names">Elad &amp; Vika</div>
     </div>
   </div>
   <div class="slide-9-right">
