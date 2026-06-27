@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ottavia — Data Visualization v4</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --bg: #F5F1EA;
+    --card: #FFFFFF;
+    --t1: #433E36;
+    --t2: #A8A297;
+    --t3: #C2BCB2;
+    --border: #E7DFD0;
+    --subtle: #F0EBE4;
+
+    --nutrition: #9DD8B8;
+    --nutrition-s: #D7F4E8;
+    --activity: #C4A08E;
+    --activity-s: #F9EFE0;
+    --hydration: #A3C4FF;
+    --hydration-s: #DBEFFA;
+    --recovery: #CDBCFF;
+    --recovery-s: #E7EBFF;
+
+    /* Full strength for text */
+    --nutrition-full: #4B8F61;
+    --activity-full: #C08A48;
+    --hydration-full: #3A647E;
+    --recovery-full: #58669D;
+
+    /* Slider-controlled values */
+    --unit-size: 11px;
+    --unit-radius: 0px;
+    --viz-scale: 1;
+
+    /* Spacing-controlled values */
+    --sp-label: 6px;
+    --sp-value: 6px;
+    --sp-sub: 6px;
+    --sp-viz: 8px;
+    --sp-note: 8px;
+    --sp-block: 28px;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+    background: #1a1a1a;
+    display: flex; justify-content: center; align-items: flex-start;
+    min-height: 100vh; padding: 20px;
+  }
+
+  /* ---- Nav ---- */
+  .version-nav {
+    position: fixed; left: 24px; top: 50%; transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 8px; z-index: 1000;
+  }
+  .version-nav a {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 10px 14px; background: #2a2a2a; border: 1px solid #3a3a3a;
+    border-radius: 10px; text-decoration: none; color: #999;
+    font-size: 13px; font-weight: 600; transition: all 0.2s;
+    min-width: 100px; text-align: center;
+  }
+  .version-nav a span { font-size: 10px; font-weight: 400; color: #666; margin-top: 2px; }
+  .version-nav a:hover { background: #333; border-color: #555; color: #ccc; }
+  .version-nav a.active { background: #433E36; border-color: #433E36; color: #fff; }
+  .version-nav a.active span { color: rgba(255,255,255,0.6); }
+
+  /* ---- Controls panel (right side) ---- */
+  .controls {
+    position: fixed; right: 24px; top: 50%; transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 20px; z-index: 1000;
+    background: #2a2a2a; border: 1px solid #3a3a3a; border-radius: 12px;
+    padding: 18px 16px; width: 180px;
+  }
+  .controls h3 {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.8px; color: #888; margin-bottom: -8px;
+  }
+  .control-group {
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .control-group label {
+    font-size: 12px; font-weight: 500; color: #bbb;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .control-group label output {
+    font-size: 11px; color: #888; font-weight: 400;
+    min-width: 32px; text-align: right;
+  }
+  .control-group input[type="range"] {
+    width: 100%; height: 4px; -webkit-appearance: none; appearance: none;
+    background: #444; border-radius: 2px; outline: none;
+    cursor: pointer;
+  }
+  .control-group input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 14px; height: 14px;
+    border-radius: 50%; background: #fff; cursor: pointer;
+    border: 2px solid #666;
+  }
+
+  /* ---- Phone ---- */
+  .phone-frame {
+    width: 390px; height: 844px; background: var(--bg);
+    border-radius: 40px; overflow: hidden; position: relative;
+    box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+  }
+  .screen { height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .screen::-webkit-scrollbar { display: none; }
+
+  .status-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 24px 0; height: 50px; background: var(--bg);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .status-time { font-size: 15px; font-weight: 600; color: var(--t1); }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+
+  .top-header {
+    background: var(--bg); padding: 6px 20px 14px;
+    position: sticky; top: 50px; z-index: 99;
+    border-bottom: 1px solid var(--border);
+  }
+  .top-header h1 { font-size: 24px; font-weight: 600; color: #8F897D; line-height: 32px; }
+  .top-header h1 b { color: var(--t1); font-weight: 600; }
+
+  .chat { padding: 16px 20px; display: flex; flex-direction: column; gap: 18px; }
+
+  .user-bubble {
+    align-self: flex-end; background: var(--card); border-radius: 23px;
+    padding: 10px 14px; font-size: 16px; line-height: 24px;
+    color: var(--t1); max-width: 302px;
+  }
+  .ottavia-text { font-size: 16px; line-height: 24px; color: var(--t1); letter-spacing: 0.2px; }
+  .ottavia-text strong { font-weight: 600; }
+  .convo-divider { border: none; border-top: 1px solid var(--subtle); margin: 20px 0; }
+
+  /* ========================================
+     V4: PIXEL ART DATA VIZ
+     ======================================== */
+
+  .viz-block {
+    padding: 0;
+    margin-bottom: var(--sp-block);
+    text-align: left;
+  }
+
+  .viz-block-label {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.8px; color: var(--t2);
+    margin-bottom: var(--sp-label);
+  }
+  .viz-block-value {
+    font-size: 28px; font-weight: 700; letter-spacing: -0.5px; line-height: 34px;
+    margin-bottom: var(--sp-value);
+  }
+  .viz-block-value .u {
+    font-size: 14px; font-weight: 400; color: var(--t2); letter-spacing: 0;
+  }
+  .viz-block-sub {
+    font-size: 13px; color: var(--t2); line-height: 18px;
+    margin-bottom: var(--sp-sub);
+  }
+  .viz-block-note {
+    font-size: 12px; color: var(--t3); margin-top: var(--sp-note); line-height: 16px;
+  }
+
+  /* ---- Waffle grid ---- */
+  .waffle {
+    display: grid; gap: 2px;
+    transform: scale(var(--viz-scale));
+    transform-origin: top center;
+    justify-content: center;
+  }
+  .waffle i {
+    display: block;
+    width: var(--unit-size);
+    height: var(--unit-size);
+    background: var(--empty);
+    border-radius: var(--unit-radius);
+  }
+  .waffle i.f {
+    background: var(--fill);
+  }
+
+  /* ---- Pixel bar columns ---- */
+  .pixel-bars {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    gap: 2px; min-height: 40px;
+    transform: scale(var(--viz-scale));
+    transform-origin: top left;
+  }
+  .px-col {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+  }
+  .px-val {
+    font-size: 10px; font-weight: 700; line-height: 14px; margin-bottom: 2px;
+    color: var(--t1);
+  }
+  .px-stack {
+    display: flex; flex-direction: column-reverse; gap: 2px; width: 100%;
+    align-items: center;
+  }
+  .px-stack i {
+    display: block; width: 100%; max-width: 28px;
+    height: var(--unit-size);
+    background: var(--fill);
+    border-radius: var(--unit-radius);
+  }
+  .px-stack i.e {
+    background: var(--empty);
+  }
+  .px-day {
+    font-size: 11px; color: var(--t3); margin-top: 4px; font-weight: 400;
+  }
+  .px-day.today { font-weight: 700; color: var(--t1); }
+
+  /* ---- Pixel macro rows ---- */
+  .pm-row {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+    text-align: left;
+  }
+  .pm-label {
+    font-size: 12px; font-weight: 600; width: 48px; flex-shrink: 0;
+    color: var(--t1);
+  }
+  .pm-grid {
+    display: flex; gap: 2px; flex: 1;
+  }
+  .pm-grid i {
+    display: block; flex: 1;
+    height: var(--unit-size);
+    background: var(--empty);
+    border-radius: var(--unit-radius);
+  }
+  .pm-grid i.f {
+    background: var(--fill);
+  }
+  .pm-goal {
+    font-size: 11px; font-weight: 400; width: 52px; text-align: right;
+    flex-shrink: 0; color: var(--t2);
+  }
+
+  /* ---- Home ---- */
+  .home-indicator {
+    position: sticky; bottom: 0; height: 34px; background: var(--bg);
+    display: flex; justify-content: center; align-items: center; z-index: 100;
+  }
+  .home-indicator-bar { width: 134px; height: 5px; background: var(--t1); border-radius: 100px; }
+
+  /* ---- Mobile ---- */
+  .version-dropdown { display: none; }
+  .version-dropdown select {
+    width: 100%; background: #1a1a1a; color: #fff; border: none;
+    border-bottom: 1px solid #333; padding: 14px 16px; font-size: 14px;
+    font-family: inherit; appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 16px center; outline: none;
+  }
+  @media (max-width: 768px) {
+    .version-nav { display: none !important; }
+    .controls { display: none !important; }
+    .version-dropdown { display: block; position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; }
+    body { padding: 0; padding-top: 48px; }
+    .phone-frame { width: 100%; height: calc(100vh - 48px); border-radius: 0; box-shadow: none; }
+  }
+  .embed body { padding: 0; }
+  .embed .version-nav, .embed .controls, .embed .coach-fab { display: none !important; }
+  .embed .version-dropdown { display: block !important; position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; }
+  .embed .phone-frame { width: 100%; height: calc(100vh - 48px); border-radius: 0; box-shadow: none; margin-top: 48px; }
+</style>
+<script>if(location.search.includes("embed=1"))document.documentElement.classList.add("embed");</script>
+</head>
+<body>
+
+<nav class="version-nav">
+  <a href="viz-v1.html">V1<span>White Cards</span></a>
+  <a href="viz-v2.html">V2<span>Borderless</span></a>
+  <a href="viz-v3.html">V3<span>Accent Cards</span></a>
+  <a href="viz-v4.html" class="active">V4<span>Pixel Art</span></a>
+  <a href="viz-v5.html">V5<span>Rings & Pills</span></a>
+</nav>
+
+<!-- Controls panel -->
+<div class="controls">
+  <h3>Pixel Controls</h3>
+  <div class="control-group">
+    <label>Unit size <output id="sizeVal">11px</output></label>
+    <input type="range" id="sizeSlider" min="4" max="20" value="11" step="1">
+  </div>
+  <div class="control-group">
+    <label>Corner radius <output id="radiusVal">0px</output></label>
+    <input type="range" id="radiusSlider" min="0" max="10" value="0" step="1">
+  </div>
+  <div class="control-group">
+    <label>Scale <output id="scaleVal">1.0x</output></label>
+    <input type="range" id="scaleSlider" min="0.5" max="2" value="1" step="0.1">
+  </div>
+
+  <hr style="border:none;border-top:1px solid #3a3a3a;margin:4px 0;">
+
+  <h3>Empty fill</h3>
+  <div class="control-group">
+    <label style="cursor:pointer;">
+      <input type="checkbox" id="whiteEmpty" checked> White squares
+    </label>
+  </div>
+
+  <hr style="border:none;border-top:1px solid #3a3a3a;margin:4px 0;">
+
+  <h3>Spacing</h3>
+  <div class="control-group">
+    <label>Label → value <output id="spLabelVal">6px</output></label>
+    <input type="range" id="spLabelSlider" min="0" max="24" value="6" step="1">
+  </div>
+  <div class="control-group">
+    <label>Value → sub <output id="spValueVal">6px</output></label>
+    <input type="range" id="spValueSlider" min="0" max="24" value="6" step="1">
+  </div>
+  <div class="control-group">
+    <label>Sub → chart <output id="spSubVal">6px</output></label>
+    <input type="range" id="spSubSlider" min="0" max="24" value="6" step="1">
+  </div>
+  <div class="control-group">
+    <label>Chart → note <output id="spNoteVal">8px</output></label>
+    <input type="range" id="spNoteSlider" min="0" max="24" value="8" step="1">
+  </div>
+  <div class="control-group">
+    <label>Between blocks <output id="spBlockVal">28px</output></label>
+    <input type="range" id="spBlockSlider" min="8" max="48" value="28" step="2">
+  </div>
+</div>
+
+<div class="version-dropdown">
+  <select onchange="window.location.href=this.value+(location.search.includes('embed=1')?'?embed=1':'')">
+    <option value="viz-v1.html">V1 — White Cards</option>
+    <option value="viz-v2.html">V2 — Borderless</option>
+    <option value="viz-v3.html">V3 — Accent Cards</option>
+    <option value="viz-v4.html" selected>V4 — Pixel Art</option>
+    <option value="viz-v5.html">V5 — Rings & Pills</option>
+  </select>
+</div>
+
+<div class="phone-frame">
+  <div class="screen">
+
+    <div class="status-bar">
+      <span class="status-time">12:15</span>
+      <span class="status-icons">
+        <svg width="16" height="12" viewBox="0 0 16 12"><rect x="0" y="3" width="3" height="9" rx="1" fill="#333" opacity="0.4"/><rect x="4.5" y="2" width="3" height="10" rx="1" fill="#333" opacity="0.6"/><rect x="9" y="1" width="3" height="11" rx="1" fill="#333" opacity="0.8"/><rect x="13.5" y="0" width="3" height="12" rx="1" fill="#333"/></svg>
+        <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 3C10.7 3 13.1 4.1 14.8 6L16 4.8C13.9 2.4 11.1 1 8 1S2.1 2.4 0 4.8L1.2 6C2.9 4.1 5.3 3 8 3Z" fill="#333"/><path d="M8 7C9.5 7 10.9 7.6 11.9 8.5L13.1 7.3C11.8 6.1 10 5.3 8 5.3S4.2 6.1 2.9 7.3L4.1 8.5C5.1 7.6 6.5 7 8 7Z" fill="#333"/><circle cx="8" cy="11" r="1.5" fill="#333"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0.5" y="0.5" width="22" height="11" rx="3" stroke="#333" stroke-opacity="0.35" fill="none"/><rect x="23.5" y="3.5" width="1.5" height="5" rx="0.75" fill="#333" opacity="0.4"/><rect x="2" y="2" width="19" height="8" rx="2" fill="#333"/></svg>
+      </span>
+    </div>
+
+    <div class="top-header">
+      <h1>Data <b>Visualization</b></h1>
+    </div>
+
+    <div class="chat">
+
+      <!-- ======== 1. CALORIES — Waffle chart ======== -->
+      <div class="user-bubble">How is my lunch?</div>
+      <div class="ottavia-text">Great post-workout bowl — here's your day so far:</div>
+
+      <div class="viz-block">
+        <div class="viz-block-label">Calories today</div>
+        <div class="viz-block-value" style="color:var(--nutrition-full);">1,024 <span class="u">of 1,800 kcal</span></div>
+        <div class="viz-block-sub">776 remaining</div>
+        <div class="waffle" data-total="100" data-filled="57" data-cols="25"
+             style="--fill:var(--nutrition); --empty:#FFFFFF;"></div>
+        <div class="viz-block-note">Each square = ~18 kcal</div>
+      </div>
+
+      <div class="user-bubble">How was my run?</div>
+      <div class="ottavia-text"><strong>10.7 km at a steady pace.</strong> Third run this week.</div>
+
+      <div class="viz-block">
+        <div class="viz-block-label">Run distance · this week</div>
+        <div class="viz-block-value" style="color:var(--activity-full);">10.7 km <span class="u">today</span></div>
+        <div class="viz-block-sub">27% longer than Monday</div>
+        <div class="pixel-bars" data-values="8,0,8,0,0,0,11" data-labels="M,T,W,T,F,S,S" data-today="6"
+             data-rawvals="8.4,,7.7,,,,10.7"
+             style="--fill:var(--activity); --empty:#FFFFFF;"></div>
+        <div class="viz-block-note">Each square = 1 km</div>
+      </div>
+
+      <div class="user-bubble">Check cholesterol trend</div>
+      <div class="ottavia-text">Weekly average 182 mg — trending down nicely.</div>
+
+      <div class="viz-block">
+        <div class="viz-block-label">Cholesterol · this week</div>
+        <div class="viz-block-value" style="color:var(--nutrition-full);">182 mg <span class="u">daily avg</span></div>
+        <div class="viz-block-sub">12% below last month</div>
+        <div class="pixel-bars" data-values="6,7,9,8,2,6,6" data-labels="M,T,W,T,F,S,S" data-today="6"
+             data-rawvals="180,210,280,230,45,193,189"
+             style="--fill:var(--nutrition); --empty:#FFFFFF;"></div>
+        <div class="viz-block-note">Each square = ~30 mg</div>
+      </div>
+
+      <!-- ======== 4. HYDRATION — Waffle chart (centered) ======== -->
+      <div class="user-bubble">How much water today?</div>
+
+      <div class="viz-block">
+        <div class="viz-block-label">Water intake · today</div>
+        <div class="viz-block-value" style="color:var(--hydration-full);">1.8L <span class="u">of 2.5L</span></div>
+        <div class="viz-block-sub">700ml remaining</div>
+        <div class="waffle" data-total="100" data-filled="72" data-cols="10"
+             style="--fill:var(--hydration); --empty:#FFFFFF;"></div>
+        <div class="viz-block-note">Each square = 25 ml</div>
+      </div>
+
+      <div class="user-bubble">How did I sleep this week?</div>
+      <div class="ottavia-text"><strong>Averaging 7.2h</strong> — 30 min above your usual.</div>
+
+      <div class="viz-block">
+        <div class="viz-block-label">Sleep duration · this week</div>
+        <div class="viz-block-value" style="color:var(--recovery-full);">7.2h <span class="u">avg / night</span></div>
+        <div class="viz-block-sub">Best night: Thursday 8.1h</div>
+        <div class="pixel-bars" data-values="7,7,6,8,7,7,8" data-labels="M,T,W,T,F,S,S" data-today="6"
+             data-rawvals="7.1,7.4,6.5,8.1,7.3,6.9,7.8"
+             style="--fill:var(--recovery); --empty:#FFFFFF;"></div>
+        <div class="viz-block-note">Each square = 1 hour</div>
+      </div>
+
+      <div class="user-bubble">Show me today's macros</div>
+
+      <div class="viz-block">
+        <div class="viz-block-label">Macros · today</div>
+        <div class="viz-block-value" style="color:var(--nutrition-full);">1,024 <span class="u">kcal logged</span></div>
+        <div class="viz-block-sub">57% of 1,800 kcal goal</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="pm-row" data-filled="7" data-total="10" data-label="Protein" data-goal="82/120g"
+               style="--fill:var(--nutrition); --empty:#FFFFFF;"></div>
+          <div class="pm-row" data-filled="6" data-total="10" data-label="Carbs" data-goal="138/250g"
+               style="--fill:var(--nutrition); --empty:#FFFFFF;"></div>
+          <div class="pm-row" data-filled="8" data-total="10" data-label="Fats" data-goal="55/70g"
+               style="--fill:var(--nutrition); --empty:#FFFFFF;"></div>
+          <div class="pm-row" data-filled="4" data-total="10" data-label="Fiber" data-goal="12/30g"
+               style="--fill:var(--nutrition); --empty:#FFFFFF;"></div>
+        </div>
+      </div>
+
+      <!-- ======== 7. RECOVERY — Waffle chart (centered) ======== -->
+      <div class="user-bubble">What's my recovery score?</div>
+      <div class="ottavia-text">Your recovery looks solid today:</div>
+
+      <div class="viz-block">
+        <div class="viz-block-label">Recovery score · today</div>
+        <div class="viz-block-value" style="color:var(--recovery-full);">78 <span class="u">/ 100</span></div>
+        <div class="viz-block-sub">5 points up from yesterday</div>
+        <div class="waffle" data-total="100" data-filled="78" data-cols="10"
+             style="--fill:var(--recovery); --empty:#FFFFFF;"></div>
+        <div class="viz-block-note">Each square = 1 point</div>
+      </div>
+
+      <div class="ottavia-text">
+        Green-lit for training. Sleep quality is doing the heavy lifting.
+      </div>
+
+      <div style="height: 40px;"></div>
+
+    </div><!-- .chat -->
+
+    <div class="home-indicator">
+      <div class="home-indicator-bar"></div>
+    </div>
+
+  </div><!-- .screen -->
+</div><!-- .phone-frame -->
+
+<script>
+// Slider controls
+const root = document.documentElement;
+
+document.getElementById('sizeSlider').addEventListener('input', e => {
+  const v = e.target.value;
+  root.style.setProperty('--unit-size', v + 'px');
+  document.getElementById('sizeVal').textContent = v + 'px';
+  rebuildGrids();
+});
+
+document.getElementById('radiusSlider').addEventListener('input', e => {
+  const v = e.target.value;
+  root.style.setProperty('--unit-radius', v + 'px');
+  document.getElementById('radiusVal').textContent = v + 'px';
+});
+
+document.getElementById('scaleSlider').addEventListener('input', e => {
+  const v = e.target.value;
+  root.style.setProperty('--viz-scale', v);
+  document.getElementById('scaleVal').textContent = parseFloat(v).toFixed(1) + 'x';
+});
+
+// White empty toggle
+document.getElementById('whiteEmpty').addEventListener('change', e => {
+  const on = e.target.checked;
+  // Waffle empty cells (no .f class)
+  document.querySelectorAll('.waffle i:not(.f)').forEach(i => {
+    i.style.background = on ? '#FFFFFF' : '';
+  });
+  // Pixel bar empty cells
+  document.querySelectorAll('.px-stack i.e').forEach(i => {
+    i.style.background = on ? '#FFFFFF' : '';
+  });
+  // Macro row empty cells
+  document.querySelectorAll('.pm-grid i:not(.f)').forEach(i => {
+    i.style.background = on ? '#FFFFFF' : '';
+  });
+});
+
+// Spacing sliders
+['Label','Value','Sub','Note','Block'].forEach(name => {
+  const id = 'sp' + name;
+  const prop = '--sp-' + name.toLowerCase();
+  document.getElementById(id + 'Slider').addEventListener('input', e => {
+    const v = e.target.value;
+    root.style.setProperty(prop, v + 'px');
+    document.getElementById(id + 'Val').textContent = v + 'px';
+  });
+});
+
+function rebuildGrids() {
+  const size = document.getElementById('sizeSlider').value;
+  document.querySelectorAll('.waffle').forEach(el => {
+    const cols = +el.dataset.cols;
+    el.style.gridTemplateColumns = `repeat(${cols}, var(--unit-size))`;
+  });
+}
+
+// Generate waffle grids
+document.querySelectorAll('.waffle').forEach(el => {
+  const total = +el.dataset.total || 100;
+  const filled = +el.dataset.filled || 0;
+  const cols = +el.dataset.cols || 10;
+  const empty = total - filled;
+  el.style.gridTemplateColumns = `repeat(${cols}, var(--unit-size))`;
+  let html = '';
+  for (let i = 0; i < empty; i++) html += '<i></i>';
+  for (let i = 0; i < filled; i++) html += '<i class="f"></i>';
+  el.innerHTML = html;
+});
+
+// Generate pixel bar columns
+document.querySelectorAll('.pixel-bars').forEach(el => {
+  const values = el.dataset.values.split(',').map(Number);
+  const labels = el.dataset.labels.split(',');
+  const rawvals = el.dataset.rawvals ? el.dataset.rawvals.split(',') : [];
+  const today = +(el.dataset.today ?? -1);
+  let html = '';
+  values.forEach((v, idx) => {
+    html += '<div class="px-col">';
+    if (v > 0) {
+      const label = rawvals[idx] || v;
+      html += `<span class="px-val">${label}</span>`;
+      html += '<div class="px-stack">';
+      for (let i = 0; i < v; i++) html += '<i></i>';
+      html += '</div>';
+    } else {
+      html += '<span class="px-val" style="color:transparent;">-</span>';
+      html += '<div class="px-stack"><i class="e"></i></div>';
+    }
+    html += `<span class="px-day${idx === today ? ' today' : ''}">${labels[idx]}</span>`;
+    html += '</div>';
+  });
+  el.innerHTML = html;
+});
+
+// Generate pixel macro rows
+document.querySelectorAll('.pm-row').forEach(el => {
+  const filled = +el.dataset.filled || 0;
+  const total = +el.dataset.total || 10;
+  const label = el.dataset.label;
+  const goal = el.dataset.goal;
+  let html = `<span class="pm-label">${label}</span><div class="pm-grid">`;
+  for (let i = 0; i < filled; i++) html += '<i class="f"></i>';
+  for (let i = filled; i < total; i++) html += '<i></i>';
+  html += `</div><span class="pm-goal">${goal}</span>`;
+  el.innerHTML = html;
+});
+</script>
+
+</body>
+</html>

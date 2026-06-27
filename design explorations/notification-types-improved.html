@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Otavia Notification Types</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f7;
+        }
+        h1 {
+            color: #1F4788;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            background: white;
+            border-collapse: collapse;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th {
+            background: #1F4788;
+            color: white;
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+        }
+        td {
+            padding: 16px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tr:hover {
+            background: #f9fafb;
+        }
+        .calendar {
+            background: #E3F2FD;
+        }
+        .chat {
+            background: #E8F5E9;
+        }
+        .type-col {
+            font-weight: 700;
+            width: 12%;
+            background: #f0f0f2;
+        }
+        .kind-col {
+            width: 18%;
+            padding-left: 24px;
+        }
+        .dest-col {
+            width: 12%;
+            font-weight: 600;
+        }
+        .why-col {
+            width: 30%;
+        }
+        .example-col {
+            width: 28%;
+            font-style: italic;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Otavia Notification Types</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Kind</th>
+                <th>Destination</th>
+                <th>Why</th>
+                <th>Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="type-col" rowspan="2">🏃 Garmin</td>
+                <td class="kind-col">Post Workout</td>
+                <td class="dest-col chat">💬 Chat</td>
+                <td class="why-col">Requires feedback and coaching input</td>
+                <td class="example-col">"How was your run? [Easy / Just Right / Hard]"</td>
+            </tr>
+            <tr>
+                <td class="kind-col">Post Sleep</td>
+                <td class="dest-col chat">💬 Chat</td>
+                <td class="why-col">Conversational reflection on rest quality</td>
+                <td class="example-col">"You got 7.5 hours last night! How do you feel?"</td>
+            </tr>
+            <tr>
+                <td class="type-col" rowspan="3">📅 Calendar</td>
+                <td class="kind-col">Hydration</td>
+                <td class="dest-col calendar">📅 Calendar</td>
+                <td class="why-col">Routine, high-frequency, quick action</td>
+                <td class="example-col">"💧 Time for 300ml water"</td>
+            </tr>
+            <tr>
+                <td class="kind-col">Meal</td>
+                <td class="dest-col calendar">📅 Calendar</td>
+                <td class="why-col">Scheduled reminder, simple action</td>
+                <td class="example-col">"🥣 Breakfast time - Yogurt bowl ready"</td>
+            </tr>
+            <tr>
+                <td class="kind-col">Workout Start</td>
+                <td class="dest-col calendar">📅 Calendar</td>
+                <td class="why-col">Time-based trigger, routine action</td>
+                <td class="example-col">"🏋️ Workout time - Upper body 45 min"</td>
+            </tr>
+            <tr>
+                <td class="type-col">💡 Insight</td>
+                <td class="kind-col">Pattern Detected</td>
+                <td class="dest-col chat">💬 Chat</td>
+                <td class="why-col">Conversational, adds coaching value</td>
+                <td class="example-col">"I noticed you sleep better on days you train"</td>
+            </tr>
+            <tr>
+                <td class="type-col" rowspan="3">⚙️ System</td>
+                <td class="kind-col">Answer Ready</td>
+                <td class="dest-col chat">💬 Chat</td>
+                <td class="why-col">User expects response in chat</td>
+                <td class="example-col">"Your meal plan is ready to review"</td>
+            </tr>
+            <tr>
+                <td class="kind-col">Error</td>
+                <td class="dest-col chat">💬 Chat</td>
+                <td class="why-col">Needs user attention and context</td>
+                <td class="example-col">"Couldn't sync with Garmin. Try reconnecting?"</td>
+            </tr>
+            <tr>
+                <td class="kind-col">Re-engagement</td>
+                <td class="dest-col chat">💬 Chat</td>
+                <td class="why-col">Conversational nudge to return</td>
+                <td class="example-col">"Haven't seen you in 2 days. Everything okay?"</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PDA — Workflow</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #FFFFFF;
+    font-family: "Modern Era", "ModernEra", "Aktiv Grotesk", "Neue Haas Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: #0D0D0D;
+  }
+  .wrap { display: flex; justify-content: center; padding: 40px 20px 80px; }
+  svg   { display: block; }
+
+  .title         { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; fill: #0D0D0D; }
+  .subtitle      { font-size: 14px; font-weight: 400; fill: #5C564D; }
+  .section-label { font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; fill: #0D0D0D; }
+  .section-sub   { font-size: 12px; font-weight: 400; fill: #766F64; }
+  .phase-label   { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; fill: #0D0D0D; }
+  .phase-sub     { font-size: 12px; font-weight: 400; fill: #766F64; }
+  .box-text      { font-size: 13.5px; font-weight: 400; fill: #FFFFFF; }
+  .box-text-lg   { font-size: 14px; font-weight: 500; fill: #FFFFFF; }
+  .box-text-xl   { font-size: 15px; font-weight: 600; fill: #FFFFFF; letter-spacing: -0.01em; }
+  .annotation    { font-size: 11px; font-weight: 400; fill: #766F64; }
+  .annotation-key{ font-size: 10.5px; font-weight: 600; fill: #5C564D; letter-spacing: 0.06em; }
+  .role-caption  { font-size: 11.5px; font-weight: 400; fill: #5C564D; }
+  .connector-label { font-size: 12px; font-weight: 400; fill: #5C564D; font-style: italic; }
+  .gate-side-label { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; fill: #A17A5B; }
+  .canon-side-label{ font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; fill: #5C564D; }
+  .box       { fill: #0D0D0D; }
+  .gate      { fill: #0D0D0D; }
+  .connector { fill: none; stroke: #B5B0A6; stroke-width: 1.25; }
+  .bracket   { fill: none; stroke: #5C564D; stroke-width: 1; }
+  .gate-bracket { fill: none; stroke: #A17A5B; stroke-width: 1.25; }
+  .canon-bracket{ fill: none; stroke: #5C564D; stroke-width: 1; }
+  .divider   { stroke: #C2BCB2; stroke-width: 1; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<svg width="1500" height="1980" viewBox="0 0 1500 1980" xmlns="http://www.w3.org/2000/svg">
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,5 L0,10 z" fill="#B5B0A6" />
+    </marker>
+  </defs>
+
+  <!-- TITLE -->
+  <text x="60" y="64" class="title">PDA — Workflow</text>
+  <text x="60" y="86" class="subtitle">Macro flow, design system architecture, and phase-by-phase execution.</text>
+
+  <!-- ============================================ -->
+  <!-- ROW 1 — MACRO WORKFLOW -->
+  <!-- ============================================ -->
+
+  <text x="60" y="130" class="section-label">Macro Workflow</text>
+  <text x="60" y="148" class="section-sub">Five beats from a new task to a shipped feature.</text>
+
+  <rect x="60" y="178" width="240" height="48" class="box" />
+  <text x="78" y="200" class="box-text-lg">1 · Feedback /</text>
+  <text x="78" y="218" class="box-text-lg">new task</text>
+
+  <text x="60" y="252" class="annotation-key">KNOWLEDGE</text>
+  <text x="60" y="268" class="annotation">user feedback · pilot Telegram</text>
+  <text x="60" y="282" class="annotation">store reviews · founder ask</text>
+
+  <text x="60" y="306" class="annotation-key">KPI</text>
+  <text x="60" y="322" class="annotation">problem framed · severity ranked</text>
+
+  <text x="60" y="346" class="annotation-key">SKILLS</text>
+  <text x="60" y="362" class="annotation">product-thinker</text>
+
+  <text x="60" y="386" class="annotation-key">TOOLS</text>
+  <text x="60" y="402" class="annotation">Jira · Telegram · App Store</text>
+
+  <rect x="346" y="178" width="240" height="48" class="box" />
+  <text x="364" y="200" class="box-text-lg">2 · Research, Strategy</text>
+  <text x="364" y="218" class="box-text-lg">&amp; Plan</text>
+
+  <text x="346" y="252" class="annotation-key">KNOWLEDGE</text>
+  <text x="346" y="268" class="annotation">DESIGN.md · TARGET_USERS</text>
+  <text x="346" y="282" class="annotation">COMMUNICATION_TYPES · refs</text>
+  <text x="346" y="296" class="annotation">(Airbnb · Oura · Whoop · Notion · Claude)</text>
+
+  <text x="346" y="320" class="annotation-key">KPI</text>
+  <text x="346" y="336" class="annotation">MVP vs north star agreed</text>
+  <text x="346" y="350" class="annotation">success metric defined</text>
+
+  <text x="346" y="374" class="annotation-key">SKILLS</text>
+  <text x="346" y="390" class="annotation">product-thinker · simplify</text>
+
+  <text x="346" y="414" class="annotation-key">TOOLS</text>
+  <text x="346" y="430" class="annotation">Read · Grep · WebSearch · Figma MCP</text>
+
+  <rect x="632" y="178" width="240" height="48" class="box" />
+  <text x="650" y="200" class="box-text-lg">3 · Mock — all</text>
+  <text x="650" y="218" class="box-text-lg">use cases</text>
+
+  <text x="632" y="252" class="annotation-key">KNOWLEDGE</text>
+  <text x="632" y="268" class="annotation">DESIGN.md · ottavia-design</text>
+  <text x="632" y="282" class="annotation">existing mock patterns · tokens</text>
+
+  <text x="632" y="306" class="annotation-key">KPI</text>
+  <text x="632" y="322" class="annotation">all states covered</text>
+  <text x="632" y="336" class="annotation">no design system drift</text>
+
+  <text x="632" y="360" class="annotation-key">SKILLS</text>
+  <text x="632" y="376" class="annotation">component-spec · design-critique</text>
+
+  <text x="632" y="400" class="annotation-key">TOOLS</text>
+  <text x="632" y="416" class="annotation">Write · Edit · Figma MCP · git · gh</text>
+
+  <rect x="918" y="178" width="240" height="48" class="box" />
+  <text x="936" y="206" class="box-text-lg">4 · Review</text>
+
+  <text x="918" y="252" class="annotation-key">KNOWLEDGE</text>
+  <text x="918" y="268" class="annotation">Builder critique · brand voice</text>
+  <text x="918" y="282" class="annotation">system rules · content tone</text>
+
+  <text x="918" y="306" class="annotation-key">KPI</text>
+  <text x="918" y="322" class="annotation">critique resolved</text>
+  <text x="918" y="336" class="annotation">approval explicit (not assumed)</text>
+
+  <text x="918" y="360" class="annotation-key">SKILLS</text>
+  <text x="918" y="376" class="annotation">design-critique · conversational-design</text>
+
+  <text x="918" y="400" class="annotation-key">TOOLS</text>
+  <text x="918" y="416" class="annotation">GitHub Pages link · screenshots</text>
+  <text x="918" y="430" class="annotation">iteration loop</text>
+
+  <rect x="1204" y="178" width="240" height="48" class="box" />
+  <text x="1222" y="206" class="box-text-lg">5 · Build &amp; Ship</text>
+
+  <text x="1204" y="252" class="annotation-key">KNOWLEDGE</text>
+  <text x="1204" y="268" class="annotation">ottavia-client code</text>
+  <text x="1204" y="282" class="annotation">MarkdownStyles tokens · RN constraints</text>
+
+  <text x="1204" y="306" class="annotation-key">KPI</text>
+  <text x="1204" y="322" class="annotation">build matches mock · no hex in tsx</text>
+  <text x="1204" y="336" class="annotation">PR approved · Jira → Code Review</text>
+
+  <text x="1204" y="360" class="annotation-key">SKILLS</text>
+  <text x="1204" y="376" class="annotation">design-handoff · code-change</text>
+  <text x="1204" y="390" class="annotation">jira-ticket</text>
+
+  <text x="1204" y="414" class="annotation-key">TOOLS</text>
+  <text x="1204" y="430" class="annotation">Edit · preview_screenshot · git · gh pr</text>
+
+  <line x1="300" y1="202" x2="346" y2="202" class="connector" marker-end="url(#arrow)" />
+  <line x1="586" y1="202" x2="632" y2="202" class="connector" marker-end="url(#arrow)" />
+  <line x1="872" y1="202" x2="918" y2="202" class="connector" marker-end="url(#arrow)" />
+  <line x1="1158" y1="202" x2="1204" y2="202" class="connector" marker-end="url(#arrow)" />
+
+  <!-- Divider 1 -->
+  <line x1="60" y1="478" x2="1440" y2="478" class="divider" />
+
+  <!-- ============================================ -->
+  <!-- ROW 2 — DESIGN SYSTEM ARCHITECTURE -->
+  <!-- ============================================ -->
+
+  <text x="60" y="510" class="section-label">Design System Architecture</text>
+  <text x="60" y="528" class="section-sub">DESIGN.md is canonical. Figma, Playground, and Code are implementations of it. PDA keeps parity.</text>
+
+  <!-- Canonical: DESIGN.md (left) -->
+  <rect x="160" y="600" width="280" height="64" class="box" />
+  <text x="180" y="628" class="box-text-xl">DESIGN.md</text>
+  <text x="180" y="650" class="annotation" fill="#A8A297">canonical · tokens + prose + spec</text>
+
+  <!-- Canonical side label & bracket -->
+  <path d="M 140 600 L 130 600 L 130 664 L 140 664" class="canon-bracket" />
+  <text x="114" y="640" class="canon-side-label" text-anchor="end" transform="rotate(-90 114 640)">Canonical</text>
+
+  <!-- Implementations heading (right of canonical) -->
+  <text x="820" y="582" class="section-label">Implementations</text>
+
+  <!-- Implementation 1: Figma -->
+  <rect x="820" y="600" width="220" height="44" class="box" />
+  <text x="838" y="627" class="box-text-lg">Figma</text>
+  <text x="1060" y="618" class="role-caption">visual — source of intent</text>
+  <text x="1060" y="634" class="annotation">Builder owns · PDA reads, never edits</text>
+
+  <!-- Implementation 2: Playground -->
+  <rect x="820" y="666" width="220" height="44" class="box" />
+  <text x="838" y="693" class="box-text-lg">Playground</text>
+  <text x="1060" y="684" class="role-caption">bridge — single mirror of canon</text>
+  <text x="1060" y="700" class="annotation">PDA owns · Builder critiques</text>
+
+  <!-- Implementation 3: Code -->
+  <rect x="820" y="732" width="220" height="44" class="box" />
+  <text x="838" y="759" class="box-text-lg">Code</text>
+  <text x="1060" y="750" class="role-caption">production — ottavia-client</text>
+  <text x="1060" y="766" class="annotation">Engineers + PDA · follows DESIGN.md</text>
+
+  <!-- Fan-out connectors from DESIGN.md to each implementation -->
+  <path d="M 440 632 C 620 632, 700 622, 820 622" class="connector" marker-end="url(#arrow)" />
+  <path d="M 440 632 C 620 632, 700 688, 820 688" class="connector" marker-end="url(#arrow)" />
+  <path d="M 440 632 C 620 632, 700 754, 820 754" class="connector" marker-end="url(#arrow)" />
+
+  <!-- PDA Parity Audit (below DESIGN.md) -->
+  <rect x="160" y="740" width="280" height="56" class="box" />
+  <text x="180" y="765" class="box-text-lg">PDA — weekly parity</text>
+  <text x="180" y="783" class="box-text-lg">audit</text>
+
+  <!-- Annotations for PDA audit -->
+  <text x="160" y="824" class="annotation-key">ROLE</text>
+  <text x="160" y="840" class="annotation">reads DESIGN.md · diffs all three surfaces</text>
+  <text x="160" y="854" class="annotation">updates Playground to match canon</text>
+  <text x="160" y="868" class="annotation">reports drift &amp; proposed fixes to Builder</text>
+
+  <!-- Loop arrows from PDA audit to each implementation (showing the audit reach) -->
+  <path d="M 440 760 C 620 760, 700 622, 820 622" class="connector" stroke-dasharray="4 4" marker-end="url(#arrow)" />
+  <path d="M 440 768 C 620 768, 700 688, 820 688" class="connector" stroke-dasharray="4 4" marker-end="url(#arrow)" />
+  <path d="M 440 776 C 620 776, 700 754, 820 754" class="connector" stroke-dasharray="4 4" marker-end="url(#arrow)" />
+
+  <!-- Dashed connector legend -->
+  <line x1="1230" y1="800" x2="1270" y2="800" class="connector" stroke-dasharray="4 4" />
+  <text x="1280" y="804" class="annotation">audit (read-only diff)</text>
+  <line x1="1230" y1="820" x2="1270" y2="820" class="connector" />
+  <text x="1280" y="824" class="annotation">implementation (writes from canon)</text>
+
+  <!-- Divider 2 -->
+  <line x1="60" y1="910" x2="1440" y2="910" class="divider" />
+
+  <!-- ============================================ -->
+  <!-- ROW 3 — EXECUTION DETAIL -->
+  <!-- ============================================ -->
+
+  <text x="60" y="942" class="section-label">Execution Detail</text>
+  <text x="60" y="960" class="section-sub">How steps 2 – 5 unfold inside the three working phases.</text>
+
+  <!-- PHASE 1 -->
+  <text x="80" y="1004" class="phase-label">Phase 1</text>
+  <text x="80" y="1024" class="phase-sub">Setup &amp; Plan</text>
+
+  <rect x="80" y="1054" width="240" height="40" class="box" />
+  <text x="96" y="1079" class="box-text">Builder briefs the task</text>
+
+  <rect x="80" y="1134" width="240" height="40" class="box" />
+  <text x="96" y="1159" class="box-text">Read existing system</text>
+
+  <rect x="80" y="1214" width="240" height="40" class="box" />
+  <text x="96" y="1239" class="box-text">Map MVP &amp; north star</text>
+
+  <rect x="80" y="1294" width="240" height="40" class="box" />
+  <text x="96" y="1319" class="box-text">Flag blockers &amp; questions</text>
+
+  <rect x="80" y="1384" width="240" height="40" class="gate" />
+  <text x="96" y="1409" class="box-text">Builder approves the plan</text>
+
+  <path d="M 60 1384 L 50 1384 L 50 1424 L 60 1424" class="gate-bracket" />
+  <text x="30" y="1411" class="gate-side-label" text-anchor="end" transform="rotate(-90 30 1411)">Builder Review</text>
+
+  <line x1="200" y1="1094" x2="200" y2="1134" class="connector" marker-end="url(#arrow)" />
+  <line x1="200" y1="1174" x2="200" y2="1214" class="connector" marker-end="url(#arrow)" />
+  <line x1="200" y1="1254" x2="200" y2="1294" class="connector" marker-end="url(#arrow)" />
+  <line x1="200" y1="1334" x2="200" y2="1384" class="connector" marker-end="url(#arrow)" />
+
+  <text x="80" y="1494" class="annotation-key">FILES &amp; SOURCES</text>
+  <text x="80" y="1512" class="annotation">ottavia-ops/about-ottavia/</text>
+  <text x="80" y="1528" class="annotation">ottavia-ops/product/</text>
+  <text x="80" y="1544" class="annotation">ottavia-client/src/components/</text>
+  <text x="80" y="1560" class="annotation">ottavia-client/DESIGN.md</text>
+  <text x="80" y="1576" class="annotation">Figma — current designs</text>
+
+  <text x="80" y="1606" class="annotation-key">TOOLS</text>
+  <text x="80" y="1624" class="annotation">Read · Grep · Bash</text>
+  <text x="80" y="1640" class="annotation">Figma MCP (get_design_context)</text>
+  <text x="80" y="1656" class="annotation">WebSearch (references)</text>
+
+  <text x="80" y="1686" class="annotation-key">OUTPUT</text>
+  <text x="80" y="1704" class="annotation">Plan doc · MVP scope</text>
+  <text x="80" y="1720" class="annotation">Jira draft (OTRD)</text>
+
+  <path d="M 320 1404 C 420 1404, 420 1074, 540 1074" class="connector" marker-end="url(#arrow)" />
+  <text x="430" y="1224" class="connector-label">after plan approved</text>
+
+  <!-- PHASE 2 -->
+  <text x="540" y="1004" class="phase-label">Phase 2</text>
+  <text x="540" y="1024" class="phase-sub">Design Playground Mock</text>
+
+  <rect x="540" y="1054" width="260" height="40" class="box" />
+  <text x="556" y="1079" class="box-text">Study existing mock patterns</text>
+
+  <rect x="540" y="1134" width="260" height="40" class="box" />
+  <text x="556" y="1159" class="box-text">Create new section</text>
+
+  <rect x="540" y="1214" width="260" height="40" class="box" />
+  <text x="556" y="1239" class="box-text">Mock all use cases &amp; states</text>
+
+  <rect x="540" y="1294" width="260" height="40" class="gate" />
+  <text x="556" y="1319" class="box-text">Builder critique</text>
+
+  <rect x="540" y="1374" width="260" height="40" class="gate" />
+  <text x="556" y="1399" class="box-text">Fix loop — together</text>
+
+  <rect x="540" y="1454" width="260" height="40" class="box" />
+  <text x="556" y="1479" class="box-text">Extend design system</text>
+
+  <rect x="540" y="1534" width="260" height="40" class="box" />
+  <text x="556" y="1559" class="box-text">Push to GitHub Pages</text>
+
+  <rect x="540" y="1624" width="260" height="40" class="gate" />
+  <text x="556" y="1649" class="box-text">Builder approves the mock</text>
+
+  <path d="M 520 1294 L 510 1294 L 510 1664 L 520 1664" class="gate-bracket" />
+  <text x="494" y="1479" class="gate-side-label" text-anchor="end" transform="rotate(-90 494 1479)">Builder Review</text>
+
+  <path d="M 800 1314 C 850 1314, 850 1394, 800 1394" class="connector" marker-end="url(#arrow)" />
+  <text x="855" y="1358" class="connector-label">iterate</text>
+
+  <line x1="670" y1="1094" x2="670" y2="1134" class="connector" marker-end="url(#arrow)" />
+  <line x1="670" y1="1174" x2="670" y2="1214" class="connector" marker-end="url(#arrow)" />
+  <line x1="670" y1="1254" x2="670" y2="1294" class="connector" marker-end="url(#arrow)" />
+  <line x1="670" y1="1334" x2="670" y2="1374" class="connector" marker-end="url(#arrow)" />
+  <line x1="670" y1="1414" x2="670" y2="1454" class="connector" marker-end="url(#arrow)" />
+  <line x1="670" y1="1494" x2="670" y2="1534" class="connector" marker-end="url(#arrow)" />
+  <line x1="670" y1="1574" x2="670" y2="1624" class="connector" marker-end="url(#arrow)" />
+
+  <text x="540" y="1734" class="annotation-key">FILES &amp; SOURCES</text>
+  <text x="540" y="1752" class="annotation">ottavia-design/ (repo)</text>
+  <text x="540" y="1768" class="annotation">existing mocks in ottavia-design/</text>
+  <text x="540" y="1784" class="annotation">ottavia-design/design-system/</text>
+  <text x="540" y="1800" class="annotation">DESIGN.md token reference</text>
+
+  <text x="540" y="1830" class="annotation-key">TOOLS</text>
+  <text x="540" y="1848" class="annotation">Read · Write · Edit</text>
+  <text x="540" y="1864" class="annotation">Figma MCP (execute, screenshot, instantiate)</text>
+  <text x="540" y="1880" class="annotation">Bash · git · gh</text>
+
+  <text x="540" y="1910" class="annotation-key">OUTPUT</text>
+  <text x="540" y="1928" class="annotation">Live mock on GitHub Pages</text>
+  <text x="540" y="1944" class="annotation">New components in design system</text>
+  <text x="540" y="1960" class="annotation">Commit + push to ottavia-design</text>
+
+  <path d="M 800 1644 C 920 1644, 920 1074, 1020 1074" class="connector" marker-end="url(#arrow)" />
+  <text x="900" y="1354" class="connector-label">after mock approved</text>
+
+  <!-- PHASE 3 -->
+  <text x="1020" y="1004" class="phase-label">Phase 3</text>
+  <text x="1020" y="1024" class="phase-sub">React Native Build</text>
+
+  <rect x="1020" y="1054" width="260" height="40" class="box" />
+  <text x="1036" y="1079" class="box-text">Clean branch from develop</text>
+
+  <rect x="1020" y="1134" width="260" height="40" class="box" />
+  <text x="1036" y="1159" class="box-text">Build in React Native</text>
+
+  <rect x="1020" y="1214" width="260" height="40" class="box" />
+  <text x="1036" y="1239" class="box-text">Verify on device</text>
+
+  <rect x="1020" y="1294" width="260" height="40" class="box" />
+  <text x="1036" y="1319" class="box-text">Show mock vs build to Builder</text>
+
+  <rect x="1020" y="1384" width="260" height="40" class="gate" />
+  <text x="1036" y="1409" class="box-text">Builder approves the build</text>
+
+  <path d="M 1000 1384 L 990 1384 L 990 1424 L 1000 1424" class="gate-bracket" />
+  <text x="970" y="1411" class="gate-side-label" text-anchor="end" transform="rotate(-90 970 1411)">Builder Review</text>
+
+  <rect x="1020" y="1474" width="260" height="40" class="box" />
+  <text x="1036" y="1499" class="box-text">Push PR to develop</text>
+
+  <line x1="1150" y1="1094" x2="1150" y2="1134" class="connector" marker-end="url(#arrow)" />
+  <line x1="1150" y1="1174" x2="1150" y2="1214" class="connector" marker-end="url(#arrow)" />
+  <line x1="1150" y1="1254" x2="1150" y2="1294" class="connector" marker-end="url(#arrow)" />
+  <line x1="1150" y1="1334" x2="1150" y2="1384" class="connector" marker-end="url(#arrow)" />
+  <line x1="1150" y1="1424" x2="1150" y2="1474" class="connector" marker-end="url(#arrow)" />
+
+  <text x="1020" y="1574" class="annotation-key">FILES &amp; SOURCES</text>
+  <text x="1020" y="1592" class="annotation">ottavia-client/ (repo)</text>
+  <text x="1020" y="1608" class="annotation">src/components/ · src/screens/</text>
+  <text x="1020" y="1624" class="annotation">src/utils/MarkdownStyles.ts (COLORS)</text>
+  <text x="1020" y="1640" class="annotation">src/utils/ResponsiveScreen.tsx</text>
+  <text x="1020" y="1656" class="annotation">Live mock from Phase 2 (reference)</text>
+
+  <text x="1020" y="1686" class="annotation-key">TOOLS</text>
+  <text x="1020" y="1704" class="annotation">Read · Edit · Write</text>
+  <text x="1020" y="1720" class="annotation">preview_start · preview_screenshot</text>
+  <text x="1020" y="1736" class="annotation">Bash · git · gh pr create</text>
+
+  <text x="1020" y="1766" class="annotation-key">SKILLS</text>
+  <text x="1020" y="1784" class="annotation">jira-ticket-skill (OTRD)</text>
+  <text x="1020" y="1800" class="annotation">code-change-skill</text>
+
+  <text x="1020" y="1830" class="annotation-key">OUTPUT</text>
+  <text x="1020" y="1848" class="annotation">PR open against develop</text>
+  <text x="1020" y="1864" class="annotation">Screenshots: mock vs build</text>
+  <text x="1020" y="1880" class="annotation">Jira ticket → Code Review</text>
+
+  <!-- Bottom legend -->
+  <line x1="60" y1="1940" x2="1440" y2="1940" class="divider" />
+
+</svg>
+
+</div>
+</body>
+</html>

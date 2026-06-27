@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ottavia — Chat Block Palette v1 (Reverse exercise)</title>
+<style>
+@font-face { font-family:'Modern Era'; src:url('../assets/ModernEra/ModernEra-Regular-Trial.otf') format('opentype'); font-weight:400; font-style:normal; font-display:swap; }
+@font-face { font-family:'Modern Era'; src:url('../assets/ModernEra/ModernEra-Medium-Trial.otf') format('opentype'); font-weight:500; font-style:normal; font-display:swap; }
+@font-face { font-family:'Modern Era'; src:url('../assets/ModernEra/ModernEra-Bold-Trial.otf') format('opentype'); font-weight:700; font-style:normal; font-display:swap; }
+
+:root{
+  /* Neutral */
+  --n0:#FEFCF9; --n10:#F5F1EA; --n20:#DBD6CD; --n30:#C2BCB2; --n40:#A8A297; --n50:#8F897D; --n60:#766F64; --n70:#5C564D; --n80:#433E36;
+  /* Brand */
+  --green60:#2F703F;
+  /* Domain — Nutrition */
+  --nut10:#E8F8F0; --nut30:#B9EBD1; --nut50:#8ADEB3; --nut60:#52C188; --nut70:#3A9A6A; --nut80:#2A7A50;
+  /* Domain — Recovery */
+  --rec10:#EFEDFD; --rec30:#D0C8F9; --rec50:#B0A4F5; --rec60:#8C63CB; --rec70:#6F47B0; --rec80:#553584;
+  /* Domain — Hydration */
+  --hyd10:#EFF8FF; --hyd30:#D0E9FF; --hyd50:#B1DAFF; --hyd60:#359FFF; --hyd70:#1A7BD9; --hyd80:#155EA8;
+  /* Domain — Activity */
+  --act10:#FCF7F1; --act30:#F7E8D4; --act50:#F9D9B3; --act60:#FFB078; --act70:#E08A50; --act80:#B86A38;
+  /* Semantic */
+  --suc10:#DFF2E4; --suc30:#A0D7AD; --suc50:#61BC77; --suc60:#47AD60;
+  --err10:#FFF3EE; --err30:#FEDCCD; --err50:#F7B5A7; --err60:#F0846D;
+  --war10:#FDF8E5; --war30:#FAE0A6; --war50:#F6CF74; --war60:#E0B043;
+  --inf10:#ECF2F7; --inf30:#C2D5E2; --inf50:#8AABCB; --inf60:#5A8AAD;
+  /* Lime (extra chart series) */
+  --lim50:#D2E35A; --lim60:#AFBD4A; --lim70:#8B973A;
+  /* Spacing */
+  --xs:4px; --sm:8px; --md:12px; --lg:16px; --xl:20px; --xxl:24px; --xxxl:32px;
+  /* Radii */
+  --r-sm:4px; --r-md:8px; --r-lg:12px; --r-xl:16px; --r-2xl:24px; --r-full:999px;
+  /* Shadows */
+  --sh-sm:0 1px 2px rgba(67,62,54,.06);
+  --sh-md:0 2px 6px rgba(67,62,54,.08);
+  --sh-lg:0 6px 16px rgba(67,62,54,.12);
+  --sh-glass:0 2px 5px rgba(186,178,164,.19);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Modern Era',-apple-system,sans-serif;background:#E7E1D6;color:var(--n80);line-height:1.4;padding:48px 32px 96px;}
+
+/* ---------- Doc chrome ---------- */
+.doc-head{max-width:1100px;margin:0 auto 40px;}
+.eyebrow{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--n50);font-weight:500;}
+.doc-head h1{font-size:44px;line-height:1.05;font-weight:700;margin:10px 0 14px;letter-spacing:-.5px;}
+.doc-head p{font-size:18px;color:var(--n70);max-width:760px;}
+.flags{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;}
+.flag{background:var(--n0);border:1px solid var(--n20);border-radius:var(--r-lg);padding:12px 16px;font-size:14px;color:var(--n70);max-width:340px;box-shadow:var(--sh-sm);}
+.flag b{color:var(--n80);font-weight:700;display:block;margin-bottom:3px;font-size:13px;letter-spacing:.02em;text-transform:uppercase;}
+.flag.dep{border-left:3px solid var(--war60);}
+.flag.arch{border-left:3px solid var(--rec60);}
+
+.section-label{max-width:1100px;margin:64px auto 8px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--n50);font-weight:500;}
+.section-title{max-width:1100px;margin:0 auto 6px;font-size:28px;font-weight:700;}
+.section-sub{max-width:1100px;margin:0 auto 28px;font-size:16px;color:var(--n60);}
+
+/* ---------- Gallery of phones ---------- */
+.gallery{display:flex;gap:28px;overflow-x:auto;padding:8px 0 24px;max-width:1180px;margin:0 auto;scroll-snap-type:x proximity;}
+.case{scroll-snap-align:start;flex:0 0 auto;width:430px;}
+.case-cap{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--n50);font-weight:500;margin-bottom:2px;}
+.case-q{font-size:15px;color:var(--n70);margin-bottom:14px;}
+.case-q b{color:var(--n80);font-weight:500;}
+
+/* ---------- Phone frame ---------- */
+.phone{width:430px;background:var(--n10);border-radius:44px;padding:0;box-shadow:var(--sh-lg);overflow:hidden;border:1px solid var(--n20);position:relative;}
+.statusbar{height:48px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 6px;font-size:15px;font-weight:500;color:var(--n80);}
+.statusbar .icons{display:flex;gap:6px;align-items:center;font-size:13px;}
+.appheader{display:flex;align-items:center;justify-content:space-between;padding:8px 20px 14px;}
+.glass{background:rgba(255,255,255,.6);border:1px solid #fff;box-shadow:var(--sh-glass);}
+.date-pill{width:44px;height:44px;border-radius:var(--r-2xl);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;}
+.date-pill .d{font-size:18px;font-weight:700;}
+.date-pill .w{font-size:12px;font-weight:700;margin-top:1px;}
+.ottavia-sel{height:44px;border-radius:var(--r-full);display:flex;align-items:center;gap:6px;padding:0 16px;font-size:20px;font-weight:500;letter-spacing:-.5px;}
+.ottavia-sel .chev{font-size:11px;color:var(--n60);}
+.profile{width:44px;height:44px;border-radius:var(--r-full);display:flex;align-items:center;justify-content:center;color:var(--n70);}
+.thread{padding:6px 20px 120px;}
+
+/* ---------- Messages ---------- */
+.user-msg{display:flex;justify-content:flex-end;margin:18px 0;}
+.user-bubble{background:var(--n20);color:var(--n80);border-radius:22px 22px 6px 22px;padding:11px 16px;font-size:17px;max-width:300px;}
+.user-bubble .photo{height:96px;border-radius:14px;background:linear-gradient(135deg,var(--act50),var(--nut50));margin-bottom:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;}
+.ottavia-msg{margin:18px 0 6px;}
+.ottavia-msg p{font-size:18px;line-height:24px;color:var(--n80);margin-bottom:14px;}
+.ottavia-msg p:last-child{margin-bottom:0;}
+.ottavia-msg .mark{background:var(--war30);border-radius:3px;padding:0 2px;}
+
+/* ---------- BLOCK: callout ---------- */
+.callout{border-radius:var(--r-xl);padding:14px 16px;font-size:16px;line-height:22px;margin:6px 0 16px;display:flex;gap:11px;}
+.callout .ico{font-size:16px;line-height:22px;flex:none;}
+.callout.info{background:var(--inf10);color:var(--inf60);}
+.callout.info .body{color:var(--n80);}
+.callout.warn{background:var(--war10);} .callout.warn .body{color:var(--n80);} .callout.warn .ico{color:var(--war60);}
+.callout.tip{background:var(--nut10);} .callout.tip .body{color:var(--n80);} .callout.tip .ico{color:var(--nut70);}
+
+/* ---------- BLOCK: week grid ---------- */
+.weekgrid{background:var(--n0);border:1px solid var(--n20);border-radius:var(--r-2xl);padding:14px;margin:6px 0 16px;box-shadow:var(--sh-sm);}
+.weekgrid .row{display:flex;align-items:center;gap:12px;padding:9px 4px;border-bottom:1px solid var(--n10);}
+.weekgrid .row:last-child{border-bottom:none;}
+.weekgrid .day{width:38px;font-size:13px;font-weight:700;color:var(--n50);text-transform:uppercase;letter-spacing:.04em;}
+.weekgrid .what{flex:1;font-size:16px;color:var(--n80);}
+.weekgrid .what small{display:block;color:var(--n50);font-size:13px;margin-top:1px;}
+.load{display:flex;gap:3px;}
+.load i{width:6px;height:14px;border-radius:2px;background:var(--n20);display:block;}
+.load i.on{background:var(--act60);}
+.load.rest i.on{background:var(--n30);}
+.load.hard i.on{background:var(--act70);}
+
+/* ---------- BLOCK: timeline ---------- */
+.timeline{margin:6px 0 16px;padding-left:6px;}
+.timeline .tl{display:flex;gap:14px;padding-bottom:14px;position:relative;}
+.timeline .tl:last-child{padding-bottom:0;}
+.timeline .tl::before{content:'';position:absolute;left:5px;top:16px;bottom:-2px;width:2px;background:var(--n20);}
+.timeline .tl:last-child::before{display:none;}
+.timeline .dot{width:12px;height:12px;border-radius:50%;background:var(--n0);border:2px solid var(--nut60);margin-top:3px;flex:none;z-index:1;}
+.timeline .time{width:52px;font-size:14px;font-weight:500;color:var(--n50);flex:none;}
+.timeline .ev{font-size:16px;color:var(--n80);}
+.timeline .ev small{display:block;color:var(--n50);font-size:13px;}
+
+/* ---------- BLOCK: checklist ---------- */
+.checklist{background:var(--n0);border:1px solid var(--n20);border-radius:var(--r-xl);padding:8px 14px;margin:6px 0 16px;box-shadow:var(--sh-sm);}
+.checklist .ck-head{font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--n50);padding:8px 0 4px;}
+.checklist .ck{display:flex;align-items:center;gap:11px;padding:9px 0;border-top:1px solid var(--n10);font-size:16px;color:var(--n80);}
+.checklist .box{width:22px;height:22px;border-radius:7px;border:2px solid var(--n30);flex:none;display:flex;align-items:center;justify-content:center;}
+.checklist .ck.done .box{background:var(--nut60);border-color:var(--nut60);color:#fff;font-size:13px;}
+.checklist .ck.done span{color:var(--n50);text-decoration:line-through;}
+
+/* ---------- BLOCK: stat callout ---------- */
+.stats{display:flex;gap:10px;margin:6px 0 16px;}
+.stat{flex:1;background:var(--n0);border:1px solid var(--n20);border-radius:var(--r-xl);padding:12px 14px;box-shadow:var(--sh-sm);}
+.stat .v{font-size:28px;font-weight:700;color:var(--n80);line-height:1;}
+.stat .v small{font-size:14px;font-weight:500;color:var(--n50);}
+.stat .l{font-size:13px;color:var(--n50);margin-top:5px;}
+.stat.accent .v{color:var(--nut70);}
+
+/* ---------- BLOCK: goal progress ---------- */
+.goals{background:var(--n0);border:1px solid var(--n20);border-radius:var(--r-xl);padding:14px;margin:6px 0 16px;box-shadow:var(--sh-sm);}
+.goal{margin-bottom:14px;}
+.goal:last-child{margin-bottom:0;}
+.goal .gtop{display:flex;justify-content:space-between;font-size:15px;margin-bottom:6px;}
+.goal .gtop .lab{color:var(--n80);}
+.goal .gtop .val{color:var(--n50);font-weight:500;}
+.bar{height:8px;border-radius:var(--r-full);background:var(--n10);overflow:hidden;}
+.bar i{display:block;height:100%;border-radius:var(--r-full);}
+
+/* ---------- BLOCK: option set ---------- */
+.options{display:flex;flex-direction:column;gap:10px;margin:6px 0 16px;}
+.opt{background:var(--n0);border:1px solid var(--n20);border-radius:var(--r-xl);padding:13px 15px;box-shadow:var(--sh-sm);display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.opt .ot{font-size:16px;color:var(--n80);}
+.opt .ot small{display:block;color:var(--n50);font-size:13px;margin-top:1px;}
+.opt .tag{background:var(--nut10);color:var(--nut80);font-size:13px;font-weight:700;padding:4px 10px;border-radius:var(--r-full);white-space:nowrap;}
+
+/* ---------- BLOCK: stepper (workout) ---------- */
+.stepper{background:var(--n0);border:1px solid var(--n20);border-radius:var(--r-2xl);padding:16px;margin:6px 0 16px;box-shadow:var(--sh-sm);}
+.stepper .sh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;}
+.stepper .sh .t{font-size:18px;font-weight:700;}
+.stepper .sh .m{font-size:13px;color:var(--n50);}
+.step{display:flex;gap:12px;padding:10px 0;border-top:1px solid var(--n10);}
+.step .idx{width:24px;height:24px;border-radius:50%;background:var(--act10);color:var(--act80);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;}
+.step .sc .st{font-size:16px;color:var(--n80);font-weight:500;}
+.step .sc .sd{font-size:14px;color:var(--n50);margin-top:1px;}
+
+/* ---------- BLOCK: range band ---------- */
+.rangeband{background:var(--n0);border:1px solid var(--n20);border-radius:var(--r-xl);padding:14px 16px;margin:6px 0 16px;box-shadow:var(--sh-sm);}
+.rangeband .rl{display:flex;justify-content:space-between;font-size:15px;margin-bottom:10px;}
+.rangeband .rl .lab{color:var(--n80);} .rangeband .rl .val{color:var(--act80);font-weight:700;}
+.rbtrack{position:relative;height:10px;border-radius:var(--r-full);background:var(--n10);}
+.rbtrack .band{position:absolute;height:100%;border-radius:var(--r-full);background:var(--act30);}
+.rbtrack .mk{position:absolute;width:4px;height:18px;border-radius:2px;background:var(--act70);top:-4px;}
+.rbscale{display:flex;justify-content:space-between;font-size:11px;color:var(--n40);margin-top:6px;}
+
+/* ---------- BLOCK: chips ---------- */
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 4px;}
+.chip{background:#EAF8F0;border:1px solid #D0ECDB;color:var(--green60);font-size:16px;font-weight:700;padding:9px 16px;border-radius:22px;box-shadow:0 2px 2.5px rgba(186,178,164,.19);}
+
+/* ---------- BLOCK: citation ---------- */
+.cite{display:inline-flex;align-items:center;gap:5px;background:var(--n10);border:1px solid var(--n20);color:var(--n60);font-size:13px;padding:2px 9px;border-radius:var(--r-full);vertical-align:middle;}
+.cite .d{width:6px;height:6px;border-radius:50%;background:var(--rec60);}
+
+/* ---------- BLOCK: confirmation header ---------- */
+.confirm{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.confirm .ring{width:30px;height:30px;border-radius:50%;background:var(--suc10);color:var(--suc60);display:flex;align-items:center;justify-content:center;font-size:15px;flex:none;}
+.confirm .ctxt{font-size:18px;font-weight:500;color:var(--n80);}
+
+/* ---------- annotation ---------- */
+.note{background:rgba(255,255,255,.55);border:1px dashed var(--n30);border-radius:var(--r-lg);padding:14px 16px;margin-top:14px;font-size:14px;line-height:20px;color:var(--n70);}
+.note b{color:var(--n80);font-weight:700;}
+.note .used{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
+.note .bk{font-size:12px;font-weight:700;letter-spacing:.02em;background:var(--n10);border:1px solid var(--n20);color:var(--n60);padding:3px 9px;border-radius:var(--r-full);}
+
+/* ---------- Palette ---------- */
+.palette{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+.pcard{background:var(--n10);border:1px solid var(--n20);border-radius:var(--r-2xl);padding:20px;}
+.pcard .ph{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px;}
+.pcard .ph .nm{font-size:18px;font-weight:700;}
+.pcard .ph .tier{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--n50);font-weight:500;}
+.pcard .desc{font-size:14px;color:var(--n60);margin-bottom:16px;}
+.statusdot{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;vertical-align:middle;}
+.s-chat{background:var(--nut60);} .s-code{background:var(--act60);} .s-new{background:var(--rec60);}
+
+/* ---------- Ledger ---------- */
+.ledger{max-width:1100px;margin:0 auto;background:var(--n0);border:1px solid var(--n20);border-radius:var(--r-2xl);overflow:hidden;box-shadow:var(--sh-sm);}
+.ledger table{width:100%;border-collapse:collapse;font-size:14px;}
+.ledger th,.ledger td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--n10);}
+.ledger th{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--n50);font-weight:500;background:var(--n10);}
+.ledger td.ctr,.ledger th.ctr{text-align:center;}
+.ledger .grp td{background:var(--n10);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--n60);font-weight:700;}
+.ledger .pri{color:var(--n80);font-weight:700;} .ledger .sup{color:var(--n40);}
+.tag-cut{background:var(--war10);color:var(--war60);font-size:12px;font-weight:700;padding:2px 8px;border-radius:var(--r-full);}
+.tag-gap{background:var(--rec10);color:var(--rec70);font-size:12px;font-weight:700;padding:2px 8px;border-radius:var(--r-full);}
+.legend{max-width:1100px;margin:0 auto 16px;display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--n60);}
+.legend span{display:flex;align-items:center;gap:6px;}
+</style>
+</head>
+<body>
+
+<div class="doc-head">
+  <div class="eyebrow">Mock phase · for Builder critique · Redesign v1 tokens</div>
+  <h1>The chat block palette</h1>
+  <p>Reverse exercise: instead of designing content and finding components, define the vocabulary of blocks Ottavia composes from, so she has enough to draw the best answer for any wellness intent. Six real responses (Elad UAT data), then the 12-block palette, then the ledger. Built on the v1 Visual Refresh tokens, Modern Era, green-anchored.</p>
+  <div class="flags">
+    <div class="flag arch"><b>Architecture dependency</b>Today the contract is prose + one trailing <code>chartData</code>. These compositions assume an <b>ordered block array interleaved with prose</b>. Nothing here works without that backend + renderer change.</div>
+    <div class="flag dep"><b>Open token</b>Brand green <code>#2F703F</code> is marked provisional in the token sheet. Stat-callout uses a numeric-display size not yet in the type scale (Hero is too big). Flagged, not resolved.</div>
+    <div class="flag arch"><b>Layout read</b>In the refresh, Ottavia speaks full-width on the canvas (only the user gets a bubble). Blocks render in that full 390px column — not crammed in a 302px bubble.</div>
+  </div>
+</div>
+
+<div class="section-label">Section A</div>
+<div class="section-title">Six responses, composed from the palette</div>
+<div class="section-sub">Scroll horizontally. Each phone is one intent; the dashed note under each calls out which blocks fired and where I chose prose over a block.</div>
+
+<div class="gallery">
+
+  <!-- ========== CASE 1: PLAN A WEEK ========== -->
+  <div class="case">
+    <div class="case-cap">Plan a week</div>
+    <div class="case-q"><b>"Plan my training week — 100k is in 3 weeks."</b></div>
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span class="icons">▲ ▾ ▮</span></div>
+      <div class="appheader">
+        <div class="date-pill glass"><span class="d">19</span><span class="w">wed</span></div>
+        <div class="ottavia-sel glass">Ottavia <span class="chev">▼</span></div>
+        <div class="profile glass">◍</div>
+      </div>
+      <div class="thread">
+        <div class="user-msg"><div class="user-bubble">Plan my training week — 100k is in 3 weeks.</div></div>
+        <div class="ottavia-msg">
+          <p>You're into the <span class="mark">taper</span> now, so this week pulls volume back about 20% while keeping the intensity that holds your fitness. HRV's been stable, so I'm keeping Thursday's quality session in.</p>
+        </div>
+        <div class="weekgrid">
+          <div class="row"><span class="day">Mon</span><span class="what">Rest</span><span class="load rest"><i class="on"></i><i></i><i></i></span></div>
+          <div class="row"><span class="day">Tue</span><span class="what">Easy run <small>8 km · by feel</small></span><span class="load"><i class="on"></i><i></i><i></i></span></div>
+          <div class="row"><span class="day">Wed</span><span class="what">Intervals <small>6×3 min @ threshold</small></span><span class="load hard"><i class="on"></i><i class="on"></i><i class="on"></i></span></div>
+          <div class="row"><span class="day">Thu</span><span class="what">Tempo <small>40 min steady</small></span><span class="load"><i class="on"></i><i class="on"></i><i></i></span></div>
+          <div class="row"><span class="day">Fri</span><span class="what">Rest</span><span class="load rest"><i class="on"></i><i></i><i></i></span></div>
+          <div class="row"><span class="day">Sat</span><span class="what">Long run <small>28 km · fuel practice</small></span><span class="load"><i class="on"></i><i class="on"></i><i></i></span></div>
+          <div class="row"><span class="day">Sun</span><span class="what">Recovery <small>6 km easy</small></span><span class="load"><i class="on"></i><i></i><i></i></span></div>
+        </div>
+        <div class="callout info"><span class="ico">↻</span><span class="body">Wednesday is the only hard day. If the intervals leave you flat, swap Thursday to easy — I'll watch your morning HRV and flag it.</span></div>
+        <div class="chips"><span class="chip">Adjust long run</span><span class="chip">Why taper now?</span></div>
+      </div>
+    </div>
+    <div class="note">
+      <div class="used"><span class="bk">text</span><span class="bk">week grid</span><span class="bk">callout</span><span class="bk">chips</span></div>
+      <b>Why these:</b> seven days will never read as prose — the grid carries the <i>shape</i> of the week at a glance with a load indicator. Prose carries the <i>why</i> (taper logic). The callout isolates the one conditional so it doesn't get buried. Chips move it forward.
+    </div>
+  </div>
+
+  <!-- ========== CASE 2: PLAN A DAY ========== -->
+  <div class="case">
+    <div class="case-cap">Plan a day</div>
+    <div class="case-q"><b>"What does today look like?"</b></div>
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span class="icons">▲ ▾ ▮</span></div>
+      <div class="appheader">
+        <div class="date-pill glass"><span class="d">19</span><span class="w">wed</span></div>
+        <div class="ottavia-sel glass">Ottavia <span class="chev">▼</span></div>
+        <div class="profile glass">◍</div>
+      </div>
+      <div class="thread">
+        <div class="user-msg"><div class="user-bubble">What does today look like?</div></div>
+        <div class="ottavia-msg">
+          <p>Recovery's green — HRV <b>62</b> (+4 vs your average) and you slept 7h 24m. Good day to train. Here's the shape: <span class="cite"><span class="d"></span>recovery</span></p>
+        </div>
+        <div class="timeline">
+          <div class="tl"><span class="dot"></span><span class="time">07:00</span><span class="ev">Easy run <small>8 km, keep HR under 150</small></span></div>
+          <div class="tl"><span class="dot"></span><span class="time">08:30</span><span class="ev">Breakfast <small>aim 35g protein in the window</small></span></div>
+          <div class="tl"><span class="dot"></span><span class="time">13:00</span><span class="ev">Lunch</span></div>
+          <div class="tl"><span class="dot"></span><span class="time">16:00</span><span class="ev">Hydration check <small>1.5 L by now</small></span></div>
+          <div class="tl"><span class="dot"></span><span class="time">21:30</span><span class="ev">Wind-down <small>screens off, lights low</small></span></div>
+        </div>
+        <div class="checklist">
+          <div class="ck-head">Today's focus</div>
+          <div class="ck done"><span class="box">✓</span><span>8 km easy logged</span></div>
+          <div class="ck"><span class="box"></span><span>Hit 120g protein</span></div>
+          <div class="ck"><span class="box"></span><span>2.5 L water</span></div>
+          <div class="ck"><span class="box"></span><span>Lights out by 22:30</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="note">
+      <div class="used"><span class="bk">text</span><span class="bk">timeline</span><span class="bk">checklist</span><span class="bk">citation</span></div>
+      <b>Why these:</b> a day is time-anchored — the timeline does what a bulleted list can't. The checklist is the 3–4 things to actually <i>track</i>, tappable and stateful. Citation chip keeps the "recovery's green" claim grounded.
+    </div>
+  </div>
+
+  <!-- ========== CASE 3: DIET ========== -->
+  <div class="case">
+    <div class="case-cap">Diet</div>
+    <div class="case-q"><b>"What should I eat after my run?"</b></div>
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span class="icons">▲ ▾ ▮</span></div>
+      <div class="appheader">
+        <div class="date-pill glass"><span class="d">19</span><span class="w">wed</span></div>
+        <div class="ottavia-sel glass">Ottavia <span class="chev">▼</span></div>
+        <div class="profile glass">◍</div>
+      </div>
+      <div class="thread">
+        <div class="user-msg"><div class="user-bubble">What should I eat after my run?</div></div>
+        <div class="ottavia-msg">
+          <p>You burned about 620 kcal and you're at 48g of your 130g protein target. Prioritise protein and carbs to refuel — aim for something like this:</p>
+        </div>
+        <div class="stats">
+          <div class="stat accent"><div class="v">~550<small> kcal</small></div><div class="l">target refuel</div></div>
+          <div class="stat"><div class="v">40<small>g</small></div><div class="l">protein</div></div>
+        </div>
+        <div class="goals">
+          <div class="goal"><div class="gtop"><span class="lab">Protein today</span><span class="val">48 → 88 / 130g</span></div><div class="bar"><i style="width:68%;background:var(--nut60);"></i></div></div>
+        </div>
+        <div class="options">
+          <div class="opt"><span class="ot">Greek yogurt, berries, granola</span><span class="tag">40g P</span></div>
+          <div class="opt"><span class="ot">Chicken rice bowl</span><span class="tag">45g P</span></div>
+          <div class="opt"><span class="ot">Shake + banana <small>fastest option</small></span><span class="tag">35g P</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="note">
+      <div class="used"><span class="bk">text</span><span class="bk">stat callout ×2</span><span class="bk">goal progress</span><span class="bk">option set</span></div>
+      <b>Why these:</b> the "meal card" isn't a new component — it's stat callout + goal progress composed. Option set is capped at <b>3</b> on purpose (limit choices at a decision point). Goal bar shows where this meal <i>lands</i> you, not just the meal in isolation.
+    </div>
+  </div>
+
+  <!-- ========== CASE 4: WORKOUT ========== -->
+  <div class="case">
+    <div class="case-cap">Workout</div>
+    <div class="case-q"><b>"Give me today's interval session."</b></div>
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span class="icons">▲ ▾ ▮</span></div>
+      <div class="appheader">
+        <div class="date-pill glass"><span class="d">19</span><span class="w">wed</span></div>
+        <div class="ottavia-sel glass">Ottavia <span class="chev">▼</span></div>
+        <div class="profile glass">◍</div>
+      </div>
+      <div class="thread">
+        <div class="user-msg"><div class="user-bubble">Give me today's interval session.</div></div>
+        <div class="ottavia-msg">
+          <p>You're tapering, so today's a sharpener — <b>6×3 min at threshold</b>, controlled. Not a session to chase numbers on.</p>
+        </div>
+        <div class="stepper">
+          <div class="sh"><span class="t">Threshold intervals</span><span class="m">~50 min · 8.5 km</span></div>
+          <div class="step"><span class="idx">1</span><span class="sc"><div class="st">Warm-up</div><div class="sd">15 min easy + 4 strides</div></span></div>
+          <div class="step"><span class="idx">2</span><span class="sc"><div class="st">Main · 6×3 min @ threshold</div><div class="sd">90s jog recovery between reps</div></span></div>
+          <div class="step"><span class="idx">3</span><span class="sc"><div class="st">Cool-down</div><div class="sd">10 min easy</div></span></div>
+        </div>
+        <div class="rangeband">
+          <div class="rl"><span class="lab">Target HR — threshold</span><span class="val">158–165 bpm</span></div>
+          <div class="rbtrack"><span class="band" style="left:62%;width:18%;"></span><span class="mk" style="left:70%;"></span></div>
+          <div class="rbscale"><span>120</span><span>easy</span><span>tempo</span><span>threshold</span><span>185</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="note">
+      <div class="used"><span class="bk">text</span><span class="bk">stepper</span><span class="bk">range band</span></div>
+      <b>Why these:</b> a workout is an <i>ordered sequence</i> — warm-up → main → cool-down — which is exactly a stepper. The range band shows the target zone <i>spatially</i> against the full HR range, which a number alone ("158–165") doesn't communicate.
+    </div>
+  </div>
+
+  <!-- ========== CASE 5: HOW AM I DOING ========== -->
+  <div class="case">
+    <div class="case-cap">How am I doing · data viz</div>
+    <div class="case-q"><b>"How's my recovery trending?"</b></div>
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span class="icons">▲ ▾ ▮</span></div>
+      <div class="appheader">
+        <div class="date-pill glass"><span class="d">19</span><span class="w">wed</span></div>
+        <div class="ottavia-sel glass">Ottavia <span class="chev">▼</span></div>
+        <div class="profile glass">◍</div>
+      </div>
+      <div class="thread">
+        <div class="user-msg"><div class="user-bubble">How's my recovery trending?</div></div>
+        <div class="ottavia-msg">
+          <p>Trending up. Your 7-day HRV is climbing and resting HR is down 3 bpm — the taper's doing its job.</p>
+        </div>
+        <!-- trend block -->
+        <div class="weekgrid" style="padding:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;">
+            <span style="font-size:16px;font-weight:700;">HRV · last 7 days</span><span style="font-size:13px;color:var(--n50);">avg 58 ms</span>
+          </div>
+          <svg viewBox="0 0 340 110" width="100%" height="110" style="display:block;">
+            <line x1="0" y1="72" x2="340" y2="72" stroke="var(--n20)" stroke-width="1" stroke-dasharray="3 4"/>
+            <polyline fill="none" stroke="var(--rec60)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"
+              points="10,70 65,58 120,64 175,40 230,46 285,26 330,16"/>
+            <circle cx="330" cy="16" r="5" fill="var(--rec60)"/>
+            <text x="306" y="12" font-size="13" font-weight="700" fill="var(--rec70)" font-family="Modern Era">64</text>
+          </svg>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--n40);margin-top:4px;"><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span></div>
+        </div>
+        <div class="goals">
+          <div class="goal"><div class="gtop"><span class="lab">Sleep ≥7h this week</span><span class="val">5 / 7 nights</span></div><div class="bar"><i style="width:71%;background:var(--rec60);"></i></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="note">
+      <div class="used"><span class="bk">text</span><span class="bk">trend (line)</span><span class="bk">goal progress</span></div>
+      <b>Restraint, on purpose:</b> I could have added resting-HR, sleep stages, and training load. I didn't. The question was "how's my recovery <i>trending</i>" — answered with one trend + one supporting metric. This is exactly the data-hungry line the selection rubric has to hold. Critique target: does this still feel like a dashboard?
+    </div>
+  </div>
+
+  <!-- ========== CASE 6: LOGGING ========== -->
+  <div class="case">
+    <div class="case-cap">Logging confirmation</div>
+    <div class="case-q"><b>User logs a photo of breakfast.</b></div>
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span class="icons">▲ ▾ ▮</span></div>
+      <div class="appheader">
+        <div class="date-pill glass"><span class="d">19</span><span class="w">wed</span></div>
+        <div class="ottavia-sel glass">Ottavia <span class="chev">▼</span></div>
+        <div class="profile glass">◍</div>
+      </div>
+      <div class="thread">
+        <div class="user-msg"><div class="user-bubble"><div class="photo">📷 breakfast</div>Oatmeal, banana, peanut butter</div></div>
+        <div class="ottavia-msg">
+          <div class="confirm"><span class="ring">✓</span><span class="ctxt">Logged breakfast</span></div>
+          <p>Nice protein start before the run.</p>
+        </div>
+        <div class="stats">
+          <div class="stat accent"><div class="v">420<small> kcal</small></div><div class="l">this meal</div></div>
+          <div class="stat"><div class="v">18<small>g</small></div><div class="l">protein</div></div>
+        </div>
+        <div class="goals">
+          <div class="goal"><div class="gtop"><span class="lab">Protein</span><span class="val">18 / 130g</span></div><div class="bar"><i style="width:14%;background:var(--nut60);"></i></div></div>
+          <div class="goal"><div class="gtop"><span class="lab">Calories</span><span class="val">420 / 2200</span></div><div class="bar"><i style="width:19%;background:var(--act60);"></i></div></div>
+        </div>
+        <div class="ottavia-msg"><p>That's 14% of your protein target before 9am — you're set up well for the post-run window.</p></div>
+      </div>
+    </div>
+    <div class="note">
+      <div class="used"><span class="bk">confirmation</span><span class="bk">stat callout</span><span class="bk">goal progress</span><span class="bk">text</span></div>
+      <b>Why these:</b> Type 2 logging is never just "logged" — it shows how the item <i>fits</i>. The confirmation header gives instant closure; the goal bars connect the meal to the day's targets; the closing line is the contextual connection the comms spec requires.
+    </div>
+  </div>
+
+</div>
+
+<!-- ============ SECTION B: PALETTE ============ -->
+<div class="section-label">Section B</div>
+<div class="section-title">The 12-block palette</div>
+<div class="section-sub">Each primitive shown once. Status: <span class="statusdot s-chat"></span>in chat today · <span class="statusdot s-code"></span>in code, not wired to chat · <span class="statusdot s-new"></span>new.</div>
+
+<div class="palette">
+
+  <div class="pcard">
+    <div class="ph"><span class="nm"><span class="statusdot s-new"></span>Checklist</span><span class="tier">Structure</span></div>
+    <div class="desc">Tappable, stateful list of actions. For "today's focus", a how-to you tick off, prep steps.</div>
+    <div class="checklist" style="margin:0;">
+      <div class="ck done"><span class="box">✓</span><span>8 km easy logged</span></div>
+      <div class="ck"><span class="box"></span><span>Hit 120g protein</span></div>
+      <div class="ck"><span class="box"></span><span>Lights out by 22:30</span></div>
+    </div>
+  </div>
+
+  <div class="pcard">
+    <div class="ph"><span class="nm"><span class="statusdot s-new"></span>Stepper / sequence</span><span class="tier">Structure</span></div>
+    <div class="desc">Ordered steps. Workouts (warm-up→main→cool-down), recipes, multi-step how-tos.</div>
+    <div class="stepper" style="margin:0;">
+      <div class="step" style="border-top:none;"><span class="idx">1</span><span class="sc"><div class="st">Warm-up</div><div class="sd">15 min easy + strides</div></span></div>
+      <div class="step"><span class="idx">2</span><span class="sc"><div class="st">Main set</div><div class="sd">6×3 min @ threshold</div></span></div>
+    </div>
+  </div>
+
+  <div class="pcard">
+    <div class="ph"><span class="nm"><span class="statusdot s-new"></span>Timeline</span><span class="tier">Structure</span></div>
+    <div class="desc">Time-anchored events down a day. Daily plans, scheduled cues, fueling windows.</div>
+    <div class="timeline" style="margin:0;">
+      <div class="tl"><span class="dot"></span><span class="time">07:00</span><span class="ev">Easy run</span></div>
+      <div class="tl"><span class="dot"></span><span class="time">08:30</span><span class="ev">Breakfast</span></div>
+      <div class="tl"><span class="dot"></span><span class="time">21:30</span><span class="ev">Wind-down</span></div>
+    </div>
+  </div>
+
+  <div class="pcard">
+    <div class="ph"><span class="nm"><span class="statusdot s-new"></span>Week grid</span><span class="tier">Structure</span></div>
+    <div class="desc">7-day overview with a per-day load/intensity read. Training weeks, meal weeks, retrospectives.</div>
+    <div class="weekgrid" style="margin:0;">
+      <div class="row"><span class="day">Mon</span><span class="what">Rest</span><span class="load rest"><i class="on"></i><i></i><i></i></span></div>
+      <div class="row"><span class="day">Wed</span><span class="what">Intervals</span><span class="load hard"><i class="on"></i><i class="on"></i><i class="on"></i></span></div>
+      <div class="row"><span class="day">Sat</span><span class="what">Long run</span><span class="load"><i class="on"></i><i class="on"></i><i></i></span></div>
+    </div>
+  </div>
+
+  <div class="pcard">
+    <div class="ph"><span class="nm"><span class="statusdot s-new"></span>Option set</span><span class="tier">Structure</span></div>
+    <div class="desc">2–3 choices, never more. Meal options, plan A/B, "how do you want to handle this".</div>
+    <div class="options" style="margin:0;">
+      <div class="opt"><span class="ot">Greek yogurt + granola</span><span class="tag">40g P</span></div>
+      <div class="opt"><span class="ot">Chicken rice bowl</span><span class="tag">45g P</span></div>
+    </div>
+  </div>
+
+  <div class="pcard">
+    <div class="ph"><span class="nm"><span class="statusdot s-new"></span>Callout / note</span><span class="tier">Structure</span></div>
+    <div class="desc">One framed idea: a conditional, a caution (never alarming), a tip. Uses semantic tokens, not domain.</div>
+    <div class="callout info" style="margin:0;"><span class="ico">↻</span><span class="body">If Wednesday leaves you flat, swap Thursday to easy.</span></div>
+  </div>
+
+  <div class="pcard">
+    <div class="ph"><span class="nm"><span class="statusdot s-code"></span>Stat callout</span><span class="tier">Data</span></div>
+    <div class="desc">One or two big numbers with a label. The "numeric display" type token DESIGN.md still needs.</div>
+    <div class="stats" style="margin:0;">
+      <div class="stat accent"><div class="v">62<small> ms</small></div><div class="l">HRV today</div></div>
+      <div class="stat"><div class="v">7h24<small>m</small></div><div class="l">sleep</div></div>
+    </div>
+  </div>
+
+  <div class="pcard">
+    <div class="ph"><span class="nm"><span class="statusdot s-chat"></span>Trend (line)</span><span class="tier">Data</span></div>
+    <div class="desc">Movement over time with an average baseline. HRV, weight, resting HR, sleep duration.</div>
+    <svg viewBox="0 0 340 90" width="100%" height="90" style="display:block;">
+      <line x1="0" y1="60" x2="340" y2="60" stroke="var(--n20)" stroke-width="1" stroke-dasharray="3 4"/>
+      <polyline fill="none" stroke="var(--rec60)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" points="10,58 65,48 120,52 175,34 230,38 285,22 330,14"/>
+      <circle cx="330" cy="14" r="5" fill="var(--rec60)"/>
+    </svg>
+  </div>
+
+  <div class="pcard">
+    <div class="ph"><span class="nm"><span class="statusdot s-chat"></span>Compare (bar)</span><span class="tier">Data</span></div>
+    <div class="desc">Discrete periods side by side. This week vs last, weekday distribution, macro by meal.</div>
+    <svg viewBox="0 0 340 90" width="100%" height="90" style="display:block;">
+      <rect x="14" y="40" width="34" height="50" rx="4" fill="var(--act50)"/>
+      <rect x="62" y="28" width="34" height="62" rx="4" fill="var(--act50)"/>
+      <rect x="110" y="50" width="34" height="40" rx="4" fill="var(--act50)"/>
+      <rect x="158" y="18" width="34" height="72" rx="4" fill="var(--act60)"/>
+      <rect x="206" y="36" width="34" height="54" rx="4" fill="var(--act50)"/>
+      <rect x="254" y="44" width="34" height="46" rx="4" fill="var(--act50)"/>
+      <rect x="302" y="30" width="34" height="60" rx="4" fill="var(--act50)"/>
+    </svg>
+  </div>
+
+  <div class="pcard">
+    <div class="ph"><span class="nm"><span class="statusdot s-chat"></span>Goal progress</span><span class="tier">Data</span></div>
+    <div class="desc">Where you stand vs a target — bar or ring. Protein, calories, hydration, weekly sessions.</div>
+    <div style="display:flex;align-items:center;gap:18px;">
+      <svg viewBox="0 0 76 76" width="76" height="76" style="flex:none;">
+        <circle cx="38" cy="38" r="30" fill="none" stroke="var(--n10)" stroke-width="9"/>
+        <circle cx="38" cy="38" r="30" fill="none" stroke="var(--nut60)" stroke-width="9" stroke-linecap="round" stroke-dasharray="188.4" stroke-dashoffset="60" transform="rotate(-90 38 38)"/>
+        <text x="38" y="43" text-anchor="middle" font-size="17" font-weight="700" fill="var(--n80)" font-family="Modern Era">68%</text>
+      </svg>
+      <div style="flex:1;" class="goals"><div class="goal" style="margin:0;"><div class="gtop"><span class="lab">Protein</span><span class="val">88 / 130g</span></div><div class="bar"><i style="width:68%;background:var(--nut60);"></i></div></div></div>
+    </div>
+  </div>
+
+  <div class="pcard">
+    <div class="ph"><span class="nm"><span class="statusdot s-new"></span>Distribution</span><span class="tier">Data</span></div>
+    <div class="desc">Parts of a whole. Macro split, sleep stages, time in HR zones, day's calorie sources.</div>
+    <div style="height:18px;border-radius:var(--r-full);overflow:hidden;display:flex;">
+      <i style="width:40%;background:var(--nut60);"></i><i style="width:35%;background:var(--act60);"></i><i style="width:25%;background:var(--war50);"></i>
+    </div>
+    <div style="display:flex;gap:14px;font-size:13px;color:var(--n50);margin-top:8px;">
+      <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--nut60);"></span> Protein 40%</span>
+      <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--act60);"></span> Carbs 35%</span>
+      <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--war50);"></span> Fat 25%</span>
+    </div>
+  </div>
+
+  <div class="pcard">
+    <div class="ph"><span class="nm"><span class="statusdot s-new"></span>Range band</span><span class="tier">Data</span></div>
+    <div class="desc">Where a value sits vs a normal/target band. HR zones, "your HRV vs your typical range", BP.</div>
+    <div class="rangeband" style="margin:0;">
+      <div class="rl"><span class="lab">HRV vs your range</span><span class="val">62 ms · above</span></div>
+      <div class="rbtrack"><span class="band" style="left:30%;width:34%;background:var(--rec30);"></span><span class="mk" style="left:74%;background:var(--rec60);"></span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============ SECTION C: LEDGER ============ -->
+<div class="section-label">Section C</div>
+<div class="section-title">The ledger</div>
+<div class="section-sub">What I'd build, in what order, and the honest findings — including a cut and a gap.</div>
+
+<div class="legend">
+  <span><span class="statusdot s-chat"></span> in chat today</span>
+  <span><span class="statusdot s-code"></span> in code, not wired to chat</span>
+  <span><span class="statusdot s-new"></span> new build</span>
+  <span><b>●</b> primary use &nbsp; <b style="color:var(--n40);">○</b> supporting</span>
+</div>
+
+<div class="ledger">
+  <table>
+    <thead><tr>
+      <th>Block</th><th>Status</th>
+      <th class="ctr">Week</th><th class="ctr">Day</th><th class="ctr">Diet</th><th class="ctr">Workout</th><th class="ctr">Doing</th><th class="ctr">Log</th>
+      <th>Priority</th>
+    </tr></thead>
+    <tbody>
+      <tr class="grp"><td colspan="9">Structure — what markdown can't lay out</td></tr>
+      <tr><td>Checklist</td><td><span class="statusdot s-new"></span>new</td><td class="ctr sup">○</td><td class="ctr pri">●</td><td class="ctr sup">○</td><td class="ctr sup">○</td><td class="ctr"></td><td class="ctr"></td><td><b>P1</b></td></tr>
+      <tr><td>Week grid</td><td><span class="statusdot s-new"></span>new</td><td class="ctr pri">●</td><td class="ctr"></td><td class="ctr sup">○</td><td class="ctr sup">○</td><td class="ctr sup">○</td><td class="ctr"></td><td><b>P1</b></td></tr>
+      <tr><td>Option set</td><td><span class="statusdot s-new"></span>new</td><td class="ctr sup">○</td><td class="ctr sup">○</td><td class="ctr pri">●</td><td class="ctr sup">○</td><td class="ctr"></td><td class="ctr"></td><td><b>P1</b></td></tr>
+      <tr><td>Stepper / sequence</td><td><span class="statusdot s-new"></span>new</td><td class="ctr"></td><td class="ctr"></td><td class="ctr sup">○</td><td class="ctr pri">●</td><td class="ctr"></td><td class="ctr"></td><td>P2</td></tr>
+      <tr><td>Timeline</td><td><span class="statusdot s-new"></span>new</td><td class="ctr"></td><td class="ctr pri">●</td><td class="ctr sup">○</td><td class="ctr sup">○</td><td class="ctr"></td><td class="ctr"></td><td>P2</td></tr>
+      <tr><td>Callout / note</td><td><span class="statusdot s-new"></span>new</td><td class="ctr pri">●</td><td class="ctr sup">○</td><td class="ctr sup">○</td><td class="ctr sup">○</td><td class="ctr sup">○</td><td class="ctr sup">○</td><td>P2</td></tr>
+      <tr class="grp"><td colspan="9">Data — glanceable quantity</td></tr>
+      <tr><td>Stat callout</td><td><span class="statusdot s-code"></span>code</td><td class="ctr"></td><td class="ctr"></td><td class="ctr pri">●</td><td class="ctr sup">○</td><td class="ctr pri">●</td><td class="ctr pri">●</td><td><b>P1</b></td></tr>
+      <tr><td>Goal progress</td><td><span class="statusdot s-chat"></span>chat·code</td><td class="ctr sup">○</td><td class="ctr sup">○</td><td class="ctr pri">●</td><td class="ctr"></td><td class="ctr pri">●</td><td class="ctr pri">●</td><td>wire-in</td></tr>
+      <tr><td>Trend (line)</td><td><span class="statusdot s-chat"></span>chat</td><td class="ctr"></td><td class="ctr"></td><td class="ctr sup">○</td><td class="ctr"></td><td class="ctr pri">●</td><td class="ctr"></td><td>have it</td></tr>
+      <tr><td>Compare (bar)</td><td><span class="statusdot s-chat"></span>chat</td><td class="ctr"></td><td class="ctr"></td><td class="ctr sup">○</td><td class="ctr"></td><td class="ctr pri">●</td><td class="ctr"></td><td>have it</td></tr>
+      <tr><td>Distribution</td><td><span class="statusdot s-new"></span>new</td><td class="ctr"></td><td class="ctr"></td><td class="ctr pri">●</td><td class="ctr sup">○</td><td class="ctr sup">○</td><td class="ctr"></td><td>P3 <span class="tag-cut">defer</span></td></tr>
+      <tr><td>Range band</td><td><span class="statusdot s-new"></span>new</td><td class="ctr"></td><td class="ctr"></td><td class="ctr"></td><td class="ctr pri">●</td><td class="ctr sup">○</td><td class="ctr"></td><td>P3 <span class="tag-cut">defer</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div style="max-width:1100px;margin:28px auto 0;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+  <div class="flag" style="max-width:none;"><b><span class="tag-cut">Cut candidate</span></b>Across six real answers, <b>Compare (bar)</b> never became the primary block — Trend always beat it for the recovery question, and Week grid beat it for weekly views. It may be a duplicate of Trend+grid. Don't build it standalone until an intent demands it.</div>
+  <div class="flag" style="max-width:none;"><b><span class="tag-gap">Gap found</span></b>The diet answer wanted a <b>swap / comparison</b> ("yogurt vs the rice bowl, side by side on protein") that Option-set only half-covers. A dedicated 2-up comparison may be the 13th block — but I'd confirm with 2 more diet prompts before committing.</div>
+</div>
+
+<div style="max-width:1100px;margin:40px auto 0;font-size:14px;color:var(--n50);border-top:1px solid var(--n30);padding-top:16px;">
+  Recommended sequence: <b>(1)</b> ship the ordered-block contract · <b>(2)</b> build the four P1 blocks — checklist, week grid, option set, stat callout · <b>(3)</b> wire in existing Ring / goal progress · <b>(4)</b> defer distribution & range band. The real deliverable alongside the blocks is the <b>selection rubric</b> — "show a block only when it beats a sentence" — which is where "data-aware, not data-hungry" gets enforced. Tokens: Ottavia Redesign v1 Visual Refresh. Not canonized — Playground mock for critique.
+</div>
+
+<!-- ============ SECTION D: REPORTS ============ -->
+<style>
+.rep-wrap{max-width:1100px;margin:0 auto;}
+/* icons */
+.icon-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:40px;}
+.icon-chip{background:var(--n10);border:1px solid var(--n20);border-radius:var(--r-2xl);padding:20px;text-align:center;}
+.icon-badge{width:56px;height:56px;border-radius:var(--r-full);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;}
+.icon-badge svg{width:28px;height:28px;}
+.icon-chip .inm{font-size:16px;font-weight:700;color:var(--n80);}
+.icon-chip .ihex{font-size:12px;color:var(--n50);margin-top:3px;font-family:monospace;}
+.icon-chip .icon-note{font-size:13px;color:var(--n60);margin-top:8px;}
+/* anatomy */
+.anatomy{display:grid;grid-template-columns:390px 1fr;gap:32px;align-items:start;margin-bottom:48px;background:var(--n10);border:1px solid var(--n20);border-radius:var(--r-2xl);padding:28px;}
+.anno{list-style:none;}
+.anno li{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--n20);font-size:15px;color:var(--n70);}
+.anno li:last-child{border-bottom:none;}
+.anno .num{width:24px;height:24px;border-radius:50%;background:var(--n80);color:var(--n0);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;}
+.anno b{color:var(--n80);}
+.anno .opt{color:var(--rec70);font-weight:700;font-size:12px;}
+/* report card */
+.rep-card{background:#FFFFFF;border:1px solid var(--n20);border-radius:var(--r-2xl);padding:20px;box-shadow:var(--sh-md);width:390px;}
+.rtype{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:var(--r-full);font-size:14px;font-weight:700;margin-bottom:14px;}
+.rtype svg{width:16px;height:16px;}
+.r-headline{font-size:24px;line-height:28px;font-weight:700;color:var(--n80);margin-bottom:18px;}
+.r-stats{display:flex;margin-bottom:16px;}
+.r-stats .rs{flex:1;padding:0 14px;border-left:1px solid var(--n10);}
+.r-stats .rs:first-child{padding-left:0;border-left:none;}
+.r-stats .rsl{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--n50);margin-bottom:4px;}
+.r-stats .rsv{font-size:22px;font-weight:700;color:var(--n80);line-height:1;}
+.r-divide{height:1px;background:var(--n10);margin:0 0 16px;}
+.r-body p{font-size:17px;line-height:23px;color:var(--n80);margin-bottom:14px;}
+.r-link{font-size:16px;font-weight:700;color:var(--green60);padding-top:4px;}
+.r-blocklabel{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--n50);font-weight:700;margin:4px 0 8px;}
+.rep-pair{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;margin-bottom:14px;}
+.rep-block{margin-bottom:14px;}
+.rep-group{margin-bottom:44px;}
+.rep-group-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.rep-group-head .gb{width:38px;height:38px;border-radius:var(--r-full);display:flex;align-items:center;justify-content:center;}
+.rep-group-head .gb svg{width:20px;height:20px;}
+.rep-group-head .gn{font-size:20px;font-weight:700;color:var(--n80);}
+.rep-group-head .gd{font-size:14px;color:var(--n60);}
+.rep-col-cap{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--n50);font-weight:700;margin-bottom:8px;}
+.distbar{height:16px;border-radius:var(--r-full);overflow:hidden;display:flex;}
+.distbar i{display:block;height:100%;}
+.distlegend{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--n50);margin-top:8px;}
+.distlegend span{display:flex;align-items:center;gap:5px;}
+.distlegend i{width:8px;height:8px;border-radius:2px;display:block;}
+</style>
+
+<div class="section-label">Section D</div>
+<div class="section-title">Reports — one card, four fills</div>
+<div class="section-sub">Type 3 (Garmin-triggered insights). Pulled the closed/open structure from your reference frames. All four share the same skeleton; they differ by icon, accent color, the three stats, and which blocks appear in the drill-down.</div>
+
+<div class="rep-wrap">
+
+  <!-- ICONS -->
+  <div class="rep-block" style="font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--n50);font-weight:500;margin-bottom:12px;">Four report icons <span style="text-transform:none;letter-spacing:0;color:var(--rec70);font-weight:700;">· placeholders — final glyphs to be drawn in the Ottavia icon set</span></div>
+  <div class="icon-row">
+    <div class="icon-chip">
+      <div class="icon-badge" style="background:var(--rec10);color:var(--rec70);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+      </div>
+      <div class="inm">Sleep report</div>
+      <div class="ihex">recovery · #8C63CB</div>
+      <div class="icon-note">Crescent moon</div>
+    </div>
+    <div class="icon-chip">
+      <div class="icon-badge" style="background:var(--nut10);color:var(--green60);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18h18"/><path d="M7 18a5 5 0 0 1 10 0"/><path d="M12 4v3M5.5 7.5l1.5 1.5M18.5 7.5 17 9"/></svg>
+      </div>
+      <div class="inm">Day recap</div>
+      <div class="ihex">brand · #2F703F</div>
+      <div class="icon-note">Sun on horizon</div>
+    </div>
+    <div class="icon-chip">
+      <div class="icon-badge" style="background:var(--act10);color:var(--act80);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg>
+      </div>
+      <div class="inm">Post-workout</div>
+      <div class="ihex">activity · #E08A50</div>
+      <div class="icon-note">Pulse / effort</div>
+    </div>
+    <div class="icon-chip">
+      <div class="icon-badge" style="background:var(--hyd10);color:var(--hyd80);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="4"/><path d="M12 8v4l2.5 1.5"/></svg>
+      </div>
+      <div class="inm">Weight</div>
+      <div class="ihex">hydration · #359FFF</div>
+      <div class="icon-note">Scale dial</div>
+    </div>
+  </div>
+
+  <!-- ANATOMY -->
+  <div class="rep-block" style="font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--n50);font-weight:500;margin-bottom:12px;">The shared anatomy</div>
+  <div class="anatomy">
+    <div class="rep-card" style="width:auto;">
+      <span class="rtype" style="background:var(--rec10);color:var(--rec70);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg> Sleep report · 7:02 AM</span>
+      <div class="r-headline">Headline verdict — the one-line answer.</div>
+      <div class="r-stats">
+        <div class="rs"><div class="rsl">Stat 1</div><div class="rsv">7h48m</div></div>
+        <div class="rs"><div class="rsl">Stat 2</div><div class="rsv">82%</div></div>
+        <div class="rs"><div class="rsl">Stat 3</div><div class="rsv">64ms</div></div>
+      </div>
+      <div class="r-link">Continue reading ↓</div>
+    </div>
+    <ol class="anno">
+      <li><span class="num">1</span><span><b>Type chip</b> — icon + report name + timestamp. Identity and when it fired. Accent color = the report's domain.</span></li>
+      <li><span class="num">2</span><span><b>Headline verdict</b> — the meaning, in one line. Always the first thing read. This is the report; everything else supports it.</span></li>
+      <li><span class="num">3</span><span><b>Three key stats</b> — the glanceable numbers, divided columns. Closed state stops here.</span></li>
+      <li><span class="num">4</span><span><b>Expand affordance</b> — "Continue reading ↓" / "Collapse". Progressive disclosure: verdict first, depth on demand.</span></li>
+      <li><span class="num">5</span><span><b>Analysis prose</b> <span class="opt">open only</span> — the reasoning behind the verdict, grounded in the numbers.</span></li>
+      <li><span class="num">6</span><span><b>Drill-down blocks</b> <span class="opt">open only</span> — type-specific, drawn from the block palette (stages, zones, trend, goals).</span></li>
+    </ol>
+  </div>
+
+  <!-- ========== SLEEP ========== -->
+  <div class="rep-group">
+    <div class="rep-group-head">
+      <div class="gb" style="background:var(--rec10);color:var(--rec70);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></div>
+      <div><div class="gn">Sleep report</div><div class="gd">High-level verdict, then drill into stages + trend.</div></div>
+    </div>
+    <div class="rep-pair">
+      <div>
+        <div class="rep-col-cap">Closed</div>
+        <div class="rep-card">
+          <span class="rtype" style="background:var(--rec10);color:var(--rec70);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg> Sleep report · 7:02 AM</span>
+          <div class="r-headline">You recovered well — deep sleep was your best in a week.</div>
+          <div class="r-stats">
+            <div class="rs"><div class="rsl">Duration</div><div class="rsv">7h48m</div></div>
+            <div class="rs"><div class="rsl">Efficiency</div><div class="rsv">82%</div></div>
+            <div class="rs"><div class="rsl">HRV</div><div class="rsv">64ms</div></div>
+          </div>
+          <div class="r-link">Continue reading ↓</div>
+        </div>
+      </div>
+      <div>
+        <div class="rep-col-cap">Open</div>
+        <div class="rep-card">
+          <span class="rtype" style="background:var(--rec10);color:var(--rec70);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg> Sleep report · 7:02 AM</span>
+          <div class="r-headline">You recovered well — deep sleep was your best in a week.</div>
+          <div class="r-stats">
+            <div class="rs"><div class="rsl">Duration</div><div class="rsv">7h48m</div></div>
+            <div class="rs"><div class="rsl">Efficiency</div><div class="rsv">82%</div></div>
+            <div class="rs"><div class="rsl">HRV</div><div class="rsv">64ms</div></div>
+          </div>
+          <div class="r-divide"></div>
+          <div class="r-body"><p>7h 48m at 82% efficiency — above the threshold where aerobic adaptations consolidate. Deep sleep hit 1h 32m, your best in seven days, which tracks with the lighter Tuesday load.</p></div>
+          <div class="r-blocklabel">Sleep stages · distribution</div>
+          <div class="rep-block">
+            <div class="distbar"><i style="width:20%;background:var(--rec70);"></i><i style="width:52%;background:var(--rec50);"></i><i style="width:22%;background:var(--rec30);"></i><i style="width:6%;background:var(--n20);"></i></div>
+            <div class="distlegend"><span><i style="background:var(--rec70);"></i>Deep 20%</span><span><i style="background:var(--rec50);"></i>Light 52%</span><span><i style="background:var(--rec30);"></i>REM 22%</span><span><i style="background:var(--n20);"></i>Awake 6%</span></div>
+          </div>
+          <div class="r-blocklabel">Duration · last 7 nights</div>
+          <svg viewBox="0 0 340 70" width="100%" height="70" style="display:block;margin-bottom:14px;">
+            <line x1="0" y1="44" x2="340" y2="44" stroke="var(--n20)" stroke-width="1" stroke-dasharray="3 4"/>
+            <polyline fill="none" stroke="var(--rec60)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" points="10,50 65,46 120,52 175,34 230,40 285,30 330,22"/>
+            <circle cx="330" cy="22" r="5" fill="var(--rec60)"/>
+          </svg>
+          <div class="r-link">Collapse</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== POST-WORKOUT ========== -->
+  <div class="rep-group">
+    <div class="rep-group-head">
+      <div class="gb" style="background:var(--act10);color:var(--act80);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg></div>
+      <div><div class="gn">Post-workout report</div><div class="gd">Data first, then the analysis of what it means.</div></div>
+    </div>
+    <div class="rep-pair">
+      <div>
+        <div class="rep-col-cap">Closed</div>
+        <div class="rep-card">
+          <span class="rtype" style="background:var(--act10);color:var(--act80);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg> Post-workout · 8:15 AM</span>
+          <div class="r-headline">Strong threshold session — you held the zone the whole way.</div>
+          <div class="r-stats">
+            <div class="rs"><div class="rsl">Distance</div><div class="rsv">8.5km</div></div>
+            <div class="rs"><div class="rsl">Avg HR</div><div class="rsv">162</div></div>
+            <div class="rs"><div class="rsl">Time</div><div class="rsv">50m</div></div>
+          </div>
+          <div class="r-link">Continue reading ↓</div>
+        </div>
+      </div>
+      <div>
+        <div class="rep-col-cap">Open</div>
+        <div class="rep-card">
+          <span class="rtype" style="background:var(--act10);color:var(--act80);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg> Post-workout · 8:15 AM</span>
+          <div class="r-headline">Strong threshold session — you held the zone the whole way.</div>
+          <div class="r-stats">
+            <div class="rs"><div class="rsl">Distance</div><div class="rsv">8.5km</div></div>
+            <div class="rs"><div class="rsl">Avg HR</div><div class="rsv">162</div></div>
+            <div class="rs"><div class="rsl">Time</div><div class="rsv">50m</div></div>
+          </div>
+          <div class="r-divide"></div>
+          <div class="r-body"><p>Six reps at 162 average, right inside your 158–165 threshold band. Recovery jogs dropped you to ~140 each time, so you were genuinely clearing — not hanging on. Exactly the sharpener the taper called for.</p></div>
+          <div class="r-blocklabel">Time in HR zones · distribution</div>
+          <div class="rep-block">
+            <div class="distbar"><i style="width:30%;background:var(--act30);"></i><i style="width:18%;background:var(--act50);"></i><i style="width:44%;background:var(--act60);"></i><i style="width:8%;background:var(--act80);"></i></div>
+            <div class="distlegend"><span><i style="background:var(--act30);"></i>Easy 30%</span><span><i style="background:var(--act50);"></i>Tempo 18%</span><span><i style="background:var(--act60);"></i>Threshold 44%</span><span><i style="background:var(--act80);"></i>VO₂ 8%</span></div>
+          </div>
+          <div class="r-blocklabel">Target zone check · range band</div>
+          <div class="rangeband" style="margin:0 0 14px;">
+            <div class="rl"><span class="lab">Avg HR vs threshold band</span><span class="val">162 · in band</span></div>
+            <div class="rbtrack"><span class="band" style="left:62%;width:18%;"></span><span class="mk" style="left:70%;"></span></div>
+          </div>
+          <div class="r-link">Collapse</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== WEIGHT ========== -->
+  <div class="rep-group">
+    <div class="rep-group-head">
+      <div class="gb" style="background:var(--hyd10);color:var(--hyd80);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="4"/><path d="M12 8v4l2.5 1.5"/></svg></div>
+      <div><div class="gn">Weight measurement</div><div class="gd">Where you are now, and the trend that gives it meaning.</div></div>
+    </div>
+    <div class="rep-pair">
+      <div>
+        <div class="rep-col-cap">Closed</div>
+        <div class="rep-card">
+          <span class="rtype" style="background:var(--hyd10);color:var(--hyd80);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="4"/><path d="M12 8v4l2.5 1.5"/></svg> Weight · 6:30 AM</span>
+          <div class="r-headline">72.1 kg — down 0.3, right on your fat-loss target.</div>
+          <div class="r-stats">
+            <div class="rs"><div class="rsl">Weight</div><div class="rsv">72.1<span style="font-size:14px;color:var(--n50);">kg</span></div></div>
+            <div class="rs"><div class="rsl">Body fat</div><div class="rsv">18.2%</div></div>
+            <div class="rs"><div class="rsl">vs last wk</div><div class="rsv" style="color:var(--hyd70);">↓0.3</div></div>
+          </div>
+          <div class="r-link">Continue reading ↓</div>
+        </div>
+      </div>
+      <div>
+        <div class="rep-col-cap">Open</div>
+        <div class="rep-card">
+          <span class="rtype" style="background:var(--hyd10);color:var(--hyd80);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="4"/><path d="M12 8v4l2.5 1.5"/></svg> Weight · 6:30 AM</span>
+          <div class="r-headline">72.1 kg — down 0.3, right on your fat-loss target.</div>
+          <div class="r-stats">
+            <div class="rs"><div class="rsl">Weight</div><div class="rsv">72.1<span style="font-size:14px;color:var(--n50);">kg</span></div></div>
+            <div class="rs"><div class="rsl">Body fat</div><div class="rsv">18.2%</div></div>
+            <div class="rs"><div class="rsl">vs last wk</div><div class="rsv" style="color:var(--hyd70);">↓0.3</div></div>
+          </div>
+          <div class="r-divide"></div>
+          <div class="r-blocklabel">Weight · last 30 days</div>
+          <svg viewBox="0 0 340 80" width="100%" height="80" style="display:block;margin-bottom:14px;">
+            <polyline fill="none" stroke="var(--hyd60)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" points="10,18 65,24 120,22 175,34 230,40 285,46 330,52"/>
+            <circle cx="330" cy="52" r="5" fill="var(--hyd60)"/>
+            <text x="300" y="48" font-size="13" font-weight="700" fill="var(--hyd80)" font-family="Modern Era">72.1</text>
+          </svg>
+          <div class="r-body"><p>You're tracking about 0.4%/week — inside your 0.5% target without cutting training fuel. Body fat is down 0.4 points this month while weight held flat two weeks ago, which reads as lean mass holding.</p></div>
+          <div class="r-link">Collapse</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== DAY RECAP ========== -->
+  <div class="rep-group">
+    <div class="rep-group-head">
+      <div class="gb" style="background:var(--nut10);color:var(--green60);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18h18"/><path d="M7 18a5 5 0 0 1 10 0"/><path d="M12 4v3M5.5 7.5l1.5 1.5M18.5 7.5 17 9"/></svg></div>
+      <div><div class="gn">Day recap <span style="font-weight:400;color:var(--n50);font-size:14px;">· my suggestion</span></div><div class="gd">Narrative + how the day's goals landed + one nudge for tomorrow.</div></div>
+    </div>
+    <div class="rep-pair">
+      <div>
+        <div class="rep-col-cap">Closed</div>
+        <div class="rep-card">
+          <span class="rtype" style="background:var(--nut10);color:var(--green60);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18h18"/><path d="M7 18a5 5 0 0 1 10 0"/><path d="M12 4v3M5.5 7.5l1.5 1.5M18.5 7.5 17 9"/></svg> Day recap · 9:30 PM</span>
+          <div class="r-headline">Solid day — training and protein landed, water fell short.</div>
+          <div class="r-stats">
+            <div class="rs"><div class="rsl">Training</div><div class="rsv" style="color:var(--nut70);">Done</div></div>
+            <div class="rs"><div class="rsl">Protein</div><div class="rsv">124<span style="font-size:13px;color:var(--n50);">/130</span></div></div>
+            <div class="rs"><div class="rsl">Water</div><div class="rsv">1.8<span style="font-size:13px;color:var(--n50);">/2.5L</span></div></div>
+          </div>
+          <div class="r-link">Continue reading ↓</div>
+        </div>
+      </div>
+      <div>
+        <div class="rep-col-cap">Open</div>
+        <div class="rep-card">
+          <span class="rtype" style="background:var(--nut10);color:var(--green60);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18h18"/><path d="M7 18a5 5 0 0 1 10 0"/><path d="M12 4v3M5.5 7.5l1.5 1.5M18.5 7.5 17 9"/></svg> Day recap · 9:30 PM</span>
+          <div class="r-headline">Solid day — training and protein landed, water fell short.</div>
+          <div class="r-stats">
+            <div class="rs"><div class="rsl">Training</div><div class="rsv" style="color:var(--nut70);">Done</div></div>
+            <div class="rs"><div class="rsl">Protein</div><div class="rsv">124<span style="font-size:13px;color:var(--n50);">/130</span></div></div>
+            <div class="rs"><div class="rsl">Water</div><div class="rsv">1.8<span style="font-size:13px;color:var(--n50);">/2.5L</span></div></div>
+          </div>
+          <div class="r-divide"></div>
+          <div class="r-body"><p>You got the threshold session in and nearly hit protein at 124 of 130g. Water was the gap — given you trained, start earlier tomorrow. Sleep's trending well, so you're set for Saturday's long run.</p></div>
+          <div class="r-blocklabel">How the day landed</div>
+          <div class="goals" style="margin:0 0 14px;">
+            <div class="goal"><div class="gtop"><span class="lab">Protein</span><span class="val">124 / 130g</span></div><div class="bar"><i style="width:95%;background:var(--nut60);"></i></div></div>
+            <div class="goal"><div class="gtop"><span class="lab">Water</span><span class="val">1.8 / 2.5L</span></div><div class="bar"><i style="width:72%;background:var(--hyd60);"></i></div></div>
+            <div class="goal"><div class="gtop"><span class="lab">Training</span><span class="val">complete</span></div><div class="bar"><i style="width:100%;background:var(--act60);"></i></div></div>
+          </div>
+          <div class="callout tip" style="margin:0 0 14px;"><span class="ico">→</span><span class="body">Tomorrow: easy 8km and front-load hydration before noon.</span></div>
+          <div class="r-link">Collapse</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="font-size:14px;color:var(--n50);border-top:1px solid var(--n30);padding-top:16px;">
+    <b style="color:var(--n80);">Open decisions:</b> icons are placeholders — final glyphs need drawing in the Ottavia set. Weight has no native domain color; I assigned it hydration blue as a calm "measurement" read — flag if you'd rather it be neutral. Day recap is my proposal: it's the only report that summarizes <i>your actions</i> rather than a sensor event, so it leans on goal-progress + a forward nudge instead of a single sensor trend. Structure not canonized — Playground mock for critique.
+  </div>
+
+</div>
+
+<!-- ============ SECTION E: DAY DIVIDER ============ -->
+<style>
+.dd-wrap{max-width:1100px;margin:0 auto;}
+.dd-variants{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:40px;}
+.dd-card{background:var(--n10);border:1px solid var(--n20);border-radius:var(--r-2xl);padding:24px;}
+.dd-card .dh{font-size:16px;font-weight:700;margin-bottom:2px;}
+.dd-card .dsub{font-size:13px;color:var(--n60);margin-bottom:18px;}
+.dd-card .stage{background:var(--n10);border-radius:var(--r-lg);}
+/* divider — default */
+.day-div{display:flex;align-items:center;gap:14px;margin:8px 0;}
+.day-div .ln{flex:1;height:1px;background:var(--n20);}
+.day-pill{font-size:14px;font-weight:700;color:var(--n60);padding:6px 14px;border-radius:var(--r-full);background:rgba(255,255,255,.65);border:1px solid #fff;box-shadow:var(--sh-glass);white-space:nowrap;}
+/* divider — prominent (recommended) */
+.day-div.prom{margin:30px 0;}
+.day-div.prom .ln{background:var(--n20);}
+.day-div.prom .day-pill{font-size:15px;color:var(--n80);padding:9px 18px;display:inline-flex;align-items:center;gap:9px;}
+.day-div.prom .day-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--green60);}
+.day-div.prom .day-pill .today{color:var(--green60);}
+/* divider — enriched */
+.day-div.rich .day-pill{flex-direction:column;align-items:center;gap:2px;padding:8px 18px;}
+.day-div.rich .day-pill .dl{font-size:15px;color:var(--n80);}
+.day-div.rich .day-pill .ds{font-size:12px;color:var(--n50);font-weight:400;}
+/* sticky demo */
+.demo-phone{width:390px;margin:0 auto;background:var(--n10);border-radius:32px;border:1px solid var(--n20);box-shadow:var(--sh-lg);overflow:hidden;}
+.demo-scroll{height:460px;overflow-y:auto;padding:0 18px 24px;position:relative;}
+.day-div.sticky{position:sticky;top:0;z-index:6;margin:0;padding:14px 0 12px;background:linear-gradient(to bottom,var(--n10) 70%,rgba(245,241,234,0));backdrop-filter:blur(4px);}
+.demo-msg{background:#fff;border:1px solid var(--n20);border-radius:18px;padding:12px 14px;font-size:15px;color:var(--n70);margin:10px 0;box-shadow:var(--sh-sm);}
+.demo-msg.u{background:var(--n20);border:none;margin-left:auto;max-width:75%;color:var(--n80);}
+.demo-msg .mt{font-size:11px;color:var(--n40);margin-top:4px;}
+.demo-mini-rep{background:#fff;border:1px solid var(--n20);border-radius:18px;padding:14px;margin:10px 0;box-shadow:var(--sh-sm);}
+.demo-mini-rep .mc{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:4px 10px;border-radius:var(--r-full);margin-bottom:8px;}
+.demo-mini-rep .mhl{font-size:17px;font-weight:700;color:var(--n80);line-height:21px;}
+.dd-side{display:grid;grid-template-columns:390px 1fr;gap:32px;align-items:center;}
+.dd-side .pts{list-style:none;}
+.dd-side .pts li{font-size:15px;color:var(--n70);padding:9px 0;border-bottom:1px solid var(--n20);}
+.dd-side .pts li:last-child{border:none;}
+.dd-side .pts b{color:var(--n80);}
+</style>
+
+<div class="section-label">Section E</div>
+<div class="section-title">Day divider — so the day boundary survives scrolling</div>
+<div class="section-sub">A plain centered date scrolls away and you lose it. The fix is a divider that's prominent in the flow and sticks to the top while you're inside that day.</div>
+
+<div class="dd-wrap">
+
+  <div class="dd-variants">
+    <div class="dd-card">
+      <div class="dh">Default</div>
+      <div class="dsub">Minimal, familiar. Hairlines + glass pill, relative label.</div>
+      <div class="stage" style="padding:14px 16px;">
+        <div class="day-div"><span class="ln"></span><span class="day-pill">Yesterday</span><span class="ln"></span></div>
+      </div>
+    </div>
+    <div class="dd-card">
+      <div class="dh">Prominent <span style="font-size:12px;color:var(--green60);">· recommended</span></div>
+      <div class="dsub">More air above/below, larger pill, accent dot on "today".</div>
+      <div class="stage" style="padding:6px 16px;">
+        <div class="day-div prom"><span class="ln"></span><span class="day-pill"><span class="dot"></span><span class="today">Today</span></span><span class="ln"></span></div>
+      </div>
+    </div>
+    <div class="dd-card">
+      <div class="dh">Dated</div>
+      <div class="dsub">Explicit date for older days once "Today/Yesterday" runs out.</div>
+      <div class="stage" style="padding:14px 16px;">
+        <div class="day-div prom"><span class="ln"></span><span class="day-pill"><span style="color:var(--n80);">Wed · Jun 19</span></span><span class="ln"></span></div>
+      </div>
+    </div>
+    <div class="dd-card">
+      <div class="dh">Enriched <span style="font-size:12px;color:var(--rec70);">· optional</span></div>
+      <div class="dsub">Doubles as a one-line day anchor. Note: overlaps the Day recap report.</div>
+      <div class="stage" style="padding:10px 16px;">
+        <div class="day-div prom rich"><span class="ln"></span><span class="day-pill"><span class="dl">Tue · Jun 18</span><span class="ds">trained · slept 7h48m</span></span><span class="ln"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dd-side">
+    <div class="demo-phone">
+      <div class="demo-scroll">
+        <div class="day-div sticky"><span class="ln"></span><span class="day-pill"><span class="dl">Tue · Jun 18</span></span><span class="ln"></span></div>
+        <div class="demo-msg u">How was my run today?<div class="mt">5:40 PM</div></div>
+        <div class="demo-msg">Strong tempo — you held threshold the whole way. Nice control on the back half.<div class="mt">5:40 PM</div></div>
+        <div class="demo-mini-rep"><span class="mc" style="background:var(--nut10);color:var(--green60);">Day recap · 9:30 PM</span><div class="mhl">Solid day — training and protein landed.</div></div>
+        <div class="demo-msg u">Thanks, night<div class="mt">9:34 PM</div></div>
+
+        <div class="day-div sticky prom"><span class="ln"></span><span class="day-pill"><span class="dot"></span><span class="today">Today</span></span><span class="ln"></span></div>
+        <div class="demo-mini-rep"><span class="mc" style="background:var(--rec10);color:var(--rec70);">Sleep report · 7:02 AM</span><div class="mhl">You recovered well — deep sleep was your best in a week.</div></div>
+        <div class="demo-msg">Morning. Recovery's green — HRV 64, up 4 on your average. Good day to train.<div class="mt">7:05 AM</div></div>
+        <div class="demo-msg u">What should I eat first?<div class="mt">7:30 AM</div></div>
+        <div class="demo-msg">Aim for 35g protein in the next hour — you've got the run at 9.<div class="mt">7:30 AM</div></div>
+        <div class="demo-msg">Keep scrolling — the day pill above stays pinned until tomorrow takes over.<div class="mt">7:31 AM</div></div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--n50);font-weight:500;margin-bottom:12px;">Scroll the phone ↑</div>
+      <ul class="pts">
+        <li><b>Sticky on scroll</b> — the active day pins to the top of the thread and only leaves when the next day scrolls up to replace it. This is what fixes "I lost track."</li>
+        <li><b>Relative labels</b> — Today / Yesterday read instantly; fall back to "Wed · Jun 19" for older days.</li>
+        <li><b>Prominence by air</b> — 30px of breathing room and a filled glass pill make it register as a section break, not another message.</li>
+        <li><b>Accent on Today</b> — the green dot marks the live day at a glance.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="font-size:14px;color:var(--n50);border-top:1px solid var(--n30);padding-top:16px;margin-top:32px;">
+    <b style="color:var(--n80);">Recommendation:</b> ship <b>Prominent + sticky</b> with relative labels as the default; use <b>Dated</b> automatically once a day is older than yesterday. Hold the <b>Enriched</b> variant — its micro-summary competes with the Day recap report for the same job, so pick one home for "how the day went" rather than saying it twice. Mock for critique, not canonized.
+  </div>
+
+</div>
+
+<!-- ============ SECTION F: DAY DIVIDER — REVISED ============ -->
+<style>
+.f-wrap{max-width:1100px;margin:0 auto;}
+.f-note{background:var(--war10);border:1px solid var(--war30);border-radius:var(--r-lg);padding:12px 16px;font-size:14px;color:var(--n70);margin-bottom:28px;}
+.f-note b{color:var(--n80);}
+.cmp2{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;}
+.cmp2 .dirhead{font-size:18px;font-weight:700;color:var(--n80);}
+.cmp2 .dirsub{font-size:14px;color:var(--n60);margin:2px 0 14px;}
+.cmp2 .specs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.cmp2 .spec{font-size:12px;font-weight:700;background:var(--n10);border:1px solid var(--n20);color:var(--n60);padding:3px 9px;border-radius:var(--r-full);}
+.fdemo{width:100%;max-width:390px;margin:0 auto;background:var(--n10);border-radius:32px;border:1px solid var(--n20);box-shadow:var(--sh-lg);overflow:hidden;}
+.fscroll{height:440px;overflow-y:auto;padding:0 18px 24px;position:relative;}
+.fmsg{background:#fff;border:1px solid var(--n20);border-radius:18px;padding:11px 14px;font-size:15px;color:var(--n70);margin:10px 0;box-shadow:var(--sh-sm);}
+.fmsg.u{background:var(--n20);border:none;margin-left:auto;max-width:75%;color:var(--n80);}
+.fmini{background:#fff;border:1px solid var(--n20);border-radius:18px;padding:13px;margin:10px 0;box-shadow:var(--sh-sm);}
+.fmini .mc{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:4px 10px;border-radius:var(--r-full);margin-bottom:7px;}
+.fmini .mhl{font-size:16px;font-weight:700;color:var(--n80);line-height:20px;}
+/* Direction 1 — inverse solid pill */
+.dd-inv{display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:6;padding:16px 0 14px;background:linear-gradient(to bottom,var(--n10) 72%,rgba(245,241,234,0));}
+.dd-inv .ln{flex:1;height:1px;background:var(--n20);}
+.dd-inv .pill{background:var(--n80);color:var(--n0);font-size:14px;font-weight:700;padding:8px 16px;border-radius:var(--r-full);display:inline-flex;align-items:center;gap:8px;white-space:nowrap;box-shadow:var(--sh-md);}
+.dd-inv .pill .dot{width:7px;height:7px;border-radius:50%;background:var(--lim50);}
+/* Direction 2 — full-width sticky band */
+.dd-band{position:sticky;top:0;z-index:6;margin:8px -18px;padding:11px 18px;background:var(--n20);display:flex;align-items:center;gap:11px;box-shadow:0 4px 10px rgba(67,62,54,.07);}
+.dd-band .tick{width:4px;height:17px;border-radius:2px;background:var(--green60);}
+.dd-band .dl{font-size:15px;font-weight:700;color:var(--n80);}
+.dd-band .ds{font-size:13px;color:var(--n60);margin-left:auto;}
+.dd-band.today{background:var(--n80);}
+.dd-band.today .dl{color:var(--n0);}
+.dd-band.today .ds{color:var(--n30);}
+.dd-band.today .tick{background:var(--lim50);}
+</style>
+
+<div class="section-label">Section F</div>
+<div class="section-title">Day divider — revised (breaking from the nav glass)</div>
+<div class="section-sub">Scroll each phone. Both drop the glass pill so the divider stops impersonating primary navigation, raise contrast, give it its own color, and pin on scroll.</div>
+
+<div class="f-wrap">
+  <div class="f-note"><b>Why this supersedes Section E:</b> the glass pill in E is the header's nav language (date pill, Ottavia selector, profile) — all tappable. A passive day marker shouldn't wear it. These two use a reserved structural treatment instead, not nav-glass and not a domain color.</div>
+
+  <div class="cmp2">
+
+    <!-- DIRECTION 1 -->
+    <div>
+      <div class="dirhead">1 · Inverse solid pill</div>
+      <div class="dirsub">Keeps the centered chat-divider shape, flips the treatment: solid dark fill, cream text. Clearly not a glass nav control.</div>
+      <div class="specs"><span class="spec">fill neutral/80</span><span class="spec">text neutral/0</span><span class="spec">lime dot = today</span><span class="spec">sticky + shadow</span></div>
+      <div class="fdemo">
+        <div class="fscroll">
+          <div class="dd-inv"><span class="ln"></span><span class="pill">Tue · Jun 18</span><span class="ln"></span></div>
+          <div class="fmsg u">How was my run today?</div>
+          <div class="fmsg">Strong tempo — you held threshold the whole way.</div>
+          <div class="fmini"><span class="mc" style="background:var(--nut10);color:var(--green60);">Day recap · 9:30 PM</span><div class="mhl">Solid day — training and protein landed.</div></div>
+          <div class="fmsg u">Thanks, night</div>
+          <div class="dd-inv"><span class="ln"></span><span class="pill"><span class="dot"></span>Today</span><span class="ln"></span></div>
+          <div class="fmini"><span class="mc" style="background:var(--rec10);color:var(--rec70);">Sleep report · 7:02 AM</span><div class="mhl">You recovered well — deep sleep was your best in a week.</div></div>
+          <div class="fmsg">Morning. Recovery's green — HRV 64, up 4 on your average.</div>
+          <div class="fmsg u">What should I eat first?</div>
+          <div class="fmsg">35g protein in the next hour — you've got the run at 9.</div>
+          <div class="fmsg">Keep scrolling — the dark pill stays pinned until tomorrow takes over.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIRECTION 2 -->
+    <div>
+      <div class="dirhead">2 · Full-width sticky band</div>
+      <div class="dirsub">Not a pill at all — a left-aligned section header that spans the column and pins. Maximum scroll-clarity; unmistakably structural.</div>
+      <div class="specs"><span class="spec">band neutral/20 · today neutral/80</span><span class="spec">accent tick</span><span class="spec">left-aligned</span><span class="spec">sticky + shadow</span></div>
+      <div class="fdemo">
+        <div class="fscroll">
+          <div class="dd-band"><span class="tick"></span><span class="dl">Tue · Jun 18</span><span class="ds">trained · slept 7h48m</span></div>
+          <div class="fmsg u">How was my run today?</div>
+          <div class="fmsg">Strong tempo — you held threshold the whole way.</div>
+          <div class="fmini"><span class="mc" style="background:var(--nut10);color:var(--green60);">Day recap · 9:30 PM</span><div class="mhl">Solid day — training and protein landed.</div></div>
+          <div class="fmsg u">Thanks, night</div>
+          <div class="dd-band today"><span class="tick"></span><span class="dl">Today</span><span class="ds">Wed · Jun 19</span></div>
+          <div class="fmini"><span class="mc" style="background:var(--rec10);color:var(--rec70);">Sleep report · 7:02 AM</span><div class="mhl">You recovered well — deep sleep was your best in a week.</div></div>
+          <div class="fmsg">Morning. Recovery's green — HRV 64, up 4 on your average.</div>
+          <div class="fmsg u">What should I eat first?</div>
+          <div class="fmsg">35g protein in the next hour — you've got the run at 9.</div>
+          <div class="fmsg">Keep scrolling — the band stays pinned and the day is always visible.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="font-size:14px;color:var(--n50);border-top:1px solid var(--n30);padding-top:16px;margin-top:32px;">
+    <b style="color:var(--n80);">Read it on scroll:</b> #1 stays light and chat-native but reads clearly as "not nav" via the dark fill. #2 is the strongest day-orientation — the day name is always on screen, left-aligned like a calendar section. Both use a <b>reserved structural color</b> (neutral-inverse), with lime/green only as the "today" accent — no domain color borrowed. Pick one and I'll build it in Figma and add the <code>marker</code> token. Mock for critique.
+  </div>
+
+</div>
+
+<!-- ============ SECTION G: DATE AS SYSTEM MESSAGE ============ -->
+<style>
+.g-wrap{max-width:1100px;margin:0 auto;}
+.g-fam{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px;}
+.g-fam .fi{font-size:14px;color:var(--n70);background:var(--n10);border:1px solid var(--n20);border-radius:var(--r-lg);padding:10px 14px;}
+.g-fam .fi b{color:var(--n80);}
+.gcols{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;}
+.gcols .dirhead{font-size:18px;font-weight:700;color:var(--n80);}
+.gcols .dirsub{font-size:14px;color:var(--n60);margin:2px 0 14px;}
+/* system message — info (grey), matches the Ottavia mobile-app banner */
+.sysmsg{margin:12px 0;padding:12px 18px;border-radius:var(--r-xl);background:#ECE6DB;text-align:center;}
+.sysmsg .l1{font-size:14px;color:var(--n60);line-height:19px;}
+.sysmsg .l2{font-size:14px;color:var(--n50);line-height:19px;}
+.sysmsg a{color:var(--n70);text-decoration:underline;}
+/* date system message — sticky */
+.datemsg{position:sticky;top:0;z-index:6;margin:10px 0;padding:11px 18px;border-radius:var(--r-xl);text-align:center;font-size:14px;font-weight:700;}
+.datemsg.solid{background:var(--green60);color:var(--n0);box-shadow:0 4px 10px rgba(47,112,63,.18);}
+.datemsg.solid .sub{color:var(--nut30);font-weight:400;}
+.datemsg.tint{background:var(--nut10);color:var(--green60);border:1px solid var(--nut30);}
+.datemsg.tint .sub{color:var(--nut70);font-weight:400;opacity:.8;}
+.datemsg .sub{margin-left:6px;}
+/* reuse F demo shells */
+</style>
+
+<div class="section-label">Section G</div>
+<div class="section-title">Date as a green system message</div>
+<div class="section-sub">Your call: the date joins the system-message family instead of the nav family. Same banner shape; color encodes type. Scroll each phone — the date banner pins.</div>
+
+<div class="g-wrap">
+  <div class="g-fam">
+    <div class="fi"><b>Grey banner</b> = info / system event ("X is now part of your guidance")</div>
+    <div class="fi"><b>Green banner</b> = date boundary</div>
+    <div class="fi" style="border-left:3px solid var(--war60);"><b>Watch:</b> green also reads as nutrition / success — full-width banner context keeps it "structural," but worth a gut-check</div>
+  </div>
+
+  <div class="gcols">
+
+    <!-- SOLID GREEN -->
+    <div>
+      <div class="dirhead">A · Solid brand green</div>
+      <div class="dirsub">Highest contrast and prominence. Cream text on #2F703F, pinned with a green shadow.</div>
+      <div class="fdemo">
+        <div class="fscroll">
+          <div class="datemsg solid">Tue · Jun 18</div>
+          <div class="sysmsg"><div class="l1">Dominique L. is now part of your guidance.</div><div class="l2">You can always change in the <a href="#">Expert Hub</a></div></div>
+          <div class="fmsg u">How was my run today?</div>
+          <div class="fmsg">Strong tempo — you held threshold the whole way.</div>
+          <div class="fmini"><span class="mc" style="background:var(--nut10);color:var(--green60);">Day recap · 9:30 PM</span><div class="mhl">Solid day — training and protein landed.</div></div>
+          <div class="datemsg solid">Today<span class="sub">Wed · Jun 19</span></div>
+          <div class="fmini"><span class="mc" style="background:var(--rec10);color:var(--rec70);">Sleep report · 7:02 AM</span><div class="mhl">You recovered well — deep sleep was your best in a week.</div></div>
+          <div class="fmsg">Morning. Recovery's green — HRV 64, up 4 on your average.</div>
+          <div class="fmsg u">What should I eat first?</div>
+          <div class="fmsg">35g protein in the next hour — you've got the run at 9.</div>
+          <div class="fmsg">Keep scrolling — the green date stays pinned.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TINT GREEN -->
+    <div>
+      <div class="dirhead">B · Soft green tint</div>
+      <div class="dirsub">Calmer. Green text on a pale green fill — differentiated by hue, lower contrast, sits quieter in-thread.</div>
+      <div class="fdemo">
+        <div class="fscroll">
+          <div class="datemsg tint">Tue · Jun 18</div>
+          <div class="sysmsg"><div class="l1">Dominique L. is now part of your guidance.</div><div class="l2">You can always change in the <a href="#">Expert Hub</a></div></div>
+          <div class="fmsg u">How was my run today?</div>
+          <div class="fmsg">Strong tempo — you held threshold the whole way.</div>
+          <div class="fmini"><span class="mc" style="background:var(--nut10);color:var(--green60);">Day recap · 9:30 PM</span><div class="mhl">Solid day — training and protein landed.</div></div>
+          <div class="datemsg tint">Today<span class="sub">Wed · Jun 19</span></div>
+          <div class="fmini"><span class="mc" style="background:var(--rec10);color:var(--rec70);">Sleep report · 7:02 AM</span><div class="mhl">You recovered well — deep sleep was your best in a week.</div></div>
+          <div class="fmsg">Morning. Recovery's green — HRV 64, up 4 on your average.</div>
+          <div class="fmsg u">What should I eat first?</div>
+          <div class="fmsg">35g protein in the next hour — you've got the run at 9.</div>
+          <div class="fmsg">Keep scrolling — the tinted date stays pinned.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="font-size:14px;color:var(--n50);border-top:1px solid var(--n30);padding-top:16px;margin-top:32px;">
+    <b style="color:var(--n80);">My read:</b> this is the right home for the date — it stops competing with nav and inherits a pattern users already parse as "the app telling me something." <b>Solid (A)</b> nails your contrast + prominence asks; <b>tint (B)</b> is gentler but leans on hue alone, which is the weakest signal on a small pinned strip. I'd ship <b>A</b>. One genuine caveat: green is also your nutrition/success color — if that ever feels ambiguous, the same banner in a neutral-ink fill keeps the family without the hue overload. Pick A or B and I'll build it in Figma as a <code>System Message</code> component with an <code>info / date</code> variant. Mock for critique.
+  </div>
+
+</div>
+
+<!-- ============ SECTION H: MORNING BRIEF ============ -->
+<style>
+.h-wrap{max-width:1100px;margin:0 auto;}
+.h-cols{display:grid;grid-template-columns:430px 1fr;gap:40px;align-items:start;}
+.fixlist{list-style:none;}
+.fixlist li{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--n20);font-size:14px;line-height:20px;color:var(--n70);}
+.fixlist li:last-child{border:none;}
+.fixlist .was{color:var(--err60);font-weight:700;}
+.fixlist .now{color:var(--nut70);font-weight:700;}
+.fixlist b{color:var(--n80);}
+.fixhdr{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--n50);font-weight:500;margin-bottom:6px;}
+.mb-chip{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:var(--r-full);font-size:14px;font-weight:700;margin-bottom:14px;background:var(--nut10);color:var(--green60);}
+.combine-note{background:var(--nut10);border:1px solid var(--nut30);border-radius:var(--r-xl);padding:16px 18px;font-size:14px;line-height:20px;color:var(--n70);margin-top:20px;}
+.combine-note b{color:var(--n80);}
+</style>
+
+<div class="section-label">Section H</div>
+<div class="section-title">Morning brief — redesign</div>
+<div class="section-sub">Same data as today's production output, re-composed: one message, verdict-first, blocks instead of bullets, no plumbing leaks. Sleep folds in as a drill-down.</div>
+
+<div class="h-wrap">
+  <div class="h-cols">
+
+    <!-- redesigned phone -->
+    <div>
+      <div class="phone">
+        <div class="statusbar"><span>7:02</span><span class="icons">▲ ▾ ▮</span></div>
+        <div class="appheader">
+          <div class="date-pill glass"><span class="d">24</span><span class="w">tue</span></div>
+          <div class="ottavia-sel glass">Ottavia <span class="chev">▼</span></div>
+          <div class="profile glass">◍</div>
+        </div>
+        <div class="thread">
+          <div class="datemsg solid" style="position:static;margin:6px 0 16px;">Today<span class="sub">Tue · Jun 24</span></div>
+          <div class="rep-card" style="width:auto;">
+            <span class="rtype" style="background:var(--nut10);color:var(--green60);"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18h18"/><path d="M7 18a5 5 0 0 1 10 0"/><path d="M12 4v3M5.5 7.5l1.5 1.5M18.5 7.5 17 9"/></svg> Morning brief · 7:02 AM</span>
+            <div class="r-headline">Recovery's turning a corner — keep today light and recovery-first.</div>
+            <div class="r-stats">
+              <div class="rs"><div class="rsl">Sleep</div><div class="rsv" style="color:var(--nut70);">76 ↑</div></div>
+              <div class="rs"><div class="rsl">Readiness</div><div class="rsv">Fair</div></div>
+              <div class="rs"><div class="rsl">Protein</div><div class="rsv">63<span style="font-size:13px;color:var(--n50);">/70g</span></div></div>
+            </div>
+            <div class="r-divide"></div>
+            <div class="r-body"><p>Your sleep score climbed from 49 to 76 after a few restless nights — good direction, but not fully topped up. Yesterday was zero steps and only 495 ml of water, so today is about gentle movement and fluids.</p></div>
+            <div class="r-blocklabel">Today's focus</div>
+            <div class="checklist" style="margin:0 0 14px;">
+              <div class="ck"><span class="box"></span><span>Easy 15-min walk — only if you feel stable</span></div>
+              <div class="ck"><span class="box"></span><span>Front-load fluids — aim 2.4 L, most before evening</span></div>
+              <div class="ck"><span class="box"></span><span>Stop eating by 18:00</span></div>
+              <div class="ck"><span class="box"></span><span>Wind down earlier than last night</span></div>
+            </div>
+            <div class="r-link">See full sleep report →</div>
+          </div>
+          <div class="chips"><span class="chip">Log breakfast</span><span class="chip">Why so light today?</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- fixes -->
+    <div>
+      <div class="fixhdr">What changed from today's version</div>
+      <ul class="fixlist">
+        <li><span><span class="was">Was</span> a 6-line bold wall. <span class="now">Now</span> <b>one verdict line</b> + 3 glanceable stats. Lead with the takeaway, not the data dump.</span></li>
+        <li><span><span class="was">Was</span> "Fetching today's nutrition entries…", "### Log your dinner?". <span class="now">Now</span> <b>zero plumbing</b> — tool narration and raw markdown never reach the bubble.</span></li>
+        <li><span><span class="was">Was</span> <code>2026-06-16</code>, <code>very_stressful_awake tags</code>. <span class="now">Now</span> <b>natural language</b> — "a few restless nights," "yesterday."</span></li>
+        <li><span><span class="was">Was</span> loose bullets you can't act on. <span class="now">Now</span> a <b>tappable checklist</b> — today's plan you can actually check off.</span></li>
+        <li><span><span class="was">Was</span> "Log your breakfast?" mashed into the paragraph. <span class="now">Now</span> a clean <b>"Log breakfast" chip</b>.</span></li>
+        <li><span><span class="was">Was</span> two messages glued together. <span class="now">Now</span> <b>one message</b>, clear hierarchy and spacing.</span></li>
+        <li><span><span class="now">New</span> sleep depth is a <b>"See full sleep report →"</b> drill-down — not a second 7am push.</span></li>
+      </ul>
+
+      <div class="combine-note">
+        <b>Combine vs separate:</b> keep Morning brief and Sleep report as distinct components, but send <b>one morning message</b> — the brief, leading with the sleep verdict, with the full Sleep report one tap away. Synthesis is primary; the one-domain deep-dive is on demand. And give both <b>synthesis reports (Morning brief + Day recap) the brand-green chip</b>, so they read differently from the domain-colored sensor reports (Sleep / Workout / Weight).
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

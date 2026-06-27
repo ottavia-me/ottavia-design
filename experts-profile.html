@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ottavia Experts Profile Mockup</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #f4f2ee;
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "SF Pro Display", "Segoe UI", sans-serif;
+      color: #34302b;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 32px;
+    }
+
+    .stage {
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+    }
+
+    .phone {
+      width: 390px;
+      height: 844px;
+      background: linear-gradient(180deg, #fffdf9 0%, #f7f3ed 100%);
+      border-radius: 34px;
+      box-shadow: 0 24px 70px rgba(55, 48, 40, 0.14);
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(80, 70, 58, 0.08);
+    }
+
+    .screen {
+      height: 100%;
+      overflow-y: auto;
+      padding: 18px 22px 32px;
+    }
+
+    .status {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #050505;
+      margin-bottom: 26px;
+      padding: 0 4px;
+    }
+
+    .icons { letter-spacing: 2px; font-size: 12px; }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .icon-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(60, 50, 42, .08);
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      color: #3f3933;
+    }
+
+    .share { font-size: 18px; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 170px;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: .06em;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: #f4e8ef;
+      color: #7d6175;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 45px;
+      line-height: .94;
+      margin: 0 0 10px;
+      letter-spacing: -.04em;
+      color: #332d28;
+    }
+
+    h2 {
+      font-size: 22px;
+      margin: 28px 0 14px;
+      letter-spacing: -.03em;
+    }
+
+    h3 {
+      font-size: 15px;
+      margin: 0 0 5px;
+      letter-spacing: -.02em;
+    }
+
+    p {
+      margin: 0;
+      line-height: 1.42;
+      color: #645e56;
+      font-size: 14px;
+    }
+
+    .subtitle { font-size: 15px; color: #665f57; margin-bottom: 12px; }
+
+    .portrait {
+      height: 210px;
+      border-radius: 95px 95px 26px 26px;
+      overflow: hidden;
+      background: #e5d8ca;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      box-shadow: inset 0 -18px 40px rgba(0,0,0,.08);
+    }
+
+    .portrait img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: rgba(63, 57, 48, .08);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 14px;
+      border: 1px solid rgba(63, 57, 48, .08);
+    }
+
+    .metric {
+      background: rgba(255, 255, 255, .73);
+      padding: 12px 8px;
+      text-align: center;
+      min-height: 66px;
+    }
+
+    .metric strong { display: block; font-size: 14px; color: #302b26; }
+    .metric span { display: block; font-size: 10px; color: #756f68; line-height: 1.2; }
+
+    .card {
+      background: rgba(255,255,255,.7);
+      border: 1px solid rgba(63, 57, 48, .1);
+      border-radius: 19px;
+      box-shadow: 0 10px 28px rgba(61, 49, 37, .05);
+      padding: 16px;
+    }
+
+    .recommend {
+      background: linear-gradient(135deg, #fff5f0, #f4ecff);
+      margin-bottom: 22px;
+      position: relative;
+    }
+
+    .sparkle {
+      position: absolute;
+      right: 17px;
+      top: 17px;
+      color: #8560c8;
+    }
+
+    .list-card { padding: 0; overflow: hidden; }
+
+    .reason, .influence {
+      display: flex;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(63, 57, 48, .08);
+      align-items: flex-start;
+    }
+
+    .reason:last-child, .influence:last-child { border-bottom: 0; }
+
+    .bubble {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      font-size: 15px;
+      background: #eef6ff;
+    }
+
+    .purple { background: #f1eafd; }
+    .green { background: #e9f5e8; }
+    .orange { background: #fff0df; }
+    .blue { background: #eaf5ff; }
+
+    .knowledge {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+
+    .cover {
+      width: 60px;
+      height: 72px;
+      border-radius: 10px;
+      background: linear-gradient(145deg, #203c48, #111b20);
+      color: white;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font-size: 9px;
+      line-height: 1.1;
+      padding: 8px;
+      font-weight: 700;
+      flex: 0 0 auto;
+    }
+
+    .cover.podcast { background: linear-gradient(145deg, #7e58bd, #4d327c); font-size: 26px; }
+    .cover.article { background: linear-gradient(145deg, #e6d6c0, #c6ad8e); font-size: 26px; }
+
+    .chev { margin-left: auto; font-size: 20px; color: #5d554e; }
+
+    .cta {
+      position: sticky;
+      bottom: 0;
+      background: linear-gradient(180deg, rgba(247,243,237,0), #f7f3ed 28%);
+      padding-top: 18px;
+      margin-top: 20px;
+    }
+
+    .price-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(63, 57, 48, .09);
+      border-radius: 20px;
+      padding: 15px;
+    }
+
+    .price { font-size: 26px; letter-spacing: -.04em; color: #332d28; }
+    .price small { font-size: 13px; color: #726b63; }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 15px 20px;
+      background: #403a33;
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .small-note {
+      font-size: 11px;
+      color: #938b82;
+      text-align: center;
+      margin-top: 13px;
+    }
+
+    .hub-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -.03em;
+    }
+
+    .counter {
+      background: #f1ece5;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: #5d554d;
+    }
+
+    .expert-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px;
+      border-radius: 17px;
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(63,57,48,.09);
+      margin-top: 10px;
+    }
+
+    .avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #ddd;
+      flex: 0 0 auto;
+    }
+
+    .active {
+      background: #e9f6df;
+      color: #5b8a3f;
+      font-size: 11px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      margin-left: auto;
+      font-weight: 700;
+    }
+
+    .plus {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid rgba(63,57,48,.1);
+      background: #f7f2eb;
+      display: grid;
+      place-items: center;
+      margin-left: auto;
+      font-size: 22px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      overflow: hidden;
+      margin: 14px 0;
+    }
+
+    .tab {
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(63,57,48,.1);
+      font-size: 13px;
+      color: #6e665e;
+      background: rgba(255,255,255,.55);
+    }
+
+    .tab.active-tab {
+      background: #3f3933;
+      color: white;
+    }
+
+    .footer-note {
+      position: absolute;
+      bottom: 18px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: #82796f;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="phone">
+      <div class="screen">
+        <div class="status"><span>9:41</span><span class="icons">▮▮▮ ᯤ ▱</span></div>
+        <div class="topbar"><div class="icon-btn">‹</div><div class="icon-btn share">⇧</div></div>
+
+        <section class="hero">
+          <div>
+            <span class="tag">RECOVERY</span>
+            <h1>Dr. Maya<br/>Levin</h1>
+            <p class="subtitle">Recovery Specialist</p>
+            <p>Helping endurance athletes recover harder, sleep deeper and train longer.</p>
+          </div>
+          <div class="portrait">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=500&q=80" alt="Dr. Maya Levin portrait" />
+          </div>
+        </section>
+
+        <div class="metrics">
+          <div class="metric"><strong>240k</strong><span>followers</span></div>
+          <div class="metric"><strong>2</strong><span>books</span></div>
+          <div class="metric"><strong>12</strong><span>podcasts</span></div>
+          <div class="metric"><strong>400+</strong><span>articles</span></div>
+        </div>
+
+        <div class="card recommend">
+          <span class="sparkle">✦</span>
+          <h3>Recommended for you</h3>
+          <p>Based on your recent training load, sleep variability and recovery patterns.</p>
+        </div>
+
+        <h2>Why she fits your profile</h2>
+        <div class="card list-card">
+          <div class="reason"><span class="bubble blue">🏃</span><p>You train 4–5x per week</p></div>
+          <div class="reason"><span class="bubble purple">☾</span><p>Recovery variability detected</p></div>
+          <div class="reason"><span class="bubble green">♡</span><p>Sleep impacts your performance</p></div>
+          <div class="reason"><span class="bubble orange">☻</span><p>You often ask about recovery and fatigue</p></div>
+        </div>
+        <p style="margin-top:14px">Her approach focuses on balancing training stress with recovery capacity.</p>
+
+        <h2>What she brings into Ottavia</h2>
+        <div class="card knowledge">
+          <div class="cover">ADAPTIVE<br/>ATHLETE</div>
+          <div><h3>Books</h3><p>2 titles</p><p>The Adaptive Athlete<br/>Recovery Before Intensity</p></div>
+          <div class="chev">›</div>
+        </div>
+        <div class="card knowledge">
+          <div class="cover podcast">◉</div>
+          <div><h3>Podcasts</h3><p>12 episodes integrated</p><p>Sleep • HRV • Recovery • Stress</p></div>
+          <div class="chev">›</div>
+        </div>
+        <div class="card knowledge">
+          <div class="cover article">□</div>
+          <div><h3>Articles & Frameworks</h3><p>400+ research-backed pieces</p><p>Applied to your data and context.</p></div>
+          <div class="chev">›</div>
+        </div>
+
+        <h2>How Ottavia changes with Dr. Maya</h2>
+        <div class="card list-card">
+          <div class="influence"><span class="bubble purple">⌁</span><div><h3>Recovery interpretation</h3><p>Your HRV and sleep trends receive stronger weight in training decisions.</p></div></div>
+          <div class="influence"><span class="bubble blue">▥</span><div><h3>Workout guidance</h3><p>Ottavia may reduce intensity sooner to prevent accumulated fatigue.</p></div></div>
+          <div class="influence"><span class="bubble green">▣</span><div><h3>Daily recommendations</h3><p>Recovery protocols and timing suggestions become part of your daily guidance.</p></div></div>
+        </div>
+
+        <div class="cta">
+          <div class="price-card">
+            <div><div class="price">$8.00 <small>/ month</small></div><p>Cancel anytime</p></div>
+            <button>Bring into Ottavia</button>
+          </div>
+          <div class="small-note">Educational content only. Not medical advice.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phone">
+      <div class="screen">
+        <div class="status"><span>9:41</span><span class="icons">▮▮▮ ᯤ ▱</span></div>
+        <div class="topbar"><div class="hub-title">Your experts</div><div class="icon-btn">×</div></div>
+
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <h2 style="margin:0; font-size:20px;">Active perspectives</h2>
+            <span class="counter">2 of 5</span>
+          </div>
+          <p>These experts shape Ottavia's guidance based on your data.</p>
+
+          <div class="expert-row">
+            <img class="avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80" alt="Maya" />
+            <div><h3>Dr. Maya Levin</h3><p>Recovery Specialist</p></div>
+            <span class="active">Active</span>
+          </div>
+
+          <div class="expert-row">
+            <img class="avatar" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=200&q=80" alt="James" />
+            <div><h3>Dr. James Nestor</h3><p>Breathing & Longevity</p></div>
+            <span class="active">Active</span>
+          </div>
+        </div>
+
+        <div class="expert-row" style="margin-top:14px;">
+          <span class="bubble purple">✦</span>
+          <div><h3>Explore more experts</h3></div>
+          <div class="chev">›</div>
+        </div>
+
+        <h2>More experts</h2>
+        <div class="tabs">
+          <div class="tab active-tab">All</div>
+          <div class="tab">Recovery</div>
+          <div class="tab">Nutrition</div>
+          <div class="tab">Performance</div>
+        </div>
+
+        <div class="expert-row"><img class="avatar" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80"/><div><h3>Dr. Stacy Sims</h3><p>Exercise Physiology & Nutrition</p></div><div class="plus">+</div></div>
+        <div class="expert-row"><img class="avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"/><div><h3>Dr. Rhonda Patrick</h3><p>Longevity & Healthspan</p></div><div class="plus">+</div></div>
+        <div class="expert-row"><img class="avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"/><div><h3>Ben Greenfield</h3><p>Performance & Biohacking</p></div><div class="plus">+</div></div>
+        <div class="expert-row"><img class="avatar" src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=200&q=80"/><div><h3>Dr. Andrew Huberman</h3><p>Neuroscience</p></div><div class="plus">+</div></div>
+        <div class="expert-row"><img class="avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80"/><div><h3>Sahar Yousef</h3><p>Nutrition & Metabolism</p></div><div class="plus">+</div></div>
+
+        <div class="footer-note">Educational content only. Not medical advice.</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

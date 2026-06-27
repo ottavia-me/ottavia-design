@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ottavia — Data Visualization v1</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --bg-primary: #F5F1EA;
+    --bg-card: #FFFFFF;
+    --text-primary: #433E36;
+    --text-secondary: #A8A297;
+    --text-muted: #8F897D;
+    --text-tertiary: #C2BCB2;
+    --border-light: #E7DFD0;
+    --border-subtle: #F0EBE4;
+    --neutral-80: #433E36;
+    --neutral-50: #8F897D;
+
+    /* Domain colors */
+    --hydration-bg: #DBEFFA;
+    --hydration-border: #92B7CE;
+    --hydration-title: #3A647E;
+    --hydration-text: #689BBB;
+
+    --activity-bg: #F9EFE0;
+    --activity-border: #E2C191;
+    --activity-title: #C08A48;
+    --activity-text: #D4A163;
+
+    --nutrition-bg: #D7F4E8;
+    --nutrition-border: #83BD96;
+    --nutrition-title: #4B8F61;
+    --nutrition-text: #58A471;
+
+    --recovery-bg: #E7EBFF;
+    --recovery-border: #8292D5;
+    --recovery-title: #58669D;
+    --recovery-text: #8292D5;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+    background: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  /* ---- Version Navigation ---- */
+  .version-nav {
+    position: fixed; left: 24px; top: 50%; transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 8px; z-index: 1000;
+  }
+  .version-nav a {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 10px 14px; background: #2a2a2a; border: 1px solid #3a3a3a;
+    border-radius: 10px; text-decoration: none; color: #999;
+    font-size: 13px; font-weight: 600; transition: all 0.2s;
+    min-width: 100px; text-align: center;
+  }
+  .version-nav a span { font-size: 10px; font-weight: 400; color: #666; margin-top: 2px; }
+  .version-nav a:hover { background: #333; border-color: #555; color: #ccc; }
+  .version-nav a.active { background: var(--neutral-80); border-color: var(--neutral-80); color: #fff; }
+  .version-nav a.active span { color: rgba(255,255,255,0.6); }
+
+  /* ---- Phone Frame ---- */
+  .phone-frame {
+    width: 390px; height: 844px; background: var(--bg-primary);
+    border-radius: 40px; overflow: hidden; position: relative;
+    box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+  }
+  .screen { height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .screen::-webkit-scrollbar { display: none; }
+
+  /* ---- Status Bar ---- */
+  .status-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 24px 0; height: 50px; background: var(--bg-primary);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .status-time {
+    font-size: 15px; font-weight: 600; color: var(--text-primary);
+  }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+
+  /* ---- Header ---- */
+  .top-header {
+    background: var(--bg-primary); padding: 6px 20px 14px;
+    position: sticky; top: 50px; z-index: 99;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .top-header-row { display: flex; align-items: center; justify-content: space-between; }
+  .top-header h1 {
+    font-size: 24px; font-weight: 600; color: var(--neutral-50); letter-spacing: 0; line-height: 32px;
+  }
+  .top-header h1 .dynamic-day { color: var(--neutral-80); }
+
+  /* ---- Chat content ---- */
+  .chat {
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* User bubble */
+  .user-bubble {
+    align-self: flex-end;
+    background: var(--bg-card);
+    border-radius: 22px;
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 26px;
+    color: var(--text-primary);
+    max-width: 80%;
+    letter-spacing: 0.2px;
+  }
+
+  /* Ottavia text */
+  .ottavia-text {
+    font-size: 18px;
+    line-height: 26px;
+    color: var(--text-primary);
+    letter-spacing: 0.2px;
+  }
+  .ottavia-text strong { font-weight: 600; }
+
+  /* ========================================
+     VIZ CARD — White container, system typography
+     ======================================== */
+  .viz-card {
+    background: #FFFFFF;
+    border-radius: 24px;
+    padding: 16px 18px 14px;
+    border: 1px solid var(--border-light);
+    margin: 2px 0;
+  }
+
+  /* Card header */
+  .viz-header {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;
+  }
+  .viz-title { font-size: 18px; font-weight: 600; color: #000; letter-spacing: 0; line-height: 24px; }
+  .viz-date { font-size: 14px; color: #C2BCB1; line-height: 24px; letter-spacing: 0; }
+
+  /* Summary value — domain color applied via inline style */
+  .viz-value { font-size: 26px; font-weight: 600; letter-spacing: 0; margin: 4px 0 2px; line-height: 32px; }
+  .viz-value .unit { font-size: 16px; font-weight: 400; }
+
+  /* Context line — system secondary */
+  .viz-context { font-size: 14px; font-weight: 400; margin-bottom: 14px; letter-spacing: 0; color: var(--text-secondary); }
+
+  /* Insight footer — system muted */
+  .viz-insight { font-size: 14px; font-weight: 400; padding-top: 10px; margin-top: 12px; letter-spacing: 0; color: var(--text-muted); border-top: 1px solid var(--border-subtle) !important; }
+
+  /* ---- Progress Bar ---- */
+  .progress-track { height: 28px; border-radius: 40px; position: relative; overflow: hidden; display: flex; align-items: center; }
+  .progress-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 40px; display: flex; align-items: center; padding-left: 12px; }
+  .progress-fill-label { font-size: 14px; font-weight: 600; color: #fff; white-space: nowrap; }
+  .progress-remaining { position: absolute; right: 12px; font-size: 14px; font-weight: 600; white-space: nowrap; }
+
+  /* ---- Bar Chart (vertical) ---- */
+  .bar-chart { display: flex; align-items: flex-end; justify-content: space-between; height: 120px; padding-top: 22px; }
+  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; height: 100%; justify-content: flex-end; }
+  .bar-val { font-size: 14px; font-weight: 400; letter-spacing: -0.14px; white-space: nowrap; line-height: 30px; }
+  .bar-rect { width: 30px; border-radius: 10px; min-height: 5px; }
+  .bar-rect.empty { min-height: 5px; background: #F1F6FF !important; border: 1px solid #EAEEF6 !important; opacity: 1; }
+  .bar-label { font-size: 14px; font-weight: 400; color: #988F80; margin-top: 1px; letter-spacing: -0.14px; }
+  .bar-label.today { font-weight: 700; color: var(--text-primary); }
+
+  /* ---- Line Chart (SVG) ---- */
+  .line-chart-container { position: relative; margin-top: 4px; }
+  .line-chart-labels { display: flex; justify-content: space-between; margin-top: 4px; padding: 0 2px; }
+  .line-chart-labels span { font-size: 14px; font-weight: 400; color: #988F80; }
+  .line-chart-labels span.today { font-weight: 700; color: var(--text-primary); }
+
+  /* ---- Macros / Horizontal bars ---- */
+  .macro-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .macro-row:last-child { margin-bottom: 0; }
+  .macro-label { font-size: 14px; font-weight: 600; width: 52px; flex-shrink: 0; color: var(--text-primary); }
+  .macro-bar-track { flex: 1; height: 12px; border-radius: 20px; overflow: hidden; position: relative; background: #F0EBE4; }
+  .macro-bar-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 20px; }
+  .macro-goal { font-size: 14px; font-weight: 400; width: 48px; text-align: right; flex-shrink: 0; color: var(--text-secondary); }
+
+  /* ---- Ring Progress ---- */
+  .ring-container { display: flex; align-items: center; gap: 20px; }
+  .ring-svg { width: 90px; height: 90px; flex-shrink: 0; }
+  .ring-details { display: flex; flex-direction: column; gap: 4px; }
+  .ring-detail-row { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 400; color: var(--text-primary); }
+  .ring-detail-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* Conversation divider */
+  .convo-divider { border: none; border-top: 1px solid var(--border-subtle); margin: 20px 0; }
+
+  /* ---- Home indicator ---- */
+  .home-indicator {
+    position: sticky; bottom: 0; height: 34px; background: var(--bg-primary);
+    display: flex; justify-content: center; align-items: center; z-index: 100;
+  }
+  .home-indicator-bar { width: 134px; height: 5px; background: var(--text-primary); border-radius: 100px; }
+
+  /* Mobile: version nav becomes dropdown */
+  .version-dropdown { display: none; }
+  .version-dropdown select {
+    width: 100%; background: #1a1a1a; color: #fff; border: none;
+    border-bottom: 1px solid #333; padding: 14px 16px; font-size: 14px;
+    font-family: inherit; appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 16px center; outline: none;
+  }
+  @media (max-width: 768px) {
+    .version-nav { display: none !important; }
+    .version-dropdown { display: block; position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; }
+    body { padding: 0; padding-top: 48px; }
+    .phone-frame { width: 100%; height: calc(100vh - 48px); border-radius: 0; box-shadow: none; }
+  }
+  .embed body { padding: 0; }
+  .embed .version-nav, .embed .controls, .embed .coach-fab { display: none !important; }
+  .embed .version-dropdown { display: block !important; position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; }
+  .embed .phone-frame { width: 100%; height: calc(100vh - 48px); border-radius: 0; box-shadow: none; margin-top: 48px; }
+</style>
+<script>if(location.search.includes("embed=1"))document.documentElement.classList.add("embed");</script>
+</head>
+<body>
+
+<nav class="version-nav">
+  <a href="viz-v1.html" class="active">V1<span>White Cards</span></a>
+  <a href="viz-v2.html">V2<span>Borderless</span></a>
+  <a href="viz-v3.html">V3<span>Accent Cards</span></a>
+  <a href="viz-v4.html">V4<span>Pixel Art</span></a>
+  <a href="viz-v5.html">V5<span>Rings & Pills</span></a>
+</nav>
+
+<div class="version-dropdown">
+  <select onchange="window.location.href=this.value+(location.search.includes('embed=1')?'?embed=1':'')">
+    <option value="viz-v1.html" selected>V1 — White Cards</option>
+    <option value="viz-v2.html">V2 — Borderless</option>
+    <option value="viz-v3.html">V3 — Accent Cards</option>
+    <option value="viz-v4.html">V4 — Pixel Art</option>
+    <option value="viz-v5.html">V5 — Rings & Pills</option>
+  </select>
+</div>
+
+<div class="phone-frame">
+  <div class="screen">
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span class="status-time">12:15</span>
+      <span class="status-icons">
+        <svg width="16" height="12" viewBox="0 0 16 12"><rect x="0" y="3" width="3" height="9" rx="1" fill="#333" opacity="0.4"/><rect x="4.5" y="2" width="3" height="10" rx="1" fill="#333" opacity="0.6"/><rect x="9" y="1" width="3" height="11" rx="1" fill="#333" opacity="0.8"/><rect x="13.5" y="0" width="3" height="12" rx="1" fill="#333"/></svg>
+        <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 3C10.7 3 13.1 4.1 14.8 6L16 4.8C13.9 2.4 11.1 1 8 1S2.1 2.4 0 4.8L1.2 6C2.9 4.1 5.3 3 8 3Z" fill="#333"/><path d="M8 7C9.5 7 10.9 7.6 11.9 8.5L13.1 7.3C11.8 6.1 10 5.3 8 5.3S4.2 6.1 2.9 7.3L4.1 8.5C5.1 7.6 6.5 7 8 7Z" fill="#333"/><circle cx="8" cy="11" r="1.5" fill="#333"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0.5" y="0.5" width="22" height="11" rx="3" stroke="#333" stroke-opacity="0.35" fill="none"/><rect x="23.5" y="3.5" width="1.5" height="5" rx="0.75" fill="#333" opacity="0.4"/><rect x="2" y="2" width="19" height="8" rx="2" fill="#333"/></svg>
+      </span>
+    </div>
+
+    <!-- Header -->
+    <div class="top-header">
+      <div class="top-header-row">
+        <h1>Data <span class="dynamic-day">Visualization</span></h1>
+      </div>
+    </div>
+
+    <div class="chat">
+
+      <!-- ================================================
+           CONVERSATION 1: Nutrition — Calories Progress Bar
+           ================================================ -->
+      <div class="user-bubble">How is my lunch? 🥗</div>
+
+      <div class="ottavia-text">
+        Beautiful bowl, Vika 🌿<br>
+        This is a great post-workout choice — especially after your heavy lift today.<br><br>
+        <strong>I've analyzed your photo:</strong>
+      </div>
+
+      <div class="ottavia-text">
+        • Chicken ~250 kcal, 42g protein<br>
+        • Avocado ~120 kcal, 2g protein, 11g fat<br>
+        • Corn ~70–90 kcal<br>
+        • Veggies + oil ~80–100 kcal
+      </div>
+
+      <!-- Viz Card: Nutrition Progress Bar -->
+      <div class="viz-card nutrition">
+        <div class="viz-header">
+          <div class="viz-title">🥗 Calories today</div>
+          <div class="viz-date">14 Mar</div>
+        </div>
+        <div class="viz-value" style="color: var(--nutrition-title);">
+          1,024 <span class="unit">of 1,800</span>
+        </div>
+        <div class="viz-context" style="">
+          ↑ 320 kcal from this meal · 776 remaining
+        </div>
+        <div class="progress-track" style="background: rgba(255,255,255,0.5);">
+          <div class="progress-fill" style="width: 57%; background: var(--nutrition-title);">
+            <span class="progress-fill-label">1,024 kcal</span>
+          </div>
+          <span class="progress-remaining" style="color: var(--nutrition-title);">776 kcal</span>
+        </div>
+        <div class="viz-insight" style="color: var(--nutrition-text); border-top: 1px solid var(--nutrition-border);">
+          On track — protein-heavy lunch helps hit your 130g target
+        </div>
+      </div>
+
+      <div class="ottavia-text">
+        Plenty of protein for muscle repair, and thyroid-friendly because the fats come mostly from avocado and olive oil.
+      </div>
+
+      <hr class="convo-divider">
+
+      <!-- ================================================
+           CONVERSATION 2: Activity — Weekly Bar Chart
+           ================================================ -->
+      <div class="user-bubble">How was my run?</div>
+
+      <div class="ottavia-text">
+        Nice run 👏<br>
+        <strong>10.7 km at a steady pace.</strong> You finished strong.
+      </div>
+
+      <div class="ottavia-text">
+        This was your third run this week, which shows great consistency.
+      </div>
+
+      <!-- Viz Card: Activity Bar Chart -->
+      <div class="viz-card activity">
+        <div class="viz-header">
+          <div class="viz-title">🏃 Run workout</div>
+          <div class="viz-date">10 – 16 Mar</div>
+        </div>
+        <div class="viz-value" style="color: var(--activity-title);">
+          10.7 km <span class="unit">today</span>
+        </div>
+        <div class="viz-context" style="">
+          ↑ 27% longer than Monday · 3 runs this week
+        </div>
+        <div class="bar-chart">
+          <div class="bar-col">
+            <span class="bar-val" style="color: var(--activity-title);">8.4</span>
+            <div class="bar-rect" style="height: 56px; background: var(--activity-title);"></div>
+            <span class="bar-label">M</span>
+          </div>
+          <div class="bar-col">
+            <span class="bar-val" style="color: transparent;">-</span>
+            <div class="bar-rect empty" style="height: 4px; background: var(--activity-bg); border-color: var(--activity-border);"></div>
+            <span class="bar-label">T</span>
+          </div>
+          <div class="bar-col">
+            <span class="bar-val" style="color: var(--activity-title);">7.7</span>
+            <div class="bar-rect" style="height: 51px; background: var(--activity-title);"></div>
+            <span class="bar-label">W</span>
+          </div>
+          <div class="bar-col">
+            <span class="bar-val" style="color: transparent;">-</span>
+            <div class="bar-rect empty" style="height: 4px; background: var(--activity-bg); border-color: var(--activity-border);"></div>
+            <span class="bar-label">T</span>
+          </div>
+          <div class="bar-col">
+            <span class="bar-val" style="color: transparent;">-</span>
+            <div class="bar-rect empty" style="height: 4px; background: var(--activity-bg); border-color: var(--activity-border);"></div>
+            <span class="bar-label">F</span>
+          </div>
+          <div class="bar-col">
+            <span class="bar-val" style="color: transparent;">-</span>
+            <div class="bar-rect empty" style="height: 4px; background: var(--activity-bg); border-color: var(--activity-border);"></div>
+            <span class="bar-label">S</span>
+          </div>
+          <div class="bar-col">
+            <span class="bar-val" style="color: var(--activity-title);">10.7</span>
+            <div class="bar-rect" style="height: 72px; background: var(--activity-title);"></div>
+            <span class="bar-label today">S</span>
+          </div>
+        </div>
+        <div class="viz-insight" style="color: var(--activity-text); border-top: 1px solid var(--activity-border);">
+          Strong finish — consider a lighter session tomorrow for recovery
+        </div>
+      </div>
+
+      <div class="ottavia-text">
+        For your next workout, I suggest keeping it lighter or switching to strength, to let your legs fully recover.
+      </div>
+
+      <hr class="convo-divider">
+
+      <!-- ================================================
+           CONVERSATION 3: Nutrition — Cholesterol Bar Chart
+           ================================================ -->
+      <div class="user-bubble">📈 Check cholesterol trend</div>
+
+      <div class="ottavia-text">
+        <strong style="font-size: 22px; letter-spacing: -0.5px;">Hi Vika,</strong><br><br>
+        I checked your cholesterol trend for you. You've been really consistent lately, and it shows.<br><br>
+        <strong>Your average is sitting around 182 mg/day, which is a little lower than your usual.</strong>
+      </div>
+
+      <!-- Viz Card: Nutrition (Cholesterol) Bar Chart -->
+      <div class="viz-card nutrition">
+        <div class="viz-header">
+          <div class="viz-title">🥬 Cholesterol intake</div>
+          <div class="viz-date">10 – 16 Mar</div>
+        </div>
+        <div class="viz-value" style="color: var(--nutrition-title);">
+          91 mg/day <span class="unit">avg</span>
+        </div>
+        <div class="viz-context" style="">
+          ↓ 12% vs last month · below 200mg guideline
+        </div>
+        <div class="bar-chart">
+          <div class="bar-col">
+            <span class="bar-val" style="color: var(--nutrition-title);">180</span>
+            <div class="bar-rect" style="height: 42px; background: var(--nutrition-title);"></div>
+            <span class="bar-label">M</span>
+          </div>
+          <div class="bar-col">
+            <span class="bar-val" style="color: var(--nutrition-title);">210</span>
+            <div class="bar-rect" style="height: 50px; background: var(--nutrition-title);"></div>
+            <span class="bar-label">T</span>
+          </div>
+          <div class="bar-col">
+            <span class="bar-val" style="color: var(--nutrition-title);">280</span>
+            <div class="bar-rect" style="height: 72px; background: var(--nutrition-title);"></div>
+            <span class="bar-label">W</span>
+          </div>
+          <div class="bar-col">
+            <span class="bar-val" style="color: var(--nutrition-title);">230</span>
+            <div class="bar-rect" style="height: 56px; background: var(--nutrition-title);"></div>
+            <span class="bar-label">T</span>
+          </div>
+          <div class="bar-col">
+            <span class="bar-val" style="color: var(--nutrition-title);">45</span>
+            <div class="bar-rect" style="height: 14px; background: var(--nutrition-title);"></div>
+            <span class="bar-label">F</span>
+          </div>
+          <div class="bar-col">
+            <span class="bar-val" style="color: var(--nutrition-title);">193</span>
+            <div class="bar-rect" style="height: 46px; background: var(--nutrition-title);"></div>
+            <span class="bar-label">S</span>
+          </div>
+          <div class="bar-col">
+            <span class="bar-val" style="color: var(--nutrition-title);">189</span>
+            <div class="bar-rect" style="height: 45px; background: var(--nutrition-title);"></div>
+            <span class="bar-label today">S</span>
+          </div>
+        </div>
+        <div class="viz-insight" style="color: var(--nutrition-text); border-top: 1px solid var(--nutrition-border);">
+          Trending down — your recent meals are helping
+        </div>
+      </div>
+
+      <div class="ottavia-text">
+        That's a really positive direction, especially given how much life you juggle.<br><br>
+        Beautiful start. Let's keep the rhythm.
+      </div>
+
+      <hr class="convo-divider">
+
+      <!-- ================================================
+           CONVERSATION 4: Hydration — Ring Progress
+           ================================================ -->
+      <div class="user-bubble">How much water did I drink today?</div>
+
+      <!-- Viz Card: Hydration Ring -->
+      <div class="viz-card hydration">
+        <div class="viz-header">
+          <div class="viz-title">💧 Hydration today</div>
+          <div class="viz-date">14 Mar</div>
+        </div>
+        <div class="viz-value" style="color: var(--hydration-title);">
+          1.8L <span class="unit">of 2.5L</span>
+        </div>
+        <div class="viz-context" style="color: var(--hydration-text);">
+          72% of daily goal · 700ml remaining
+        </div>
+        <div class="ring-container" style="margin-top: 4px;">
+          <svg class="ring-svg" viewBox="0 0 90 90">
+            <circle cx="45" cy="45" r="36" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="10" />
+            <circle cx="45" cy="45" r="36" fill="none" stroke="#3A647E" stroke-width="10"
+              stroke-dasharray="226" stroke-dashoffset="63"
+              stroke-linecap="round" transform="rotate(-90 45 45)" />
+            <text x="45" y="43" text-anchor="middle" font-size="18" font-weight="700" fill="#3A647E">72%</text>
+            <text x="45" y="56" text-anchor="middle" font-size="10" font-weight="500" fill="#689BBB">goal</text>
+          </svg>
+          <div class="ring-details" style="color: var(--hydration-title);">
+            <div class="ring-detail-row">
+              <div class="ring-detail-dot" style="background: var(--hydration-title);"></div>
+              Morning: 600ml
+            </div>
+            <div class="ring-detail-row">
+              <div class="ring-detail-dot" style="background: var(--hydration-title);"></div>
+              Lunch: 500ml
+            </div>
+            <div class="ring-detail-row">
+              <div class="ring-detail-dot" style="background: var(--hydration-text);"></div>
+              Afternoon: 400ml
+            </div>
+            <div class="ring-detail-row" style="color: var(--hydration-text);">
+              <div class="ring-detail-dot" style="background: var(--hydration-border); opacity:0.4;"></div>
+              Evening: —
+            </div>
+          </div>
+        </div>
+        <div class="viz-insight" style="color: var(--hydration-text); border-top: 1px solid var(--hydration-border);">
+          You usually drink 500ml after your workout — log it if you did
+        </div>
+      </div>
+
+      <div class="ottavia-text">
+        You're at 72% — ahead of yesterday at this time. After your run, aim for at least 500ml to support recovery.
+      </div>
+
+      <hr class="convo-divider">
+
+      <!-- ================================================
+           CONVERSATION 5: Recovery — Sleep Line Chart
+           ================================================ -->
+      <div class="user-bubble">How well did I sleep this week?</div>
+
+      <div class="ottavia-text">
+        <strong>Your sleep has been solid this week.</strong><br>
+        Averaging 7.2 hours per night, which is 30 minutes more than your usual.
+      </div>
+
+      <!-- Viz Card: Recovery Line Chart -->
+      <div class="viz-card recovery">
+        <div class="viz-header">
+          <div class="viz-title">🌙 Sleep duration</div>
+          <div class="viz-date">10 – 16 Mar</div>
+        </div>
+        <div class="viz-value" style="color: var(--recovery-title);">
+          7.2h <span class="unit">avg / night</span>
+        </div>
+        <div class="viz-context" style="color: var(--recovery-text);">
+          ↑ 30 min vs your 4-week average
+        </div>
+        <div class="line-chart-container">
+          <svg viewBox="0 0 310 90" style="width:100%;height:90px;">
+            <line x1="10" y1="15" x2="300" y2="15" stroke="rgba(255,255,255,0.4)" stroke-width="1" stroke-dasharray="4,4"/>
+            <line x1="10" y1="40" x2="300" y2="40" stroke="rgba(255,255,255,0.4)" stroke-width="1" stroke-dasharray="4,4"/>
+            <line x1="10" y1="65" x2="300" y2="65" stroke="rgba(255,255,255,0.4)" stroke-width="1" stroke-dasharray="4,4"/>
+            <text x="4" y="18" font-size="8" fill="#8292D5" font-weight="500">8h</text>
+            <text x="4" y="43" font-size="8" fill="#8292D5" font-weight="500">7h</text>
+            <text x="4" y="68" font-size="8" fill="#8292D5" font-weight="500">6h</text>
+            <polygon points="26,30 74,22 122,45 170,12 218,28 266,35 300,18 300,72 26,72" fill="#8292D5" opacity="0.15"/>
+            <polyline points="26,30 74,22 122,45 170,12 218,28 266,35 300,18" fill="none" stroke="#58669D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="26" cy="30" r="4" fill="#58669D"/>
+            <circle cx="74" cy="22" r="4" fill="#58669D"/>
+            <circle cx="122" cy="45" r="4" fill="#58669D"/>
+            <circle cx="170" cy="12" r="4" fill="#58669D"/>
+            <circle cx="218" cy="28" r="4" fill="#58669D"/>
+            <circle cx="266" cy="35" r="4" fill="#58669D"/>
+            <circle cx="300" cy="18" r="4" fill="#fff" stroke="#58669D" stroke-width="2"/>
+            <text x="26" y="24" text-anchor="middle" font-size="9" fill="#58669D" font-weight="600">7.1</text>
+            <text x="74" y="16" text-anchor="middle" font-size="9" fill="#58669D" font-weight="600">7.4</text>
+            <text x="122" y="56" text-anchor="middle" font-size="9" fill="#58669D" font-weight="600">6.5</text>
+            <text x="170" y="8" text-anchor="middle" font-size="9" fill="#58669D" font-weight="600">8.1</text>
+            <text x="218" y="22" text-anchor="middle" font-size="9" fill="#58669D" font-weight="600">7.3</text>
+            <text x="266" y="46" text-anchor="middle" font-size="9" fill="#58669D" font-weight="600">6.9</text>
+            <text x="300" y="12" text-anchor="middle" font-size="9" fill="#58669D" font-weight="700">7.8</text>
+          </svg>
+          <div class="line-chart-labels">
+            <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span class="today">S</span>
+          </div>
+        </div>
+        <div class="viz-insight" style="color: var(--recovery-text); border-top: 1px solid var(--recovery-border);">
+          Thursday was your best night — deep sleep was 22% above average
+        </div>
+      </div>
+
+      <div class="ottavia-text">
+        Wednesday dipped (6.5h) — that was your late training day. But you bounced back strong on Thursday with 8.1h.<br><br>
+        Your body's recovering well. Keep the pre-bed routine consistent.
+      </div>
+
+      <hr class="convo-divider">
+
+      <!-- ================================================
+           CONVERSATION 6: Nutrition — Macros Breakdown
+           ================================================ -->
+      <div class="user-bubble">Show me today's macros</div>
+
+      <div class="ottavia-text">
+        Here's where you are after logging lunch:
+      </div>
+
+      <!-- Viz Card: Nutrition Macros Horizontal Bars -->
+      <div class="viz-card nutrition">
+        <div class="viz-header">
+          <div class="viz-title">🍽 Macros today</div>
+          <div class="viz-date">14 Mar</div>
+        </div>
+        <div class="viz-value" style="color: var(--nutrition-title);">
+          1,024 <span class="unit">kcal logged</span>
+        </div>
+        <div class="viz-context" style="">
+          57% of 1,800 kcal goal · 776 remaining
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:2px;">
+          <div class="macro-row">
+            <span class="macro-label" style="color: var(--nutrition-title);">Protein</span>
+            <div class="macro-bar-track" style="background: rgba(255,255,255,0.5);">
+              <div class="macro-bar-fill" style="width: 68%; background: var(--nutrition-title);"></div>
+            </div>
+            <span class="macro-goal" style="color: var(--nutrition-text);">82/120g</span>
+          </div>
+          <div class="macro-row">
+            <span class="macro-label" style="color: var(--nutrition-title);">Carbs</span>
+            <div class="macro-bar-track" style="background: rgba(255,255,255,0.5);">
+              <div class="macro-bar-fill" style="width: 55%; background: var(--nutrition-text);"></div>
+            </div>
+            <span class="macro-goal" style="color: var(--nutrition-text);">138/250g</span>
+          </div>
+          <div class="macro-row">
+            <span class="macro-label" style="color: var(--nutrition-title);">Fats</span>
+            <div class="macro-bar-track" style="background: rgba(255,255,255,0.5);">
+              <div class="macro-bar-fill" style="width: 78%; background: var(--nutrition-border);"></div>
+            </div>
+            <span class="macro-goal" style="color: var(--nutrition-text);">55/70g</span>
+          </div>
+          <div class="macro-row">
+            <span class="macro-label" style="color: var(--nutrition-title);">Fiber</span>
+            <div class="macro-bar-track" style="background: rgba(255,255,255,0.5);">
+              <div class="macro-bar-fill" style="width: 40%; background: var(--nutrition-border);"></div>
+            </div>
+            <span class="macro-goal" style="color: var(--nutrition-text);">12/30g</span>
+          </div>
+        </div>
+        <div class="viz-insight" style="color: var(--nutrition-text); border-top: 1px solid var(--nutrition-border);">
+          Protein is on track 💪 — aim for a fiber-rich snack this afternoon
+        </div>
+      </div>
+
+      <div class="ottavia-text">
+        Your protein is strong at 68% — well ahead for this time of day. Fats are close to goal, so go lighter there for dinner. <strong>Fiber needs attention</strong> — an apple or some hummus with veggies would bridge the gap.
+      </div>
+
+      <hr class="convo-divider">
+
+      <!-- ================================================
+           CONVERSATION 7: Recovery — Multi-metric Progress
+           ================================================ -->
+      <div class="user-bubble">What's my recovery score?</div>
+
+      <div class="ottavia-text">
+        Your recovery looks solid today:
+      </div>
+
+      <!-- Viz Card: Recovery Multi-progress -->
+      <div class="viz-card recovery">
+        <div class="viz-header">
+          <div class="viz-title">💜 Recovery score</div>
+          <div class="viz-date">14 Mar</div>
+        </div>
+        <div class="viz-value" style="color: var(--recovery-title);">
+          78 <span class="unit">/ 100</span>
+        </div>
+        <div class="viz-context" style="color: var(--recovery-text);">
+          ↑ 5 points vs yesterday · good to train
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:2px;">
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--recovery-title);margin-bottom:3px;">
+              <span>Sleep quality</span><span>85%</span>
+            </div>
+            <div class="macro-bar-track" style="background: rgba(255,255,255,0.5);">
+              <div class="macro-bar-fill" style="width: 85%; background: var(--recovery-title);"></div>
+            </div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--recovery-text);margin-bottom:3px;">
+              <span>HRV</span><span>72 ms</span>
+            </div>
+            <div class="macro-bar-track" style="background: rgba(255,255,255,0.5);">
+              <div class="macro-bar-fill" style="width: 72%; background: var(--recovery-text);"></div>
+            </div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--recovery-text);margin-bottom:3px;">
+              <span>Resting HR</span><span>52 bpm</span>
+            </div>
+            <div class="macro-bar-track" style="background: rgba(255,255,255,0.5);">
+              <div class="macro-bar-fill" style="width: 80%; background: var(--recovery-text);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="viz-insight" style="color: var(--recovery-text); border-top: 1px solid var(--recovery-border);">
+          Sleep drove the score up — HRV is stabilizing after Wednesday's hard run
+        </div>
+      </div>
+
+      <div class="ottavia-text">
+        You're green-lit for training today. Your sleep quality (85%) is doing the heavy lifting. HRV is still recovering from Wednesday but trending the right way.
+      </div>
+
+      <div style="height: 40px;"></div>
+
+    </div><!-- .chat -->
+
+    <!-- Home indicator -->
+    <div class="home-indicator">
+      <div class="home-indicator-bar"></div>
+    </div>
+
+  </div><!-- .screen -->
+</div><!-- .phone-frame -->
+
+</body>
+</html>

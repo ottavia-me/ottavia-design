@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ottavia — Swipe-to-Delete Engineering Spec</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, 'SF Pro Display', system-ui, sans-serif;
+    background: #e8e4dd;
+    color: #4C4C49;
+    line-height: 1.6;
+  }
+
+  /* Header */
+  .header {
+    background: #4C4C49;
+    color: #F5F1EA;
+    padding: 48px 40px;
+    text-align: center;
+  }
+  .header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+  .header .subtitle { font-size: 14px; color: #A6A297; letter-spacing: 1px; text-transform: uppercase; }
+  .header .version { font-size: 12px; color: #7a7a74; margin-top: 12px; }
+
+  /* Content */
+  .content { max-width: 820px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* Section */
+  .section { margin-bottom: 48px; }
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #A6A297;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(76,76,73,0.12);
+  }
+  .section-number {
+    display: inline-block;
+    background: #4C4C49;
+    color: #F5F1EA;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 20px;
+    font-size: 11px;
+    margin-right: 8px;
+  }
+
+  /* Cards */
+  .card {
+    background: #F5F1EA;
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+  }
+  .card h3 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+  .card p { font-size: 14px; color: #6b6b66; margin-bottom: 8px; }
+
+  /* State Flow */
+  .state-flow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+  .state-box {
+    background: #4C4C49;
+    color: #F5F1EA;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .state-box.active { background: #FF755D; }
+  .state-arrow { color: #A6A297; font-size: 18px; }
+
+  /* Spec Table */
+  .spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 13px;
+  }
+  .spec-table th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: #A6A297;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(76,76,73,0.12);
+  }
+  .spec-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(76,76,73,0.06);
+    vertical-align: top;
+  }
+  .spec-table tr:last-child td { border-bottom: none; }
+  .spec-table code {
+    background: rgba(76,76,73,0.08);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+
+  /* Token */
+  .token {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+  .token.color-red { background: #FF755D; color: white; }
+  .token.color-dark { background: #4C4C49; color: #F5F1EA; }
+  .token.color-cream { background: #F5F1EA; color: #4C4C49; border: 1px solid rgba(76,76,73,0.12); }
+  .token.color-bg { background: #e8e4dd; color: #4C4C49; border: 1px solid rgba(76,76,73,0.12); }
+
+  /* Code Block */
+  .code-block {
+    background: #2d2d2b;
+    color: #e8e4dd;
+    border-radius: 12px;
+    padding: 20px 24px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+  .code-block .comment { color: #7a7a74; }
+  .code-block .keyword { color: #FF755D; }
+  .code-block .string { color: #8BC34A; }
+  .code-block .number { color: #FFD54F; }
+
+  /* Visual Demo */
+  .demo-row {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 16px 0;
+    position: relative;
+    height: 68px;
+    border: 1px solid rgba(76,76,73,0.08);
+  }
+  .demo-content {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    background: white;
+    z-index: 2;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .demo-content .food-name { font-size: 15px; font-weight: 500; color: #4C4C49; flex: 1; }
+  .demo-content .kcal { font-size: 14px; color: #8BC34A; font-weight: 500; }
+  .demo-actions {
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 74px;
+    background: transparent;
+    z-index: 1;
+  }
+  .demo-delete-btn {
+    width: 58px;
+    height: 40px;
+    background: #FF755D;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: scale(0);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .demo-delete-btn svg { width: 18px; height: 20px; }
+
+  .demo-row.revealed .demo-content { transform: translateX(-74px); }
+  .demo-row.revealed .demo-delete-btn { transform: scale(1); }
+
+  .demo-row.deleting .demo-content {
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 1, 1);
+  }
+  .demo-row.deleting .demo-delete-btn {
+    width: 100%;
+    border-radius: 0;
+    transition: all 0.3s ease;
+  }
+  .demo-row.collapsing {
+    height: 0;
+    transition: height 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+    overflow: hidden;
+  }
+
+  /* Lottie preview */
+  .lottie-inline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 56px;
+    background: rgba(76,76,73,0.04);
+    border-radius: 8px;
+    vertical-align: middle;
+  }
+
+  /* Interactive demo */
+  .demo-label {
+    font-size: 11px;
+    color: #A6A297;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .demo-btn-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .demo-btn {
+    padding: 6px 14px;
+    background: #4C4C49;
+    color: #F5F1EA;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .demo-btn:hover { opacity: 0.85; }
+  .demo-btn.red { background: #FF755D; }
+
+  /* File Reference */
+  .file-ref {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(76,76,73,0.04);
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin: 8px 0;
+  }
+  .file-ref .icon { font-size: 20px; }
+  .file-ref .name { font-size: 13px; font-weight: 600; }
+  .file-ref .desc { font-size: 12px; color: #A6A297; }
+
+  /* Easing visual */
+  .easing-curve {
+    width: 100%;
+    height: 80px;
+    margin: 12px 0;
+  }
+
+  /* Divider */
+  .divider {
+    border: none;
+    border-top: 1px solid rgba(76,76,73,0.1);
+    margin: 24px 0;
+  }
+
+  .callout {
+    background: rgba(255,117,93,0.08);
+    border-left: 3px solid #FF755D;
+    padding: 16px 20px;
+    border-radius: 0 10px 10px 0;
+    margin: 16px 0;
+    font-size: 13px;
+  }
+  .callout strong { color: #FF755D; }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge.gesture { background: #E3F2FD; color: #1565C0; }
+  .badge.animated { background: #FFF3E0; color: #E65100; }
+  .badge.lottie { background: #F3E5F5; color: #7B1FA2; }
+  .badge.code { background: #E8F5E9; color: #2E7D32; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="subtitle">Engineering Handoff</div>
+  <h1>Swipe-to-Delete Interaction</h1>
+  <div class="version">Ottavia Food Log &middot; React Native &middot; v1.0 &middot; March 2026</div>
+</div>
+
+<div class="content">
+
+<!-- ============================================ -->
+<!-- SECTION 1: OVERVIEW -->
+<!-- ============================================ -->
+<div class="section">
+  <div class="section-title"><span class="section-number">1</span> Overview</div>
+
+  <div class="card">
+    <h3>Interaction Summary</h3>
+    <p>Users can swipe a food log row left to reveal a delete button. Two ways to delete:</p>
+    <p><strong>A. Partial swipe + tap</strong> &mdash; Swipe left to reveal the delete button, then tap it.</p>
+    <p><strong>B. Full swipe</strong> &mdash; Swipe all the way left in one gesture to immediately delete.</p>
+    <p style="margin-top:12px">Reference: iOS Voice Memos swipe-to-delete (see attached video).<br>
+    Ottavia simplification: <strong>single action only</strong> (Delete). No "More" or "Move" buttons.</p>
+  </div>
+
+  <div class="card">
+    <h3>State Flow</h3>
+    <div class="state-flow">
+      <div class="state-box">Idle</div>
+      <div class="state-arrow">&rarr;</div>
+      <div class="state-box">Swiping</div>
+      <div class="state-arrow">&rarr;</div>
+      <div class="state-box">Revealed</div>
+      <div class="state-arrow">&rarr;</div>
+      <div class="state-box active">Deleting</div>
+      <div class="state-arrow">&rarr;</div>
+      <div class="state-box">Collapsing</div>
+      <div class="state-arrow">&rarr;</div>
+      <div class="state-box">Removed</div>
+    </div>
+    <p style="font-size:12px;color:#A6A297">Full-swipe path: Idle &rarr; Swiping &rarr; Deleting &rarr; Collapsing &rarr; Removed (skips Revealed)</p>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SECTION 2: INTERACTIVE DEMO -->
+<!-- ============================================ -->
+<div class="section">
+  <div class="section-title"><span class="section-number">2</span> Interactive Demo</div>
+
+  <div class="card">
+    <div class="demo-label">Tap buttons to see each state</div>
+
+    <div class="demo-row" id="demoRow1">
+      <div class="demo-actions">
+        <div class="demo-delete-btn" id="demoBtn1" onclick="demoDelete('demoRow1')">
+          <svg viewBox="0 0 18 20" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="1" y1="4.2" x2="17" y2="4.2"/>
+            <path d="M6 4.2V1.5h6v2.7"/>
+            <path d="M3 4.2v13c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-13"/>
+            <line x1="7" y1="8.5" x2="7" y2="15"/>
+            <line x1="11" y1="8.5" x2="11" y2="15"/>
+          </svg>
+        </div>
+      </div>
+      <div class="demo-content" id="demoContent1">
+        <span class="food-name">Greek yogurt with apple</span>
+        <span class="kcal">350 kcal</span>
+      </div>
+    </div>
+
+    <div class="demo-row" id="demoRow2">
+      <div class="demo-actions">
+        <div class="demo-delete-btn" id="demoBtn2">
+          <svg viewBox="0 0 18 20" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="1" y1="4.2" x2="17" y2="4.2"/>
+            <path d="M6 4.2V1.5h6v2.7"/>
+            <path d="M3 4.2v13c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-13"/>
+            <line x1="7" y1="8.5" x2="7" y2="15"/>
+            <line x1="11" y1="8.5" x2="11" y2="15"/>
+          </svg>
+        </div>
+      </div>
+      <div class="demo-content">
+        <span class="food-name">Grilled chicken salad</span>
+        <span class="kcal">420 kcal</span>
+      </div>
+    </div>
+
+    <div class="demo-row" id="demoRow3">
+      <div class="demo-actions">
+        <div class="demo-delete-btn" id="demoBtn3">
+          <svg viewBox="0 0 18 20" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="1" y1="4.2" x2="17" y2="4.2"/>
+            <path d="M6 4.2V1.5h6v2.7"/>
+            <path d="M3 4.2v13c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-13"/>
+            <line x1="7" y1="8.5" x2="7" y2="15"/>
+            <line x1="11" y1="8.5" x2="11" y2="15"/>
+          </svg>
+        </div>
+      </div>
+      <div class="demo-content">
+        <span class="food-name">Oatmeal with berries</span>
+        <span class="kcal">280 kcal</span>
+      </div>
+    </div>
+
+    <div class="demo-btn-row">
+      <button class="demo-btn" onclick="demoReveal()">Swipe Reveal</button>
+      <button class="demo-btn red" onclick="demoDelete('demoRow1')">Delete + Collapse</button>
+      <button class="demo-btn" onclick="demoReset()">Reset</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SECTION 3: GESTURE BEHAVIOR -->
+<!-- ============================================ -->
+<div class="section">
+  <div class="section-title"><span class="section-number">3</span> Gesture Behavior</div>
+
+  <div class="card">
+    <h3>Swipe Gesture <span class="badge gesture">Gesture</span></h3>
+    <table class="spec-table">
+      <tr>
+        <th>Parameter</th>
+        <th>Value</th>
+        <th>Notes</th>
+      </tr>
+      <tr>
+        <td>Direction</td>
+        <td><code>horizontal</code>, left only</td>
+        <td>Right swipe should not trigger actions</td>
+      </tr>
+      <tr>
+        <td>Activation threshold</td>
+        <td><code>10px</code></td>
+        <td>Min horizontal distance before gesture activates</td>
+      </tr>
+      <tr>
+        <td>Reveal snap point</td>
+        <td><code>74px</code> from right</td>
+        <td>Delete button width (58) + padding (8+8)</td>
+      </tr>
+      <tr>
+        <td>Reveal threshold</td>
+        <td><code>37px</code> (50% of snap)</td>
+        <td>If swipe > 37px, snap to revealed; else snap back</td>
+      </tr>
+      <tr>
+        <td>Full-delete threshold</td>
+        <td><code>60%</code> of row width</td>
+        <td>Swiping past this triggers immediate delete</td>
+      </tr>
+      <tr>
+        <td>Elasticity</td>
+        <td><code>0.8</code></td>
+        <td>Resistance factor when swiping past snap point</td>
+      </tr>
+      <tr>
+        <td>Velocity threshold</td>
+        <td><code>500 px/s</code></td>
+        <td>Fast flick left triggers full-delete regardless of distance</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Dismiss Behavior</h3>
+    <p><strong>Tap elsewhere:</strong> If row is in Revealed state and user taps outside the delete button, snap back to Idle.</p>
+    <p><strong>Scroll:</strong> If user starts scrolling vertically while a row is revealed, snap it back to Idle.</p>
+    <p><strong>New swipe:</strong> If user swipes a different row, close the currently revealed row first.</p>
+    <p><strong>Only one revealed at a time.</strong></p>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SECTION 4: DESIGN SPECS -->
+<!-- ============================================ -->
+<div class="section">
+  <div class="section-title"><span class="section-number">4</span> Design Specs</div>
+
+  <div class="card">
+    <h3>Delete Button</h3>
+    <table class="spec-table">
+      <tr><th>Property</th><th>Value</th></tr>
+      <tr><td>Size</td><td><code>58 x 40 px</code></td></tr>
+      <tr><td>Corner radius</td><td><code>12px</code></td></tr>
+      <tr><td>Background</td><td><span class="token color-red">#FF755D</span></td></tr>
+      <tr><td>Icon</td><td><code>trash-01</code> &mdash; 24x24 frame, ~16x18 visual</td></tr>
+      <tr><td>Icon color</td><td><code>#FFFFFF</code> (white), stroke width 2px</td></tr>
+      <tr><td>Position</td><td>Vertically centered in row, <code>8px</code> from right edge</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Food Log Row</h3>
+    <table class="spec-table">
+      <tr><th>Property</th><th>Value</th></tr>
+      <tr><td>Height</td><td><code>67px</code> (from Figma frame)</td></tr>
+      <tr><td>Background</td><td><code>#FFFFFF</code> (white)</td></tr>
+      <tr><td>Separator</td><td><code>1px</code> solid <code>rgba(76,76,73,0.08)</code></td></tr>
+      <tr><td>Padding</td><td><code>0 20px</code></td></tr>
+      <tr><td>Actions area width</td><td><code>74px</code> (btn 58 + margin 8+8)</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Color Tokens</h3>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+      <span class="token color-red">#FF755D delete</span>
+      <span class="token color-dark">#4C4C49 text</span>
+      <span class="token color-cream">#F5F1EA surface</span>
+      <span class="token color-bg">#E8E4DD bg</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SECTION 5: ANIMATION SPECS -->
+<!-- ============================================ -->
+<div class="section">
+  <div class="section-title"><span class="section-number">5</span> Animation Timing</div>
+
+  <div class="card">
+    <h3>All Transitions <span class="badge animated">Animated</span></h3>
+    <table class="spec-table">
+      <tr>
+        <th>Transition</th>
+        <th>Duration</th>
+        <th>Easing</th>
+        <th>Details</th>
+      </tr>
+      <tr>
+        <td><strong>Snap to Revealed</strong></td>
+        <td><code>350ms</code></td>
+        <td><code>spring(damping: 20, stiffness: 180)</code></td>
+        <td>Row translateX to -74px. Delete button scales from 0 &rarr; 1 with overshoot.</td>
+      </tr>
+      <tr>
+        <td><strong>Snap back to Idle</strong></td>
+        <td><code>300ms</code></td>
+        <td><code>spring(damping: 25, stiffness: 200)</code></td>
+        <td>Row translateX back to 0. Delete button scales to 0.</td>
+      </tr>
+      <tr>
+        <td><strong>Delete button bounce</strong></td>
+        <td><code>400ms</code></td>
+        <td><code>spring(damping: 12, stiffness: 150)</code></td>
+        <td>Scale: 0 &rarr; 1.1 &rarr; 0.95 &rarr; 1.0. Plays when snap completes.</td>
+      </tr>
+      <tr>
+        <td><strong>Row slide-out</strong></td>
+        <td><code>250ms</code></td>
+        <td><code>easeIn</code> (0.4, 0, 1, 1)</td>
+        <td>Row translateX to -(screen width). Accelerates out.</td>
+      </tr>
+      <tr>
+        <td><strong>Row collapse</strong></td>
+        <td><code>350ms</code></td>
+        <td><code>easeOut</code> (0.25, 1, 0.5, 1)</td>
+        <td>Row height 67px &rarr; 0px. Starts 50ms after slide-out begins. Neighboring rows animate up.</td>
+      </tr>
+      <tr>
+        <td><strong>Full-swipe delete</strong></td>
+        <td><code>200ms</code></td>
+        <td><code>easeIn</code></td>
+        <td>Row continues sliding left off screen. Delete button stretches to fill row width.</td>
+      </tr>
+    </table>
+
+    <div class="callout">
+      <strong>Key principle:</strong> All gesture-driven animations use <code>react-native-reanimated</code> spring/timing on the UI thread. The Lottie animation is an optional enhancement for the delete button icon reveal only.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Spring Config (Reanimated) <span class="badge code">Code</span></h3>
+    <div class="code-block">
+<span class="comment">// Snap to revealed position</span>
+<span class="keyword">const</span> revealSpring = {
+  damping: <span class="number">20</span>,
+  stiffness: <span class="number">180</span>,
+  mass: <span class="number">1</span>,
+  overshootClamping: <span class="keyword">false</span>,
+};
+
+<span class="comment">// Snap back to idle</span>
+<span class="keyword">const</span> snapBackSpring = {
+  damping: <span class="number">25</span>,
+  stiffness: <span class="number">200</span>,
+  mass: <span class="number">1</span>,
+  overshootClamping: <span class="keyword">true</span>,
+};
+
+<span class="comment">// Delete button scale bounce</span>
+<span class="keyword">const</span> bounceSpring = {
+  damping: <span class="number">12</span>,
+  stiffness: <span class="number">150</span>,
+  mass: <span class="number">0.8</span>,
+  overshootClamping: <span class="keyword">false</span>,
+};
+
+<span class="comment">// Row collapse</span>
+<span class="keyword">const</span> collapseTiming = {
+  duration: <span class="number">350</span>,
+  easing: Easing.bezier(<span class="number">0.25</span>, <span class="number">1</span>, <span class="number">0.5</span>, <span class="number">1</span>),
+};
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SECTION 6: LOTTIE FILES -->
+<!-- ============================================ -->
+<div class="section">
+  <div class="section-title"><span class="section-number">6</span> Lottie Animation File <span class="badge lottie">Lottie</span></div>
+
+  <div class="card">
+    <h3>delete-reveal.json</h3>
+    <p>Optional Lottie for the delete button reveal. Can be used instead of / in addition to the Reanimated scale bounce.</p>
+
+    <div style="display:flex;align-items:center;gap:20px;margin:16px 0">
+      <div id="lottieDemo" style="width:120px;height:80px;background:rgba(76,76,73,0.04);border-radius:8px"></div>
+      <div>
+        <table class="spec-table" style="margin:0">
+          <tr><td>File</td><td><code>delete-reveal.json</code></td></tr>
+          <tr><td>Size</td><td><code>68 x 50 px</code></td></tr>
+          <tr><td>Duration</td><td><code>0.6s</code> (18 frames @ 30fps)</td></tr>
+          <tr><td>Loop</td><td><code>false</code> (play once)</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <button class="demo-btn" onclick="replayLottie()" style="margin-top:4px">Replay Animation</button>
+
+    <hr class="divider">
+
+    <h3>When to use Lottie vs Reanimated</h3>
+    <table class="spec-table">
+      <tr><th>Approach</th><th>Pros</th><th>Cons</th></tr>
+      <tr>
+        <td><strong>Reanimated only</strong></td>
+        <td>Runs on UI thread, responds to gesture, no extra dependency</td>
+        <td>Less precise icon animation control</td>
+      </tr>
+      <tr>
+        <td><strong>Lottie only</strong></td>
+        <td>Pixel-perfect icon + button animation</td>
+        <td>Can't follow gesture, fixed timing</td>
+      </tr>
+      <tr>
+        <td><strong>Reanimated + Lottie</strong> (recommended)</td>
+        <td>Gesture-driven row slide + Lottie for button icon reveal</td>
+        <td>Slightly more complexity</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Other Animation Files</h3>
+    <div class="file-ref">
+      <div class="icon">&#x1F504;</div>
+      <div><div class="name">loading-spinner.json</div><div class="desc">34x34 &middot; 30fps &middot; loop &middot; Spinning 3/4 arc</div></div>
+    </div>
+    <div class="file-ref">
+      <div class="icon">&#x2714;</div>
+      <div><div class="name">check-full.json</div><div class="desc">34x34 &middot; 30fps &middot; once &middot; Circle + checkmark bounce</div></div>
+    </div>
+    <div class="file-ref">
+      <div class="icon">&#x1F5D1;</div>
+      <div><div class="name">delete-reveal.json</div><div class="desc">68x50 &middot; 30fps &middot; once &middot; Red button + trash icon</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SECTION 7: IMPLEMENTATION -->
+<!-- ============================================ -->
+<div class="section">
+  <div class="section-title"><span class="section-number">7</span> React Native Implementation</div>
+
+  <div class="card">
+    <h3>Dependencies</h3>
+    <div class="code-block">
+npm install react-native-gesture-handler react-native-reanimated lottie-react-native
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Component Structure</h3>
+    <div class="code-block">
+<span class="comment">// SwipeableRow.tsx</span>
+<span class="keyword">import</span> { Gesture, GestureDetector } <span class="keyword">from</span> <span class="string">'react-native-gesture-handler'</span>;
+<span class="keyword">import</span> Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+  runOnJS,
+  interpolate,
+} <span class="keyword">from</span> <span class="string">'react-native-reanimated'</span>;
+
+<span class="keyword">const</span> REVEAL_WIDTH = <span class="number">74</span>;        <span class="comment">// px to reveal</span>
+<span class="keyword">const</span> REVEAL_THRESHOLD = <span class="number">37</span>;   <span class="comment">// 50% snap threshold</span>
+<span class="keyword">const</span> DELETE_THRESHOLD = <span class="number">0.6</span>;  <span class="comment">// 60% of row width</span>
+<span class="keyword">const</span> VELOCITY_TRIGGER = <span class="number">500</span>;  <span class="comment">// px/s for fast flick</span>
+<span class="keyword">const</span> ROW_HEIGHT = <span class="number">67</span>;          <span class="comment">// px</span>
+
+<span class="keyword">function</span> SwipeableRow({ item, onDelete }) {
+  <span class="keyword">const</span> translateX = useSharedValue(<span class="number">0</span>);
+  <span class="keyword">const</span> rowHeight = useSharedValue(ROW_HEIGHT);
+  <span class="keyword">const</span> btnScale = useSharedValue(<span class="number">0</span>);
+
+  <span class="keyword">const</span> panGesture = Gesture.Pan()
+    .activeOffsetX(-<span class="number">10</span>)                <span class="comment">// activate after 10px left</span>
+    .failOffsetY([-<span class="number">5</span>, <span class="number">5</span>])              <span class="comment">// fail if vertical</span>
+    .onUpdate((e) => {
+      translateX.value = Math.min(<span class="number">0</span>, e.translationX);
+      btnScale.value = interpolate(
+        Math.abs(translateX.value),
+        [<span class="number">0</span>, REVEAL_WIDTH],
+        [<span class="number">0</span>, <span class="number">1</span>],
+        <span class="string">'clamp'</span>
+      );
+    })
+    .onEnd((e) => {
+      <span class="keyword">const</span> shouldDelete =
+        Math.abs(e.translationX) > rowWidth * DELETE_THRESHOLD
+        || e.velocityX < -VELOCITY_TRIGGER;
+
+      <span class="keyword">if</span> (shouldDelete) {
+        <span class="comment">// Full-delete: slide out + collapse</span>
+        translateX.value = withTiming(-rowWidth, { duration: <span class="number">250</span> });
+        rowHeight.value = withTiming(<span class="number">0</span>, collapseTiming, () => {
+          runOnJS(onDelete)(item.id);
+        });
+      } <span class="keyword">else if</span> (Math.abs(e.translationX) > REVEAL_THRESHOLD) {
+        <span class="comment">// Snap to revealed</span>
+        translateX.value = withSpring(-REVEAL_WIDTH, revealSpring);
+        btnScale.value = withSpring(<span class="number">1</span>, bounceSpring);
+      } <span class="keyword">else</span> {
+        <span class="comment">// Snap back</span>
+        translateX.value = withSpring(<span class="number">0</span>, snapBackSpring);
+        btnScale.value = withSpring(<span class="number">0</span>, snapBackSpring);
+      }
+    });
+
+  <span class="comment">// ... animated styles and render</span>
+}
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Lottie Integration (Optional)</h3>
+    <div class="code-block">
+<span class="keyword">import</span> LottieView <span class="keyword">from</span> <span class="string">'lottie-react-native'</span>;
+
+<span class="comment">// Inside the delete button, instead of static icon:</span>
+&lt;LottieView
+  source={require(<span class="string">'./delete-reveal.json'</span>)}
+  autoPlay={<span class="keyword">false</span>}
+  loop={<span class="keyword">false</span>}
+  ref={lottieRef}
+  style={{ width: <span class="number">58</span>, height: <span class="number">40</span> }}
+/&gt;
+
+<span class="comment">// Trigger when revealed:</span>
+lottieRef.current?.play();
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SECTION 8: EDGE CASES -->
+<!-- ============================================ -->
+<div class="section">
+  <div class="section-title"><span class="section-number">8</span> Edge Cases & Accessibility</div>
+
+  <div class="card">
+    <h3>Edge Cases</h3>
+    <table class="spec-table">
+      <tr><th>Scenario</th><th>Behavior</th></tr>
+      <tr><td>Last item in section</td><td>Section header remains. If section becomes empty, collapse section too (300ms).</td></tr>
+      <tr><td>Rapid consecutive deletes</td><td>Each row animates independently. No queueing needed.</td></tr>
+      <tr><td>Swipe during scroll</td><td>Vertical scroll takes priority. Horizontal swipe fails if &gt;5px vertical movement detected first.</td></tr>
+      <tr><td>Swipe on expanded player row</td><td>Same swipe behavior as normal rows (see iOS reference video at 27-33s).</td></tr>
+      <tr><td>Offline / API failure</td><td>Row slides back to Idle with snapBackSpring. Show toast error.</td></tr>
+      <tr><td>Undo</td><td>Show toast with "Undo" action for 5s after delete. Re-insert row with reverse collapse animation if tapped.</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Accessibility</h3>
+    <table class="spec-table">
+      <tr><th>Feature</th><th>Implementation</th></tr>
+      <tr><td>VoiceOver</td><td><code>accessibilityActions={[{name: 'delete', label: 'Delete'}]}</code></td></tr>
+      <tr><td>Haptic feedback</td><td>Light impact when snapping to Revealed. Medium impact on delete trigger.</td></tr>
+      <tr><td>Reduce Motion</td><td>If <code>AccessibilityInfo.isReduceMotionEnabled</code>, skip bounce and use <code>withTiming(300ms)</code> instead of springs.</td></tr>
+      <tr><td>Delete confirmation</td><td>Not required for swipe delete (same as iOS standard). Undo toast serves as safety net.</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SECTION 9: FIGMA REFERENCE -->
+<!-- ============================================ -->
+<div class="section">
+  <div class="section-title"><span class="section-number">9</span> Figma & File References</div>
+
+  <div class="card">
+    <h3>Figma Links</h3>
+    <p style="font-size:13px;margin-bottom:4px"><strong>Design (revealed state):</strong></p>
+    <p style="font-size:12px;word-break:break-all;color:#A6A297">figma.com/design/Zci1tnQn86cVDQC09Lj66r/Ottavia-mobile-app?node-id=164-4195</p>
+    <p style="font-size:13px;margin-bottom:4px;margin-top:12px"><strong>Design (idle state):</strong></p>
+    <p style="font-size:12px;word-break:break-all;color:#A6A297">figma.com/design/Zci1tnQn86cVDQC09Lj66r/Ottavia-mobile-app?node-id=164-4194</p>
+
+    <hr class="divider">
+
+    <h3>Files for Engineering</h3>
+    <div class="file-ref">
+      <div class="icon">&#128196;</div>
+      <div><div class="name">delete-reveal.json</div><div class="desc">Lottie animation &middot; product/delete-reveal.json</div></div>
+    </div>
+    <div class="file-ref">
+      <div class="icon">&#128196;</div>
+      <div><div class="name">loading-spinner.json</div><div class="desc">Lottie animation &middot; product/loading-spinner.json</div></div>
+    </div>
+    <div class="file-ref">
+      <div class="icon">&#128196;</div>
+      <div><div class="name">check-full.json</div><div class="desc">Lottie animation &middot; product/check-full.json</div></div>
+    </div>
+    <div class="file-ref">
+      <div class="icon">&#127916;</div>
+      <div><div class="name">iOS Reference Video</div><div class="desc">ScreenRecording_03-03-2026 18-48-07_1.MP4</div></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- .content -->
+
+<script>
+// Lottie demo
+const deleteRevealData = {"v":"5.7.4","fr":30,"ip":0,"op":18,"w":68,"h":50,"nm":"delete-reveal","ddd":0,"assets":[],"layers":[{"ddd":0,"ind":1,"ty":4,"nm":"Trash Icon","sr":1,"ks":{"o":{"a":1,"k":[{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":2,"s":[0]},{"t":8,"s":[100]}],"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[34,25,0],"ix":2},"a":{"a":0,"k":[0,0,0],"ix":1},"s":{"a":1,"k":[{"i":{"x":[0.667,0.667,0.667],"y":[1,1,1]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0]},"t":0,"s":[0,0,100]},{"i":{"x":[0.667,0.667,0.667],"y":[1,1,1]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0]},"t":6,"s":[110,110,100]},{"i":{"x":[0.667,0.667,0.667],"y":[1,1,1]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0]},"t":9,"s":[95,95,100]},{"t":12,"s":[100,100,100]}],"ix":6}},"ao":0,"shapes":[{"ty":"gr","it":[{"ty":"sh","d":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[-8,-5.8],[8,-5.8]],"c":false},"ix":2},"nm":"Lid"},{"ty":"sh","d":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[-3,-5.8],[-3,-9],[3,-9],[3,-5.8]],"c":false},"ix":2},"nm":"Handle"},{"ty":"sh","d":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0.8],[0,0],[-0.8,0],[0,0]],"v":[[-6,-5.8],[6,-5.8],[6,6.5],[5,8],[-5,8],[-6,6.5]],"c":true},"ix":2},"nm":"Body"},{"ty":"sh","d":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[-2,-2],[-2,4.8]],"c":false},"ix":2},"nm":"Line L"},{"ty":"sh","d":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[2,-2],[2,4.8]],"c":false},"ix":2},"nm":"Line R"},{"ty":"st","c":{"a":0,"k":[1,1,1,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":2,"ix":5},"lc":2,"lj":2,"nm":"Stroke"},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7}}],"nm":"Trash Group","np":6,"cix":2,"bm":0}],"ip":0,"op":18,"st":0,"bm":0},{"ddd":0,"ind":2,"ty":4,"nm":"Red Button","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[34,25,0],"ix":2},"a":{"a":0,"k":[0,0,0],"ix":1},"s":{"a":1,"k":[{"i":{"x":[0.667,0.667,0.667],"y":[1,1,1]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0]},"t":0,"s":[0,0,100]},{"i":{"x":[0.667,0.667,0.667],"y":[1,1,1]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0]},"t":6,"s":[110,110,100]},{"i":{"x":[0.667,0.667,0.667],"y":[1,1,1]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0]},"t":9,"s":[95,95,100]},{"t":12,"s":[100,100,100]}],"ix":6}},"ao":0,"shapes":[{"ty":"gr","it":[{"ty":"rc","d":1,"s":{"a":0,"k":[58,40],"ix":2},"p":{"a":0,"k":[0,0],"ix":3},"r":{"a":0,"k":12,"ix":4},"nm":"Rect"},{"ty":"fl","c":{"a":0,"k":[1,0.459,0.365,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill"},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7}}],"nm":"Button Group","np":2,"cix":2,"bm":0}],"ip":0,"op":18,"st":0,"bm":0}],"markers":[]};
+
+let lottieDemoAnim = lottie.loadAnimation({
+  container: document.getElementById('lottieDemo'),
+  renderer: 'svg',
+  loop: false,
+  autoplay: true,
+  animationData: deleteRevealData
+});
+
+function replayLottie() {
+  lottieDemoAnim.goToAndPlay(0, true);
+}
+
+// Interactive demo
+function demoReveal() {
+  document.getElementById('demoRow1').classList.add('revealed');
+}
+
+function demoDelete(rowId) {
+  const row = document.getElementById(rowId);
+  row.classList.remove('revealed');
+  row.classList.add('revealed');
+
+  setTimeout(() => {
+    row.querySelector('.demo-content').style.transition = 'transform 0.25s cubic-bezier(0.4, 0, 1, 1)';
+    row.querySelector('.demo-content').style.transform = 'translateX(-110%)';
+  }, 100);
+
+  setTimeout(() => {
+    row.style.transition = 'height 0.35s cubic-bezier(0.25, 1, 0.5, 1), margin 0.35s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.35s ease';
+    row.style.height = '0px';
+    row.style.marginBottom = '0px';
+    row.style.opacity = '0';
+    row.style.overflow = 'hidden';
+  }, 250);
+}
+
+function demoReset() {
+  ['demoRow1','demoRow2','demoRow3'].forEach(id => {
+    const row = document.getElementById(id);
+    row.classList.remove('revealed','deleting','collapsing');
+    row.style = '';
+    const content = row.querySelector('.demo-content');
+    if (content) {
+      content.style = '';
+    }
+  });
+}
+</script>
+</body>
+</html>

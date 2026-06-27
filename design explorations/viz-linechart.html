@@ -1,0 +1,2519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ottavia — Line Chart States</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+
+  :root {
+    /* Ottavia Design System — Neutral scale */
+    --neutral-0: #FFFFFF;
+    --neutral-10: #F5F1EA;
+    --neutral-20: #DBD6CD;
+    --neutral-30: #C2BCB2;
+    --neutral-40: #A8A297;
+    --neutral-50: #8F897D;
+    --neutral-60: #766F64;
+    --neutral-70: #5C564D;
+    --neutral-80: #433E36;
+    /* Semantic aliases */
+    --bg-primary: var(--neutral-10);
+    --bg-card: var(--neutral-0);
+    --text-primary: var(--neutral-80);
+    --text-secondary: var(--neutral-40);
+    --border-light: var(--neutral-20);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+    background: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  /* ---- Phone Frame ---- */
+  .phone-frame {
+    width: 390px; height: 844px; background: var(--bg-primary);
+    border-radius: 40px; overflow: hidden; position: relative;
+    box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+  }
+  .screen { height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .screen::-webkit-scrollbar { display: none; }
+
+  /* ---- Status Bar ---- */
+  .status-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 24px 0; height: 50px; background: var(--bg-primary);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .status-time { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+
+  /* ---- Header ---- */
+  .top-header {
+    background: var(--bg-primary); padding: 6px 20px 14px;
+    position: sticky; top: 50px; z-index: 99;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .top-header h1 {
+    font-size: 24px; font-weight: 600; color: #8F897D; letter-spacing: 0; line-height: 32px;
+  }
+  .top-header h1 .highlight { color: var(--text-primary); }
+
+  /* ---- Version Tabs ---- */
+  .version-tabs {
+    display: flex;
+    gap: 0;
+    padding: 12px 20px 0;
+    background: var(--bg-primary);
+    position: sticky; top: 96px; z-index: 98;
+  }
+  .version-tab {
+    flex: 1;
+    padding: 10px 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #C2BCB2;
+    text-align: center;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .version-tab:hover { color: #8F897D; }
+  .version-tab.active {
+    color: var(--text-primary);
+    border-bottom-color: var(--text-primary);
+  }
+  .version-content { display: none; }
+  .version-content.active { display: block; }
+
+  .drag-hint {
+    font-size: 12px;
+    color: #C2BCB2;
+    text-align: center;
+    padding: 12px 20px 0;
+    font-style: italic;
+  }
+
+  /* ---- Home indicator ---- */
+  .home-indicator {
+    position: sticky; bottom: 0; height: 34px; background: var(--bg-primary);
+    display: flex; justify-content: center; align-items: center; z-index: 100;
+  }
+  .home-indicator-bar { width: 134px; height: 5px; background: var(--text-primary); border-radius: 100px; }
+
+  /* ---- Content ---- */
+  .content-area {
+    padding: 16px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .case-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #8F897D;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0 20px;
+    margin-top: 12px;
+    margin-bottom: 4px;
+  }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #766F64;
+    margin: 20px 20px 8px 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #DBD6CD;
+  }
+
+  /* ---- Chart Card ---- */
+  .chart-card {
+    background: #FFFFFF;
+    border-radius: 24px;
+    padding: 16px 16px 20px 16px;
+    margin: 0 20px;
+    border: 2px solid #DBD6CD;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .card-title {
+    flex: 1;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 22px;
+    color: #433E36;
+  }
+
+  .card-date {
+    font-size: 10px;
+    font-weight: 500;
+    color: #C2BCB2;
+    line-height: 22px;
+    padding-left: 12px;
+    white-space: nowrap;
+    letter-spacing: 0.2px;
+  }
+
+  .card-value-row {
+    display: flex;
+    align-items: baseline;
+    margin-top: 6px;
+    gap: 6px;
+  }
+
+  .card-value {
+    font-family: 'Poppins', sans-serif;
+    font-size: 36px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    line-height: 40px;
+    margin-top: 8px;
+  }
+
+  .card-value-suffix {
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0.6;
+    letter-spacing: 0.1px;
+  }
+
+  /* ---- Line Chart ---- */
+  .line-chart-area {
+    position: relative;
+    height: 150px;
+    margin-top: 20px;
+    padding: 0 4px;
+  }
+
+  .line-chart-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .line-path {
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: opacity 0.15s ease;
+  }
+
+  .area-fill {
+    opacity: 0.12;
+    transition: opacity 0.15s ease;
+  }
+
+  /* ---- Dots: solid, small ---- */
+  .dot {
+    transition: r 0.15s ease, opacity 0.15s ease;
+  }
+
+  /* When chart is being touched, dim non-highlighted dots */
+  .line-chart-area.active .dot {
+    opacity: 0.3;
+    r: 3;
+  }
+
+  .line-chart-area.active .dot.highlighted {
+    opacity: 1;
+    r: 3.6;
+  }
+
+  /* Dim line + area slightly during touch */
+  .line-chart-area.active .line-path {
+    opacity: 0.4;
+  }
+
+  .line-chart-area.active .area-fill {
+    opacity: 0.06;
+  }
+
+  /* ---- Pulse ripple rings ---- */
+  @keyframes pulse-ring {
+    0% { r: 4; opacity: 0.5; }
+    100% { r: 14; opacity: 0; }
+  }
+
+  .pulse-ring {
+    fill: none;
+    stroke: none;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .pulse-ring.active {
+    animation: pulse-ring 0.8s ease-out infinite;
+  }
+
+  .pulse-ring-2.active {
+    animation: pulse-ring 0.8s ease-out 0.25s infinite;
+  }
+
+  /* ---- Grid lines ---- */
+  .grid-line {
+    stroke: #DBD6CD; /* neutral-20 */
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+  }
+
+  /* ---- X-axis labels ---- */
+  .x-label {
+    font-size: 10px;
+    font-weight: 500;
+    fill: #C2BCB2; /* neutral-30 */
+    text-anchor: middle;
+    transition: fill 0.15s ease, font-weight 0.15s ease;
+  }
+
+  .x-label.today {
+    font-weight: 700;
+  }
+
+  .x-label.highlighted {
+    font-weight: 700;
+  }
+
+  /* ---- Colored scan line ---- */
+  .scan-line {
+    stroke-width: 1.5;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+
+  .scan-line.active {
+    opacity: 0.7;
+  }
+
+  /* ---- Value chip (top of scan line) ---- */
+  .value-chip {
+    position: absolute;
+    top: -2px;
+    transform: translateX(-50%) scale(0.85);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 10px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.12s ease, transform 0.12s ease;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .value-chip.active {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+
+  /* ---- Dual chip: split colors ---- */
+  .value-chip-dual {
+    position: absolute;
+    top: -2px;
+    transform: translateX(-50%) scale(0.85);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.12s ease, transform 0.12s ease;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    white-space: nowrap;
+  }
+
+  .value-chip-dual.active {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+
+  .chip-half {
+    width: 100%;
+    padding: 3px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #FFFFFF;
+    text-align: center;
+    line-height: 16px;
+  }
+
+  .chip-half:first-child {
+    padding-top: 4px;
+  }
+
+  .chip-half:last-child {
+    padding-bottom: 4px;
+  }
+
+  /* ---- Goal line ---- */
+  .goal-line-svg {
+    stroke-width: 1.5;
+    stroke-dasharray: 6 4;
+    opacity: 0.5;
+  }
+
+  .goal-label-svg {
+    font-size: 10px;
+    font-weight: 600;
+    opacity: 0.7;
+  }
+
+  /* ---- Dual line legend ---- */
+  .chart-legend {
+    display: flex;
+    gap: 16px;
+    margin-top: 12px;
+    padding: 0 4px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .legend-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: #A8A297;
+  }
+
+  /* ---- V2: Time range pills ---- */
+  .range-pills {
+    display: flex;
+    gap: 4px;
+    margin-top: 10px;
+  }
+
+  .range-pill {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: 1.5px solid #DBD6CD;
+    color: #A8A297;
+    background: transparent;
+  }
+
+  .range-pill.active {
+    color: #FFFFFF;
+    border-color: transparent;
+  }
+
+  /* ---- V2: Personal range band ---- */
+  .range-band {
+    opacity: 0.10;
+  }
+
+  /* ---- V2: Trend line (moving average) ---- */
+  .trend-line {
+    fill: none;
+    stroke-width: 1.5;
+    stroke-dasharray: 5 3;
+    opacity: 0.45;
+    stroke-linecap: round;
+  }
+
+  /* ---- V2: Min/Max markers ---- */
+  .min-max-label {
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-anchor: middle;
+  }
+
+  .min-max-bg {
+    rx: 3;
+    ry: 3;
+  }
+
+  /* ---- V2: Summary stats row ---- */
+  .stats-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 14px;
+    padding: 10px 0 0;
+    border-top: 1px solid #F5F1EA;
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    font-weight: 500;
+    color: #C2BCB2;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .stat-value {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  .stat-delta {
+    font-size: 10px;
+    font-weight: 600;
+    margin-top: 1px;
+  }
+
+  .stat-delta.up { color: #58A471; }
+  .stat-delta.down { color: #C47A5A; }
+  .stat-delta.flat { color: #A8A297; }
+
+  /* (V2: status dot colors removed — range band is enough) */
+
+  /* ---- V3: Unified Card Header — 3 sizes only ---- */
+  .v3-card {
+    background: #FFFFFF;
+    border-radius: 24px;
+    padding: 16px 16px 20px 16px;
+    margin: 0 20px;
+    border: 2px solid #DBD6CD;
+  }
+
+  .v3-row1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .v3-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #433E36;
+    letter-spacing: 0.2px;
+    line-height: 18px;
+  }
+
+  .v3-row2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+  }
+
+  .v3-card .line-chart-area {
+    margin: 0 -16px;
+  }
+
+  .v3-card .line-chart-svg {
+    width: 100%;
+    height: auto;
+  }
+
+  .v3-data {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+  }
+
+  .v3-value {
+    font-family: 'Poppins', sans-serif;
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    line-height: 36px;
+  }
+
+  .v3-unit {
+    font-size: 14px;
+    font-weight: 400;
+    color: #A8A297;
+    letter-spacing: 0.1px;
+  }
+
+  .v3-trend {
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: 2px;
+  }
+  .v3-trend.up { color: #58A471; }
+  .v3-trend.down { color: #C47A5A; }
+  .v3-trend.flat { color: #A8A297; }
+
+  .v3-pills {
+    display: flex;
+    gap: 4px;
+  }
+
+  .v3-pill {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: 1.5px solid #DBD6CD; /* neutral-20 */
+    color: #A8A297; /* neutral-40 */
+    background: transparent;
+  }
+
+  .v3-pill.active {
+    color: #FFFFFF;
+    border-color: transparent;
+  }
+
+  /* ---- V4: Apple Health-Inspired ---- */
+  #v4 .content-area {
+    background: #F2F2F7;
+    border-radius: 0;
+    padding: 16px 0;
+    margin: 0;
+  }
+
+  #v4 .section-title {
+    color: #1C1C1E;
+    font-size: 20px;
+    font-weight: 700;
+    border-bottom: none;
+    margin: 24px 20px 8px 20px;
+    padding-bottom: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+  }
+
+  #v4 .case-label {
+    color: #8E8E93;
+  }
+
+  .v4-card {
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: 16px 16px 14px 16px;
+    margin: 0 16px;
+    border: none;
+    box-shadow: none;
+  }
+
+  .v4-category {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .v4-cat-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .v4-cat-label {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.1px;
+  }
+
+  .v4-narrative {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1C1C1E;
+    line-height: 22px;
+    margin-bottom: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+  }
+
+  .v4-separator {
+    height: 0.5px;
+    background: #E5E5EA;
+    margin-bottom: 12px;
+  }
+
+  .v4-comparison {
+    display: flex;
+    gap: 0;
+    margin-bottom: 16px;
+  }
+
+  .v4-comp-col {
+    flex: 1;
+  }
+
+  .v4-comp-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+
+  .v4-comp-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+  }
+
+  .v4-comp-text {
+    font-size: 12px;
+    font-weight: 500;
+    color: #8E8E93;
+  }
+
+  .v4-comp-value {
+    font-family: 'Poppins', sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    line-height: 32px;
+  }
+
+  .v4-comp-unit {
+    font-size: 14px;
+    font-weight: 400;
+    margin-left: 2px;
+  }
+
+  .v4-chart-wrap {
+    position: relative;
+    margin: 0 -4px;
+  }
+
+  .v4-chart-wrap .line-chart-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .v4-chart-wrap .x-label {
+    font-size: 10px;
+    fill: #8E8E93;
+    text-anchor: middle;
+    font-weight: 500;
+  }
+
+  .v4-chart-wrap .x-label.today {
+    font-weight: 700;
+  }
+
+  .v4-chart-wrap .dot {
+    transition: r 0.15s ease;
+  }
+
+  .v4-chart-wrap .dot.highlighted {
+    r: 5;
+  }
+
+  .v4-now-line {
+    stroke: #C7C7CC;
+    stroke-width: 1;
+    stroke-dasharray: 4 3;
+    opacity: 0.8;
+  }
+
+  .v4-avg-line {
+    fill: none;
+    stroke-width: 1.5;
+    opacity: 0.4;
+    stroke-dasharray: none;
+  }
+
+  .v4-main-line {
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .v4-value-chip {
+    position: absolute;
+    top: -4px;
+    transform: translateX(-50%);
+    padding: 3px 8px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #FFFFFF;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .v4-value-chip.active {
+    opacity: 1;
+  }
+
+  /* ---- Embed mode ---- */
+  .embed body { padding: 0; }
+  .embed .phone-frame { width: 100%; height: 100vh; border-radius: 0; box-shadow: none; }
+
+  @media (max-width: 768px) {
+    body { padding: 0; }
+    .phone-frame { width: 100%; height: 100vh; border-radius: 0; box-shadow: none; }
+  }
+</style>
+<script>
+if(location.search.includes("embed=1"))document.documentElement.classList.add("embed");
+(function(){let last='';setInterval(async()=>{try{const r=await fetch(location.href,{cache:'no-store'});const t=await r.text();if(last&&t!==last)location.reload();last=t;}catch(e){}},1000);})();
+</script>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="screen">
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span class="status-time">12:15</span>
+      <span class="status-icons">
+        <svg width="16" height="12" viewBox="0 0 16 12"><rect x="0" y="3" width="3" height="9" rx="1" fill="#333" opacity="0.4"/><rect x="4.5" y="2" width="3" height="10" rx="1" fill="#333" opacity="0.6"/><rect x="9" y="1" width="3" height="11" rx="1" fill="#333" opacity="0.8"/><rect x="13.5" y="0" width="3" height="12" rx="1" fill="#333"/></svg>
+        <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 3C10.7 3 13.1 4.1 14.8 6L16 4.8C13.9 2.4 11.1 1 8 1S2.1 2.4 0 4.8L1.2 6C2.9 4.1 5.3 3 8 3Z" fill="#333"/><path d="M8 7C9.5 7 10.9 7.6 11.9 8.5L13.1 7.3C11.8 6.1 10 5.3 8 5.3S4.2 6.1 2.9 7.3L4.1 8.5C5.1 7.6 6.5 7 8 7Z" fill="#333"/><circle cx="8" cy="11" r="1.5" fill="#333"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0.5" y="0.5" width="22" height="11" rx="3" stroke="#333" stroke-opacity="0.35" fill="none"/><rect x="23.5" y="3.5" width="1.5" height="5" rx="0.75" fill="#333" opacity="0.4"/><rect x="2" y="2" width="19" height="8" rx="2" fill="#333"/></svg>
+      </span>
+    </div>
+
+    <!-- Header -->
+    <div class="top-header">
+      <h1>Line Chart <span class="highlight">States</span></h1>
+    </div>
+
+    <!-- Version Tabs -->
+    <div class="version-tabs">
+      <div class="version-tab active" onclick="switchVersion('v1')">V1</div>
+      <div class="version-tab" onclick="switchVersion('v2')">V2</div>
+      <div class="version-tab" onclick="switchVersion('v3')">V3</div>
+      <div class="version-tab" onclick="switchVersion('v4')">V4</div>
+    </div>
+
+    <div id="v1" class="version-content active">
+      <p class="drag-hint">Press and drag across the chart</p>
+      <div class="content-area" id="cases-v1"></div>
+    </div>
+
+    <div id="v2" class="version-content">
+      <p class="drag-hint">Tap W / M / 3M to switch · trend line appears on M & 3M</p>
+      <div class="content-area" id="cases-v2"></div>
+    </div>
+
+    <div id="v3" class="version-content">
+      <p class="drag-hint">3 sizes · 3 grays + category color · shared header system</p>
+      <div class="content-area" id="cases-v3"></div>
+    </div>
+
+    <div id="v4" class="version-content">
+      <p class="drag-hint">Apple Health-inspired · narrative-first · comparison layout</p>
+      <div class="content-area" id="cases-v4"></div>
+    </div>
+
+    <!-- Home Indicator -->
+    <div class="home-indicator">
+      <div class="home-indicator-bar"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const COLORS = {
+  hydration: { primary: '#3A647E', secondary: '#689BBB', bg: '#DBEFFA', border: '#92B7CE' },
+  activity: { primary: '#9A6E3A', secondary: '#D4A163', bg: '#F9EFE0', border: '#E2C191' },
+  nutrition: { primary: '#3A7A4E', secondary: '#58A471', bg: '#D7F4E8', border: '#83BD96' },
+  recovery: { primary: '#58669D', secondary: '#8292D5', bg: '#E7EBFF', border: '#8292D5' },
+};
+
+const GRADIENTS = {
+  hydration: { top: '#A8D8F0', bottom: '#8FC4E0' },
+  activity: { top: '#F0D8A8', bottom: '#DCC490' },
+  nutrition: { top: '#A8E0B8', bottom: '#90CCA2' },
+  recovery: { top: '#B8C0E8', bottom: '#A0A8D8' },
+};
+
+const KEYWORDS = {
+  hydration: ['water', 'hydration', 'fluid', 'drink', 'ml', 'liter'],
+  activity: ['step', 'run', 'walk', 'exercise', 'workout', 'active', 'activity', 'movement', 'training', 'distance', 'pace', 'vo2'],
+  nutrition: ['calor', 'kcal', 'protein', 'carb', 'fat', 'meal', 'food', 'nutriti', 'macro', 'fiber', 'vitamin', 'iron', 'weight', 'sodium'],
+  recovery: ['sleep', 'hrv', 'recover', 'rest', 'stress', 'body battery', 'heart rate', 'rhr', 'spo2', 'respiration'],
+};
+
+function getCategoryKey(title) {
+  const lower = (title || '').toLowerCase();
+  for (const [cat, kws] of Object.entries(KEYWORDS)) {
+    if (kws.some(kw => lower.includes(kw))) return cat;
+  }
+  return 'activity';
+}
+
+function getColors(title) {
+  return COLORS[getCategoryKey(title)];
+}
+
+function formatVal(v) {
+  if (v >= 1000) return (v/1000).toFixed(v % 1000 === 0 ? 0 : 1) + 'k';
+  if (v % 1 !== 0) return v.toFixed(1);
+  return v;
+}
+
+/* ---- Sample data ---- */
+const chartData = [
+  { section: 'Single Line — Trends' },
+
+  { label: '1. Weekly HRV trend', data: {
+    title: 'HRV This Week', dateRange: 'Mar 17–23', average: '42', suffix: 'avg ms',
+    values: [
+      { label: 'Mon', value: 38 }, { label: 'Tue', value: 45 }, { label: 'Wed', value: 41 },
+      { label: 'Thu', value: 48 }, { label: 'Fri', value: 44 }, { label: 'Sat', value: 39 },
+      { label: 'Sun', value: 47, today: true },
+    ]
+  }},
+
+  { label: '2. Resting heart rate', data: {
+    title: 'Resting Heart Rate', dateRange: 'Mar 17–23', average: '56', suffix: 'avg bpm',
+    values: [
+      { label: 'Mon', value: 58 }, { label: 'Tue', value: 55 }, { label: 'Wed', value: 57 },
+      { label: 'Thu', value: 54 }, { label: 'Fri', value: 53 }, { label: 'Sat', value: 56 },
+      { label: 'Sun', value: 55, today: true },
+    ]
+  }},
+
+  { label: '3. Sleep duration with goal', data: {
+    title: 'Sleep Duration', dateRange: 'Mar 17–23', average: '6.8', suffix: 'avg hours',
+    goal: 8, goalLabel: '8h goal',
+    values: [
+      { label: 'Mon', value: 7.2 }, { label: 'Tue', value: 6.5 }, { label: 'Wed', value: 5.8 },
+      { label: 'Thu', value: 7.5 }, { label: 'Fri', value: 6.0 }, { label: 'Sat', value: 8.1 },
+      { label: 'Sun', value: 6.5, today: true },
+    ]
+  }},
+
+  { label: '4. Training load (30 days)', data: {
+    title: 'Training Load', dateRange: 'Feb 23 – Mar 23', average: '685', suffix: 'avg weekly',
+    values: [
+      { label: 'W1', value: 580 }, { label: 'W2', value: 720 }, { label: 'W3', value: 650 },
+      { label: 'W4', value: 810 },
+    ]
+  }},
+
+  { section: 'Dual Line — Cross-Domain (Onboarding CONNECTION)' },
+
+  { label: '5. HRV vs Training Load', isDual: true, data: {
+    title: 'HRV vs Training Load', dateRange: '30 days', subtitle: 'When load rises, HRV should dip — yours didn\'t',
+    lineA: { name: 'HRV', suffix: 'ms', color: 'recovery',
+      values: [
+        { label: 'W1', value: 38 }, { label: 'W2', value: 42 }, { label: 'W3', value: 40 }, { label: 'W4', value: 45 },
+      ]
+    },
+    lineB: { name: 'Training Load', suffix: 'pts', color: 'activity',
+      values: [
+        { label: 'W1', value: 580 }, { label: 'W2', value: 720 }, { label: 'W3', value: 650 }, { label: 'W4', value: 810 },
+      ]
+    },
+  }},
+
+  { label: '6. Sleep Score vs Training Volume', isDual: true, data: {
+    title: 'Sleep Score vs Training Volume', dateRange: '30 days', subtitle: 'Heavy training weeks didn\'t hurt your sleep',
+    lineA: { name: 'Sleep Score', suffix: 'pts', color: 'recovery',
+      values: [
+        { label: 'W1', value: 78 }, { label: 'W2', value: 72 }, { label: 'W3', value: 81 }, { label: 'W4', value: 75 },
+      ]
+    },
+    lineB: { name: 'Training Vol', suffix: 'min', color: 'activity',
+      values: [
+        { label: 'W1', value: 180 }, { label: 'W2', value: 310 }, { label: 'W3', value: 220 }, { label: 'W4', value: 340 },
+      ]
+    },
+  }},
+
+  { section: 'Edge Cases' },
+
+  { label: '7. Flat line', data: {
+    title: 'Body Battery', dateRange: 'Mar 17–23', average: '60', suffix: 'avg',
+    values: [
+      { label: 'Mon', value: 60 }, { label: 'Tue', value: 60 }, { label: 'Wed', value: 60 },
+      { label: 'Thu', value: 60 }, { label: 'Fri', value: 60 },
+    ]
+  }},
+
+  { label: '8. Single spike', data: {
+    title: 'Stress Level', dateRange: 'Mar 17–23', average: '38', suffix: 'avg',
+    values: [
+      { label: 'Mon', value: 32 }, { label: 'Tue', value: 35 }, { label: 'Wed', value: 82 },
+      { label: 'Thu', value: 30 }, { label: 'Fri', value: 28 }, { label: 'Sat', value: 34 },
+      { label: 'Sun', value: 31, today: true },
+    ]
+  }},
+
+  { label: '9. Sparse (gaps)', data: {
+    title: 'HRV Trend', dateRange: 'Mar 17–23', average: '44', suffix: 'avg ms',
+    values: [
+      { label: 'Mon', value: 42 }, { label: 'Tue', value: null }, { label: 'Wed', value: 48 },
+      { label: 'Thu', value: null }, { label: 'Fri', value: null }, { label: 'Sat', value: 40 },
+      { label: 'Sun', value: 46, today: true },
+    ]
+  }},
+
+  { label: '10. Dense (14 days)', data: {
+    title: 'Steps Trend', dateRange: 'Mar 10–23', average: '7.2k', suffix: 'avg steps',
+    values: [
+      { label: '10', value: 6200 }, { label: '11', value: 7800 }, { label: '12', value: 5400 },
+      { label: '13', value: 8100 }, { label: '14', value: 7200 }, { label: '15', value: 9300 },
+      { label: '16', value: 6800 }, { label: '17', value: 7500 }, { label: '18', value: 8400 },
+      { label: '19', value: 5900 }, { label: '20', value: 7100 }, { label: '21', value: 8800 },
+      { label: '22', value: 6500 }, { label: '23', value: 7400, today: true },
+    ]
+  }},
+];
+
+/* ---- Render helpers ---- */
+const PAD = { top: 24, right: 8, bottom: 28, left: 8 };
+const CHART_H = 150;
+
+function buildPath(points, width, height, minVal, maxVal, customPad, tension) {
+  const p = customPad || PAD;
+  const t = tension !== undefined ? tension : 0.33; // 0 = straight lines, 0.33 = full smooth
+  const validPoints = points.filter(p => p.value !== null && p.value !== undefined);
+  if (validPoints.length < 2) return { path: '', areaPath: '', dots: validPoints };
+
+  const range = maxVal - minVal || 1;
+  const xStep = (width - p.left - p.right) / (points.length - 1);
+
+  const coords = points.map((pt, i) => {
+    if (pt.value === null || pt.value === undefined) return null;
+    return {
+      x: p.left + i * xStep,
+      y: p.top + (1 - (pt.value - minVal) / range) * (height - p.top - p.bottom),
+      value: pt.value,
+      label: pt.label,
+      today: pt.today,
+      idx: i,
+    };
+  }).filter(Boolean);
+
+  // Monotone cubic interpolation (Fritsch-Carlson)
+  const n = coords.length;
+  const dx = [], dy = [], m = [], tangents = [];
+
+  for (let i = 0; i < n - 1; i++) {
+    dx[i] = coords[i + 1].x - coords[i].x;
+    dy[i] = coords[i + 1].y - coords[i].y;
+    m[i] = dy[i] / dx[i];
+  }
+
+  tangents[0] = m[0];
+  tangents[n - 1] = m[n - 2];
+  for (let i = 1; i < n - 1; i++) {
+    if (m[i - 1] * m[i] <= 0) {
+      tangents[i] = 0;
+    } else {
+      tangents[i] = (m[i - 1] + m[i]) / 2;
+    }
+  }
+
+  for (let i = 0; i < n - 1; i++) {
+    if (Math.abs(m[i]) < 1e-6) {
+      tangents[i] = 0;
+      tangents[i + 1] = 0;
+    } else {
+      const alpha = tangents[i] / m[i];
+      const beta = tangents[i + 1] / m[i];
+      const s = alpha * alpha + beta * beta;
+      if (s > 9) {
+        const tau = 3 / Math.sqrt(s);
+        tangents[i] = tau * alpha * m[i];
+        tangents[i + 1] = tau * beta * m[i];
+      }
+    }
+  }
+
+  let d = `M ${coords[0].x} ${coords[0].y}`;
+  for (let i = 0; i < n - 1; i++) {
+    const seg = dx[i] * t;
+    const cp1x = coords[i].x + seg;
+    const cp1y = coords[i].y + tangents[i] * seg;
+    const cp2x = coords[i + 1].x - seg;
+    const cp2y = coords[i + 1].y - tangents[i + 1] * seg;
+    d += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${coords[i + 1].x} ${coords[i + 1].y}`;
+  }
+
+  const bottomY = height - p.bottom;
+  const areaD = d + ` L ${coords[coords.length-1].x} ${bottomY} L ${coords[0].x} ${bottomY} Z`;
+
+  return { path: d, areaPath: areaD, dots: coords };
+}
+
+function renderSingleLineCard(data, cardIdx) {
+  const colors = getColors(data.title);
+  const catKey = getCategoryKey(data.title);
+  const grad = GRADIENTS[catKey];
+  const values = data.values || [];
+  const validVals = values.filter(v => v.value !== null && v.value !== undefined).map(v => v.value);
+  const minVal = Math.min(...validVals) * 0.85;
+  const maxVal = data.goal ? Math.max(Math.max(...validVals), data.goal) * 1.05 : Math.max(...validVals) * 1.05;
+  const chartW = 318;
+  const chartH = CHART_H;
+  const uid = `lc-${cardIdx}`;
+
+  const { path, areaPath, dots } = buildPath(values, chartW, chartH, minVal, maxVal);
+
+  const gridLines = [0.25, 0.5, 0.75].map(pct => {
+    const y = PAD.top + pct * (chartH - PAD.top - PAD.bottom);
+    return `<line x1="${PAD.left}" y1="${y}" x2="${chartW - PAD.right}" y2="${y}" class="grid-line"/>`;
+  }).join('');
+
+  const xStep = (chartW - PAD.left - PAD.right) / (values.length - 1);
+  const xLabels = values.map((v, i) => {
+    const x = PAD.left + i * xStep;
+    const cls = v.today ? 'x-label today' : 'x-label';
+    const style = v.today ? `fill:${colors.secondary}` : '';
+    if (values.length > 10 && i % 2 !== 0 && !v.today) return '';
+    return `<text x="${x}" y="${chartH - 6}" class="${cls}" style="${style}" data-idx="${i}">${v.label}</text>`;
+  }).join('');
+
+  let goalHtml = '';
+  if (data.goal) {
+    const range = maxVal - minVal || 1;
+    const goalY = PAD.top + (1 - (data.goal - minVal) / range) * (chartH - PAD.top - PAD.bottom);
+    goalHtml = `
+      <line x1="${PAD.left}" y1="${goalY}" x2="${chartW - PAD.right}" y2="${goalY}" class="goal-line-svg" stroke="${colors.primary}"/>
+      <text x="${chartW - PAD.right}" y="${goalY - 6}" text-anchor="end" class="goal-label-svg" fill="${colors.primary}">${data.goalLabel}</text>`;
+  }
+
+  // Solid dots + two pulse rings per dot
+  const dotsHtml = dots.map(d => `
+    <circle cx="${d.x}" cy="${d.y}" r="10" class="pulse-ring" fill="${colors.secondary}" data-idx="${d.idx}"/>
+    <circle cx="${d.x}" cy="${d.y}" r="10" class="pulse-ring pulse-ring-2" fill="${colors.secondary}" data-idx="${d.idx}"/>
+    <circle cx="${d.x}" cy="${d.y}" r="3" class="dot" fill="${colors.secondary}" data-idx="${d.idx}" data-val="${d.value}"/>
+  `).join('');
+
+  // Colored scan line — runs full height including chip zone
+  const scanLine = `<line x1="0" y1="0" x2="0" y2="${chartH - PAD.bottom}" class="scan-line" stroke="${colors.secondary}" id="${uid}-scan"/>`;
+
+  return `
+    <div class="chart-card" data-uid="${uid}" data-color="${colors.secondary}" data-primary="${colors.primary}" data-border="${colors.border}" data-bg="${colors.bg}">
+      <div class="card-top">
+        <div class="card-title">${data.title}</div>
+        <div class="card-date">${data.dateRange}</div>
+      </div>
+      <div class="card-value-row">
+        <div class="card-value" style="color:${colors.secondary}">${(data.average || '').replace(/,/g, '')}</div>
+        <span class="card-value-suffix" style="color:${colors.secondary}">${data.suffix || ''}</span>
+      </div>
+      <div class="line-chart-area" id="${uid}" data-uid="${uid}">
+        <svg class="line-chart-svg" viewBox="0 0 ${chartW} ${chartH}" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="${uid}-grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="${grad.top}" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="${grad.bottom}" stop-opacity="0.02"/>
+            </linearGradient>
+          </defs>
+          ${gridLines}
+          ${goalHtml}
+          <path d="${areaPath}" fill="url(#${uid}-grad)" class="area-fill"/>
+          <path d="${path}" class="line-path" stroke="${colors.border}" id="${uid}-line"/>
+          ${scanLine}
+          ${dotsHtml}
+          ${xLabels}
+        </svg>
+        <div class="value-chip" id="${uid}-chip" style="background:${colors.secondary};color:#FFFFFF"></div>
+      </div>
+    </div>`;
+}
+
+function renderDualLineCard(data, cardIdx) {
+  const colorsA = COLORS[data.lineA.color];
+  const colorsB = COLORS[data.lineB.color];
+  const gradA = GRADIENTS[data.lineA.color];
+  const gradB = GRADIENTS[data.lineB.color];
+  const chartW = 318;
+  const chartH = CHART_H;
+  const uid = `lc-dual-${cardIdx}`;
+
+  const valsA = data.lineA.values.filter(v => v.value !== null).map(v => v.value);
+  const valsB = data.lineB.values.filter(v => v.value !== null).map(v => v.value);
+
+  const minA = Math.min(...valsA) * 0.85, maxA = Math.max(...valsA) * 1.05;
+  const minB = Math.min(...valsB) * 0.85, maxB = Math.max(...valsB) * 1.05;
+
+  const pathA = buildPath(data.lineA.values, chartW, chartH, minA, maxA);
+  const pathB = buildPath(data.lineB.values, chartW, chartH, minB, maxB);
+
+  const xStep = (chartW - PAD.left - PAD.right) / (data.lineA.values.length - 1);
+  const xLabels = data.lineA.values.map((v, i) => {
+    const x = PAD.left + i * xStep;
+    return `<text x="${x}" y="${chartH - 6}" class="x-label" data-idx="${i}">${v.label}</text>`;
+  }).join('');
+
+  const gridLines = [0.25, 0.5, 0.75].map(pct => {
+    const y = PAD.top + pct * (chartH - PAD.top - PAD.bottom);
+    return `<line x1="${PAD.left}" y1="${y}" x2="${chartW - PAD.right}" y2="${y}" class="grid-line"/>`;
+  }).join('');
+
+  const dotsA = pathA.dots.map(d => `
+    <circle cx="${d.x}" cy="${d.y}" r="10" class="pulse-ring" fill="${colorsA.secondary}" data-idx="${d.idx}" data-line="a"/>
+    <circle cx="${d.x}" cy="${d.y}" r="10" class="pulse-ring pulse-ring-2" fill="${colorsA.secondary}" data-idx="${d.idx}" data-line="a"/>
+    <circle cx="${d.x}" cy="${d.y}" r="3" class="dot" fill="${colorsA.secondary}" data-idx="${d.idx}" data-line="a" data-val="${d.value}"/>
+  `).join('');
+
+  const dotsB = pathB.dots.map(d => `
+    <circle cx="${d.x}" cy="${d.y}" r="10" class="pulse-ring" fill="${colorsB.secondary}" data-idx="${d.idx}" data-line="b"/>
+    <circle cx="${d.x}" cy="${d.y}" r="10" class="pulse-ring pulse-ring-2" fill="${colorsB.secondary}" data-idx="${d.idx}" data-line="b"/>
+    <circle cx="${d.x}" cy="${d.y}" r="3" class="dot" fill="${colorsB.secondary}" data-idx="${d.idx}" data-line="b" data-val="${d.value}"/>
+  `).join('');
+
+  const scanLine = `<line x1="0" y1="0" x2="0" y2="${chartH - PAD.bottom}" class="scan-line" stroke="${colorsA.secondary}" id="${uid}-scan"/>`;
+
+  return `
+    <div class="chart-card" data-uid="${uid}" data-color="${colorsA.secondary}" data-primary="${colorsA.primary}" data-border="${colorsA.border}" data-bg="${colorsA.bg}" data-is-dual="true"
+         data-color-b="${colorsB.secondary}" data-primary-b="${colorsB.primary}" data-border-b="${colorsB.border}" data-bg-b="${colorsB.bg}"
+         data-name-a="${data.lineA.name}" data-suffix-a="${data.lineA.suffix}" data-name-b="${data.lineB.name}" data-suffix-b="${data.lineB.suffix}">
+      <div class="card-top">
+        <div class="card-title">${data.title}</div>
+        <div class="card-date">${data.dateRange}</div>
+      </div>
+      ${data.subtitle ? `<div style="font-size:13px;color:#A8A297;margin-top:4px;line-height:18px">${data.subtitle}</div>` : ''}
+      <div class="line-chart-area" id="${uid}" data-uid="${uid}">
+        <svg class="line-chart-svg" viewBox="0 0 ${chartW} ${chartH}" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="${uid}-gradA" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="${gradA.top}" stop-opacity="0.2"/>
+              <stop offset="100%" stop-color="${gradA.bottom}" stop-opacity="0.01"/>
+            </linearGradient>
+            <linearGradient id="${uid}-gradB" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="${gradB.top}" stop-opacity="0.2"/>
+              <stop offset="100%" stop-color="${gradB.bottom}" stop-opacity="0.01"/>
+            </linearGradient>
+          </defs>
+          ${gridLines}
+          <path d="${pathA.areaPath}" fill="url(#${uid}-gradA)" class="area-fill"/>
+          <path d="${pathB.areaPath}" fill="url(#${uid}-gradB)" class="area-fill"/>
+          <path d="${pathA.path}" class="line-path" stroke="${colorsA.border}" stroke-width="2"/>
+          <path d="${pathB.path}" class="line-path" stroke="${colorsB.border}" stroke-width="2" stroke-dasharray="6 3"/>
+          ${scanLine}
+          ${dotsA}
+          ${dotsB}
+          ${xLabels}
+        </svg>
+        <div class="value-chip-dual" id="${uid}-chip">
+          <div class="chip-half" id="${uid}-chip-a" style="background:${colorsA.secondary}"></div>
+          <div class="chip-half" id="${uid}-chip-b" style="background:${colorsB.secondary}"></div>
+        </div>
+      </div>
+      <div class="chart-legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background:${colorsA.secondary}"></div>
+          <span class="legend-label">${data.lineA.name}</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:${colorsB.secondary};border:1.5px dashed ${colorsB.border}"></div>
+          <span class="legend-label">${data.lineB.name}</span>
+        </div>
+      </div>
+    </div>`;
+}
+
+/* ---- Render all cards ---- */
+const container = document.getElementById('cases-v1');
+let html = '';
+chartData.forEach((item, idx) => {
+  if (item.section) {
+    html += `<div class="section-title">${item.section}</div>`;
+  } else if (item.isDual) {
+    html += `<div class="case-label">${item.label}</div>${renderDualLineCard(item.data, idx)}`;
+  } else {
+    html += `<div class="case-label">${item.label}</div>${renderSingleLineCard(item.data, idx)}`;
+  }
+});
+container.innerHTML = html;
+
+/* ---- Line draw animation ---- */
+function animateLines() {
+  document.querySelectorAll('.version-content.active .line-path, .version-content.active .v4-main-line').forEach(el => {
+    if (el.dataset.animated) return;
+    el.dataset.animated = '1';
+    const length = el.getTotalLength();
+    el.style.strokeDasharray = length;
+    el.style.strokeDashoffset = length;
+    el.style.transition = 'none';
+    requestAnimationFrame(() => {
+      el.style.transition = 'stroke-dashoffset 0.8s cubic-bezier(0.33, 1, 0.68, 1)';
+      el.style.strokeDashoffset = '0';
+    });
+  });
+  document.querySelectorAll('.version-content.active .area-fill').forEach(el => {
+    if (el.dataset.animated) return;
+    el.dataset.animated = '1';
+    el.style.opacity = '0';
+    setTimeout(() => {
+      el.style.transition = 'opacity 0.4s ease';
+      el.style.opacity = '';
+    }, 600);
+  });
+  document.querySelectorAll('.version-content.active .dot').forEach(el => {
+    if (el.dataset.animated) return;
+    el.dataset.animated = '1';
+    el.style.opacity = '0';
+    setTimeout(() => {
+      el.style.transition = 'opacity 0.3s ease';
+      el.style.opacity = '1';
+    }, 700);
+  });
+}
+animateLines();
+
+/* ---- Version switching ---- */
+function switchVersion(v) {
+  document.querySelectorAll('.version-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.version-content').forEach(c => c.classList.remove('active'));
+  document.querySelector(`.version-tab[onclick*="${v}"]`).classList.add('active');
+  document.getElementById(v).classList.add('active');
+  setTimeout(animateLines, 50);
+}
+
+/* ---- Touch & drag interaction ---- */
+let activeChartEl = null;
+let lastHighlightedIdx = -1;
+
+function haptic() {
+  if (navigator.vibrate) navigator.vibrate(5);
+}
+
+function handleLineTouch(e, chartArea) {
+  const rect = chartArea.getBoundingClientRect();
+  const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+  const svgWidth = rect.width;
+  const svg = chartArea.querySelector('.line-chart-svg');
+  const viewBoxWidth = svg ? parseFloat(svg.getAttribute('viewBox').split(' ')[2]) : 318;
+  const svgX = (x / svgWidth) * viewBoxWidth;
+
+  chartArea.classList.add('active');
+
+  const card = chartArea.closest('.chart-card') || chartArea.closest('.v4-card');
+  const uid = card.dataset.uid;
+  const isDual = card.dataset.isDual === 'true';
+
+  // Find nearest dot by x position
+  const dots = chartArea.querySelectorAll('.dot');
+  let closest = null;
+  let closestDist = Infinity;
+  let closestIdx = -1;
+
+  dots.forEach(dot => {
+    const cx = parseFloat(dot.getAttribute('cx'));
+    const dist = Math.abs(cx - svgX);
+    if (dist < closestDist) {
+      closestDist = dist;
+      closest = dot;
+      closestIdx = parseInt(dot.dataset.idx);
+    }
+  });
+
+  if (!closest || closestIdx === lastHighlightedIdx) return;
+
+  // Haptic on new dot
+  haptic();
+  lastHighlightedIdx = closestIdx;
+
+  // Clear all highlights
+  dots.forEach(d => d.classList.remove('highlighted'));
+  chartArea.querySelectorAll('.pulse-ring').forEach(r => r.classList.remove('active'));
+  chartArea.querySelectorAll('.x-label').forEach(l => {
+    l.classList.remove('highlighted');
+    l.style.fill = '';
+  });
+
+  // Highlight all dots at this x index
+  chartArea.querySelectorAll(`.dot[data-idx="${closestIdx}"]`).forEach(d => d.classList.add('highlighted'));
+
+  // Activate pulse rings
+  chartArea.querySelectorAll(`.pulse-ring[data-idx="${closestIdx}"]`).forEach(r => r.classList.add('active'));
+
+  // Highlight x-label
+  chartArea.querySelectorAll(`.x-label[data-idx="${closestIdx}"]`).forEach(l => {
+    l.classList.add('highlighted');
+    l.style.fill = card.dataset.color;
+  });
+
+  // Move colored scan line
+  const scan = chartArea.querySelector('.scan-line');
+  if (scan && closest) {
+    const cx = closest.getAttribute('cx');
+    scan.setAttribute('x1', cx);
+    scan.setAttribute('x2', cx);
+    scan.classList.add('active');
+  }
+
+  // Show value chip at top of scan line
+  const cx = parseFloat(closest.getAttribute('cx'));
+  const pctX = (cx / viewBoxWidth) * 100;
+
+  if (isDual) {
+    const dualChip = chartArea.querySelector('.value-chip-dual');
+    if (dualChip) {
+      const dotA = chartArea.querySelector(`.dot[data-idx="${closestIdx}"][data-line="a"]`);
+      const dotB = chartArea.querySelector(`.dot[data-idx="${closestIdx}"][data-line="b"]`);
+      const valA = dotA ? formatVal(parseFloat(dotA.dataset.val)) : '–';
+      const valB = dotB ? formatVal(parseFloat(dotB.dataset.val)) : '–';
+      const suffA = card.dataset.suffixA ? ' ' + card.dataset.suffixA : '';
+      const suffB = card.dataset.suffixB ? ' ' + card.dataset.suffixB : '';
+      dualChip.querySelector('.chip-half:first-child').textContent = valA + suffA;
+      dualChip.querySelector('.chip-half:last-child').textContent = valB + suffB;
+      dualChip.style.left = pctX + '%';
+      dualChip.classList.add('active');
+    }
+  } else {
+    // Try V4 chip first, then V1-V3 chip
+    const v4Chip = chartArea.querySelector('.v4-value-chip');
+    const chip = v4Chip || chartArea.querySelector('.value-chip');
+    if (chip) {
+      chip.textContent = formatVal(parseFloat(closest.dataset.val));
+      chip.style.left = pctX + '%';
+      chip.classList.add('active');
+    }
+  }
+}
+
+function clearLineTouch(chartArea) {
+  chartArea.classList.remove('active');
+  chartArea.querySelectorAll('.dot').forEach(d => d.classList.remove('highlighted'));
+  chartArea.querySelectorAll('.pulse-ring').forEach(r => r.classList.remove('active'));
+  chartArea.querySelectorAll('.x-label').forEach(l => {
+    l.classList.remove('highlighted');
+    l.style.fill = '';
+  });
+  const scan = chartArea.querySelector('.scan-line');
+  if (scan) scan.classList.remove('active');
+  const chip = chartArea.querySelector('.value-chip');
+  if (chip) chip.classList.remove('active');
+  const v4Chip = chartArea.querySelector('.v4-value-chip');
+  if (v4Chip) v4Chip.classList.remove('active');
+  const dualChip = chartArea.querySelector('.value-chip-dual');
+  if (dualChip) dualChip.classList.remove('active');
+  lastHighlightedIdx = -1;
+  activeChartEl = null;
+}
+
+document.addEventListener('mousedown', e => {
+  const area = e.target.closest('.line-chart-area');
+  if (!area) return;
+  activeChartEl = area;
+  handleLineTouch(e, area);
+});
+
+document.addEventListener('mousemove', e => {
+  if (!activeChartEl) return;
+  handleLineTouch(e, activeChartEl);
+});
+
+document.addEventListener('mouseup', () => {
+  if (activeChartEl) clearLineTouch(activeChartEl);
+});
+
+document.addEventListener('touchstart', e => {
+  const area = e.target.closest('.line-chart-area');
+  if (!area) return;
+  activeChartEl = area;
+  handleLineTouch(e, area);
+}, { passive: true });
+
+document.addEventListener('touchmove', e => {
+  if (!activeChartEl) return;
+  handleLineTouch(e, activeChartEl);
+}, { passive: true });
+
+document.addEventListener('touchend', () => {
+  if (activeChartEl) clearLineTouch(activeChartEl);
+});
+
+/* ================================================================
+   V2: ENHANCED CHARTS
+   - Time range pills (W / M / 3M)
+   - Personal range band (your typical zone)
+   - 7-day trend line overlay
+   - Summary stats row (avg, low, high, delta)
+   - Min/Max markers on chart
+   - Color-coded dots (good / caution / alert)
+   ================================================================ */
+
+const v2Data = [
+  { section: 'Enhanced — Range Band + Trend + Stats' },
+
+  { label: '1. HRV with personal range', data: {
+    title: 'HRV', dateRange: 'Mar 17–23', average: '42', suffix: 'ms',
+    rangeLow: 35, rangeHigh: 50,
+    prevAvg: 39,
+    values: [
+      { label: 'Mon', value: 38 }, { label: 'Tue', value: 45 }, { label: 'Wed', value: 41 },
+      { label: 'Thu', value: 48 }, { label: 'Fri', value: 44 }, { label: 'Sat', value: 39 },
+      { label: 'Sun', value: 47, today: true },
+    ]
+  }},
+
+  { label: '2. Resting HR with range', data: {
+    title: 'Resting Heart Rate', dateRange: 'Mar 17–23', average: '56', suffix: 'bpm',
+    rangeLow: 52, rangeHigh: 60,
+    prevAvg: 57,
+    invertStatus: true,
+    values: [
+      { label: 'Mon', value: 58 }, { label: 'Tue', value: 55 }, { label: 'Wed', value: 57 },
+      { label: 'Thu', value: 54 }, { label: 'Fri', value: 53 }, { label: 'Sat', value: 56 },
+      { label: 'Sun', value: 55, today: true },
+    ]
+  }},
+
+  { label: '3. Sleep duration with range + goal', data: {
+    title: 'Sleep Duration', dateRange: 'Mar 17–23', average: '6.8', suffix: 'hours',
+    rangeLow: 6.5, rangeHigh: 8.0,
+    goal: 8, goalLabel: '8h goal',
+    prevAvg: 7.1,
+    values: [
+      { label: 'Mon', value: 7.2 }, { label: 'Tue', value: 6.5 }, { label: 'Wed', value: 5.8 },
+      { label: 'Thu', value: 7.5 }, { label: 'Fri', value: 6.0 }, { label: 'Sat', value: 8.1 },
+      { label: 'Sun', value: 6.5, today: true },
+    ]
+  }},
+
+  { label: '4. Stress with inverted range', data: {
+    title: 'Stress Level', dateRange: 'Mar 17–23', average: '38', suffix: 'avg',
+    rangeLow: 20, rangeHigh: 40,
+    prevAvg: 35,
+    invertStatus: true,
+    values: [
+      { label: 'Mon', value: 32 }, { label: 'Tue', value: 35 }, { label: 'Wed', value: 82 },
+      { label: 'Thu', value: 30 }, { label: 'Fri', value: 28 }, { label: 'Sat', value: 34 },
+      { label: 'Sun', value: 31, today: true },
+    ]
+  }},
+
+  { label: '5. Steps with trend', data: {
+    title: 'Steps', dateRange: 'Mar 17–23', average: '7.2k', suffix: 'steps',
+    rangeLow: 6000, rangeHigh: 9000,
+    prevAvg: 6800,
+    values: [
+      { label: 'Mon', value: 6200 }, { label: 'Tue', value: 7800 }, { label: 'Wed', value: 8100 },
+      { label: 'Thu', value: 6500 }, { label: 'Fri', value: 7200 }, { label: 'Sat', value: 9300 },
+      { label: 'Sun', value: 5900, today: true },
+    ]
+  }},
+
+  { label: '6. Body Battery (flat + narrow range)', data: {
+    title: 'Body Battery', dateRange: 'Mar 17–23', average: '62', suffix: 'avg',
+    rangeLow: 55, rangeHigh: 75,
+    prevAvg: 60,
+    values: [
+      { label: 'Mon', value: 60 }, { label: 'Tue', value: 60 }, { label: 'Wed', value: 63 },
+      { label: 'Thu', value: 58 }, { label: 'Fri', value: 65 }, { label: 'Sat', value: 62 },
+      { label: 'Sun', value: 64, today: true },
+    ]
+  }},
+
+  { section: 'Onboarding — CONNECTION Section' },
+
+  { label: '7. Onboarding AHA chart', isDual: true, data: {
+    title: 'HRV vs Training Load',
+    dateRange: '30 days',
+    subtitle: 'Your training load climbed 40% but HRV held steady — your body is absorbing the work.',
+    lineA: { name: 'HRV', suffix: 'ms', color: 'recovery', rangeLow: 32, rangeHigh: 48,
+      values: [
+        { label: 'W1', value: 36 }, { label: 'W2', value: 40 }, { label: 'W3', value: 38 }, { label: 'W4', value: 43 },
+      ]
+    },
+    lineB: { name: 'Training Load', suffix: 'pts', color: 'activity',
+      values: [
+        { label: 'W1', value: 520 }, { label: 'W2', value: 680 }, { label: 'W3', value: 610 }, { label: 'W4', value: 730 },
+      ]
+    },
+  }},
+];
+
+// --- Data generation for M and 3M ranges ---
+function seededRng(seed) {
+  let s = Math.abs(seed) % 2147483647;
+  if (s <= 0) s += 2147483646;
+  return function() { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; };
+}
+
+function genValues(count, base, spread, labelFn, seed, markLast) {
+  const r = seededRng(seed);
+  const out = [];
+  let cur = base;
+  for (let i = 0; i < count; i++) {
+    cur += (base - cur) * 0.12 + (r() - 0.5) * spread;
+    const v = base >= 100 ? Math.round(cur) : Math.round(cur * 10) / 10;
+    out.push({ label: labelFn(i), value: v });
+    if (markLast && i === count - 1) out[i].today = true;
+  }
+  return out;
+}
+
+function avgOfVals(vals) {
+  const v = vals.filter(x => x.value != null).map(x => x.value);
+  return v.length ? v.reduce((a,b) => a + b, 0) / v.length : 0;
+}
+
+function generateRangeData(data, range) {
+  if (range === 'w') return data;
+  const wVals = data.values.filter(v => v.value != null).map(v => v.value);
+  const wAvg = wVals.reduce((a,b) => a + b, 0) / wVals.length;
+  const wSpread = Math.max(...wVals) - Math.min(...wVals);
+  const count = range === 'm' ? 30 : 13;
+  const labelFn = range === 'm' ? (i => '' + (i + 1)) : (i => 'W' + (i + 1));
+  let seed = 0;
+  for (let i = 0; i < data.title.length; i++) seed = seed * 31 + data.title.charCodeAt(i);
+  seed += range === 'm' ? 1000 : 2000;
+  const baseAvg = range === 'm' ? wAvg * 0.98 : wAvg * 0.96;
+  const spread = range === 'm' ? wSpread * 0.8 : wSpread * 0.7;
+  const values = genValues(count, baseAvg, spread, labelFn, Math.abs(seed), range === 'm');
+  const avg = avgOfVals(values);
+  let fmtAvg;
+  if (wAvg >= 1000) fmtAvg = (avg / 1000).toFixed(1) + 'k';
+  else if (data.average && data.average.includes('.')) fmtAvg = avg.toFixed(1);
+  else fmtAvg = Math.round(avg) + '';
+  const prevAvg = data.prevAvg ? data.prevAvg * (range === 'm' ? 0.97 : 0.94) : undefined;
+  return {
+    dateRange: range === 'm' ? 'Feb 23 – Mar 23' : 'Jan – Mar \'26',
+    average: fmtAvg,
+    prevAvg: prevAvg,
+    values: values,
+  };
+}
+
+function computeMovingAvg(values, window) {
+  const result = [];
+  for (let i = 0; i < values.length; i++) {
+    let sum = 0, count = 0;
+    for (let j = Math.max(0, i - window + 1); j <= i; j++) {
+      if (values[j].value !== null && values[j].value !== undefined) {
+        sum += values[j].value;
+        count++;
+      }
+    }
+    result.push(count > 0 ? sum / count : null);
+  }
+  return result;
+}
+
+function getStatus(value, rangeLow, rangeHigh, invert) {
+  if (value === null || value === undefined) return 'good';
+  if (invert) {
+    if (value <= rangeLow) return 'good';
+    if (value <= rangeHigh) return 'caution';
+    return 'alert';
+  }
+  if (value >= rangeLow && value <= rangeHigh) return 'good';
+  if (value >= rangeLow * 0.9 && value <= rangeHigh * 1.1) return 'caution';
+  return 'alert';
+}
+
+const STATUS_COLORS = {
+  good: '#58A471',
+  caution: '#D4A163',
+  alert: '#C47A5A',
+};
+
+function renderV2Card(data, cardIdx, range) {
+  range = range || 'w';
+  const rd = range === 'w' ? data : generateRangeData(data, range);
+  const colors = getColors(data.title);
+  const catKey = getCategoryKey(data.title);
+  const grad = GRADIENTS[catKey];
+  const values = rd.values || [];
+  const validVals = values.filter(v => v.value !== null && v.value !== undefined).map(v => v.value);
+
+  const dataMin = Math.min(...validVals);
+  const dataMax = Math.max(...validVals);
+  const allMin = Math.min(dataMin, data.rangeLow || dataMin) * 0.85;
+  const allMax = Math.max(dataMax, data.rangeHigh || dataMax, data.goal || 0) * 1.05;
+  const chartW = 318;
+  const chartH = CHART_H;
+  const uid = `v2-${cardIdx}-${range}`;
+  const valRange = allMax - allMin || 1;
+
+  const { path, areaPath, dots } = buildPath(values, chartW, chartH, allMin, allMax);
+
+  // Grid
+  const gridLines = [0.25, 0.5, 0.75].map(pct => {
+    const y = PAD.top + pct * (chartH - PAD.top - PAD.bottom);
+    return `<line x1="${PAD.left}" y1="${y}" x2="${chartW - PAD.right}" y2="${y}" class="grid-line"/>`;
+  }).join('');
+
+  // X labels — thin for dense views (M=30pts, 3M=13pts)
+  const xStep = (chartW - PAD.left - PAD.right) / (values.length - 1);
+  const labelSkip = values.length > 20 ? 5 : values.length > 10 ? 2 : 1;
+  const xLabels = values.map((v, i) => {
+    const x = PAD.left + i * xStep;
+    const cls = v.today ? 'x-label today' : 'x-label';
+    const style = v.today ? `fill:${colors.secondary}` : '';
+    if (labelSkip > 1 && i % labelSkip !== 0 && i !== values.length - 1 && !v.today) return '';
+    return `<text x="${x}" y="${chartH - 6}" class="${cls}" style="${style}" data-idx="${i}">${v.label}</text>`;
+  }).join('');
+
+  // Personal range band
+  let rangeBandHtml = '';
+  if (data.rangeLow !== undefined && data.rangeHigh !== undefined) {
+    const bandTop = PAD.top + (1 - (data.rangeHigh - allMin) / valRange) * (chartH - PAD.top - PAD.bottom);
+    const bandBot = PAD.top + (1 - (data.rangeLow - allMin) / valRange) * (chartH - PAD.top - PAD.bottom);
+    rangeBandHtml = `<rect x="${PAD.left}" y="${bandTop}" width="${chartW - PAD.left - PAD.right}" height="${bandBot - bandTop}" fill="${colors.secondary}" class="range-band" rx="4"/>`;
+  }
+
+  // Goal line
+  let goalHtml = '';
+  if (data.goal) {
+    const goalY = PAD.top + (1 - (data.goal - allMin) / valRange) * (chartH - PAD.top - PAD.bottom);
+    goalHtml = `
+      <line x1="${PAD.left}" y1="${goalY}" x2="${chartW - PAD.right}" y2="${goalY}" class="goal-line-svg" stroke="${colors.primary}"/>
+      <text x="${chartW - PAD.right}" y="${goalY - 6}" text-anchor="end" class="goal-label-svg" fill="${colors.primary}">${data.goalLabel}</text>`;
+  }
+
+  // Trend line (moving average)
+  const maWindow = values.length > 7 ? 5 : 3;
+  const maValues = computeMovingAvg(values, maWindow);
+  const maPoints = values.map((v, i) => ({ ...v, value: maValues[i] }));
+  const trendPath = buildPath(maPoints, chartW, chartH, allMin, allMax);
+
+  // Solid dots + pulse rings — hide visible dots on M (30pts, too dense)
+  const showDots = values.length <= 14;
+  const dotsHtml = dots.map(d => `
+    <circle cx="${d.x}" cy="${d.y}" r="10" class="pulse-ring" fill="${colors.secondary}" data-idx="${d.idx}"/>
+    <circle cx="${d.x}" cy="${d.y}" r="10" class="pulse-ring pulse-ring-2" fill="${colors.secondary}" data-idx="${d.idx}"/>
+    <circle cx="${d.x}" cy="${d.y}" r="${showDots ? 3 : 0}" class="dot" fill="${colors.secondary}" data-idx="${d.idx}" data-val="${d.value}"/>
+  `).join('');
+
+  // Min/Max markers
+  let minMaxHtml = '';
+  if (dots.length >= 3) {
+    const minDot = dots.reduce((a, b) => a.value < b.value ? a : b);
+    const maxDot = dots.reduce((a, b) => a.value > b.value ? a : b);
+    if (minDot.idx !== maxDot.idx) {
+      const minLabel = formatVal(minDot.value);
+      const maxLabel = formatVal(maxDot.value);
+      // Place labels above max, below min
+      minMaxHtml = `
+        <rect x="${maxDot.x - 14}" y="${maxDot.y - 20}" width="28" height="14" fill="${colors.bg}" class="min-max-bg"/>
+        <text x="${maxDot.x}" y="${maxDot.y - 10}" class="min-max-label" fill="${colors.primary}">${maxLabel}</text>
+        <rect x="${minDot.x - 14}" y="${minDot.y + 8}" width="28" height="14" fill="${colors.bg}" class="min-max-bg"/>
+        <text x="${minDot.x}" y="${minDot.y + 18}" class="min-max-label" fill="${colors.primary}">${minLabel}</text>`;
+    }
+  }
+
+  // Scan line
+  const scanLine = `<line x1="0" y1="0" x2="0" y2="${chartH - PAD.bottom}" class="scan-line" stroke="${colors.secondary}" id="${uid}-scan"/>`;
+
+  // Summary stats
+  const avg = (validVals.reduce((a, b) => a + b, 0) / validVals.length);
+  const low = dataMin;
+  const high = dataMax;
+  const rdPrevAvg = rd.prevAvg !== undefined ? rd.prevAvg : data.prevAvg;
+  const deltaVal = rdPrevAvg ? avg - rdPrevAvg : 0;
+  const deltaPct = rdPrevAvg ? ((deltaVal / rdPrevAvg) * 100).toFixed(0) : 0;
+  const deltaClass = deltaVal > 0.5 ? 'up' : deltaVal < -0.5 ? 'down' : 'flat';
+  const deltaSign = deltaVal > 0 ? '+' : '';
+  const deltaLabel = rdPrevAvg ? `${deltaSign}${deltaPct}%` : '–';
+
+  // Range pills
+  const pillBg = colors.secondary;
+
+  return `
+    <div class="chart-card" data-uid="${uid}" data-chart-idx="${cardIdx}" data-range="${range}" data-color="${colors.secondary}" data-primary="${colors.primary}" data-border="${colors.border}" data-bg="${colors.bg}">
+      <div class="card-top">
+        <div class="card-title">${data.title}</div>
+        <div class="card-date">${rd.dateRange || data.dateRange}</div>
+      </div>
+      <div style="display:flex;align-items:baseline;justify-content:space-between">
+        <div class="card-value-row">
+          <div class="card-value" style="color:${colors.secondary}">${(rd.average || data.average || '').replace(/,/g, '')}</div>
+          <span class="card-value-suffix" style="color:${colors.secondary}">${data.suffix || ''}</span>
+          ${rdPrevAvg ? `<span class="stat-delta ${deltaClass}" style="margin-left:8px;font-size:12px">${deltaLabel}</span>` : ''}
+        </div>
+        <div class="range-pills">
+          <div class="range-pill${range==='w'?' active':''}" ${range==='w'?`style="background:${pillBg};border-color:${pillBg}"`:''} onclick="switchV2Range(${cardIdx},'w')">W</div>
+          <div class="range-pill${range==='m'?' active':''}" ${range==='m'?`style="background:${pillBg};border-color:${pillBg}"`:''} onclick="switchV2Range(${cardIdx},'m')">M</div>
+          <div class="range-pill${range==='3m'?' active':''}" ${range==='3m'?`style="background:${pillBg};border-color:${pillBg}"`:''} onclick="switchV2Range(${cardIdx},'3m')">3M</div>
+        </div>
+      </div>
+      <div class="line-chart-area" id="${uid}" data-uid="${uid}">
+        <svg class="line-chart-svg" viewBox="0 0 ${chartW} ${chartH}" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="${uid}-grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="${grad.top}" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="${grad.bottom}" stop-opacity="0.02"/>
+            </linearGradient>
+          </defs>
+          ${gridLines}
+          ${rangeBandHtml}
+          ${goalHtml}
+          <path d="${areaPath}" fill="url(#${uid}-grad)" class="area-fill"/>
+          ${range !== 'w' && trendPath.path ? `<path d="${trendPath.path}" class="trend-line" stroke="${colors.secondary}"/>` : ''}
+          <path d="${path}" class="line-path" stroke="${colors.border}" id="${uid}-line"/>
+          ${scanLine}
+          ${dotsHtml}
+          ${minMaxHtml}
+          ${xLabels}
+        </svg>
+        <div class="value-chip" id="${uid}-chip" style="background:${colors.secondary};color:#FFFFFF"></div>
+      </div>
+    </div>`;
+}
+
+function renderV2DualCard(data, cardIdx) {
+  const colorsA = COLORS[data.lineA.color];
+  const colorsB = COLORS[data.lineB.color];
+  const gradA = GRADIENTS[data.lineA.color];
+  const gradB = GRADIENTS[data.lineB.color];
+  const chartW = 318;
+  const chartH = CHART_H;
+  const uid = `v2-dual-${cardIdx}`;
+
+  const valsA = data.lineA.values.filter(v => v.value !== null).map(v => v.value);
+  const valsB = data.lineB.values.filter(v => v.value !== null).map(v => v.value);
+
+  const minA = Math.min(Math.min(...valsA), data.lineA.rangeLow || Infinity) * 0.85;
+  const maxA = Math.max(Math.max(...valsA), data.lineA.rangeHigh || -Infinity) * 1.05;
+  const minB = Math.min(...valsB) * 0.85, maxB = Math.max(...valsB) * 1.05;
+  const rangeA = maxA - minA || 1;
+
+  const pathA = buildPath(data.lineA.values, chartW, chartH, minA, maxA);
+  const pathB = buildPath(data.lineB.values, chartW, chartH, minB, maxB);
+
+  const xStep = (chartW - PAD.left - PAD.right) / (data.lineA.values.length - 1);
+  const xLabels = data.lineA.values.map((v, i) => {
+    const x = PAD.left + i * xStep;
+    return `<text x="${x}" y="${chartH - 6}" class="x-label" data-idx="${i}">${v.label}</text>`;
+  }).join('');
+
+  const gridLines = [0.25, 0.5, 0.75].map(pct => {
+    const y = PAD.top + pct * (chartH - PAD.top - PAD.bottom);
+    return `<line x1="${PAD.left}" y1="${y}" x2="${chartW - PAD.right}" y2="${y}" class="grid-line"/>`;
+  }).join('');
+
+  // Range band for line A (primary metric)
+  let rangeBandHtml = '';
+  if (data.lineA.rangeLow !== undefined && data.lineA.rangeHigh !== undefined) {
+    const bandTop = PAD.top + (1 - (data.lineA.rangeHigh - minA) / rangeA) * (chartH - PAD.top - PAD.bottom);
+    const bandBot = PAD.top + (1 - (data.lineA.rangeLow - minA) / rangeA) * (chartH - PAD.top - PAD.bottom);
+    rangeBandHtml = `<rect x="${PAD.left}" y="${bandTop}" width="${chartW - PAD.left - PAD.right}" height="${bandBot - bandTop}" fill="${colorsA.secondary}" class="range-band" rx="4"/>`;
+  }
+
+  const dotsA = pathA.dots.map(d => `
+    <circle cx="${d.x}" cy="${d.y}" r="10" class="pulse-ring" fill="${colorsA.secondary}" data-idx="${d.idx}" data-line="a"/>
+    <circle cx="${d.x}" cy="${d.y}" r="10" class="pulse-ring pulse-ring-2" fill="${colorsA.secondary}" data-idx="${d.idx}" data-line="a"/>
+    <circle cx="${d.x}" cy="${d.y}" r="3" class="dot" fill="${colorsA.secondary}" data-idx="${d.idx}" data-line="a" data-val="${d.value}"/>
+  `).join('');
+
+  const dotsB = pathB.dots.map(d => `
+    <circle cx="${d.x}" cy="${d.y}" r="10" class="pulse-ring" fill="${colorsB.secondary}" data-idx="${d.idx}" data-line="b"/>
+    <circle cx="${d.x}" cy="${d.y}" r="10" class="pulse-ring pulse-ring-2" fill="${colorsB.secondary}" data-idx="${d.idx}" data-line="b"/>
+    <circle cx="${d.x}" cy="${d.y}" r="3" class="dot" fill="${colorsB.secondary}" data-idx="${d.idx}" data-line="b" data-val="${d.value}"/>
+  `).join('');
+
+  const scanLine = `<line x1="0" y1="0" x2="0" y2="${chartH - PAD.bottom}" class="scan-line" stroke="${colorsA.secondary}" id="${uid}-scan"/>`;
+
+  // Stats: line A low/high, line B change
+  const lowA = Math.min(...valsA), highA = Math.max(...valsA);
+  const firstB = valsB[0], lastB = valsB[valsB.length - 1];
+  const bDelta = firstB ? Math.round(((lastB - firstB) / firstB) * 100) : 0;
+  const bSign = bDelta > 0 ? '+' : '';
+  const bClass = bDelta > 0 ? 'up' : bDelta < 0 ? 'down' : 'flat';
+
+  return `
+    <div class="chart-card" data-uid="${uid}" data-color="${colorsA.secondary}" data-primary="${colorsA.primary}" data-border="${colorsA.border}" data-bg="${colorsA.bg}" data-is-dual="true"
+         data-color-b="${colorsB.secondary}" data-primary-b="${colorsB.primary}" data-border-b="${colorsB.border}" data-bg-b="${colorsB.bg}"
+         data-name-a="${data.lineA.name}" data-suffix-a="${data.lineA.suffix}" data-name-b="${data.lineB.name}" data-suffix-b="${data.lineB.suffix}">
+      <div class="card-top">
+        <div class="card-title">${data.title}</div>
+        <div class="card-date">${data.dateRange}</div>
+      </div>
+      ${data.subtitle ? `<div style="font-size:13px;color:#766F64;margin-top:6px;line-height:18px;font-weight:500">${data.subtitle}</div>` : ''}
+      <div class="line-chart-area" id="${uid}" data-uid="${uid}">
+        <svg class="line-chart-svg" viewBox="0 0 ${chartW} ${chartH}" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="${uid}-gradA" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="${gradA.top}" stop-opacity="0.2"/>
+              <stop offset="100%" stop-color="${gradA.bottom}" stop-opacity="0.01"/>
+            </linearGradient>
+          </defs>
+          ${gridLines}
+          ${rangeBandHtml}
+          <path d="${pathA.areaPath}" fill="url(#${uid}-gradA)" class="area-fill"/>
+          <path d="${pathA.path}" class="line-path" stroke="${colorsA.border}" stroke-width="2.5"/>
+          <path d="${pathB.path}" class="line-path" stroke="${colorsB.border}" stroke-width="2" stroke-dasharray="6 3"/>
+          ${scanLine}
+          ${dotsA}
+          ${dotsB}
+          ${xLabels}
+        </svg>
+        <div class="value-chip-dual" id="${uid}-chip">
+          <div class="chip-half" id="${uid}-chip-a" style="background:${colorsA.secondary}"></div>
+          <div class="chip-half" id="${uid}-chip-b" style="background:${colorsB.secondary}"></div>
+        </div>
+      </div>
+      <div class="chart-legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background:${colorsA.secondary}"></div>
+          <span class="legend-label">${data.lineA.name}</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:${colorsB.secondary};border:1.5px dashed ${colorsB.border}"></div>
+          <span class="legend-label">${data.lineB.name}</span>
+        </div>
+      </div>
+    </div>`;
+}
+
+// V2 chart lookup (non-section items only)
+const v2Charts = v2Data.filter(d => !d.section);
+
+function switchV2Range(chartIdx, range) {
+  const item = v2Charts[chartIdx];
+  if (!item || item.isDual) return;
+  const card = document.querySelector(`.chart-card[data-chart-idx="${chartIdx}"]`);
+  if (!card) return;
+  const newHtml = renderV2Card(item.data, chartIdx, range);
+  // Replace card element
+  const temp = document.createElement('div');
+  temp.innerHTML = newHtml;
+  card.parentNode.replaceChild(temp.firstElementChild, card);
+  setTimeout(animateLines, 50);
+}
+
+// Render V2
+const v2Container = document.getElementById('cases-v2');
+let v2Html = '';
+let v2ChartIdx = 0;
+v2Data.forEach((item) => {
+  if (item.section) {
+    v2Html += `<div class="section-title">${item.section}</div>`;
+  } else if (item.isDual) {
+    v2Html += `<div class="case-label">${item.label}</div>${renderV2DualCard(item.data, v2ChartIdx)}`;
+    v2ChartIdx++;
+  } else {
+    v2Html += `<div class="case-label">${item.label}</div>${renderV2Card(item.data, v2ChartIdx, 'w')}`;
+    v2ChartIdx++;
+  }
+});
+v2Container.innerHTML = v2Html;
+
+/* ================================================================
+   V3: UNIFIED HEADER SYSTEM
+   Narrative title · Y-axis labels · edge-to-edge charts
+   3 font sizes: 32px (value) · 14px (title, unit) · 12px (trend, pills)
+   3 gray levels: #433E36 · #A8A297 · #C2BCB2  + category color + semantic
+   ================================================================ */
+
+// Nice round numbers for Y-axis
+function niceNum(range, round) {
+  if (range === 0) return 1;
+  const exp = Math.floor(Math.log10(range));
+  const frac = range / Math.pow(10, exp);
+  let nice;
+  if (round) {
+    if (frac < 1.5) nice = 1;
+    else if (frac < 3) nice = 2;
+    else if (frac < 7) nice = 5;
+    else nice = 10;
+  } else {
+    if (frac <= 1) nice = 1;
+    else if (frac <= 2) nice = 2;
+    else if (frac <= 5) nice = 5;
+    else nice = 10;
+  }
+  return nice * Math.pow(10, exp);
+}
+
+function niceScale(dataMin, dataMax, maxTicks) {
+  maxTicks = maxTicks || 5;
+  if (dataMax <= dataMin) dataMax = dataMin + 1;
+  const range = niceNum(dataMax - dataMin, false);
+  const step = niceNum(range / (maxTicks - 1), true);
+  const niceMin = Math.floor(dataMin / step) * step;
+  const niceMax = Math.ceil(dataMax / step) * step;
+  const ticks = [];
+  for (let v = niceMin; v <= niceMax + step * 0.001; v += step) {
+    ticks.push(Math.round(v * 1000) / 1000);
+  }
+  return { min: niceMin, max: niceMax, step, ticks };
+}
+
+function fmtYLabel(v) {
+  if (Math.abs(v) >= 1000) {
+    const k = v / 1000;
+    return (k % 1 === 0 ? k.toFixed(0) : k.toFixed(1)) + 'k';
+  }
+  if (v % 1 !== 0) return v.toFixed(1);
+  return v.toString();
+}
+
+const v3Data = [
+  { section: 'Unified Header — Recovery (Purple)' },
+
+  { label: '1. HRV — weekly', data: {
+    title: 'Your HRV has been climbing all week, averaging 42 ms', dateRange: 'Mar 17–23', average: '42', suffix: 'ms',
+    rangeLow: 35, rangeHigh: 50, prevAvg: 39,
+    values: [
+      { label: 'Mon', value: 38 }, { label: 'Tue', value: 45 }, { label: 'Wed', value: 41 },
+      { label: 'Thu', value: 48 }, { label: 'Fri', value: 44 }, { label: 'Sat', value: 39 },
+      { label: 'Sun', value: 47, today: true },
+    ]
+  }},
+
+  { label: '2. Resting Heart Rate', data: {
+    title: 'Your resting heart rate dropped slightly, sitting around 56 bpm', dateRange: 'Mar 17–23', average: '56', suffix: 'bpm',
+    rangeLow: 52, rangeHigh: 60, prevAvg: 57,
+    values: [
+      { label: 'Mon', value: 58 }, { label: 'Tue', value: 55 }, { label: 'Wed', value: 57 },
+      { label: 'Thu', value: 54 }, { label: 'Fri', value: 53 }, { label: 'Sat', value: 56 },
+      { label: 'Sun', value: 55, today: true },
+    ]
+  }},
+
+  { label: '3. Stress Level (spike)', data: {
+    title: 'Your stress spiked mid-week but settled back down', dateRange: 'Mar 17–23', average: '38', suffix: 'avg',
+    rangeLow: 20, rangeHigh: 40, prevAvg: 35,
+    values: [
+      { label: 'Mon', value: 32 }, { label: 'Tue', value: 35 }, { label: 'Wed', value: 82 },
+      { label: 'Thu', value: 30 }, { label: 'Fri', value: 28 }, { label: 'Sat', value: 34 },
+      { label: 'Sun', value: 31, today: true },
+    ]
+  }},
+
+  { section: 'Unified Header — Activity (Gold)' },
+
+  { label: '4. Steps', data: {
+    title: 'You averaged about 7.2k steps a day, with a big Saturday push', dateRange: 'Mar 17–23', average: '7.2k', suffix: 'steps',
+    rangeLow: 6000, rangeHigh: 9000, prevAvg: 6800,
+    values: [
+      { label: 'Mon', value: 6200 }, { label: 'Tue', value: 7800 }, { label: 'Wed', value: 8100 },
+      { label: 'Thu', value: 6500 }, { label: 'Fri', value: 7200 }, { label: 'Sat', value: 9300 },
+      { label: 'Sun', value: 5900, today: true },
+    ]
+  }},
+
+  { section: 'Unified Header — Nutrition (Green)' },
+
+  { label: '5. Calories', data: {
+    title: 'Your calorie intake stayed consistent, averaging about 1,850 kcal', dateRange: 'Mar 17–23', average: '1,850', suffix: 'kcal',
+    rangeLow: 1800, rangeHigh: 2200, prevAvg: 1920,
+    values: [
+      { label: 'Mon', value: 1950 }, { label: 'Tue', value: 1780 }, { label: 'Wed', value: 2100 },
+      { label: 'Thu', value: 1650 }, { label: 'Fri', value: 1900 }, { label: 'Sat', value: 2250 },
+      { label: 'Sun', value: 1820, today: true },
+    ]
+  }},
+
+  { label: '6. Protein', data: {
+    title: 'Your protein has been trending up, averaging 95g a day', dateRange: 'Mar 17–23', average: '95', suffix: 'g',
+    rangeLow: 90, rangeHigh: 130, prevAvg: 88,
+    values: [
+      { label: 'Mon', value: 102 }, { label: 'Tue', value: 88 }, { label: 'Wed', value: 95 },
+      { label: 'Thu', value: 78 }, { label: 'Fri', value: 110 }, { label: 'Sat', value: 92 },
+      { label: 'Sun', value: 100, today: true },
+    ]
+  }},
+
+  { section: 'Unified Header — Hydration (Blue)' },
+
+  { label: '7. Water Intake', data: {
+    title: 'Your water intake picked up, averaging about 1.6L a day', dateRange: 'Mar 17–23', average: '1.6', suffix: 'L',
+    rangeLow: 1.5, rangeHigh: 2.5, prevAvg: 1.4,
+    values: [
+      { label: 'Mon', value: 1.8 }, { label: 'Tue', value: 1.5 }, { label: 'Wed', value: 2.1 },
+      { label: 'Thu', value: 1.3 }, { label: 'Fri', value: 1.7 }, { label: 'Sat', value: 2.0 },
+      { label: 'Sun', value: 1.6, today: true },
+    ]
+  }},
+];
+
+function renderV3Card(data, cardIdx, range) {
+  range = range || 'w';
+  const rd = range === 'w' ? data : generateRangeData(data, range);
+  const colors = getColors(data.title);
+  const catKey = getCategoryKey(data.title);
+  const grad = GRADIENTS[catKey];
+  const values = rd.values || [];
+  const validVals = values.filter(v => v.value !== null && v.value !== undefined).map(v => v.value);
+
+  // V3 chart dimensions — wider for edge-to-edge, left pad for Y labels
+  const v3Pad = { top: 16, right: 34, bottom: 28, left: 6 };
+  const chartW = 350;
+  const chartH = CHART_H;
+  const uid = `v3-${cardIdx}-${range}`;
+
+  // Nice Y-axis scale from actual data
+  const dataMin = Math.min(...validVals);
+  const dataMax = Math.max(...validVals);
+  const rawMin = Math.min(dataMin, data.rangeLow || dataMin);
+  const rawMax = Math.max(dataMax, data.rangeHigh || dataMax, data.goal || 0);
+  const scale = niceScale(rawMin, rawMax, 5);
+  const allMin = scale.min;
+  const allMax = scale.max;
+  const valRange = allMax - allMin || 1;
+
+  const { path, areaPath, dots } = buildPath(values, chartW, chartH, allMin, allMax, v3Pad, 0.15);
+
+  // Y-axis labels + grid lines at nice tick positions
+  const yAxisHtml = scale.ticks.map(tick => {
+    const y = v3Pad.top + (1 - (tick - allMin) / valRange) * (chartH - v3Pad.top - v3Pad.bottom);
+    return `
+      <line x1="0" y1="${y}" x2="${chartW - v3Pad.right}" y2="${y}" class="grid-line"/>
+      <text x="${chartW - v3Pad.right + 4}" y="${y + 3.5}" text-anchor="start" style="font-size:10px;fill:#A8A297;font-weight:500;font-family:-apple-system,sans-serif">${fmtYLabel(tick)}</text>`;
+  }).join('');
+
+  // Range band
+  let rangeBandHtml = '';
+  if (data.rangeLow !== undefined && data.rangeHigh !== undefined) {
+    const bandTop = v3Pad.top + (1 - (data.rangeHigh - allMin) / valRange) * (chartH - v3Pad.top - v3Pad.bottom);
+    const bandBot = v3Pad.top + (1 - (data.rangeLow - allMin) / valRange) * (chartH - v3Pad.top - v3Pad.bottom);
+    rangeBandHtml = `<rect x="0" y="${bandTop}" width="${chartW - v3Pad.right}" height="${bandBot - bandTop}" fill="${colors.secondary}" class="range-band" rx="4"/>`;
+  }
+
+  // X labels — first anchored start, last anchored end, rest middle
+  const xStep = (chartW - v3Pad.left - v3Pad.right) / (values.length - 1);
+  const labelSkip = values.length > 20 ? 5 : values.length > 10 ? 2 : 1;
+  const xLabels = values.map((v, i) => {
+    const x = v3Pad.left + i * xStep;
+    const cls = v.today ? 'x-label today' : 'x-label';
+    const anchor = i === 0 ? 'start' : i === values.length - 1 ? 'end' : 'middle';
+    const fillStyle = v.today ? `fill:${colors.secondary};` : '';
+    if (labelSkip > 1 && i % labelSkip !== 0 && i !== values.length - 1 && !v.today) return '';
+    return `<text x="${x}" y="${chartH - 6}" class="${cls}" style="${fillStyle}text-anchor:${anchor}" data-idx="${i}">${v.label}</text>`;
+  }).join('');
+
+  // Trend line (M & 3M only)
+  let trendHtml = '';
+  if (range !== 'w') {
+    const maWindow = values.length > 7 ? 5 : 3;
+    const maValues = computeMovingAvg(values, maWindow);
+    const maPoints = values.map((v, i) => ({ ...v, value: maValues[i] }));
+    const trendPath = buildPath(maPoints, chartW, chartH, allMin, allMax, v3Pad, 0.15);
+    if (trendPath.path) trendHtml = `<path d="${trendPath.path}" class="trend-line" stroke="${colors.secondary}"/>`;
+  }
+
+  // Dots
+  const showDots = values.length <= 14;
+  const dotsHtml = dots.map(d => `
+    <circle cx="${d.x}" cy="${d.y}" r="10" class="pulse-ring" fill="${colors.secondary}" data-idx="${d.idx}"/>
+    <circle cx="${d.x}" cy="${d.y}" r="10" class="pulse-ring pulse-ring-2" fill="${colors.secondary}" data-idx="${d.idx}"/>
+    <circle cx="${d.x}" cy="${d.y}" r="${showDots ? 3 : 0}" class="dot" fill="${colors.secondary}" data-idx="${d.idx}" data-val="${d.value}"/>
+  `).join('');
+
+  // Scan line
+  const scanLine = `<line x1="0" y1="0" x2="0" y2="${chartH - v3Pad.bottom}" class="scan-line" stroke="${colors.secondary}" id="${uid}-scan"/>`;
+
+  // Delta
+  const avg = (validVals.reduce((a, b) => a + b, 0) / validVals.length);
+  const rdPrevAvg = rd.prevAvg !== undefined ? rd.prevAvg : data.prevAvg;
+  const deltaVal = rdPrevAvg ? avg - rdPrevAvg : 0;
+  const deltaPct = rdPrevAvg ? ((deltaVal / rdPrevAvg) * 100).toFixed(0) : 0;
+  const deltaClass = deltaVal > 0.5 ? 'up' : deltaVal < -0.5 ? 'down' : 'flat';
+  const deltaSign = deltaVal > 0 ? '+' : '';
+  const deltaLabel = rdPrevAvg ? `${deltaSign}${deltaPct}%` : '';
+
+  const pillBg = colors.secondary;
+
+  return `
+    <div class="v3-card chart-card" data-uid="${uid}" data-v3-idx="${cardIdx}" data-range="${range}" data-color="${colors.secondary}" data-primary="${colors.primary}" data-border="${colors.border}" data-bg="${colors.bg}">
+      <div class="v3-row1">
+        <span class="v3-title">${data.title}</span>
+      </div>
+      <div class="v3-row2">
+        <div class="v3-data">
+          <span class="v3-value" style="color:${colors.secondary}">${(rd.average || data.average || '').replace(/,/g, ',')}</span>
+          <span class="v3-unit" style="color:${colors.secondary}">${data.suffix || ''}</span>
+          ${deltaLabel ? `<span class="v3-trend ${deltaClass}">${deltaLabel}</span>` : ''}
+        </div>
+        <div class="v3-pills">
+          <div class="v3-pill${range==='w'?' active':''}" ${range==='w'?`style="background:${pillBg};border-color:${pillBg}"`:''} onclick="switchV3Range(${cardIdx},'w')">W</div>
+          <div class="v3-pill${range==='m'?' active':''}" ${range==='m'?`style="background:${pillBg};border-color:${pillBg}"`:''} onclick="switchV3Range(${cardIdx},'m')">M</div>
+          <div class="v3-pill${range==='3m'?' active':''}" ${range==='3m'?`style="background:${pillBg};border-color:${pillBg}"`:''} onclick="switchV3Range(${cardIdx},'3m')">3M</div>
+        </div>
+      </div>
+      <div class="line-chart-area" id="${uid}" data-uid="${uid}">
+        <svg class="line-chart-svg" viewBox="0 0 ${chartW} ${chartH}" preserveAspectRatio="none">
+          ${yAxisHtml}
+          ${trendHtml}
+          <path d="${path}" class="line-path" stroke="${colors.border}" id="${uid}-line"/>
+          ${scanLine}
+          ${dotsHtml}
+          ${xLabels}
+        </svg>
+        <div class="value-chip" id="${uid}-chip" style="background:${colors.secondary};color:#FFFFFF"></div>
+      </div>
+    </div>`;
+}
+
+// V3 chart lookup
+const v3Charts = v3Data.filter(d => !d.section);
+
+function switchV3Range(chartIdx, range) {
+  const item = v3Charts[chartIdx];
+  if (!item) return;
+  const card = document.querySelector(`.v3-card[data-v3-idx="${chartIdx}"]`);
+  if (!card) return;
+  const newHtml = renderV3Card(item.data, chartIdx, range);
+  const temp = document.createElement('div');
+  temp.innerHTML = newHtml;
+  card.parentNode.replaceChild(temp.firstElementChild, card);
+  setTimeout(animateLines, 50);
+}
+
+// Render V3
+const v3Container = document.getElementById('cases-v3');
+let v3Html = '';
+let v3ChartIdx = 0;
+v3Data.forEach((item) => {
+  if (item.section) {
+    v3Html += `<div class="section-title">${item.section}</div>`;
+  } else {
+    v3Html += `<div class="case-label">${item.label}</div>${renderV3Card(item.data, v3ChartIdx, 'w')}`;
+    v3ChartIdx++;
+  }
+});
+v3Container.innerHTML = v3Html;
+
+/* ================================================================
+   V4: APPLE HEALTH-INSPIRED
+   Narrative-first · comparison layout · clean lines · minimal chrome
+   Design cues: colored category label, bold insight sentence,
+   Today vs Average two-column, clean line + ghost average line,
+   current-point dot, no grid, no area fill.
+   ================================================================ */
+
+function generateV4Narrative(data) {
+  const vals = data.values.filter(v => v.value != null).map(v => v.value);
+  const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
+  const prevAvg = data.prevAvg || avg;
+  const pctChange = ((avg - prevAvg) / prevAvg * 100);
+  const lastVal = vals[vals.length - 1];
+  const title = data.title.toLowerCase();
+
+  // Trend direction
+  const rising = vals.length >= 3 && vals[vals.length - 1] > vals[0] && vals[vals.length - 2] > vals[1];
+  const falling = vals.length >= 3 && vals[vals.length - 1] < vals[0] && vals[vals.length - 2] < vals[1];
+  const steady = !rising && !falling;
+
+  // "Lower is better" metrics
+  const invertedMetrics = ['stress', 'resting heart rate'];
+  const isInverted = invertedMetrics.some(m => title.includes(m));
+
+  if (Math.abs(pctChange) > 5) {
+    const dir = pctChange > 0 ? 'up' : 'down';
+    const goodDir = isInverted ? 'down' : 'up';
+    if (dir === goodDir) {
+      if (rising && !isInverted) return `Your ${data.title.toLowerCase()} has been climbing all week.`;
+      if (falling && isInverted) return `Your ${data.title.toLowerCase()} has been dropping — that's a good sign.`;
+      return `Your ${data.title.toLowerCase()} is trending in the right direction.`;
+    } else {
+      if (isInverted) return `Your ${data.title.toLowerCase()} is running higher than usual this week.`;
+      return `Your ${data.title.toLowerCase()} dipped below your average this week.`;
+    }
+  }
+  if (steady) return `Your ${data.title.toLowerCase()} has been steady all week.`;
+  if (rising) return `Your ${data.title.toLowerCase()} has been climbing over the past few days.`;
+  if (falling) return `Your ${data.title.toLowerCase()} has been tapering off this week.`;
+  return `Here's how your ${data.title.toLowerCase()} looked this week.`;
+}
+
+const v4Data = [
+  { section: 'Recovery' },
+
+  { label: '1. HRV', data: {
+    title: 'HRV', dateRange: 'Mar 17–23', average: '42', suffix: 'ms',
+    rangeLow: 35, rangeHigh: 50, prevAvg: 39,
+    compLabel: 'This Week', compAvgLabel: 'Your Average',
+    values: [
+      { label: 'Mon', value: 38 }, { label: 'Tue', value: 45 }, { label: 'Wed', value: 41 },
+      { label: 'Thu', value: 48 }, { label: 'Fri', value: 44 }, { label: 'Sat', value: 39 },
+      { label: 'Sun', value: 47, today: true },
+    ]
+  }},
+
+  { label: '2. Resting Heart Rate', data: {
+    title: 'Resting Heart Rate', dateRange: 'Mar 17–23', average: '56', suffix: 'bpm',
+    rangeLow: 52, rangeHigh: 60, prevAvg: 57,
+    compLabel: 'This Week', compAvgLabel: 'Your Average',
+    values: [
+      { label: 'Mon', value: 58 }, { label: 'Tue', value: 55 }, { label: 'Wed', value: 57 },
+      { label: 'Thu', value: 54 }, { label: 'Fri', value: 53 }, { label: 'Sat', value: 56 },
+      { label: 'Sun', value: 55, today: true },
+    ]
+  }},
+
+  { label: '3. Stress Level', data: {
+    title: 'Stress Level', dateRange: 'Mar 17–23', average: '38', suffix: 'avg',
+    rangeLow: 20, rangeHigh: 40, prevAvg: 35,
+    compLabel: 'This Week', compAvgLabel: 'Your Average',
+    values: [
+      { label: 'Mon', value: 32 }, { label: 'Tue', value: 35 }, { label: 'Wed', value: 82 },
+      { label: 'Thu', value: 30 }, { label: 'Fri', value: 28 }, { label: 'Sat', value: 34 },
+      { label: 'Sun', value: 31, today: true },
+    ]
+  }},
+
+  { section: 'Activity' },
+
+  { label: '4. Steps', data: {
+    title: 'Steps', dateRange: 'Mar 17–23', average: '7.2k', suffix: 'steps',
+    rangeLow: 6000, rangeHigh: 9000, prevAvg: 6800,
+    compLabel: 'This Week', compAvgLabel: 'Your Average',
+    values: [
+      { label: 'Mon', value: 6200 }, { label: 'Tue', value: 7800 }, { label: 'Wed', value: 8100 },
+      { label: 'Thu', value: 6500 }, { label: 'Fri', value: 7200 }, { label: 'Sat', value: 9300 },
+      { label: 'Sun', value: 5900, today: true },
+    ]
+  }},
+
+  { section: 'Nutrition' },
+
+  { label: '5. Calories', data: {
+    title: 'Calories', dateRange: 'Mar 17–23', average: '1,850', suffix: 'kcal',
+    rangeLow: 1800, rangeHigh: 2200, prevAvg: 1920,
+    compLabel: 'This Week', compAvgLabel: 'Your Average',
+    values: [
+      { label: 'Mon', value: 1950 }, { label: 'Tue', value: 1780 }, { label: 'Wed', value: 2100 },
+      { label: 'Thu', value: 1650 }, { label: 'Fri', value: 1900 }, { label: 'Sat', value: 2250 },
+      { label: 'Sun', value: 1820, today: true },
+    ]
+  }},
+
+  { label: '6. Protein', data: {
+    title: 'Protein', dateRange: 'Mar 17–23', average: '95', suffix: 'g',
+    rangeLow: 90, rangeHigh: 130, prevAvg: 88,
+    compLabel: 'This Week', compAvgLabel: 'Your Average',
+    values: [
+      { label: 'Mon', value: 102 }, { label: 'Tue', value: 88 }, { label: 'Wed', value: 95 },
+      { label: 'Thu', value: 78 }, { label: 'Fri', value: 110 }, { label: 'Sat', value: 92 },
+      { label: 'Sun', value: 100, today: true },
+    ]
+  }},
+
+  { section: 'Hydration' },
+
+  { label: '7. Water Intake', data: {
+    title: 'Water Intake', dateRange: 'Mar 17–23', average: '1.6', suffix: 'L',
+    rangeLow: 1.5, rangeHigh: 2.5, prevAvg: 1.4,
+    compLabel: 'This Week', compAvgLabel: 'Your Average',
+    values: [
+      { label: 'Mon', value: 1.8 }, { label: 'Tue', value: 1.5 }, { label: 'Wed', value: 2.1 },
+      { label: 'Thu', value: 1.3 }, { label: 'Fri', value: 1.7 }, { label: 'Sat', value: 2.0 },
+      { label: 'Sun', value: 1.6, today: true },
+    ]
+  }},
+];
+
+// Apple Health color palette for V4
+const APPLE_COLORS = {
+  hydration: { primary: '#007AFF', secondary: '#007AFF', light: '#E3F0FF' },
+  activity:  { primary: '#FF9500', secondary: '#FF9500', light: '#FFF3E0' },
+  nutrition: { primary: '#34C759', secondary: '#34C759', light: '#E8F8ED' },
+  recovery:  { primary: '#FF3B30', secondary: '#FF3B30', light: '#FFE8E6' },
+};
+
+function getAppleColor(title) {
+  return APPLE_COLORS[getCategoryKey(title)];
+}
+
+function renderV4Card(data, cardIdx) {
+  const colors = getAppleColor(data.title);
+  const catKey = getCategoryKey(data.title);
+  const values = data.values || [];
+  const validVals = values.filter(v => v.value != null).map(v => v.value);
+  const chartW = 326;
+  const chartH = 140;
+  const uid = `v4-${cardIdx}`;
+
+  // Compute current avg and previous avg
+  const currentAvg = validVals.reduce((a, b) => a + b, 0) / validVals.length;
+  const prevAvg = data.prevAvg || currentAvg;
+
+  // Format display values
+  const fmtCurrent = data.average.replace(/,/g, ',');
+  const fmtPrevAvg = prevAvg >= 1000 ? formatVal(prevAvg) : (prevAvg % 1 !== 0 ? prevAvg.toFixed(1) : Math.round(prevAvg));
+
+  // Generate narrative
+  const narrative = generateV4Narrative(data);
+
+  // Category label text (capitalize)
+  const categoryLabels = {
+    hydration: 'Hydration',
+    activity: 'Activity',
+    nutrition: 'Nutrition',
+    recovery: 'Recovery',
+  };
+  const catLabel = categoryLabels[catKey] || 'Health';
+
+  // Chart padding — more room, no grid
+  const p = { top: 16, right: 8, bottom: 24, left: 8 };
+
+  // Data range
+  const dataMin = Math.min(...validVals);
+  const dataMax = Math.max(...validVals);
+  const valMin = dataMin - (dataMax - dataMin) * 0.15;
+  const valMax = dataMax + (dataMax - dataMin) * 0.15;
+  const valRange = valMax - valMin || 1;
+
+  // Build main line (colored)
+  const xStep = (chartW - p.left - p.right) / (values.length - 1);
+  const coords = values.map((v, i) => {
+    if (v.value == null) return null;
+    return {
+      x: p.left + i * xStep,
+      y: p.top + (1 - (v.value - valMin) / valRange) * (chartH - p.top - p.bottom),
+      value: v.value,
+      label: v.label,
+      today: v.today,
+      idx: i,
+    };
+  }).filter(Boolean);
+
+  // Monotone cubic interpolation
+  function monotonePath(pts) {
+    const n = pts.length;
+    if (n < 2) return '';
+    const dx = [], dy = [], m = [], tangents = [];
+    for (let i = 0; i < n - 1; i++) {
+      dx[i] = pts[i + 1].x - pts[i].x;
+      dy[i] = pts[i + 1].y - pts[i].y;
+      m[i] = dy[i] / dx[i];
+    }
+    tangents[0] = m[0];
+    tangents[n - 1] = m[n - 2];
+    for (let i = 1; i < n - 1; i++) {
+      tangents[i] = (m[i - 1] * m[i] <= 0) ? 0 : (m[i - 1] + m[i]) / 2;
+    }
+    for (let i = 0; i < n - 1; i++) {
+      if (Math.abs(m[i]) < 1e-6) { tangents[i] = 0; tangents[i + 1] = 0; }
+      else {
+        const a = tangents[i] / m[i], b = tangents[i + 1] / m[i];
+        const s = a * a + b * b;
+        if (s > 9) { const t = 3 / Math.sqrt(s); tangents[i] = t * a * m[i]; tangents[i + 1] = t * b * m[i]; }
+      }
+    }
+    let d = `M ${pts[0].x} ${pts[0].y}`;
+    for (let i = 0; i < n - 1; i++) {
+      const seg = dx[i] / 3;
+      d += ` C ${pts[i].x + seg} ${pts[i].y + tangents[i] * seg}, ${pts[i + 1].x - seg} ${pts[i + 1].y - tangents[i + 1] * seg}, ${pts[i + 1].x} ${pts[i + 1].y}`;
+    }
+    return d;
+  }
+
+  const mainPath = monotonePath(coords);
+
+  // Average line (flat horizontal representing prevAvg)
+  const avgY = p.top + (1 - (prevAvg - valMin) / valRange) * (chartH - p.top - p.bottom);
+
+  // "Now" vertical line at the last "today" point
+  const todayCoord = coords.find(c => c.today) || coords[coords.length - 1];
+
+  // X labels
+  const xLabels = values.map((v, i) => {
+    const x = p.left + i * xStep;
+    const cls = v.today ? 'x-label today' : 'x-label';
+    const style = v.today ? `fill:${colors.secondary};font-weight:700` : '';
+    return `<text x="${x}" y="${chartH - 4}" class="${cls}" style="${style}">${v.label}</text>`;
+  }).join('');
+
+  // Current point dot (only on the latest/today point)
+  const lastCoord = todayCoord;
+  const dotHtml = `
+    <circle cx="${lastCoord.x}" cy="${lastCoord.y}" r="5" fill="${colors.secondary}" opacity="0.2"/>
+    <circle cx="${lastCoord.x}" cy="${lastCoord.y}" r="3.5" fill="#FFFFFF" stroke="${colors.secondary}" stroke-width="2"/>`;
+
+  // Interactive dots (invisible, for drag)
+  const interactiveDots = coords.map(c => `
+    <circle cx="${c.x}" cy="${c.y}" r="10" class="pulse-ring" fill="${colors.secondary}" data-idx="${c.idx}"/>
+    <circle cx="${c.x}" cy="${c.y}" r="0" class="dot" fill="${colors.secondary}" data-idx="${c.idx}" data-val="${c.value}"/>
+  `).join('');
+
+  // Scan line
+  const scanLine = `<line x1="0" y1="0" x2="0" y2="${chartH - p.bottom}" class="scan-line" stroke="${colors.secondary}" id="${uid}-scan"/>`;
+
+  return `
+    <div class="v4-card" data-uid="${uid}" data-color="${colors.primary}" data-primary="${colors.primary}">
+      <div class="v4-category">
+        <div class="v4-cat-dot" style="background:${colors.secondary}"></div>
+        <span class="v4-cat-label" style="color:${colors.secondary}">${data.title}</span>
+      </div>
+      <div class="v4-narrative">${narrative}</div>
+      <div class="v4-separator"></div>
+      <div class="v4-comparison">
+        <div class="v4-comp-col">
+          <div class="v4-comp-label">
+            <div class="v4-comp-dot" style="background:${colors.secondary}"></div>
+            <span class="v4-comp-text">${data.compLabel || 'This Week'}</span>
+          </div>
+          <div>
+            <span class="v4-comp-value" style="color:${colors.secondary}">${fmtCurrent}</span>
+            <span class="v4-comp-unit" style="color:${colors.secondary};opacity:0.7">${data.suffix}</span>
+          </div>
+        </div>
+        <div class="v4-comp-col">
+          <div class="v4-comp-label">
+            <div class="v4-comp-dot" style="background:#C7C7CC"></div>
+            <span class="v4-comp-text">${data.compAvgLabel || 'Average'}</span>
+          </div>
+          <div>
+            <span class="v4-comp-value" style="color:#8E8E93">${fmtPrevAvg}</span>
+            <span class="v4-comp-unit" style="color:#8E8E93;opacity:0.7">${data.suffix}</span>
+          </div>
+        </div>
+      </div>
+      <div class="v4-chart-wrap line-chart-area" id="${uid}" data-uid="${uid}">
+        <svg class="line-chart-svg" viewBox="0 0 ${chartW} ${chartH}" preserveAspectRatio="none">
+          <!-- Average line (gray, dashed) -->
+          <line x1="${p.left}" y1="${avgY}" x2="${chartW - p.right}" y2="${avgY}" stroke="#C7C7CC" stroke-width="1" stroke-dasharray="4 3" opacity="0.6"/>
+          <!-- "Now" vertical line -->
+          <line x1="${todayCoord.x}" y1="${p.top - 4}" x2="${todayCoord.x}" y2="${chartH - p.bottom}" class="v4-now-line"/>
+          <!-- Main colored line -->
+          <path d="${mainPath}" class="v4-main-line" stroke="${colors.secondary}" id="${uid}-line"/>
+          ${scanLine}
+          ${interactiveDots}
+          <!-- Current point dot -->
+          ${dotHtml}
+          ${xLabels}
+        </svg>
+        <div class="v4-value-chip" id="${uid}-chip" style="background:${colors.secondary}"></div>
+      </div>
+    </div>`;
+}
+
+// Render V4
+const v4Container = document.getElementById('cases-v4');
+let v4Html = '';
+const v4Charts = v4Data.filter(d => !d.section);
+let v4ChartIdx = 0;
+v4Data.forEach((item) => {
+  if (item.section) {
+    v4Html += `<div class="section-title">${item.section}</div>`;
+  } else {
+    v4Html += `<div class="case-label">${item.label}</div>${renderV4Card(item.data, v4ChartIdx)}`;
+    v4ChartIdx++;
+  }
+});
+v4Container.innerHTML = v4Html;
+</script>
+</body>
+</html>
+
