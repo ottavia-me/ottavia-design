@@ -132,6 +132,28 @@
   .gate-card .g-title { font-size: 14px; font-weight: 600; color: var(--primary-80); margin: 4px 0; }
   .gate-card .g-detail { font-size: 12px; color: var(--primary-60); }
 
+  /* Bucket status (done checkbox + Jira link, always shown when ticket is set) */
+  .bucket-item, .experts-bucket { position: relative; }
+  .bucket-status { position: absolute; top: 14px; right: 16px; width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--primary-30); background: white; display: flex; align-items: center; justify-content: center; transition: all 120ms ease; }
+  .bucket-status svg { width: 12px; height: 12px; color: white; opacity: 0; }
+  .bucket-item.done, .experts-bucket.done { background: rgba(88, 164, 113, 0.06); }
+  .bucket-item.done .bucket-status, .experts-bucket.done .bucket-status { border-color: var(--green); background: var(--green); }
+  .bucket-item.done .bucket-status svg, .experts-bucket.done .bucket-status svg { opacity: 1; }
+  .bucket-item.done .b-num, .experts-bucket.done .b-num { color: var(--green); }
+  .bucket-item.done .b-name, .experts-bucket.done .b-name { color: var(--primary-60); }
+
+  /* Jira ticket link, neutral when not started, green when done */
+  .bucket-jira { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-decoration: none; margin-top: 8px; padding: 4px 8px; border-radius: 4px; width: fit-content; transition: background 120ms ease; color: var(--primary-60); background: rgba(0,0,0,0.04); }
+  .bucket-jira:hover { background: rgba(0,0,0,0.08); }
+  .bucket-item.done .bucket-jira, .experts-bucket.done .bucket-jira { color: var(--green); background: rgba(88, 164, 113, 0.10); }
+  .bucket-item.done .bucket-jira:hover, .experts-bucket.done .bucket-jira:hover { background: rgba(88, 164, 113, 0.18); }
+
+  /* Bucket-grid status legend */
+  .bucket-status-legend { display: inline-flex; align-items: center; gap: 16px; margin-left: 12px; font-size: 11px; color: var(--primary-50); font-weight: 500; letter-spacing: 0.4px; text-transform: none; }
+  .bucket-status-legend .legend-item { display: inline-flex; align-items: center; gap: 6px; }
+  .bucket-status-legend .leg-dot { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--primary-30); background: white; }
+  .bucket-status-legend .leg-dot.done { border-color: var(--green); background: var(--green); }
+
   /* Experts (later) section */
   .experts-section { background: linear-gradient(to bottom, #FFF8E7, white); border: 1px solid var(--amber); border-radius: 12px; overflow: hidden; margin-top: 20px; }
   .experts-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 18px 22px; border-bottom: 1px solid var(--primary-20); background: rgba(212, 161, 99, 0.10); }
@@ -329,6 +351,10 @@
     <div class="section-label">
       <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
       Buckets, 18 total · 15 this sprint · 3 later
+      <span class="bucket-status-legend">
+        <span class="legend-item"><span class="leg-dot"></span>Not started</span>
+        <span class="legend-item"><span class="leg-dot done"></span>Done · linked to Jira</span>
+      </span>
     </div>
     <div class="buckets">
 
@@ -1101,5 +1127,62 @@
   </section>
 
 </div>
+<script>
+  // Bucket Jira wiring. Each bucket gets a status circle + a Jira ticket pill.
+  // Tickets are mapped from bucket number (01 to 18) to OTRD ticket in OTR 79.
+  // To mark a bucket done, add data-done="true" to the bucket-item or experts-bucket div.
+  (function() {
+    var JIRA_BASE = 'https://communication-band.atlassian.net/browse/';
+    var TICKET_MAP = {
+      '01': 'OTRD-2450', // Splash screen
+      '02': 'OTRD-2451', // Onboarding questionnaire
+      '03': 'OTRD-2452', // Connect device
+      '04': 'OTRD-2453', // Calendar surface
+      '05': 'OTRD-2454', // Top card, collapsed
+      '06': 'OTRD-2455', // Top card, expanded
+      '07': 'OTRD-2456', // Navigation
+      '08': 'OTRD-2457', // Charts and graphs
+      '09': 'OTRD-2458', // Reports
+      '10': 'OTRD-2459', // Plan
+      '11': 'OTRD-2460', // Interview
+      '12': 'OTRD-2461', // System message
+      '13': 'OTRD-2462', // Day separator
+      '14': 'OTRD-2463', // Notification
+      '15': 'OTRD-2464', // Composer
+      '16': 'OTRD-2465', // Expert profile
+      '17': 'OTRD-2466', // Expert management
+      '18': 'OTRD-2468'  // Expert hub
+    };
+    var checkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+    document.querySelectorAll('.bucket-item, .experts-bucket').forEach(function(b) {
+      // Add status circle (empty by default, filled when .done)
+      var status = document.createElement('div');
+      status.className = 'bucket-status';
+      status.innerHTML = checkSvg;
+      b.appendChild(status);
+
+      // Add Jira ticket pill based on bucket number
+      var numEl = b.querySelector('.b-num');
+      if (numEl) {
+        var num = numEl.textContent.trim();
+        var ticket = TICKET_MAP[num];
+        if (ticket) {
+          var link = document.createElement('a');
+          link.className = 'bucket-jira';
+          link.href = JIRA_BASE + ticket;
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          link.innerHTML = ticket + ' ↗';
+          b.appendChild(link);
+        }
+      }
+
+      // Mark as done if data-done attribute is set
+      if (b.hasAttribute('data-done')) {
+        b.classList.add('done');
+      }
+    });
+  })();
+</script>
 </body>
 </html>
