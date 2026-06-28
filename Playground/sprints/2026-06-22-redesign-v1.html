@@ -132,27 +132,28 @@
   .gate-card .g-title { font-size: 14px; font-weight: 600; color: var(--primary-80); margin: 4px 0; }
   .gate-card .g-detail { font-size: 12px; color: var(--primary-60); }
 
-  /* Bucket status (done checkbox + Jira link, always shown when ticket is set) */
-  .bucket-item, .experts-bucket { position: relative; }
-  .bucket-status { position: absolute; top: 14px; right: 16px; width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--primary-30); background: white; display: flex; align-items: center; justify-content: center; transition: all 120ms ease; }
-  .bucket-status svg { width: 12px; height: 12px; color: white; opacity: 0; }
-  .bucket-item.done, .experts-bucket.done { background: rgba(88, 164, 113, 0.06); }
-  .bucket-item.done .bucket-status, .experts-bucket.done .bucket-status { border-color: var(--green); background: var(--green); }
-  .bucket-item.done .bucket-status svg, .experts-bucket.done .bucket-status svg { opacity: 1; }
-  .bucket-item.done .b-num, .experts-bucket.done .b-num { color: var(--green); }
-  .bucket-item.done .b-name, .experts-bucket.done .b-name { color: var(--primary-60); }
+  /* Bucket workflow status: planning · design-ready · dev-ready · prod-ready */
+  .bucket-item, .experts-bucket { position: relative; padding-right: 28px; }
+  .bucket-item[data-status="planning"],     .experts-bucket[data-status="planning"]     { background: rgba(118, 111, 100, 0.06); }
+  .bucket-item[data-status="design-ready"], .experts-bucket[data-status="design-ready"] { background: rgba(90, 138, 173, 0.10); }
+  .bucket-item[data-status="dev-ready"],    .experts-bucket[data-status="dev-ready"]    { background: rgba(224, 176, 67, 0.14); }
+  .bucket-item[data-status="prod-ready"],   .experts-bucket[data-status="prod-ready"]   { background: rgba(71, 173, 96, 0.10); }
 
-  /* Jira ticket link, neutral when not started, green when done */
-  .bucket-jira { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-decoration: none; margin-top: 8px; padding: 4px 8px; border-radius: 4px; width: fit-content; transition: background 120ms ease; color: var(--primary-60); background: rgba(0,0,0,0.04); }
-  .bucket-jira:hover { background: rgba(0,0,0,0.08); }
-  .bucket-item.done .bucket-jira, .experts-bucket.done .bucket-jira { color: var(--green); background: rgba(88, 164, 113, 0.10); }
-  .bucket-item.done .bucket-jira:hover, .experts-bucket.done .bucket-jira:hover { background: rgba(88, 164, 113, 0.18); }
+  /* Status pill (replaces the round bullet) sits top-right of each bucket */
+  .bucket-status { position: absolute; top: 12px; right: 16px; display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 999px; font-size: 9px; font-weight: 700; letter-spacing: 0.7px; text-transform: uppercase; color: #FEFCF9; line-height: 1.2; }
+  .bucket-item[data-status="planning"]     .bucket-status, .experts-bucket[data-status="planning"]     .bucket-status { background: #766F64; }
+  .bucket-item[data-status="design-ready"] .bucket-status, .experts-bucket[data-status="design-ready"] .bucket-status { background: #5A8AAD; }
+  .bucket-item[data-status="dev-ready"]    .bucket-status, .experts-bucket[data-status="dev-ready"]    .bucket-status { background: #E0B043; }
+  .bucket-item[data-status="prod-ready"]   .bucket-status, .experts-bucket[data-status="prod-ready"]   .bucket-status { background: #47AD60; }
+
+  /* Jira ticket link, dark pill + white text for legibility on every status bg */
+  .bucket-jira { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-decoration: none; margin-top: 10px; padding: 4px 10px; border-radius: 4px; width: fit-content; transition: background 120ms ease; color: #FEFCF9; background: var(--primary-80); }
+  .bucket-jira:hover { background: var(--primary-70); }
 
   /* Bucket-grid status legend */
-  .bucket-status-legend { display: inline-flex; align-items: center; gap: 16px; margin-left: 12px; font-size: 11px; color: var(--primary-50); font-weight: 500; letter-spacing: 0.4px; text-transform: none; }
+  .bucket-status-legend { display: inline-flex; align-items: center; gap: 14px; margin-left: 12px; font-size: 11px; color: var(--primary-60); font-weight: 500; letter-spacing: 0.4px; text-transform: none; flex-wrap: wrap; }
   .bucket-status-legend .legend-item { display: inline-flex; align-items: center; gap: 6px; }
-  .bucket-status-legend .leg-dot { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--primary-30); background: white; }
-  .bucket-status-legend .leg-dot.done { border-color: var(--green); background: var(--green); }
+  .bucket-status-legend .leg-pill { display: inline-block; width: 22px; height: 10px; border-radius: 999px; }
 
   /* Experts (later) section */
   .experts-section { background: linear-gradient(to bottom, #FFF8E7, white); border: 1px solid var(--amber); border-radius: 12px; overflow: hidden; margin-top: 20px; }
@@ -352,8 +353,10 @@
       <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
       Buckets, 18 total · 15 this sprint · 3 later
       <span class="bucket-status-legend">
-        <span class="legend-item"><span class="leg-dot"></span>Not started</span>
-        <span class="legend-item"><span class="leg-dot done"></span>Done · linked to Jira</span>
+        <span class="legend-item"><span class="leg-pill" style="background:#766F64;"></span>Planning</span>
+        <span class="legend-item"><span class="leg-pill" style="background:#5A8AAD;"></span>Design ready</span>
+        <span class="legend-item"><span class="leg-pill" style="background:#E0B043;"></span>Dev ready</span>
+        <span class="legend-item"><span class="leg-pill" style="background:#47AD60;"></span>Prod ready</span>
       </span>
     </div>
     <div class="buckets">
@@ -368,19 +371,19 @@
           <div class="owner">FE1</div>
         </div>
         <div class="bucket-list">
-          <div class="bucket-item">
+          <div class="bucket-item" data-status="design-ready">
             <div class="b-num">01</div>
             <div class="b-name">Splash screen</div>
             <div class="b-detail">Brand first-frame moment. Logo, optional loading.</div>
             <div class="b-meta">States: Loading, Error</div>
           </div>
-          <div class="bucket-item">
+          <div class="bucket-item" data-status="design-ready">
             <div class="b-num">02</div>
             <div class="b-name">Onboarding questionnaire</div>
             <div class="b-detail">4 to 6 steps. One template, multiple steps.</div>
             <div class="b-meta">States: Step, Empty, Error, Back/Skip, Complete</div>
           </div>
-          <div class="bucket-item">
+          <div class="bucket-item" data-status="design-ready">
             <div class="b-num">03</div>
             <div class="b-name">Connect device</div>
             <div class="b-detail">Garmin OAuth + sync confirmation.</div>
@@ -430,7 +433,7 @@
           <div class="owner">FE1</div>
         </div>
         <div class="bucket-list">
-          <div class="bucket-item">
+          <div class="bucket-item" data-status="design-ready">
             <div class="b-num">07</div>
             <div class="b-name">Navigation</div>
             <div class="b-detail">Visual-only refresh. No backend, no pattern changes.</div>
@@ -442,7 +445,7 @@
             <div class="b-detail">Three primitives: Line, Bar, Progress bar. Reusable across reports + calendar.</div>
             <div class="b-meta">Per chart: Empty, Loading, Populated, No-data, Error</div>
           </div>
-          <div class="bucket-item">
+          <div class="bucket-item" data-status="design-ready">
             <div class="b-num">09</div>
             <div class="b-name">Reports</div>
             <div class="b-detail">Four types: Morning, Evening, Post-workout, Post-weight. Also the structured pattern for long proactive messages.</div>
@@ -460,13 +463,13 @@
             <div class="b-detail">In-chat questionnaire pattern when Ottavia gathers context mid-conversation.</div>
             <div class="b-meta">States: Question, In-progress, Completed, Skipped</div>
           </div>
-          <div class="bucket-item">
+          <div class="bucket-item" data-status="design-ready">
             <div class="b-num">12</div>
             <div class="b-name">System message</div>
             <div class="b-detail">Single variant this sprint: new incoming messages. Backend scaling deferred.</div>
             <div class="b-meta">States: Default</div>
           </div>
-          <div class="bucket-item">
+          <div class="bucket-item" data-status="design-ready">
             <div class="b-num">13</div>
             <div class="b-name">Day separator</div>
             <div class="b-detail">Inline divider between message groups by date.</div>
@@ -1153,15 +1156,27 @@
       '17': 'OTRD-2466', // Expert management
       '18': 'OTRD-2468'  // Expert hub
     };
-    var checkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+    var STATUS_LABELS = {
+      'planning': 'Planning',
+      'design-ready': 'Design ready',
+      'dev-ready': 'Dev ready',
+      'prod-ready': 'Prod ready'
+    };
     document.querySelectorAll('.bucket-item, .experts-bucket').forEach(function(b) {
-      // Add status circle (empty by default, filled when .done)
-      var status = document.createElement('div');
-      status.className = 'bucket-status';
-      status.innerHTML = checkSvg;
-      b.appendChild(status);
+      // Default to "planning" if data-status not set; overridable in HTML
+      var status = b.getAttribute('data-status');
+      if (!status || !STATUS_LABELS[status]) {
+        status = 'planning';
+        b.setAttribute('data-status', status);
+      }
 
-      // Add Jira ticket pill based on bucket number
+      // Status pill (replaces the round bullet)
+      var pill = document.createElement('div');
+      pill.className = 'bucket-status';
+      pill.textContent = STATUS_LABELS[status];
+      b.appendChild(pill);
+
+      // Jira ticket pill based on bucket number
       var numEl = b.querySelector('.b-num');
       if (numEl) {
         var num = numEl.textContent.trim();
@@ -1175,11 +1190,6 @@
           link.innerHTML = ticket + ' ↗';
           b.appendChild(link);
         }
-      }
-
-      // Mark as done if data-done attribute is set
-      if (b.hasAttribute('data-done')) {
-        b.classList.add('done');
       }
     });
   })();
