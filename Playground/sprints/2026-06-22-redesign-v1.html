@@ -135,15 +135,15 @@
   /* Bucket workflow status: planning · design-ready · dev-ready · prod-ready */
   .bucket-item, .experts-bucket { position: relative; padding-right: 28px; }
   .bucket-item[data-status="planning"],     .experts-bucket[data-status="planning"]     { background: rgba(118, 111, 100, 0.06); }
-  .bucket-item[data-status="design-ready"], .experts-bucket[data-status="design-ready"] { background: rgba(90, 138, 173, 0.10); }
-  .bucket-item[data-status="dev-ready"],    .experts-bucket[data-status="dev-ready"]    { background: rgba(224, 176, 67, 0.14); }
+  .bucket-item[data-status="design-ready"], .experts-bucket[data-status="design-ready"] { background: rgba(224, 138, 80, 0.10); }
+  .bucket-item[data-status="dev-ready"],    .experts-bucket[data-status="dev-ready"]    { background: rgba(140, 99, 203, 0.10); }
   .bucket-item[data-status="prod-ready"],   .experts-bucket[data-status="prod-ready"]   { background: rgba(71, 173, 96, 0.10); }
 
   /* Status pill (replaces the round bullet) sits top-right of each bucket */
   .bucket-status { position: absolute; top: 12px; right: 16px; display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 999px; font-size: 9px; font-weight: 700; letter-spacing: 0.7px; text-transform: uppercase; color: #FEFCF9; line-height: 1.2; }
   .bucket-item[data-status="planning"]     .bucket-status, .experts-bucket[data-status="planning"]     .bucket-status { background: #766F64; }
-  .bucket-item[data-status="design-ready"] .bucket-status, .experts-bucket[data-status="design-ready"] .bucket-status { background: #5A8AAD; }
-  .bucket-item[data-status="dev-ready"]    .bucket-status, .experts-bucket[data-status="dev-ready"]    .bucket-status { background: #E0B043; }
+  .bucket-item[data-status="design-ready"] .bucket-status, .experts-bucket[data-status="design-ready"] .bucket-status { background: #E08A50; }
+  .bucket-item[data-status="dev-ready"]    .bucket-status, .experts-bucket[data-status="dev-ready"]    .bucket-status { background: #8C63CB; }
   .bucket-item[data-status="prod-ready"]   .bucket-status, .experts-bucket[data-status="prod-ready"]   .bucket-status { background: #47AD60; }
 
   /* Jira ticket link, dark pill + white text for legibility on every status bg */
@@ -354,8 +354,8 @@
       Buckets, 18 total · 15 this sprint · 3 later
       <span class="bucket-status-legend">
         <span class="legend-item"><span class="leg-pill" style="background:#766F64;"></span>Planning</span>
-        <span class="legend-item"><span class="leg-pill" style="background:#5A8AAD;"></span>Design ready</span>
-        <span class="legend-item"><span class="leg-pill" style="background:#E0B043;"></span>Dev ready</span>
+        <span class="legend-item"><span class="leg-pill" style="background:#E08A50;"></span>Design ready</span>
+        <span class="legend-item"><span class="leg-pill" style="background:#8C63CB;"></span>Dev ready</span>
         <span class="legend-item"><span class="leg-pill" style="background:#47AD60;"></span>Prod ready</span>
       </span>
     </div>
