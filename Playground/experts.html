@@ -6635,6 +6635,37 @@
     font-size: 13px; font-weight: 700;
   }
   .p3-bow-img.x-bow-fallback svg { width: 34px; height: 34px; }
+  /* Generated "cover" for publications with no real book cover. A tinted field
+     with a saturated spine, drawn from the Ottavia card palette (matches .rp-card)
+     so it reads as native to the app. Color is set per item or derived from the
+     title. Replaces the flat icon block. */
+  .p3-bow-img.p3-bow-gen {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid transparent;
+    background: var(--surface-card);
+  }
+  .p3-bow-gen .bow-spine { position: absolute; left: 0; top: 0; bottom: 0; width: 9px; }
+  .p3-bow-gen .bow-gtitle {
+    position: absolute; left: 17px; right: 8px; top: 12px;
+    font-family: var(--font-display); font-weight: 700;
+    font-size: 11.5px; line-height: 14px; letter-spacing: -0.2px;
+    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden;
+  }
+  .p3-bow-gen .bow-glabel {
+    position: absolute; left: 17px; bottom: 10px;
+    font-size: 8px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .p3-bow-gen.blue   { background: #DBEFFA; border-color: #B7D6EC; }
+  .p3-bow-gen.blue   .bow-spine { background: #689BBB; } .p3-bow-gen.blue   .bow-gtitle { color: #3A647E; } .p3-bow-gen.blue   .bow-glabel { color: #689BBB; }
+  .p3-bow-gen.green  { background: #D7F4E8; border-color: #A6D5BB; }
+  .p3-bow-gen.green  .bow-spine { background: #58A471; } .p3-bow-gen.green  .bow-gtitle { color: #4B8F61; } .p3-bow-gen.green  .bow-glabel { color: #58A471; }
+  .p3-bow-gen.orange { background: #F9EFE0; border-color: #E7CDA3; }
+  .p3-bow-gen.orange .bow-spine { background: #D4A163; } .p3-bow-gen.orange .bow-gtitle { color: #C08A48; } .p3-bow-gen.orange .bow-glabel { color: #D4A163; }
+  .p3-bow-gen.purple { background: #E7EBFF; border-color: #C2C9EE; }
+  .p3-bow-gen.purple .bow-spine { background: #8292D5; } .p3-bow-gen.purple .bow-gtitle { color: #58669D; } .p3-bow-gen.purple .bow-glabel { color: #8292D5; }
+  .p3-bow-gen.gray   { background: #F0EBE2; border-color: #D2CCC0; }
+  .p3-bow-gen.gray   .bow-spine { background: #8F897D; } .p3-bow-gen.gray   .bow-gtitle { color: #766F64; } .p3-bow-gen.gray   .bow-glabel { color: #8F897D; }
   .p3-bow-text { min-width: 0; }
   .p3-bow-title {
     font-family: var(--font-display);
@@ -9670,6 +9701,298 @@
               <div class="suggestion-pill">How hard is Saturday?</div>
               <div class="suggestion-pill">Can I split runs around the kids?</div>
               <div class="suggestion-pill">Log this run</div>
+            </div>
+          </div>
+
+          <div class="composer">
+            <div class="composer-box">
+              <div class="composer-circle left" title="More">
+                <img src="assets/icons/more.svg" alt="" />
+              </div>
+              <div class="composer-input-wrap">
+                <div class="composer-input"></div>
+                <div class="composer-mic" title="Voice">
+                  <img src="assets/icons/microphone.svg" alt="" />
+                </div>
+              </div>
+              <div class="composer-circle right" title="Camera">
+                <img src="assets/icons/camera.svg" alt="" />
+              </div>
+            </div>
+          </div>
+
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+
+      <!-- =====================================================================
+           Surface: ANTHONY-CHAT-BASELINE (Tom). Day-to-day chat through Anthony
+           Turner's S&C lens. Scenario: Tom reports flat legs on an easy run the
+           day after a heavy lower-body session. Ottavia leads ("I"); Anthony is
+           the strength-and-conditioning knowledge the call is grounded in.
+           ===================================================================== -->
+      <div class="surface" data-surface="anthony-chat-baseline">
+        <div class="chat-baseline">
+
+          <div class="chat-header">
+            <span class="chh-blur b1"></span><span class="chh-blur b2"></span><span class="chh-blur b3"></span><div class="chat-header-gradient"></div>
+          </div>
+
+          <div class="chat-header-row">
+            <div class="header-pill date" onclick="window.switchSurface('anthony-plan-today')" style="cursor:pointer" title="Wed Jun 25"><span class="day-num">25</span><span class="day-wd">wed</span></div>
+            <div class="header-pill ottavia-mode-pill" data-mode-pill title="Switch mode">
+              <span class="label">Ottavia</span>
+              <span class="chevron">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+            </div>
+            <button class="header-icon-btn" title="Profile">
+              <img src="assets/icons/user-profile.svg" alt="" />
+            </button>
+          </div>
+
+          <div class="mode-scrim" data-mode-scrim></div>
+          <div class="ottavia-mode-menu" data-mode-menu>
+            <div class="mode-option selected" data-mode="ottavia">
+              <div class="check-slot">
+                <svg viewBox="0 0 11.6 9.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 1 L3.44 8.2 L1 5.74"/></svg>
+              </div>
+              <div class="text">
+                <div class="title">Ottavia</div>
+                <div class="sub">Intelligent personalized guidance</div>
+              </div>
+            </div>
+            <div class="mode-option" data-mode="ottavia-experts">
+              <div class="check-slot">
+                <svg viewBox="0 0 11.6 9.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 1 L3.44 8.2 L1 5.74"/></svg>
+              </div>
+              <div class="text">
+                <div class="title">Ottavia + Experts</div>
+                <div class="sub">Deeper domain-specific interpretation</div>
+                <span class="coming-soon">coming soon</span>
+              </div>
+            </div>
+            <div class="mode-menu-divider"></div>
+            <div class="mode-link" data-mode-link onclick="document.querySelector('.state-chip[data-surface=hub-home]').click()">
+              <span class="title">Experts hub</span>
+              <span class="chevron">
+                <svg viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 1 7 7 1 13"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <div class="chat-scroll">
+            <div class="chat-scroll-inner">
+              <div class="cs-ask">my legs felt flat on today's easy run, what gives?</div>
+
+              <div class="cs-eyebrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h4l2 6 4-14 2 8h4"/></svg>
+                From <a>Training</a>
+              </div>
+              <h1 class="cs-title">That's yesterday's heavy lift still in your legs, and it's worth reading right.</h1>
+              <p class="cs-para">You lifted heavy lower-body yesterday, then ran easy today. A little flatness is the strength session doing its job, but here's how the week is actually loading:</p>
+              <ul class="cs-list">
+                <li>· Yesterday · heavy lower (squats, hinge)</li>
+                <li>· Today · easy run, legs ~60% fresh</li>
+                <li>· Thursday · your key quality run</li>
+              </ul>
+
+              <p class="cs-para">The flatness now is fine. What matters is that it clears before Thursday, so the heavy lift and the hard run don't collide. If it lingers, we move the lift earlier next week.</p>
+
+              <div class="cs-expert-attr">
+                <img class="cs-attr-avatar" src="assets/images/anthony.png" alt="Anthony Turner" />
+                <div class="cs-attr-content">
+                  <div class="cs-attr-name">Anthony Turner</div>
+                  <p class="cs-attr-body">Strength and running compete for the same legs. <strong>Place the heavy work so it never lands on top of a quality run</strong>, and both keep improving.</p>
+                </div>
+              </div>
+
+              <div class="cs-progress">
+                <div class="cs-progress-label">Strength and run timing this week</div>
+                <div class="cs-progress-bar">
+                  <div class="cs-progress-fill" style="width:78%">
+                    <span class="cs-progress-current">78%</span>
+                  </div>
+                  <span class="cs-progress-target">well-timed</span>
+                </div>
+                <div class="cs-progress-delta">Yesterday's lift slightly overlapped today</div>
+              </div>
+
+              <div class="cs-msg-footer">
+                <div class="cs-icon-row">
+                  <button class="cs-icon-btn" title="Copy">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
+                  <button class="cs-icon-btn" title="Save">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.6L5 21V4a1 1 0 0 1 1-1z"/></svg>
+                  </button>
+                  <button class="cs-icon-btn up" title="Helpful">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 22H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h3"/><path d="M7 12l4.2-8.1a2.4 2.4 0 0 1 3 2.2V9h4.6a2 2 0 0 1 2 2.4l-1.3 7A2 2 0 0 1 19.2 20H7z"/></svg>
+                  </button>
+                  <button class="cs-icon-btn down" title="Not helpful">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2h3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-3"/><path d="M17 12l-4.2 8.1a2.4 2.4 0 0 1-3-2.2V15H5.2a2 2 0 0 1-2-2.4l1.3-7A2 2 0 0 1 6.8 4H17z"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="qa-scrim" aria-hidden="true">
+            <span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="tint"></span>
+          </div>
+
+          <div class="suggestion-row">
+            <div class="suggestion-track">
+              <div class="suggestion-pill active">When will my legs clear?</div>
+              <div class="suggestion-pill">Should I move my lift?</div>
+              <div class="suggestion-pill">What's Thursday's session?</div>
+              <div class="suggestion-pill">Log this run</div>
+            </div>
+          </div>
+
+          <div class="composer">
+            <div class="composer-box">
+              <div class="composer-circle left" title="More">
+                <img src="assets/icons/more.svg" alt="" />
+              </div>
+              <div class="composer-input-wrap">
+                <div class="composer-input"></div>
+                <div class="composer-mic" title="Voice">
+                  <img src="assets/icons/microphone.svg" alt="" />
+                </div>
+              </div>
+              <div class="composer-circle right" title="Camera">
+                <img src="assets/icons/camera.svg" alt="" />
+              </div>
+            </div>
+          </div>
+
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+
+      <!-- =====================================================================
+           Surface: ANTHONY-CHAT-BASELINE (Mariah). Same S&C lens sized to a
+           3-runs-a-week half-marathon build around three kids. Scenario: she
+           skipped her strength sessions two weeks running; Ottavia frames it as
+           her highest-value injury insurance, grounded in Anthony's approach.
+           ===================================================================== -->
+      <div class="surface" data-surface="anthony-chat-baseline-mariah">
+        <div class="chat-baseline">
+
+          <div class="chat-header">
+            <span class="chh-blur b1"></span><span class="chh-blur b2"></span><span class="chh-blur b3"></span><div class="chat-header-gradient"></div>
+          </div>
+
+          <div class="chat-header-row">
+            <div class="header-pill date" onclick="window.switchSurface('anthony-plan-today-mariah')" style="cursor:pointer" title="Wed Jun 25"><span class="day-num">25</span><span class="day-wd">wed</span></div>
+            <div class="header-pill ottavia-mode-pill" data-mode-pill title="Switch mode">
+              <span class="label">Ottavia</span>
+              <span class="chevron">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+            </div>
+            <button class="header-icon-btn" title="Profile">
+              <img src="assets/icons/user-profile.svg" alt="" />
+            </button>
+          </div>
+
+          <div class="mode-scrim" data-mode-scrim></div>
+          <div class="ottavia-mode-menu" data-mode-menu>
+            <div class="mode-option selected" data-mode="ottavia">
+              <div class="check-slot">
+                <svg viewBox="0 0 11.6 9.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 1 L3.44 8.2 L1 5.74"/></svg>
+              </div>
+              <div class="text">
+                <div class="title">Ottavia</div>
+                <div class="sub">Intelligent personalized guidance</div>
+              </div>
+            </div>
+            <div class="mode-option" data-mode="ottavia-experts">
+              <div class="check-slot">
+                <svg viewBox="0 0 11.6 9.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 1 L3.44 8.2 L1 5.74"/></svg>
+              </div>
+              <div class="text">
+                <div class="title">Ottavia + Experts</div>
+                <div class="sub">Deeper domain-specific interpretation</div>
+                <span class="coming-soon">coming soon</span>
+              </div>
+            </div>
+            <div class="mode-menu-divider"></div>
+            <div class="mode-link" data-mode-link onclick="document.querySelector('.state-chip[data-surface=hub-home]').click()">
+              <span class="title">Experts hub</span>
+              <span class="chevron">
+                <svg viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 1 7 7 1 13"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <div class="chat-scroll">
+            <div class="chat-scroll-inner">
+              <div class="cs-ask">I skipped my strength session again this week, does it really matter?</div>
+
+              <div class="cs-eyebrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h4l2 6 4-14 2 8h4"/></svg>
+                From <a>Training</a>
+              </div>
+              <h1 class="cs-title">Honestly, for you it's the one thing I'd protect most. Here's why.</h1>
+              <p class="cs-para">You've hit all three runs this week, which is great. But strength is your injury insurance as the runs get longer, and it's the piece that's slipped two weeks running:</p>
+              <ul class="cs-list">
+                <li>· Runs this week · 3 of 3 done</li>
+                <li>· Strength · 0 of 2 done</li>
+                <li>· Longest run · creeping up weekly</li>
+              </ul>
+
+              <p class="cs-para">It isn't about more work. Two 20-minute sessions at home keep your hips and calves strong enough for the rising mileage. That's what keeps the niggles away.</p>
+
+              <div class="cs-expert-attr">
+                <img class="cs-attr-avatar" src="assets/images/anthony.png" alt="Anthony Turner" />
+                <div class="cs-attr-content">
+                  <div class="cs-attr-name">Anthony Turner</div>
+                  <p class="cs-attr-body">For a newer runner, a small, consistent strength dose is the highest-value insurance there is. <strong>If something has to give, keep the strength</strong>, it's what protects the goal.</p>
+                </div>
+              </div>
+
+              <div class="cs-progress">
+                <div class="cs-progress-label">Strength sessions kept</div>
+                <div class="cs-progress-bar">
+                  <div class="cs-progress-fill" style="width:50%">
+                    <span class="cs-progress-current">50%</span>
+                  </div>
+                  <span class="cs-progress-target">2× / week</span>
+                </div>
+                <div class="cs-progress-delta">Two sessions missed this week</div>
+              </div>
+
+              <div class="cs-msg-footer">
+                <div class="cs-icon-row">
+                  <button class="cs-icon-btn" title="Copy">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
+                  <button class="cs-icon-btn" title="Save">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.6L5 21V4a1 1 0 0 1 1-1z"/></svg>
+                  </button>
+                  <button class="cs-icon-btn up" title="Helpful">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 22H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h3"/><path d="M7 12l4.2-8.1a2.4 2.4 0 0 1 3 2.2V9h4.6a2 2 0 0 1 2 2.4l-1.3 7A2 2 0 0 1 19.2 20H7z"/></svg>
+                  </button>
+                  <button class="cs-icon-btn down" title="Not helpful">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2h3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-3"/><path d="M17 12l-4.2 8.1a2.4 2.4 0 0 1-3-2.2V15H5.2a2 2 0 0 1-2-2.4l1.3-7A2 2 0 0 1 6.8 4H17z"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="qa-scrim" aria-hidden="true">
+            <span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="tint"></span>
+          </div>
+
+          <div class="suggestion-row">
+            <div class="suggestion-track">
+              <div class="suggestion-pill active">Give me a 20-minute session</div>
+              <div class="suggestion-pill">No-equipment options?</div>
+              <div class="suggestion-pill">When this week can I fit it?</div>
+              <div class="suggestion-pill">Log this</div>
             </div>
           </div>
 
@@ -14920,6 +15243,235 @@
       </div>
 
       <!-- =====================================================================
+           Surface: ANTHONY-PLAN-TODAY (Tom). Ottavia guidance shaped around
+           Anthony Turner's S&C approach. Scenario: today is an easy-run + heavy-
+           lift day, placed so it clears before tomorrow's quality run. Ottavia
+           leads; Anthony is the lens the strength calls are grounded in.
+           Domain (strength) cards are attributed; food/water steps are not.
+           Plan, not a chat: no composer, no quick-action pills.
+           ===================================================================== -->
+      <div class="surface" data-surface="anthony-plan-today">
+        <div class="pt">
+          <div class="pt-header">
+            <div>
+              <h1 class="pt-title">Plan for <strong>Today</strong></h1>
+              <div class="pt-today">Wed 25 · <strong>Today</strong></div>
+            </div>
+            <button class="pt-close" onclick="window.switchSurface('anthony-chat-baseline')" title="Close">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+
+          <div class="pt-main">
+            <div class="pt-content">
+              <!-- ===== MORNING ===== -->
+              <div class="pt-period show" data-period="morning">
+                <div class="pt-ev next orange">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 7:15 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Easy aerobic run · 50 min</h3>
+                  <p class="pt-ev-body">Keep today's run genuinely relaxed. You're pairing it with a strength session later, so the run is the warm-up, not the workout.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Effort</span><span class="v">Easy · conversational</span></div>
+                    <div class="row"><span class="k">Role today</span><span class="v">Warm-up for the lift</span></div>
+                    <div class="row"><span class="k">Don't</span><span class="v">Run it hard</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/anthony.png" alt="Anthony Turner" />
+                    <span class="pt-attr-text">Per <strong>Anthony Turner</strong> · easy run, then lift</span>
+                  </div>
+                </div>
+                <div class="pt-ev green">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">8:00 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Refuel breakfast · carbs + protein</h3>
+                  <p class="pt-ev-body">Within 30 minutes of finishing, while your body's primed to restock. Oats with banana, honey and Greek yogurt covers carbs to refill the tank and protein to repair.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Carbs</span><span class="v">~60 g</span></div>
+                    <div class="row"><span class="k">Protein</span><span class="v">~25 g</span></div>
+                    <div class="row"><span class="k">Window</span><span class="v">Within 30 min post-run</span></div>
+                  </div>
+                </div>
+                <div class="pt-ev blue">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">8:30 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Rehydrate · 500 ml to start</h3>
+                  <p class="pt-ev-body">Kick off the day's 2.5 L target. Add a pinch of electrolytes after the morning sweat.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Now</span><span class="v">500 ml + electrolytes</span></div><div class="row"><span class="k">By 4 PM</span><span class="v">2.5 L total</span></div></div>
+                </div>
+              </div>
+
+              <!-- ===== MIDDAY ===== -->
+              <div class="pt-period" data-period="midday">
+                <div class="pt-ev next green">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 12:30 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Heavy lower-body lift · 35 min</h3>
+                  <p class="pt-ev-body">The day's real session. Squats, hip hinge and calf raises, heavy and low-rep. This is what keeps your stride powerful and your legs durable through the build.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Style</span><span class="v">Heavy · low-rep</span></div>
+                    <div class="row"><span class="k">Focus</span><span class="v">Squat, hinge, calves</span></div>
+                    <div class="row"><span class="k">Why now</span><span class="v">Legs already warm</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/anthony.png" alt="Anthony Turner" />
+                    <span class="pt-attr-text">Per <strong>Anthony Turner</strong> · heavy, low-rep strength</span>
+                  </div>
+                </div>
+                <div class="pt-ev green">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">1:30 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Refuel within the hour</h3>
+                  <p class="pt-ev-body">Carbs and protein together after lifting, the same window as after a hard run. It's what turns the session into actual strength.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Protein</span><span class="v">~30 g</span></div><div class="row"><span class="k">Window</span><span class="v">Within 60 min</span></div></div>
+                </div>
+                <div class="pt-ev purple">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">2:00 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Single-leg check · 2 min</h3>
+                  <p class="pt-ev-body">A quick symmetry check: a hop or calf raise on each side. It flags any left-right gap before it turns into a niggle.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Test</span><span class="v">Hop / calf raise each side</span></div>
+                    <div class="row"><span class="k">Looking for</span><span class="v">Even left vs right</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/anthony.png" alt="Anthony Turner" />
+                    <span class="pt-attr-text">Per <strong>Anthony Turner</strong> · monitor asymmetry</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ===== AFTERNOON ===== -->
+              <div class="pt-period" data-period="afternoon">
+                <div class="pt-ev next blue">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 4:00 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Tomorrow is a key run, keep legs clear</h3>
+                  <p class="pt-ev-body">No heavy legs tomorrow. Today's lift is placed so it clears before your quality run, keeping the contrast between hard and easy sharp.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Tomorrow</span><span class="v">Quality run</span></div>
+                    <div class="row"><span class="k">Today's lift</span><span class="v">Clears in time</span></div>
+                    <div class="row"><span class="k">Rule</span><span class="v">No heavy legs before key runs</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/anthony.png" alt="Anthony Turner" />
+                    <span class="pt-attr-text">Per <strong>Anthony Turner</strong> · separate strength from key runs</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ===== EVENING ===== -->
+              <div class="pt-period" data-period="evening">
+                <div class="pt-ev next green">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 9:30 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Protect tonight's sleep</h3>
+                  <p class="pt-ev-body">Strength adapts while you sleep. Aim for 8 hours tonight so today's lift turns into the durability you're after.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Target</span><span class="v">8 h</span></div><div class="row"><span class="k">Why tonight</span><span class="v">Where strength is built</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =====================================================================
+           Surface: ANTHONY-PLAN-TODAY (Mariah). S&C approach sized to three runs
+           a week around three kids, first half marathon. Today is one of her two
+           short home strength sessions; her longest run is Saturday and stays on
+           fresh legs. Ottavia leads; Anthony is the lens. Plan, not a chat.
+           ===================================================================== -->
+      <div class="surface" data-surface="anthony-plan-today-mariah">
+        <div class="pt">
+          <div class="pt-header">
+            <div>
+              <h1 class="pt-title">Plan for <strong>Today</strong></h1>
+              <div class="pt-today">Wed 25 · <strong>Today</strong></div>
+            </div>
+            <button class="pt-close" onclick="window.switchSurface('anthony-chat-baseline-mariah')" title="Close">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+
+          <div class="pt-main">
+            <div class="pt-content">
+              <!-- ===== MORNING ===== -->
+              <div class="pt-period show" data-period="morning">
+                <div class="pt-ev next orange">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 9:00 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Home strength · 20 min · after drop-off</h3>
+                  <p class="pt-ev-body">No gym needed. Squats, lunges, calf raises and a plank. The basics that keep knees and hips strong as your runs get longer.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Where</span><span class="v">At home, bodyweight</span></div>
+                    <div class="row"><span class="k">Focus</span><span class="v">Hips, knees, calves</span></div>
+                    <div class="row"><span class="k">Time</span><span class="v">~20 min</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/anthony.png" alt="Anthony Turner" />
+                    <span class="pt-attr-text">Per <strong>Anthony Turner</strong> · durability first</span>
+                  </div>
+                </div>
+                <div class="pt-ev green">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">9:45 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Quick refuel · 15g protein</h3>
+                  <p class="pt-ev-body">Yogurt with berries while the breakfast dishes pile up. A little protein after helps you recover and keeps energy steady through the morning.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Protein</span><span class="v">~15 g</span></div><div class="row"><span class="k">Idea</span><span class="v">Greek yogurt + fruit</span></div></div>
+                </div>
+                <div class="pt-ev blue">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">10:00 AM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Water · glass at every handoff</h3>
+                  <p class="pt-ev-body">Aim for 1.5 L across the day. A glass at each kid-meal handoff is the easiest way to remember it without thinking about it.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Target</span><span class="v">1.5 L by evening</span></div><div class="row"><span class="k">Trick</span><span class="v">One glass per handoff</span></div></div>
+                </div>
+              </div>
+
+              <!-- ===== MIDDAY ===== -->
+              <div class="pt-period" data-period="midday">
+                <div class="pt-ev next green">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 12:30 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Lunch · protein + slow carbs</h3>
+                  <p class="pt-ev-body">A real plate while the kids are at school: eggs or chicken with whole grains and veg. Steady energy for the afternoon, nothing heavy.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Protein</span><span class="v">~25 g</span></div><div class="row"><span class="k">Carbs</span><span class="v">Slow-release</span></div></div>
+                </div>
+                <div class="pt-ev purple">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">1:30 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Single-leg balance · 1 min each side</h3>
+                  <p class="pt-ev-body">While the kettle boils, stand on one leg, then the other. A tiny habit with real payoff for stability and even strength side to side.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Do</span><span class="v">1 min per leg</span></div>
+                    <div class="row"><span class="k">Helps</span><span class="v">Balance, even strength</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/anthony.png" alt="Anthony Turner" />
+                    <span class="pt-attr-text">Per <strong>Anthony Turner</strong> · even, single-leg strength</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ===== AFTERNOON ===== -->
+              <div class="pt-period" data-period="afternoon">
+                <div class="pt-ev next blue">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 3:30 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Saturday's run stays your best</h3>
+                  <p class="pt-ev-body">No strength Friday or Saturday, so your longest run lands on fresh legs. The strength is here to support that run, never to tire you out before it.</p>
+                  <div class="pt-ev-detail">
+                    <div class="row"><span class="k">Saturday</span><span class="v">Longest run</span></div>
+                    <div class="row"><span class="k">Strength</span><span class="v">None Fri or Sat</span></div>
+                  </div>
+                  <div class="pt-ev-attr">
+                    <img class="pt-attr-avatar" src="assets/images/anthony.png" alt="Anthony Turner" />
+                    <span class="pt-attr-text">Per <strong>Anthony Turner</strong> · keep lifting away from key runs</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ===== EVENING ===== -->
+              <div class="pt-period" data-period="evening">
+                <div class="pt-ev next green">
+                  <div class="pt-ev-top"><span class="pt-ev-dot"></span><span class="pt-ev-when">Up next · 10:00 PM</span><button class="pt-ev-more" onclick="ptToggleMore(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+                  <h3 class="pt-ev-title">Rest is part of the plan</h3>
+                  <p class="pt-ev-body">Broken sleep with the kids is a given, so a steady bedtime matters more than a perfect eight hours. The strength work adapts on the downtime.</p>
+                  <div class="pt-ev-detail"><div class="row"><span class="k">Aim</span><span class="v">Steady bedtime</span></div><div class="row"><span class="k">Over</span><span class="v">Chasing 8 h exactly</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =====================================================================
            Surface: JOHN-PLAN-TODAY (Tom). Ottavia guidance shaped around John
            Hawley's carb periodization. Scenario: today is a "train low" easy
            day; tomorrow is a fuelled quality session. Ottavia leads; John is
@@ -16241,9 +16793,9 @@
       ],
       bodyOfWorkLabel: `Selected work`,
       bodyOfWork: [
-        { icon: `article`, title: `What is Best Practice for Training-Intensity and Duration Distribution?`, sub: `Int. Journal of Sports Physiology & Performance · 2010` },
-        { icon: `article`, title: `Quantifying Training Intensity Distribution in Elite Endurance Athletes`, sub: `Scand. Journal of Medicine & Science in Sports` },
-        { icon: `article`, title: `The Hierarchy of Endurance Training Needs`, sub: `Lectures & talks · the polarized model explained` },
+        { icon: `article`, coverColor: `blue`,   coverTitle: `Intensity Distribution`,  coverLabel: `Paper`, title: `What is Best Practice for Training-Intensity and Duration Distribution?`, sub: `Int. Journal of Sports Physiology & Performance · 2010` },
+        { icon: `article`, coverColor: `purple`, coverTitle: `Elite Endurance Athletes`, coverLabel: `Paper`, title: `Quantifying Training Intensity Distribution in Elite Endurance Athletes`, sub: `Scand. Journal of Medicine & Science in Sports` },
+        { icon: `article`, coverColor: `orange`, coverTitle: `Hierarchy of Needs`,       coverLabel: `Talk`,  title: `The Hierarchy of Endurance Training Needs`, sub: `Lectures & talks · the polarized model explained` },
       ],
       about: `Stephen Seiler is a Professor of Exercise Physiology at the University of Agder in Norway. He's the pioneer of the polarized training model — the observation, built from years of studying world-class endurance athletes, that most training time should be very easy (Zone 1) and a small share should be genuinely hard (Zone 3), with very little moderate-intensity threshold work in between.`,
       aboutBullets: [`Professor of Exercise Physiology, University of Agder`, `Pioneer of the polarized 80/20 model`, `Studies endurance adaptation and recovery balance`, `Widely cited across endurance sport`],
@@ -16308,6 +16860,91 @@
       },
     },
 
+    anthony: {
+      name: `Anthony Turner`, first: `Anthony`, initials: `AT`, accent: `#4A5563`, accent2: `#2E353F`,
+      portrait: `assets/images/anthony.png`, heroBg: `#D6DBE0`,
+      heroStyle: `feature`, heroImage: `assets/images/anthony-hero.png`, featureBg: `#D6DBE0`,
+      featureHeroH: 300, featureImgW: `59%`, featureFadeH: 96, featureFadeStart: 80,
+      eyebrow: `Strength & Conditioning Scientist`, headline: `Build strength that lasts, with Anthony Turner`,
+      profession: `Professor of Strength & Conditioning`,
+      tagline: `Evidence-based strength work, matched to the few sessions your running actually needs.`,
+      stats: [`UKSCA accreditation board`, `S&C textbook editor`], price: `€6,99`, priceUnit: `week`,
+      partOfProduct: `Anthony isn't an advisor you message. Ottavia has read his published work, including the Routledge Handbook of Strength and Conditioning and Advanced Strength and Conditioning, and applies his needs-analysis and testing approach inside your guidance, always with attribution.`,
+      whatYouGet: [
+        `A strength plan matched to your running, not bolted on top of it`,
+        `The few lifts that protect you from injury and keep your stride powerful`,
+        `Simple readiness and asymmetry checks, so you train when your body can take it`,
+        `His handbooks and research surfaced when they're relevant to your question`,
+      ],
+      bodyOfWorkLabel: `Selected work`,
+      bodyOfWork: [
+        { icon: `article`, coverColor: `blue`,   coverTitle: `Routledge Handbook of S&C`, coverLabel: `Handbook`, title: `Routledge Handbook of Strength and Conditioning`, sub: `Editor · evidence-based S&C from theory to application · with Paul Comfort` },
+        { icon: `article`, coverColor: `green`,  coverTitle: `Advanced S&C`,              coverLabel: `Textbook`, title: `Advanced Strength and Conditioning: An Evidence-based Approach`, sub: `Editor · the science behind physical preparation and testing` },
+        { icon: `article`, coverColor: `purple`, coverTitle: `Athlete Profiling`,         coverLabel: `Research`, title: `Athlete profiling: force plates, jump testing & asymmetry`, sub: `Applied research · Middlesex University · UKSCA` },
+      ],
+      about: `Anthony Turner is a Professor of Strength and Conditioning at Middlesex University in London and a member of the UKSCA accreditation board. He edits two of the field's standard texts, the Routledge Handbook of Strength and Conditioning and Advanced Strength and Conditioning, and is known for a systematic, evidence-based approach to physical preparation: analyse what an athlete actually needs, test it objectively with force plates, jump testing and inter-limb asymmetry, train it, then monitor that it is working.`,
+      aboutBullets: [`Professor of Strength & Conditioning, Middlesex University`, `UKSCA accreditation board member`, `Editor of two leading S&C textbooks`, `Specialist in athlete profiling, testing and asymmetry`],
+      chips: [`Strength`, `Needs analysis`, `Power`, `Testing`, `Asymmetry`, `Durability`],
+      cases: {
+        tom: {
+          plan: {
+            title: `I built your strength week around your running using Anthony's approach, Tom.`,
+            intro: `You're deep in the 100K build, so strength is here to keep you durable and powerful, not to add fatigue. Anthony's rule is a needs analysis first, then the few heavy sessions that earn their place, placed so they never blunt your key runs:`,
+            weekLabel: `Your week · strength that serves the running`,
+            week: [
+              { day: `Mon`, color: `green`,  title: `Heavy lower-body lift · 35 min`, body: `Paired with today's easy run, while you're already warm. Heavy, low-rep squats, hinges and calf raises keep your power and tendon stiffness as the miles climb. Quality over volume.` },
+              { day: `Tue`, color: `blue`,   title: `Easy run · skip the gym`,        body: `Strength only works once it's recovered from. No lifting today, so Monday's session adapts instead of stacking up.` },
+              { day: `Wed`, color: `green`,  title: `Single-leg strength · 25 min`,   body: `Calf raises, step-ups and balance work, evened out side to side. This is where running's hidden asymmetries get corrected before they become niggles.` },
+              { day: `Thu`, color: `orange`, title: `Key run day · no heavy legs`,    body: `Your one hard run leads today. Anthony's rule is never to bury a quality run under fresh leg fatigue, so the gym stays shut.` },
+              { day: `Sat`, color: `green`,  title: `Mobility + core · 20 min`,       body: `Light, supportive work before the long run: hips, ankles, trunk. Nothing that costs you tomorrow.` },
+              { day: `Sun`, color: `blue`,   title: `Rest · let it consolidate`,      body: `Strength adaptations land on rest days. Protect it as part of the plan, not a gap in it.` },
+            ],
+            close: `Two real lifts a week, placed where they help and away from your key runs. That's the whole prescription. Less is more when it's heavy and well-timed.`,
+            chips: [`Why only twice a week?`, `Won't lifting make my legs heavy?`, `How heavy is "heavy"?`],
+          },
+          qa: {
+            ask: `Should I lift the day before my long run to save time?`,
+            title: `I'd move it. Heavy legs the day before a long run is exactly what Anthony's timing avoids.`,
+            intro: `Stacking a heavy lift right before your longest run feels efficient, but it compromises the run that matters most. Two things shape the call:`,
+            points: [
+              `A heavy lower-body session leaves your legs flat for 24 to 48 hours. Put it the day before and your long run is run on tired legs, so it builds less than it should.`,
+              `Anthony's approach pairs hard with hard: lift on or near a quality run day, then leave easy and long days clear. That contrast is what keeps both improving.`,
+              `If Saturday is your long run, lift Thursday alongside your key session, or earlier in the week. Never Friday.`,
+            ],
+            close: `Keep the heavy work away from your long run and it stops being a tax on it. Same two sessions, just placed where they pay off.`,
+            chips: [`When should I lift in race week?`, `Can I lift after a run instead?`, `What lifts matter most for running?`],
+          },
+        },
+        mariah: {
+          plan: {
+            title: `I kept your strength simple and protective, Mariah, two short sessions that fit around the kids.`,
+            intro: `Training for your first half on three runs a week, strength isn't extra running, it's what keeps you injury-free and efficient. Anthony's approach is a quick needs analysis, which for a newer runner means durability, then the smallest dose that delivers it:`,
+            weekLabel: `Your week · strength built for durability`,
+            week: [
+              { day: `Mon`, color: `green`,  title: `Home strength · 20 min`,    body: `After the school run, no gym needed. Squats, lunges, calf raises and a plank. The basics that protect knees and hips when mileage climbs.` },
+              { day: `Wed`, color: `blue`,   title: `Easy run · nothing else`,   body: `One thing at a time. Today's job is the easy run, so strength waits.` },
+              { day: `Fri`, color: `green`,  title: `Home strength · 20 min`,    body: `The same short circuit, second time this week. Twice is enough to build real resilience without eating into your runs.` },
+              { day: `Sat`, color: `orange`, title: `Long-ish run · legs fresh`, body: `No strength the day before or the day of your longest run. Anthony keeps lifting away from your key run, so it stays your best one.` },
+              { day: `Sun`, color: `blue`,   title: `Rest · this is when it works`, body: `Strength adapts while you rest. With a full house, count the downtime as part of the training.` },
+            ],
+            close: `Two 20-minute sessions at home, both away from your important runs. That's all the strength a first half needs, and it's the best injury insurance you've got.`,
+            chips: [`Which exercises exactly?`, `Do I need any equipment?`, `Will this make me faster?`],
+          },
+          qa: {
+            ask: `I keep getting niggles in my knees as my runs get longer. Can strength work actually help?`,
+            title: `Yes, this is exactly what strength is for, and it's the highest-value thing you can add right now.`,
+            intro: `Knee niggles as mileage climbs usually trace back to hips and calves not yet coping with the new load. Anthony's lens treats strength as the fix, not a nice-to-have:`,
+            points: [
+              `Stronger hips and glutes control how your knee tracks with every stride. Two short sessions a week is enough to change that within a few weeks.`,
+              `Calf and lower-leg strength shares the load your knees are carrying right now. Simple calf raises, built up gradually, make a real difference.`,
+            ],
+            close: `Keep the sessions short and regular rather than long and occasional. If a niggle ever turns into pain that changes how you run, that's a physio's call, not mine.`,
+            chips: [`Show me a 20-minute routine`, `How soon will it help?`, `Should I run through a niggle?`],
+          },
+        },
+      },
+    },
+
     lewis: {
       name: `Lewis Gough`, first: `Lewis`, initials: `LG`, accent: `#3F7E6E`, accent2: `#2C5A4E`,
       portrait: `assets/images/lewis.png`, heroBg: `#D2E4D6`,
@@ -16326,9 +16963,9 @@
       ],
       bodyOfWorkLabel: `Selected work`,
       bodyOfWork: [
-        { icon: `article`, title: `Nutrition and Supplements in Cycling`, sub: `Co-authored reference text · with Andy Sparks` },
-        { icon: `article`, title: `Sodium bicarbonate for high-intensity performance`, sub: `Research on buffering, dosing and gut tolerance` },
-        { icon: `article`, title: `Caffeine, nitrate and beta-alanine in endurance sport`, sub: `Applied ergogenic-aid research · Birmingham City University` },
+        { icon: `article`, coverColor: `green`,  coverTitle: `Nutrition in Cycling`, coverLabel: `Reference`, title: `Nutrition and Supplements in Cycling`, sub: `Co-authored reference text · with Andy Sparks` },
+        { icon: `article`, coverColor: `blue`,   coverTitle: `Sodium Bicarbonate`,  coverLabel: `Research`,  title: `Sodium bicarbonate for high-intensity performance`, sub: `Research on buffering, dosing and gut tolerance` },
+        { icon: `article`, coverColor: `orange`, coverTitle: `Ergogenic Aids`,      coverLabel: `Research`,  title: `Caffeine, nitrate and beta-alanine in endurance sport`, sub: `Applied ergogenic-aid research · Birmingham City University` },
       ],
       about: `Lewis Gough is a Professor of Nutrition and Physiology at Birmingham City University, where his research focuses on sports nutrition and ergogenic aids for endurance athletes, particularly cyclists. His work examines how supplements like sodium bicarbonate, caffeine, nitrate and beta-alanine actually affect performance, and how to dose and time them so they help rather than hinder. He co-authored Nutrition and Supplements in Cycling.`,
       aboutBullets: [`Professor of Nutrition & Physiology, Birmingham City University`, `Researches ergogenic aids for endurance athletes`, `Focus on sodium bicarbonate, caffeine, nitrate, beta-alanine`, `Co-author of Nutrition and Supplements in Cycling`],
@@ -16409,9 +17046,9 @@
       ],
       bodyOfWorkLabel: `Selected work`,
       bodyOfWork: [
-        { icon: `article`, title: `Carbohydrate Dependence During Prolonged, Intense Endurance Exercise`, sub: `Sports Medicine · review` },
-        { icon: `article`, title: `Nutritional Modulation of Training-Induced Skeletal Muscle Adaptations`, sub: `Journal of Applied Physiology` },
-        { icon: `article`, title: `Training and Nutrient Interactions: "Train Low, Compete High"`, sub: `Lectures & reviews · the periodization model` },
+        { icon: `article`, coverColor: `orange`, coverTitle: `Carbohydrate Dependence`, coverLabel: `Review`, title: `Carbohydrate Dependence During Prolonged, Intense Endurance Exercise`, sub: `Sports Medicine · review` },
+        { icon: `article`, coverColor: `blue`,   coverTitle: `Muscle Adaptations`,      coverLabel: `Paper`,  title: `Nutritional Modulation of Training-Induced Skeletal Muscle Adaptations`, sub: `Journal of Applied Physiology` },
+        { icon: `article`, coverColor: `purple`, coverTitle: `Train Low, Compete High`, coverLabel: `Talk`,   title: `Training and Nutrient Interactions: "Train Low, Compete High"`, sub: `Lectures & reviews · the periodization model` },
       ],
       about: `John Hawley is a Research Professor and Director of the Exercise & Nutrition Research Program at the Mary MacKillop Institute for Health Research, Australian Catholic University, in Melbourne. He's one of the most-cited researchers in exercise metabolism, best known for the "train low, compete high" model: the idea that deliberately training some sessions with low carbohydrate availability amplifies the body's adaptation, while quality sessions and competition are fully fuelled.`,
       aboutBullets: [`Research Professor, Australian Catholic University`, `Director, Exercise & Nutrition Research Program`, `Pioneer of carbohydrate periodization ("train low")`, `Among the most-cited in exercise metabolism`],
@@ -16865,6 +17502,18 @@
   }
   window.xFollow = xFollow;
 
+  // Generated cover for a body-of-work item with no real book cover. Spine +
+  // tinted field in the Ottavia card palette. Color is taken from b.coverColor,
+  // or derived deterministically from the title so each publication keeps a
+  // stable, distinct hue. coverTitle/coverLabel let the data tune the cover text.
+  const BOW_COVER_COLORS = ['blue', 'green', 'purple', 'orange', 'gray'];
+  function bowHash(s) { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; }
+  function genBowCover(b) {
+    const color = b.coverColor || BOW_COVER_COLORS[bowHash(b.title || '') % BOW_COVER_COLORS.length];
+    const title = b.coverTitle || b.title || '';
+    const label = b.coverLabel || 'Paper';
+    return `<span class="p3-bow-img p3-bow-gen ${color}"><span class="bow-spine"></span><span class="bow-gtitle">${title}</span><span class="bow-glabel">${label}</span></span>`;
+  }
   function renderXProfile(ex) {
     return `
       <div class="p3-topbar"><button class="p3-back" onclick="window.switchSurface('chat-baseline')" title="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button></div>
@@ -16898,7 +17547,7 @@
         </div>
         <div class="p3-block">
           <h2 class="p3-section-title">${ex.bodyOfWorkLabel || 'Body of work'}</h2>
-          <div class="p3-bow-list">${ex.bodyOfWork.map(b => `<div class="p3-bow-item">${b.cover ? `<img class="p3-bow-img" src="${b.cover}" alt="${b.title}" />` : `<span class="p3-bow-img x-bow-fallback" style="background:${ex.accent}">${b.icon === 'article' ? ARTICLE_ICON : (b.tag || ex.initials)}</span>`}<div class="p3-bow-text"><h3 class="p3-bow-title">${b.title}</h3><p class="p3-bow-sub">${b.sub}</p></div></div>`).join('')}</div>
+          <div class="p3-bow-list">${ex.bodyOfWork.map(b => `<div class="p3-bow-item">${b.cover ? `<img class="p3-bow-img" src="${b.cover}" alt="${b.title}" />` : genBowCover(b)}<div class="p3-bow-text"><h3 class="p3-bow-title">${b.title}</h3><p class="p3-bow-sub">${b.sub}</p></div></div>`).join('')}</div>
         </div>
         <div class="p3-block"><h2 class="p3-section-title">About</h2><p class="p3-about-bio">${ex.about}</p><ul class="p3-about-bullets">${xLis(ex.aboutBullets)}</ul></div>
         <div class="p3-block"><div class="p3-topic-chips">${ex.chips.map(c => `<span class="p3-topic-chip">${c}</span>`).join('')}</div></div>
