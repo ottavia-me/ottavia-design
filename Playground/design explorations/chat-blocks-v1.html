@@ -1310,5 +1310,147 @@ body{font-family:'Modern Era',-apple-system,sans-serif;background:#E7E1D6;color:
   </div>
 </div>
 
+<!-- ============ SECTION I: PLAN COMPONENTS — GENERAL ============ -->
+<style>
+.plan-wrap{max-width:1100px;margin:0 auto;}
+.dlegend{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:28px;font-size:13px;color:var(--n60);}
+.dlegend span{display:flex;align-items:center;gap:6px;}
+.dlegend i{width:10px;height:10px;border-radius:50%;display:block;}
+.atom{background:rgba(255,255,255,.55);border:1px dashed var(--n30);border-radius:var(--r-lg);padding:14px 16px;font-size:14px;line-height:20px;color:var(--n70);margin-bottom:28px;}
+.atom b{color:var(--n80);}
+.plan-cols{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;}
+.plan-cap{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--n50);font-weight:500;margin-bottom:12px;}
+/* WEEK — general */
+.wk{background:var(--n0);border:1px solid var(--n20);border-radius:var(--r-2xl);padding:6px 16px;box-shadow:var(--sh-sm);}
+.wk-row{display:flex;gap:14px;padding:12px 4px;border-bottom:1px solid var(--n10);align-items:flex-start;}
+.wk-row:last-child{border-bottom:none;}
+.wk-row.today{background:var(--nut10);border-radius:12px;}
+.wk-day{width:42px;flex:none;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--n50);padding-top:3px;}
+.wk-row.today .wk-day{color:var(--green60);}
+.wk-items{flex:1;display:flex;flex-direction:column;gap:9px;min-width:0;}
+.wk-item{display:flex;align-items:center;gap:10px;}
+.wk-item .dot{width:9px;height:9px;border-radius:50%;flex:none;}
+.wk-item .ti{font-size:16px;color:var(--n80);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.wk-item .ti small{color:var(--n50);font-size:13px;margin-left:6px;}
+.wk-item .val{margin-left:auto;font-size:13px;font-weight:700;color:var(--n60);background:var(--n10);padding:2px 9px;border-radius:999px;white-space:nowrap;flex:none;}
+.wk-item.rest .ti{color:var(--n40);}
+.wk-item.rest .dot{background:var(--n30)!important;}
+/* DAY — general */
+.dayp{background:var(--n0);border:1px solid var(--n20);border-radius:var(--r-2xl);padding:18px 16px;box-shadow:var(--sh-sm);}
+.dp-row{display:flex;gap:12px;padding-bottom:16px;position:relative;}
+.dp-row:last-child{padding-bottom:0;}
+.dp-row::before{content:'';position:absolute;left:43px;top:16px;bottom:-2px;width:2px;background:var(--n10);}
+.dp-row:last-child::before{display:none;}
+.dp-time{width:48px;flex:none;font-size:14px;font-weight:500;color:var(--n50);padding-top:1px;}
+.dp-dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--n0);flex:none;margin-top:3px;z-index:1;box-shadow:0 0 0 3px var(--n0);}
+.dp-body{flex:1;}
+.dp-body .ti{font-size:16px;color:var(--n80);}
+.dp-body .de{font-size:13px;color:var(--n50);margin-top:1px;}
+.dp-body .val{display:inline-block;margin-top:4px;font-size:12px;font-weight:700;color:var(--n60);background:var(--n10);padding:2px 9px;border-radius:999px;}
+</style>
+
+<div class="section-label">Section I</div>
+<div class="section-title">Plan components — general (Week &amp; Day)</div>
+<div class="section-sub">Domain-agnostic. One shared atom composes both, so they render a training plan, a nutrition plan, a recovery plan — or a mixed wellness plan — with no new components.</div>
+
+<div class="plan-wrap">
+  <div class="atom"><b>The shared atom — a plan item:</b> <span style="color:var(--n80);">[domain dot] · title · detail · optional value</span>. The domain is carried by color, not by a bespoke component. <b>Week</b> buckets items by day (0–n per day); <b>Day</b> orders them by time. Swap the items and it's any plan.</div>
+
+  <div class="dlegend">
+    <span><i style="background:var(--act70);"></i>Training</span>
+    <span><i style="background:var(--nut60);"></i>Nutrition</span>
+    <span><i style="background:var(--rec60);"></i>Recovery</span>
+    <span><i style="background:var(--hyd60);"></i>Hydration</span>
+  </div>
+
+  <div class="plan-cols">
+
+    <!-- WEEK -->
+    <div>
+      <div class="plan-cap">Week plan · general (mixed-domain example)</div>
+      <div class="wk">
+        <div class="wk-row">
+          <div class="wk-day">Mon</div>
+          <div class="wk-items"><div class="wk-item rest"><span class="dot"></span><span class="ti">Rest day</span></div></div>
+        </div>
+        <div class="wk-row">
+          <div class="wk-day">Tue</div>
+          <div class="wk-items">
+            <div class="wk-item"><span class="dot" style="background:var(--act70);"></span><span class="ti">Easy run<small>zone 2</small></span><span class="val">8 km</span></div>
+            <div class="wk-item"><span class="dot" style="background:var(--nut60);"></span><span class="ti">High-protein day</span><span class="val">130g</span></div>
+          </div>
+        </div>
+        <div class="wk-row today">
+          <div class="wk-day">Wed</div>
+          <div class="wk-items"><div class="wk-item"><span class="dot" style="background:var(--act70);"></span><span class="ti">Intervals<small>6×3 min, threshold</small></span></div></div>
+        </div>
+        <div class="wk-row">
+          <div class="wk-day">Thu</div>
+          <div class="wk-items">
+            <div class="wk-item"><span class="dot" style="background:var(--nut60);"></span><span class="ti">Carb load</span></div>
+            <div class="wk-item"><span class="dot" style="background:var(--hyd60);"></span><span class="ti">Extra fluids</span><span class="val">3 L</span></div>
+          </div>
+        </div>
+        <div class="wk-row">
+          <div class="wk-day">Fri</div>
+          <div class="wk-items"><div class="wk-item"><span class="dot" style="background:var(--rec60);"></span><span class="ti">Mobility</span><span class="val">20 min</span></div></div>
+        </div>
+        <div class="wk-row">
+          <div class="wk-day">Sat</div>
+          <div class="wk-items"><div class="wk-item"><span class="dot" style="background:var(--act70);"></span><span class="ti">Long run<small>fuel practice</small></span><span class="val">28 km</span></div></div>
+        </div>
+        <div class="wk-row">
+          <div class="wk-day">Sun</div>
+          <div class="wk-items"><div class="wk-item rest"><span class="dot"></span><span class="ti">Rest day</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY -->
+    <div>
+      <div class="plan-cap">Day plan · general (mixed-domain example)</div>
+      <div class="dayp">
+        <div class="dp-row">
+          <div class="dp-time">07:00</div>
+          <div class="dp-dot" style="background:var(--act70);"></div>
+          <div class="dp-body"><div class="ti">Easy run</div><div class="de">8 km, keep HR under 150</div></div>
+        </div>
+        <div class="dp-row">
+          <div class="dp-time">08:30</div>
+          <div class="dp-dot" style="background:var(--nut60);"></div>
+          <div class="dp-body"><div class="ti">Breakfast</div><div class="de">aim 35g protein in the window</div><span class="val">35g protein</span></div>
+        </div>
+        <div class="dp-row">
+          <div class="dp-time">13:00</div>
+          <div class="dp-dot" style="background:var(--nut60);"></div>
+          <div class="dp-body"><div class="ti">Lunch</div></div>
+        </div>
+        <div class="dp-row">
+          <div class="dp-time">16:00</div>
+          <div class="dp-dot" style="background:var(--hyd60);"></div>
+          <div class="dp-body"><div class="ti">Hydration check</div><div class="de">1.5 L by now</div></div>
+        </div>
+        <div class="dp-row">
+          <div class="dp-time">18:30</div>
+          <div class="dp-dot" style="background:var(--rec60);"></div>
+          <div class="dp-body"><div class="ti">Mobility</div><div class="de">15 min, hips &amp; calves</div></div>
+        </div>
+        <div class="dp-row">
+          <div class="dp-time">21:30</div>
+          <div class="dp-dot" style="background:var(--rec60);"></div>
+          <div class="dp-body"><div class="ti">Wind-down</div><div class="de">screens off, lights low</div></div>
+        </div>
+      </div>
+      <div style="font-size:13px;color:var(--n50);margin-top:12px;">The time slot also accepts a label (Morning / Midday / Evening) for untimed plans, or a step number for ordered routines.</div>
+    </div>
+
+  </div>
+
+  <div style="font-size:14px;color:var(--n50);border-top:1px solid var(--n30);padding-top:16px;margin-top:32px;">
+    <b style="color:var(--n80);">Why this is general:</b> neither component knows about "training" or "nutrition" — they render plan items, and the item's <b>domain color</b> + content carry the meaning. A pure training week, a meal-prep week, a recovery protocol, or this mixed example all use the same component. Days hold 0–n items; empty days read as Rest. Mock for critique — supersedes the training-only Week grid in Section B.
+  </div>
+
+</div>
+
 </body>
 </html>
