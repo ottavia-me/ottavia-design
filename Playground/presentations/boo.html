@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Boo Schexnayder — Ottavia Demo</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/ottavia-logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --transition: .2s ease;
+      --bg: #F5F1EA;
+      --bg-deep: #ECE5D8;
+      --ink: #433E36;
+      --ink-soft: #766F64;
+      --ink-mute: #A8A297;
+      --line: rgba(67,62,54,0.10);
+      --accent: #5C7A3E;
+      --phone-bezel: #2A2620;
+
+      /* Color placeholders — solid blocks until Vika drops real assets. */
+      --ph-photo:        #B8B0A4;     /* generic photo placeholder */
+      --ph-photo-warm:   #C9B89E;     /* warm-toned placeholder */
+      --ph-photo-cool:   #A4B0BD;     /* cool-toned placeholder */
+      --ph-logo-bg:      #2A2620;     /* logo dark block */
+      --ph-logo-text:    rgba(245,241,234,0.85);
+      --ph-image-block:  #6A6258;     /* photo/illustration block */
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      font-family: 'DM Sans', -apple-system, system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      letter-spacing: -0.01em;
+    }
+
+    /* ============================================================
+       SLIDE FRAMEWORK
+       ============================================================ */
+    .slide {
+      position: absolute; inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .55s ease;
+      overflow: hidden;
+    }
+    .slide.visible { opacity: 1; pointer-events: auto; z-index: 5; }
+
+    /* Fluid content column. Each slide reserves a centered column whose
+       width scales with the viewport between --content-min and --content-max.
+       Padding is whatever's left over, with a small safety floor so the
+       block can't bump the edge on tiny screens.
+       Slides with two-column image layouts (7, 9, safety) override these
+       vars to a wider column so the image+text row still fits. */
+    .slide-content {
+      --content-min: 820px;
+      --content-max: 1280px;
+      --content-w: clamp(var(--content-min), 84vw, var(--content-max));
+      padding: 80px max(48px, calc((100vw - var(--content-w)) / 2));
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ============================================================
+       DECK CHROME — slide counter top-right, nav bottom-center
+       ============================================================ */
+    .deck-counter {
+      position: fixed;
+      top: 24px; right: 28px;
+      z-index: 100;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; font-weight: 500;
+      color: var(--ink-soft);
+      font-variant-numeric: tabular-nums;
+      opacity: 0;
+      transition: opacity .35s ease;
+      pointer-events: none;
+    }
+    .deck-counter.visible { opacity: 1; }
+    .deck-counter .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent);
+    }
+    .deck-nav {
+      position: fixed;
+      bottom: 20px; left: 50%; transform: translateX(-50%) scale(1.3);
+      transform-origin: bottom center;
+      z-index: 100;
+      display: flex; align-items: center; gap: 12px;
+      padding: 8px;
+      background: rgba(255,255,255,0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      box-shadow: 0 4px 16px rgba(67,62,54,0.08);
+      opacity: 0;
+      transition: opacity .35s ease;
+      pointer-events: none;
+    }
+    .deck-nav.visible { opacity: 1; pointer-events: auto; }
+    .nav-btn {
+      width: 36px; height: 36px;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: background .15s ease, opacity .15s ease;
+    }
+    .nav-btn:hover:not(:disabled) { background: rgba(67,62,54,0.06); }
+    .nav-btn:disabled { opacity: 0.25; cursor: default; }
+    .nav-btn svg { width: 16px; height: 16px; }
+    .nav-dots {
+      display: flex; gap: 6px;
+      padding: 0 10px;
+    }
+    .nav-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(67,62,54,0.20);
+      cursor: pointer;
+      transition: background .15s ease, transform .15s ease;
+    }
+    .nav-dot:hover { transform: scale(1.3); }
+    .nav-dot.active { background: var(--ink); }
+
+    /* ============================================================
+       SHARED TYPOGRAPHY
+       ============================================================ */
+    .kicker {
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--ink-soft);
+      margin-bottom: 24px;
+      letter-spacing: -0.01em;
+    }
+    .big-headline {
+      font-size: clamp(40px, 4.8vw, 64px);
+      font-weight: 500;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+    .medium-headline {
+      font-size: clamp(32px, 3.6vw, 48px);
+      font-weight: 500;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+    .body-text {
+      font-size: clamp(16px, 1.4vw, 20px);
+      font-weight: 400;
+      line-height: 1.55;
+      color: var(--ink-soft);
+      letter-spacing: -0.01em;
+    }
+    .slide-title-left {
+      font-size: clamp(48px, 5.2vw, 72px);
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+      color: var(--ink-soft);
+    }
+    .slide-title-center {
+      text-align: center;
+      font-size: clamp(28px, 3.2vw, 42px);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.015em;
+      color: var(--ink-soft);
+    }
+
+    /* ============================================================
+       SLIDE 1 — SPLASH (existing background image kept)
+       ============================================================ */
+    .splash {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 24px;
+      background-image: url('../assets/images/splash-background.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .splash::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.35) 80%);
+      pointer-events: none;
+    }
+    .splash-title,
+    .splash-sub,
+    .splash-start {
+      font-family: 'Product Sans', 'DM Sans', 'Inter', -apple-system, system-ui, sans-serif;
+    }
+    .splash-title {
+      position: relative;
+      width: clamp(280px, 36vw, 480px);
+      height: auto;
+      filter: drop-shadow(0 2px 24px rgba(0,0,0,0.35));
+      opacity: 0;
+      animation: splashRise .9s .15s both cubic-bezier(.2,.7,.2,1);
+    }
+    .splash-sub {
+      position: relative;
+      font-size: clamp(20px, 2vw, 28px);
+      font-weight: 500;
+      color: #F5F1EA;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.35);
+      opacity: 0;
+      animation: splashRise .9s .35s both cubic-bezier(.2,.7,.2,1);
+    }
+    .splash-start {
+      position: relative;
+      margin-top: 28px;
+      padding: 14px 44px;
+      background: rgba(67, 62, 54, 0.42);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(245,241,234,0.55);
+      border-radius: 999px;
+      color: #F5F1EA;
+      font-size: 18px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background .2s ease, transform .15s ease;
+      opacity: 0;
+      animation: splashRise .9s .65s both cubic-bezier(.2,.7,.2,1);
+    }
+    .splash-start:hover {
+      background: rgba(67, 62, 54, 0.62);
+      transform: translateY(-1px);
+    }
+    @keyframes splashRise {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================================
+       SLIDE 2 — WHO WE ARE
+       ============================================================ */
+    .slide-2 {
+      gap: 64px;
+    }
+    .founders {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      max-width: 1200px;
+      margin-top: 40px;
+    }
+    .founder { display: flex; flex-direction: column; gap: 18px; }
+    .founder-photo {
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      background: var(--ph-photo);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .founder-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;       /* fills the circle; ratio preserved (no stretch) */
+      display: block;
+    }
+    /* Drop-in slide asset — preserves aspect ratio, never crops, never stretches.
+       Fits inside whatever container it's placed in. */
+    .slide-asset {
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      margin: auto;
+    }
+    /* When the image is the slide's main illustration (slides 3/4/5/9 right slot)
+       we want it to fill the available column. */
+    .slide-asset-fill {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+    .founder-name {
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-top: 8px;
+    }
+    .founder-role {
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--ink-mute);
+      margin-top: -10px;
+      letter-spacing: -0.01em;
+    }
+    .founder-bio {
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.55;
+      color: var(--ink-soft);
+      max-width: 540px;
+    }
+    .built-shipped {
+      margin-top: 8px;
+      padding-top: 40px;
+    }
+    .bs-label {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+      margin-bottom: 20px;
+    }
+    .bs-companies {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px 24px;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    .bs-companies span:not(:last-child)::after {
+      content: '·';
+      margin-left: 24px;
+      color: var(--ink-mute);
+    }
+
+    /* ============================================================
+       SLIDE 3 — WHAT IS OTTAVIA
+       ============================================================ */
+    .slide-3 {
+      --content-min: 1100px;
+      --content-max: 1600px;
+      flex-direction: row;
+      gap: 0;
+      align-items: center;
+    }
+    .slide-3-text {
+      flex: 0 0 auto;
+      max-width: 620px;
+    }
+    .slide-3-phone-area {
+      flex: 1 1 auto;
+      position: relative;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin-left: 0;
+    }
+    .slide-3-phone-area .slide-asset-fill {
+      max-height: 100%;
+      max-width: 100%;
+      width: auto;
+      height: auto;
+    }
+    .floating-chip {
+      position: absolute;
+      padding: 12px 22px;
+      background: #FFFFFF;
+      border-radius: 999px;
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--ink);
+      box-shadow: 0 4px 16px rgba(67,62,54,0.06);
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      z-index: 3;
+    }
+    .floating-chip.tl   { top: 6%;  left: 38%; }
+    .floating-chip.tr   { top: 12%; right: -4%; }
+    .floating-chip.ml   { top: 42%; left: 4%; }
+    .floating-chip.mr   { top: 30%; right: 8%; }
+    /* Decorative green threads — drawn as background svg */
+    .green-threads {
+      position: absolute; inset: 0;
+      pointer-events: none;
+      opacity: 0.55;
+      z-index: 1;
+    }
+
+    /* ============================================================
+       SLIDE 4 — THE PROBLEM
+       ============================================================ */
+    .slide-4 {
+      --content-min: 1100px;
+      --content-max: 1600px;
+      flex-direction: row;
+      gap: 60px;
+      align-items: center;
+      justify-content: center;
+    }
+    .slide-4-text {
+      flex: 1;
+      max-width: 720px;
+    }
+    .slide-4-text .big-headline { margin-bottom: 28px; }
+    .slide-4-text .body-text { margin-bottom: 24px; max-width: 660px; }
+    .question-list {
+      list-style: none; padding: 0; margin: 0;
+      display: flex; flex-direction: column;
+      gap: 10px;
+    }
+    .question-list li {
+      font-size: clamp(15px, 1.3vw, 18px);
+      font-weight: 400;
+      color: var(--ink-soft);
+      letter-spacing: -0.01em;
+    }
+    .question-list li::before { content: '· '; }
+    .slide-4-collage {
+      flex: 1;
+      height: 100%;
+      max-width: 540px;
+      max-height: 85vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .collage-tile {
+      background: var(--ph-image-block);
+      border-radius: 8px;
+    }
+    .collage-tile.watch { background: #2A2620; aspect-ratio: 1; }
+    .collage-tile.book-1 { background: #6B5A8E; }
+    .collage-tile.book-2 { background: #2F4A6E; }
+    .collage-tile.book-3 { background: #B5704C; }
+    .collage-tile.book-4 { background: #2A2620; }
+    .collage-tile.book-5 { background: #C9744E; }
+    .collage-tile.book-6 { background: #4A6B8C; }
+    .collage-tile.book-7 { background: #8B7E5C; }
+    .collage-tile.book-8 { background: #5C7A3E; }
+
+    /* ============================================================
+       SLIDE 5 — WHO IS IT FOR
+       ============================================================ */
+    .slide-5 {
+      --content-min: 1100px;
+      --content-max: 1600px;
+      flex-direction: row;
+      gap: 80px;
+      align-items: center;
+      justify-content: center;
+    }
+    .slide-5-text { flex: 1; max-width: 720px; }
+    .slide-5-text .big-headline { margin-bottom: 32px; }
+    .bullet-list {
+      list-style: none; padding: 0; margin: 0;
+      display: flex; flex-direction: column;
+      gap: 14px;
+    }
+    .bullet-list li {
+      position: relative;
+      padding-left: 22px;
+      font-size: clamp(15px, 1.3vw, 18px);
+      font-weight: 400;
+      color: var(--ink-soft);
+      line-height: 1.55;
+      letter-spacing: -0.01em;
+    }
+    .bullet-list li::before {
+      content: '·';
+      position: absolute;
+      left: 0;
+      font-size: 22px;
+      line-height: 1;
+      color: var(--ink-soft);
+    }
+    .slide-5-image {
+      flex: 0 0 480px;
+      height: 680px;
+      max-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ============================================================
+       SLIDE 6 — OUR MISSION
+       ============================================================ */
+    .slide-6 {
+      --content-min: 1100px;
+      --content-max: 1600px;
+      gap: 24px;
+      align-items: center;
+    }
+    .slide-6 .slide-title-center { margin-bottom: 40px; }
+    .slide-6-grid {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .slide-6-grid .slide-asset {
+      max-height: 100%;
+      max-width: 100%;
+      width: auto;
+      height: auto;
+    }
+    .signals-left,
+    .knowledge-right {
+      display: flex;
+      flex-direction: column;
+      gap: 38px;
+    }
+    .knowledge-right { align-items: flex-end; text-align: right; }
+    .signal-label {
+      font-size: 26px;
+      font-weight: 400;
+      color: var(--ink-soft);
+      position: relative;
+      letter-spacing: -0.01em;
+    }
+    .signal-label::after {
+      content: ''; position: absolute;
+      right: -14px; top: 50%; transform: translateY(-50%);
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #6BBE8C;
+    }
+    .knowledge-block {
+      font-size: 26px;
+      font-weight: 400;
+      color: var(--ink-soft);
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+    }
+    .expert-faces {
+      display: flex; gap: 6px;
+      margin-top: -12px;
+    }
+    .expert-faces .face {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--ph-photo);
+    }
+    .expert-faces .face:nth-child(2) { background: var(--ph-photo-warm); }
+    .expert-faces .face:nth-child(3) { background: var(--ph-photo-cool); }
+    .expert-faces .face:nth-child(4) { background: #9C7E5C; }
+    .signal-words {
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      display: flex; flex-direction: column;
+      gap: 8px;
+      font-style: italic;
+      color: var(--ink-mute);
+      font-size: 22px;
+      font-weight: 300;
+      z-index: 1;
+    }
+
+    /* ============================================================
+       SLIDE 7 — TWO INTERCONNECTED MODES
+       ============================================================ */
+    .slide-7 {
+      --content-min: 1100px;
+      --content-max: 1600px;
+      padding: 40px max(48px, calc((100vw - var(--content-w)) / 2)) 96px;
+      align-items: center;
+      gap: 16px;
+      overflow: hidden;
+    }
+    .modes-grid {
+      flex: 1 1 0;
+      min-height: 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .slide-7 .slide-asset {
+      max-height: 100%;
+      max-width: 100%;
+      width: auto;
+      height: auto;
+    }
+    .mode-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      perspective: 1200px;
+    }
+    .mode-stack-inner {
+      display: flex; flex-direction: column;
+      gap: 4px;
+      transform: rotateX(34deg) rotateZ(0deg);
+      transform-origin: center bottom;
+      transform-style: preserve-3d;
+    }
+    .layer-card {
+      height: 70px;
+      border-radius: 14px;
+      padding: 14px 20px;
+      display: flex; flex-direction: column;
+      justify-content: center;
+      box-shadow: 0 6px 18px rgba(67,62,54,0.06);
+      border: 1px solid rgba(67,62,54,0.05);
+    }
+    .layer-card .layer-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .layer-card .layer-sub {
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba(67,62,54,0.55);
+      margin-top: 2px;
+    }
+    .layer-card.engine    { background: #D7F4E2; color: #2F8F58; }
+    .layer-card.expert    { background: #FBEED1; color: #B07A2A; }
+    .layer-card.sleep     { background: #E7E2FA; color: #6F69B5; }
+    .layer-card.training  { background: #DDECFA; color: #4E73A5; }
+    .layer-card.nutrition { background: #FBEED1; color: #B07A2A; }
+    .layer-card.physiology{ background: #DCEFD8; color: #4D8F4E; }
+    .layer-card.devices   { background: #EBE5D8; color: #766F64; }
+    .layer-card .layer-sub { color: inherit; opacity: 0.7; }
+    .mode-caption {
+      font-size: clamp(15px, 1.15vw, 18px);
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.5;
+      letter-spacing: -0.01em;
+      text-align: center;
+      max-width: 520px;
+      margin: 0;
+    }
+    .mode-caption strong { font-weight: 600; }
+    .modes-captions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(40px, 5vw, 96px);
+      width: 100%;
+      justify-items: center;
+      margin-top: 8px;
+    }
+
+    /* ============================================================
+       SLIDE 8 — EXPERTS LENS (after "Two interconnected modes")
+       Diagram artwork pinned to the top ~56% of the slide, then a row
+       with Experts side / Experts Lens (center mark) / User side, plus
+       the disclaimer pinned to the bottom of the slide.
+       ============================================================ */
+    .slide-8 {
+      --content-min: 1100px;
+      --content-max: 1600px;
+      padding: 32px max(48px, calc((100vw - var(--content-w)) / 2));
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      overflow: hidden;
+    }
+    .slide-8-art {
+      flex: 0 0 70%;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    .slide-8-art img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+    .slide-8-bottom {
+      position: absolute;
+      left: max(48px, calc((100vw - var(--content-w)) / 2));
+      right: max(48px, calc((100vw - var(--content-w)) / 2));
+      top: 62%;
+      bottom: 5%;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: clamp(28px, 3.5vw, 56px);
+      align-items: start;
+      z-index: 4;
+    }
+    .slide-8-col {
+      display: flex; flex-direction: column;
+      gap: 10px;
+      max-width: 520px;
+    }
+    .slide-8-col:last-of-type { justify-self: end; }
+    .lens-side-title {
+      font-size: clamp(22px, 1.9vw, 28px);
+      font-weight: 500;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+      margin: 0;
+    }
+    .slide-8-col .body-text {
+      font-size: clamp(15px, 1.15vw, 18px);
+      line-height: 1.55;
+      color: var(--ink-soft);
+      margin: 0;
+    }
+    .slide-8-col .lens-bullets {
+      list-style: none;
+      padding: 0;
+      margin: 4px 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .slide-8-col .lens-bullets li {
+      position: relative;
+      padding-left: 18px;
+      font-size: clamp(15px, 1.1vw, 17px);
+      line-height: 1.5;
+      color: var(--ink-soft);
+      letter-spacing: -0.01em;
+    }
+    .slide-8-col .lens-bullets li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0.7em;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--ink-soft);
+    }
+    .slide-8-center { display: flex; align-items: center; justify-content: center; padding: 0 12px; align-self: center; }
+    .lens-mark {
+      font-size: clamp(48px, 5.2vw, 84px);
+      font-weight: 500;
+      color: var(--ink-soft);
+      letter-spacing: -0.025em;
+      text-align: center;
+      line-height: 0.95;
+      margin: 0;
+    }
+    .slide-8 .disclaimer { text-align: center; }
+    .disclaimer {
+      position: absolute;
+      bottom: 16px; left: 50%;
+      transform: translateX(-50%);
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--ink-mute);
+      max-width: 1200px;
+      text-align: center;
+      letter-spacing: -0.005em;
+    }
+
+    /* ============================================================
+       SLIDE 9 — WHY IT MATTERS FOR EXPERTS
+       ============================================================ */
+    .slide-9 {
+      --content-min: 1040px;
+      --content-max: 1340px;
+      flex-direction: row;
+      justify-content: center;
+      gap: 72px;
+      align-items: center;
+      padding: 80px max(48px, calc((100vw - var(--content-w)) / 2));
+    }
+    .slide-9-left {
+      flex: 0 1 720px;
+      max-width: 720px;
+      display: flex; flex-direction: column;
+      gap: 28px;
+    }
+    .slide-9-left .medium-headline { margin-bottom: 16px; }
+    /* Type ramp aligned with the Safety & scope slide (.big-headline). */
+    .slide-9-left .big-headline { margin-bottom: 16px; }
+    .slide-9-left .bullet-list { gap: 24px; }
+    .slide-9-left .bullet-list li { font-size: clamp(17px, 1.4vw, 22px); line-height: 1.55; }
+    .slide-9-left .body-text { font-size: clamp(17px, 1.4vw, 22px); line-height: 1.55; color: #2D2A24; }
+    .slide-9-left .body-text.body-muted { color: var(--ink-soft); }
+    .slide-9-left .body-text strong { font-weight: 700; color: var(--ink); }
+
+    /* Founding role bullets — slide 9 (Founding Expert) appendix */
+    .founding-role { margin-top: 8px; }
+    .founding-role-title { font-size: clamp(20px, 1.6vw, 26px); font-weight: 700; color: var(--ink); margin: 0 0 14px; letter-spacing: -0.01em; }
+    .founding-role-bullets { list-style: none; padding: 0; margin: 0 0 10px; display: flex; flex-direction: column; gap: 10px; }
+    .founding-role-bullets li {
+      position: relative;
+      padding-left: 22px;
+      font-size: clamp(17px, 1.4vw, 22px);
+      color: #2D2A24; line-height: 1.4; letter-spacing: -0.01em;
+    }
+    .founding-role-bullets li::before {
+      content: ''; position: absolute; left: 0; top: 0.6em;
+      width: 5px; height: 5px; border-radius: 50%; background: #2D2A24;
+    }
+    .founding-role-not { font-size: clamp(14px, 1.05vw, 16px); color: var(--ink-soft); font-style: italic; margin: 4px 0 0; }
+    .founding-role-lead { font-size: clamp(15px, 1.2vw, 18px); color: var(--ink-soft); line-height: 1.5; margin: 0 0 16px; letter-spacing: -0.01em; }
+
+    /* ============================================================
+       SLIDE: NEXT STEPS — horizontal phase timeline (no dates).
+       ============================================================ */
+    .slide-next {
+      --content-min: 1040px;
+      --content-max: 1340px;
+      padding: 80px max(48px, calc((100vw - var(--content-w)) / 2));
+      justify-content: center;
+    }
+    .slide-next .kicker { margin-bottom: 18px; }
+    .slide-next .big-headline { margin-bottom: 72px; max-width: 900px; }
+    .next-timeline {
+      display: flex;
+      align-items: flex-start;
+      position: relative;
+    }
+    /* connecting line behind the nodes */
+    .next-timeline::before {
+      content: '';
+      position: absolute;
+      top: 27px; left: 27px; right: 27px;
+      height: 2px;
+      background: linear-gradient(90deg, #2F703F 0%, rgba(47,112,63,0.35) 100%);
+      z-index: 0;
+    }
+    .next-phase { flex: 1 1 0; position: relative; z-index: 1; display: flex; flex-direction: column; gap: 22px; }
+    .next-node {
+      width: 54px; height: 54px;
+      border-radius: 50%;
+      background: #2F703F;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 0 8px var(--bg);
+    }
+    .next-num { font-family: var(--font-display, inherit); font-size: 24px; font-weight: 600; color: #fff; }
+    /* small, low-prominence gate that sits ON the line, between the phases */
+    .next-gate {
+      flex: 0 0 clamp(108px, 9vw, 150px);
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .next-gate-dot {
+      margin-top: 20px;
+      width: 13px; height: 13px; border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid #2F703F;
+    }
+    .next-gate-label {
+      margin-top: 10px;
+      font-size: 12px; font-weight: 500; line-height: 1.3;
+      color: var(--ink-soft); text-align: center; max-width: 120px;
+    }
+    .next-phase-label {
+      font-size: 13px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
+      color: #2F703F; margin-bottom: 8px;
+    }
+    .next-phase-title {
+      font-size: clamp(24px, 2vw, 30px); font-weight: 600; letter-spacing: -0.01em;
+      color: var(--ink); margin: 0 0 10px;
+    }
+    .next-phase-desc {
+      font-size: clamp(15px, 1.2vw, 18px); line-height: 1.5; color: var(--ink-soft); margin: 0; max-width: 320px;
+    }
+
+    /* ============================================================
+       SLIDE: SAFETY AND SCOPE
+       Two-column: text on the left, safety image on the right.
+       ============================================================ */
+    .slide-safety {
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(40px, 5vw, 96px);
+      --content-min: 1100px;
+      --content-max: 1600px;
+      padding: 80px max(48px, calc((100vw - var(--content-w)) / 2)) 96px;
+    }
+    .slide-safety-text {
+      flex: 1 1 0;
+      max-width: 680px;
+    }
+    .slide-safety .big-headline { margin-bottom: 36px; }
+    .slide-safety .bullet-list { gap: 20px; }
+    .slide-safety .bullet-list li {
+      font-size: clamp(17px, 1.4vw, 22px);
+      line-height: 1.55;
+      color: var(--ink);
+    }
+    .slide-safety-art {
+      flex: 0 0 760px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .slide-safety-art img {
+      width: 100%;
+      height: auto;
+      max-height: 85vh;
+      object-fit: contain;
+    }
+    .slide-9-right {
+      flex: 0 0 480px;
+      display: flex; flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+    .founders-tag { margin-top: 18px; }
+    .founders-tag-label { font-size: 16px; font-weight: 700; color: var(--ink); line-height: 1.3; }
+    .founders-tag-names { font-size: 16px; font-weight: 400; color: var(--ink); line-height: 1.3; }
+
+    .channels-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px 28px;
+      width: 100%;
+      max-width: 360px;
+      margin-bottom: 12px;
+    }
+    .logo-block {
+      height: 70px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--ph-logo-text);
+    }
+    .logo-block.amazon { background: var(--ph-logo-bg); }
+    .logo-block.audible { background: #F0EFE7; color: var(--ink); }
+    .logo-block.facebook { background: #1877F2; color: #fff; border-radius: 50%; width: 70px; margin: 0 auto; }
+    .logo-block.instagram {
+      background: linear-gradient(135deg, #FEDA75, #FA7E1E 30%, #D62976 60%, #962FBF 80%, #4F5BD5);
+      color: #fff;
+      border-radius: 18px;
+      width: 70px;
+      margin: 0 auto;
+    }
+    .channels-label {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--ink-soft);
+      letter-spacing: -0.005em;
+    }
+    .channels-divider {
+      width: 100%;
+      max-width: 380px;
+      height: 1px;
+      background: var(--line);
+      margin: 14px 0 14px;
+    }
+    .ottavia-mark {
+      font-size: 44px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-top: 32px;
+      letter-spacing: -0.02em;
+    }
+    .ottavia-tagline {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--ink-soft);
+      letter-spacing: -0.01em;
+    }
+
+    /* ============================================================
+       SLIDE 10 — DEMO (existing preview-stage layout)
+       ============================================================ */
+    .slide-10 {
+      padding: 0;
+    }
+
+    /* Preview-stage CSS — copied 1:1 from index.html */
+    .preview-stage {
+      height: 100%;
+      background: #F5F1EA;
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 24px;
+      padding: 40px 48px;
+      overflow: hidden;
+    }
+    .ps-back {
+      position: absolute;
+      top: 24px; left: 24px;
+      display: inline-flex;
+      align-items: center; gap: 6px;
+      padding: 8px 14px;
+      border: 1px solid rgba(67,62,54,0.18);
+      border-radius: 20px;
+      background: rgba(255,255,255,0.6);
+      color: #433E36;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .ps-back:hover { background: #fff; }
+    .ps-left {
+      display: flex; flex-direction: column;
+      height: 100%; justify-content: flex-start;
+      padding-top: 8px;
+    }
+    .ps-expert-head { display: flex; align-items: center; gap: 14px; margin-bottom: 56px; }
+    .ps-expert-head img, .ps-expert-head .ps-avatar-fallback {
+      width: 64px; height: 64px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
+      background: #E4DCCD; display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 700; color: #8A7E6B;
+    }
+    .ps-expert-head .ps-name { font-size: 26px; font-weight: 700; color: #433E36; letter-spacing: -0.5px; line-height: 1.1; }
+    .ps-expert-head .ps-intro { font-size: 14px; color: #766F64; margin-top: 4px; max-width: 260px; line-height: 1.4; }
+    .ps-usecases { display: flex; flex-direction: column; gap: 14px; max-width: 240px; }
+    .ps-uc {
+      padding: 16px 22px;
+      border-radius: 16px;
+      border: 1.5px solid rgba(67,62,54,0.18);
+      background: rgba(255,255,255,0.35);
+      font-size: 17px;
+      font-weight: 500;
+      color: #433E36;
+      text-align: center;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all var(--transition);
+    }
+    .ps-uc:hover { background: rgba(255,255,255,0.7); }
+    .ps-uc.active {
+      background: #fff;
+      border: 1.5px solid transparent;
+      background-image: linear-gradient(#fff,#fff), linear-gradient(120deg, #8E8BFF, #6FB0E8);
+      background-origin: border-box;
+      background-clip: padding-box, border-box;
+      box-shadow: 0 4px 16px rgba(97,97,255,0.1);
+    }
+    .ps-phone-wrap { display: flex; align-items: center; justify-content: center; height: 100%; overflow: hidden; }
+    .ps-phone-scale { transform-origin: center center; flex-shrink: 0; }
+    .ps-phone {
+      position: relative;
+      box-sizing: content-box;
+      width: 390px;
+      height: 848px;
+      border-radius: 54px;
+      border: 4px solid rgba(10,10,10,0.5);
+      background: #F5F1EA;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.18);
+      overflow: hidden;
+      clip-path: inset(0 round 54px);
+      -webkit-clip-path: inset(0 round 54px);
+      isolation: isolate;
+    }
+    .ps-phone-screen {
+      position: absolute; inset: 0;
+      border-radius: 50px;
+      overflow: hidden;
+      isolation: isolate;
+      -webkit-mask-image: -webkit-radial-gradient(white, black);
+    }
+    .ps-phone iframe { display: block; width: 100%; height: 100%; border: none; }
+    .ps-phone::before {
+      content: ""; position: absolute; top: 11px; left: 50%; transform: translateX(-50%);
+      width: 125px; height: 37px; background: #000; border-radius: 100px; z-index: 50; pointer-events: none;
+    }
+    .ps-right {
+      display: flex; flex-direction: column; gap: 18px;
+      align-items: flex-end; max-width: 360px; margin-left: auto;
+    }
+    .ps-persona {
+      width: 100%; max-width: 340px; padding: 20px 22px; border-radius: 18px;
+      border: 1.5px solid rgba(67,62,54,0.16); background: rgba(255,255,255,0.45);
+      cursor: pointer; font-family: inherit; text-align: left; transition: all var(--transition);
+    }
+    .ps-persona:hover { background: rgba(255,255,255,0.75); }
+    .ps-persona.active {
+      border: 1.5px solid transparent;
+      background-image: linear-gradient(rgba(255,255,255,0.95),rgba(255,255,255,0.95)), linear-gradient(120deg, #8E8BFF, #6FB0E8);
+      background-origin: border-box; background-clip: padding-box, border-box;
+      box-shadow: 0 6px 20px rgba(97,97,255,0.1);
+    }
+    .ps-persona-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .ps-persona-head img, .ps-persona-head .ps-pa-fallback {
+      width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
+      background: #DCE4EC; display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 700; color: #5B6B7B;
+    }
+    .ps-persona-head .ps-pname { font-size: 19px; font-weight: 700; color: #4A2E5A; }
+    .ps-persona-desc { font-size: 13.5px; color: #6A6258; line-height: 1.5; }
+    .ps-persona-meta { font-size: 12px; color: #8A8275; margin-top: 8px; font-weight: 600; }
+
+    .pt-hour-picker {
+      display: none;
+      margin-top: 28px;
+      padding: 14px 12px;
+      background: #fff;
+      border-radius: 18px;
+      border: 1px solid rgba(67,62,54,0.08);
+      box-shadow: 0 8px 24px rgba(67,62,54,0.06);
+      width: fit-content;
+      max-width: 220px;
+      font-family: inherit;
+    }
+    .pt-hour-picker.visible { display: block; }
+    .pt-hour-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #A8A297;
+      padding: 4px 10px 10px;
+    }
+    .pt-hour-item {
+      display: flex; align-items: baseline; justify-content: flex-start;
+      gap: 12px; width: 100%;
+      padding: 10px 14px;
+      border: 0; border-radius: 12px;
+      background: transparent;
+      cursor: pointer;
+      font-family: inherit;
+      text-align: left;
+      transition: background var(--transition);
+    }
+    .pt-hour-item:hover { background: rgba(67,62,54,0.04); }
+    .pt-hour-item.active { background: #2A2620; }
+    .pt-hour-item .pt-label { font-size: 15px; font-weight: 600; color: #433E36; }
+    .pt-hour-item.active .pt-label { color: #fff; }
+    .pt-hour-item .pt-h { font-size: 12px; font-weight: 500; color: #A8A297; }
+    .pt-hour-item.active .pt-h { color: rgba(255,255,255,0.55); }
+  </style>
+</head>
+<body>
+
+<!-- ====================== SLIDE 1: SPLASH ====================== -->
+<section class="slide splash visible" id="slide1" data-slide-id="splash">
+  <img class="splash-title" src="../assets/icons/ottavia-brand.svg" alt="Ottavia" />
+  <p class="splash-sub">Demo for Boo Schexnayder</p>
+  <button class="splash-start" id="startBtn">Start</button>
+</section>
+
+<!-- ====================== SLIDE 2: WHO WE ARE ====================== -->
+<section class="slide slide-content slide-2" id="slide2">
+  <h1 class="slide-title-left">Who we are</h1>
+  <div class="founders">
+    <div class="founder">
+      <div class="founder-photo"><img src="../assets/images/eladprofile.png" alt="Elad Daniel" /></div>
+      <h3 class="founder-name">Elad Daniel</h3>
+      <p class="founder-role">Founder, Ultra-endurance athlete</p>
+      <p class="founder-bio">Ottavia is led by Elad Daniel, a tech entrepreneur and co-founder of Gefen Technologies, where he was responsible for the company's technology through its IPO. He brings deep experience in data-driven, enterprise platforms and a long-standing focus on endurance sports and human performance.</p>
+    </div>
+    <div class="founder">
+      <div class="founder-photo"><img src="../assets/images/vikaprofile.png" alt="Vika Finkel" /></div>
+      <h3 class="founder-name">Vika Finkel</h3>
+      <p class="founder-role">Co-Founder, Product &amp; Design lead</p>
+      <p class="founder-bio">Product and design are led by Vika Finkel, former Senior Product Design Leadership at Meta, where she owned and delivered major initiatives across Facebook, WhatsApp, Instagram, Messenger, and Novi. She brings experience building products from zero to launch, as well as evolving systems at massive scale, with responsibility spanning product vision, execution, and team building.</p>
+    </div>
+  </div>
+  <div class="built-shipped">
+    <div class="bs-label">Where we've built and shipped</div>
+    <div class="bs-companies">
+      <span>Meta</span><span>Facebook</span><span>WhatsApp</span><span>Instagram</span><span>Messenger</span><span>Novi</span><span>Gett</span><span>Gefen</span><span>Ottavia</span>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== SLIDE 3: WHAT IS OTTAVIA ====================== -->
+<section class="slide slide-content slide-3" id="slide3">
+  <div class="slide-3-text">
+    <p class="kicker">What is Ottavia</p>
+    <h1 class="big-headline">Guided everyday<br/>wellbeing choices</h1>
+    <p class="body-text" style="margin-top:28px;">Ottavia is a proactive wellbeing system that integrates multi-domain data with human knowledge to deliver continuous, context-aware support for everyday wellbeing decisions.</p>
+  </div>
+  <div class="slide-3-phone-area">
+    <img class="slide-asset-fill" src="../assets/images/aboutOttavia.png" alt="" />
+  </div>
+</section>
+
+<!-- ====================== SLIDE 4: THE PROBLEM ====================== -->
+<section class="slide slide-content slide-4" id="slide4">
+  <div class="slide-4-text">
+    <p class="kicker">The Problem</p>
+    <h1 class="big-headline">People have access to more health and performance information than ever before.</h1>
+    <p class="body-text">Books, podcasts, social media, wearables, training plans, blood tests, and AI have made knowledge widely available. Yet the same questions remain:</p>
+    <ul class="question-list">
+      <li>Am I eating enough for my training?</li>
+      <li>Should I focus on performance or weight loss right now?</li>
+      <li>How should I fuel before a race?</li>
+      <li>Is my sleep good enough for the way I'm pushing my body?</li>
+      <li>Am I recovering well enough?</li>
+      <li>What should I do today?</li>
+    </ul>
+  </div>
+  <div class="slide-4-collage">
+    <img class="slide-asset-fill" src="../assets/images/problem.png" alt="" />
+  </div>
+</section>
+
+<!-- ====================== SLIDE 5: WHO IS IT FOR ====================== -->
+<section class="slide slide-content slide-5" id="slide5">
+  <div class="slide-5-text">
+    <p class="kicker">Who is it for</p>
+    <h1 class="big-headline">We serve people who care deeply about their health and performance.</h1>
+    <ul class="bullet-list">
+      <li>People who train consistently and care about their health and performance.</li>
+      <li>They invest time in learning through books, podcasts, wearables, and experts.</li>
+      <li>They want to make better daily decisions, not consume more information.</li>
+    </ul>
+  </div>
+  <div class="slide-5-image">
+    <img class="slide-asset-fill" src="../assets/images/solution.png" alt="" />
+  </div>
+</section>
+
+<!-- ====================== SLIDE 6: OUR MISSION ====================== -->
+<section class="slide slide-content slide-6" id="slide6">
+  <h1 class="slide-title-center">Our mission is to bridge body signals with knowledge</h1>
+  <div class="slide-6-grid">
+    <img class="slide-asset" src="../assets/images/mission.png" alt="" />
+  </div>
+</section>
+
+<!-- ====================== SLIDE 7: TWO MODES ====================== -->
+<section class="slide slide-content slide-7" id="slide7">
+  <h1 class="slide-title-center">There are two<br/>interconnected modes in Ottavia</h1>
+  <div class="modes-grid">
+    <img class="slide-asset" src="../assets/images/howitworks.png" alt="" />
+  </div>
+  <div class="modes-captions">
+    <p class="mode-caption"><strong>1 . Ottavia, the default.</strong> Reasons over user's data (sleep, training, nutrition, HRV, cycle, body comp) using its own knowledge.</p>
+    <p class="mode-caption"><strong>2 . Ottavia + Experts, the same reasoning, deepened by an Expert you choose.</strong> The Expert provides the framework (their published work, protocols, decision logic). Ottavia applies it to your actual day. Same voice, deeper lens.</p>
+  </div>
+</section>
+
+<!-- ====================== SLIDE 8: EXPERTS LENS ====================== -->
+<section class="slide slide-content slide-8" id="slide8">
+  <div class="slide-8-art">
+    <img src="../assets/images/expertintro.png" alt="" />
+  </div>
+  <div class="slide-8-bottom">
+    <div class="slide-8-col">
+      <h3 class="lens-side-title">Experts side</h3>
+      <ul class="lens-bullets">
+        <li>Turn knowledge into personalized guidance at scale.</li>
+        <li>Books, methods, and frameworks become part of daily recommendations.</li>
+        <li>A new distribution and monetization channel.</li>
+        <li>Reach far beyond traditional coaching, consulting, or content.</li>
+      </ul>
+    </div>
+    <div class="slide-8-center">
+      <h1 class="lens-mark">Experts<br/>Lens</h1>
+    </div>
+    <div class="slide-8-col">
+      <h3 class="lens-side-title">Customer side</h3>
+      <ul class="lens-bullets">
+        <li>Access to the expertise you trust, applied to your own life.</li>
+        <li>Personal data combined with an expert's proven approach.</li>
+        <li>General advice turned into guidance that's relevant and contextual.</li>
+        <li>Actionable every day.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="disclaimer">Images and references to experts are for demonstration purposes only. Featured individuals are not affiliated with Ottavia unless explicitly stated.</p>
+</section>
+
+<!-- ====================== SLIDE 9: SAFETY AND SCOPE ====================== -->
+<section class="slide slide-content slide-safety" id="slide-safety">
+  <div class="slide-safety-text">
+    <p class="kicker">Safety and scope</p>
+    <h1 class="big-headline">Education, not medical advice.</h1>
+    <ul class="bullet-list">
+      <li>Expert guidance shapes daily decisions, it never replaces medical care.</li>
+      <li>Users with clinical conditions are routed to their clinician, not Ottavia.</li>
+      <li>Every recommendation is attributed to its source, so users see exactly whose lens shaped it.</li>
+    </ul>
+  </div>
+  <div class="slide-safety-art">
+    <img src="../assets/images/safety.png" alt="" />
+  </div>
+</section>
+
+<!-- ====================== SLIDE 10: BECOME A FOUNDING EXPERT ====================== -->
+<section class="slide slide-content slide-9" id="slide9">
+  <div class="slide-9-left">
+    <h1 class="big-headline">Become a Founding Expert</h1>
+    <p class="body-text">We are assembling a select group of leading experts to join us at the beginning of this journey. As a founding partner, you'll have early access to cutting-edge AI technology, a direct voice in product development, and the opportunity to establish your presence before the platform expands.</p>
+    <div class="founding-role">
+      <h3 class="founding-role-title">Your role as a Founding Expert</h3>
+      <p class="founding-role-lead">Capture your principles, frameworks, decision-making patterns, and examples worth modeling, then refine them over time. No weekly content to produce.</p>
+      <ul class="founding-role-bullets">
+        <li><strong>A new way to scale your expertise</strong>, turning your knowledge into a lasting source of income that reaches people far beyond coaching, consulting, or publishing.</li>
+        <li><strong>An evolving model</strong>, refresh and adapt your guidance whenever your thinking changes, so your audience always stays current with you.</li>
+        <li><strong>A founding voice</strong>, join a select team of leading experts with real influence over where the platform goes.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="slide-9-right">
+    <img class="slide-asset-fill" src="../assets/images/whyforexperts.png" alt="" />
+  </div>
+</section>
+
+<!-- ====================== SLIDE 10: DEMO ====================== -->
+<section class="slide slide-10" id="slide10">
+  <div class="preview-stage">
+    <button class="ps-back" id="backBtn">← Restart</button>
+
+    <!-- Left column: expert head + use-case buttons -->
+    <div class="ps-left">
+      <div class="ps-expert-head">
+        <img src="../assets/images/boo.png" alt="Boo Schexnayder" />
+        <div>
+          <div class="ps-name">Boo Schexnayder</div>
+          <div class="ps-intro">Track &amp; field speed, power and jumps coach. Coached 18 Olympians; founder of the Track &amp; Field Academy.</div>
+        </div>
+      </div>
+      <div class="ps-usecases">
+        <button class="ps-uc active" data-surface="ottavia-nutshell">Ottavia home</button>
+        <button class="ps-uc"        data-surface="plan-today">Ottavia guidance</button>
+        <button class="ps-uc"        data-surface="chat-baseline">Ottavia day to day</button>
+        <button class="ps-uc"        data-surface="x-profile">Expert Profile</button>
+        <button class="ps-uc"        data-surface="x-plan">Plan</button>
+        <button class="ps-uc"        data-surface="x-qa">Q&amp;A</button>
+      </div>
+      <div class="pt-hour-picker" id="hourPicker">
+        <div class="pt-hour-title">Plan · Hour</div>
+        <button class="pt-hour-item active" data-period="morning">
+          <span class="pt-label">Morning</span><span class="pt-h">6–11a</span>
+        </button>
+        <button class="pt-hour-item" data-period="midday">
+          <span class="pt-label">Midday</span><span class="pt-h">11a–2p</span>
+        </button>
+        <button class="pt-hour-item" data-period="afternoon">
+          <span class="pt-label">Afternoon</span><span class="pt-h">2–6p</span>
+        </button>
+        <button class="pt-hour-item" data-period="evening">
+          <span class="pt-label">Evening</span><span class="pt-h">6–10p</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Center: phone -->
+    <div class="ps-phone-wrap">
+      <div class="ps-phone-scale">
+        <div class="ps-phone">
+          <div class="ps-phone-screen">
+            <iframe id="psPhone" src="../experts.html?expert=boo&surface=ottavia-nutshell&embed=1"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right column: persona cards -->
+    <div class="ps-right">
+      <button class="ps-persona active" data-persona="tom">
+        <div class="ps-persona-head"><span class="ps-pa-fallback">T</span><span class="ps-pname">Tom, 52</span></div>
+        <div class="ps-persona-desc">Experienced marathoner, health-conscious. Has followed several coaches; wants one coherent plan tying together how to run, eat, and recover.</div>
+        <div class="ps-persona-meta">Knowledge 7/10 · marathon</div>
+      </button>
+      <button class="ps-persona" data-persona="mariah">
+        <div class="ps-persona-head"><span class="ps-pa-fallback">M</span><span class="ps-pname">Mariah, 37</span></div>
+        <div class="ps-persona-desc">Mother of three, runs 3×/week, training for her first half marathon. Wants a holistic plan that fits her life and reaches her goal.</div>
+        <div class="ps-persona-meta">Knowledge 5/10 · half marathon</div>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== SLIDE 12: NEXT STEPS (timeline) ====================== -->
+<section class="slide slide-content slide-next" id="slide12">
+  <p class="kicker">Next steps</p>
+  <h1 class="big-headline">How we move forward, as design partners.</h1>
+  <div class="next-timeline">
+    <div class="next-phase">
+      <div class="next-node"><span class="next-num">1</span></div>
+      <div class="next-body">
+        <div class="next-phase-label">Phase 1</div>
+        <h3 class="next-phase-title">This meeting</h3>
+        <p class="next-phase-desc">See the vision and a working demo of your own methodology inside Ottavia.</p>
+      </div>
+    </div>
+    <div class="next-gate">
+      <span class="next-gate-dot"></span>
+      <span class="next-gate-label">Approval &amp; discussion</span>
+    </div>
+    <div class="next-phase">
+      <div class="next-node"><span class="next-num">2</span></div>
+      <div class="next-body">
+        <div class="next-phase-label">Phase 2</div>
+        <h3 class="next-phase-title">Private demo</h3>
+        <p class="next-phase-desc">A tailored walkthrough built around your work, with pricing and partnership details.</p>
+      </div>
+    </div>
+    <div class="next-gate">
+      <span class="next-gate-dot"></span>
+      <span class="next-gate-label">Approval &amp; discussion</span>
+    </div>
+    <div class="next-phase">
+      <div class="next-node"><span class="next-num">3</span></div>
+      <div class="next-body">
+        <div class="next-phase-label">Phase 3</div>
+        <h3 class="next-phase-title">User distribution</h3>
+        <p class="next-phase-desc">Your guidance goes live to real users, applied to their lives every day, at scale.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== DECK CHROME ====================== -->
+<div class="deck-counter" id="counter">
+  <span class="dot"></span>
+  <span id="counterText">02 / 10</span>
+</div>
+<div class="deck-nav" id="deckNav">
+  <button class="nav-btn" id="prevBtn" aria-label="Previous">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <div class="nav-dots" id="navDots"></div>
+  <button class="nav-btn" id="nextBtn" aria-label="Next">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+</div>
+
+<!-- ====================== PLACEHOLDER PHONE MOCK STYLES ====================== -->
+<style>
+  /* Compact phone mockup used on slides 3, 6, 8 — just a bezel-shaped block
+     until real screens are dropped in. */
+  .phone-mock {
+    width: 280px;
+    height: 580px;
+    border-radius: 38px;
+    background: #FFFFFF;
+    border: 4px solid var(--phone-bezel);
+    box-shadow: 0 14px 40px rgba(67,62,54,0.12);
+    position: relative;
+    overflow: hidden;
+  }
+  .phone-mock::before {
+    content: '';
+    position: absolute;
+    top: 8px; left: 50%; transform: translateX(-50%);
+    width: 86px; height: 24px;
+    background: #000;
+    border-radius: 100px;
+    z-index: 2;
+  }
+  .phone-mock-inner {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, #F5F1EA 0%, #F5F1EA 100%);
+  }
+  .slide-3-phone-area .phone-mock { width: 260px; height: 540px; }
+  .slide-8-center .phone-mock { width: 240px; height: 500px; }
+</style>
+
+<script>
+  /* ----------------------------------------------------------------
+     Deck navigation — 10 slides total.
+     Slide 1 (splash) hides the deck chrome.
+     Slides 2-9 show counter + nav.
+     Slide 10 (demo) shows counter + nav too but uses its own preview-stage chrome.
+     ---------------------------------------------------------------- */
+  const TOTAL_SLIDES = 12;
+  let current = 1;
+
+  const slideEls   = Array.from(document.querySelectorAll('.slide'));
+  const counter    = document.getElementById('counter');
+  const counterTxt = document.getElementById('counterText');
+  const deckNav    = document.getElementById('deckNav');
+  const navDots    = document.getElementById('navDots');
+  const prevBtn    = document.getElementById('prevBtn');
+  const nextBtn    = document.getElementById('nextBtn');
+
+  // Build dot indicators (skip splash; one dot per non-splash slide)
+  for (let i = 2; i <= TOTAL_SLIDES; i++) {
+    const d = document.createElement('span');
+    d.className = 'nav-dot';
+    d.dataset.target = i;
+    d.addEventListener('click', () => goto(i));
+    navDots.appendChild(d);
+  }
+
+  function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+
+  function render() {
+    slideEls.forEach((el, idx) => {
+      el.classList.toggle('visible', (idx + 1) === current);
+    });
+    // Chrome: splash hides it, others show it
+    const onSplash = current === 1;
+    counter.classList.toggle('visible', !onSplash);
+    deckNav.classList.toggle('visible', !onSplash);
+    counterTxt.textContent = `${pad2(current)} / ${pad2(TOTAL_SLIDES)}`;
+    // Dots
+    Array.from(navDots.children).forEach(d => {
+      d.classList.toggle('active', parseInt(d.dataset.target, 10) === current);
+    });
+    // Buttons
+    prevBtn.disabled = (current === 1);
+    nextBtn.disabled = (current === TOTAL_SLIDES);
+    // If we leave the demo, no special handling needed (iframe persists).
+    // If we ENTER the demo, scale the phone to fit.
+    if (current === TOTAL_SLIDES) {
+      setTimeout(scalePhone, 60);
+    }
+  }
+
+  // Remember the current slide across refreshes (per-tab), so reloading the
+  // deck stays where you were instead of jumping back to the splash.
+  const DECK_KEY = 'ottavia-deck-boo';
+  function goto(n) {
+    current = Math.max(1, Math.min(TOTAL_SLIDES, n));
+    render();
+    try { sessionStorage.setItem(DECK_KEY, current); } catch (_) {}
+  }
+  function next() { goto(current + 1); }
+  function prev() { goto(current - 1); }
+
+  document.getElementById('startBtn').addEventListener('click', () => goto(2));
+  document.getElementById('backBtn').addEventListener('click', () => goto(1));
+  prevBtn.addEventListener('click', prev);
+  nextBtn.addEventListener('click', next);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp')                { e.preventDefault(); prev(); }
+    else if (e.key === 'Home')                                            { e.preventDefault(); goto(1); }
+    else if (e.key === 'End')                                             { e.preventDefault(); goto(TOTAL_SLIDES); }
+    else if (e.key === 'Enter' && current === 1)                          { e.preventDefault(); goto(2); }
+  });
+
+  // Restore the slide we were on before a refresh (falls back to splash).
+  (function restoreSlide() {
+    let saved = 1;
+    try { saved = parseInt(sessionStorage.getItem(DECK_KEY), 10) || 1; } catch (_) {}
+    current = Math.max(1, Math.min(TOTAL_SLIDES, saved));
+    render();
+  })();
+
+  /* ----------------------------------------------------------------
+     Demo slide wiring — copied from the old single-demo deck.
+     ---------------------------------------------------------------- */
+  const iframe = document.getElementById('psPhone');
+
+  // Cache-bust the phone iframe so a refresh always loads the latest
+  // experts.html (GitHub Pages + the browser cache the file aggressively,
+  // which otherwise leaves the demo showing stale surfaces).
+  (function () {
+    const base = iframe.getAttribute('src');
+    iframe.setAttribute('src', base + '&cb=' + Date.now());
+  })();
+
+  const PERSONA_AWARE_OTTAVIA_SURFACES = new Set(['ottavia-nutshell', 'plan-today', 'chat-baseline']);
+  function getActivePersona() {
+    const el = document.querySelector('.ps-persona.active');
+    return el ? el.dataset.persona : 'tom';
+  }
+  function getActiveBaseSurface() {
+    const el = document.querySelector('.ps-uc.active');
+    return el ? el.dataset.surface : 'ottavia-nutshell';
+  }
+  function resolveSurface(baseSurface, persona) {
+    if (persona === 'mariah' && PERSONA_AWARE_OTTAVIA_SURFACES.has(baseSurface)) {
+      return baseSurface + '-mariah';
+    }
+    return baseSurface;
+  }
+  function sendSurface(baseSurface, persona) {
+    const surface = resolveSurface(baseSurface, persona);
+    try { iframe.contentWindow.postMessage({ type: 'set-surface', surface }, '*'); } catch (_) {}
+  }
+
+  const hourPicker = document.getElementById('hourPicker');
+  function syncHourPickerFor(baseSurface) {
+    if (!hourPicker) return;
+    hourPicker.classList.toggle('visible', baseSurface === 'plan-today');
+  }
+
+  document.querySelectorAll('.ps-uc').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.ps-uc').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const baseSurface = btn.dataset.surface;
+      sendSurface(baseSurface, getActivePersona());
+      syncHourPickerFor(baseSurface);
+    });
+  });
+
+  document.querySelectorAll('.pt-hour-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.pt-hour-item').forEach(b => b.classList.remove('active'));
+      item.classList.add('active');
+      const period = item.dataset.period;
+      try {
+        if (iframe.contentWindow && typeof iframe.contentWindow.ptShowPeriod === 'function') {
+          iframe.contentWindow.ptShowPeriod(period);
+        }
+      } catch (_) {}
+    });
+  });
+
+  document.querySelectorAll('.ps-persona').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.ps-persona').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const persona = btn.dataset.persona;
+      try { iframe.contentWindow.postMessage({ type: 'set-persona', persona }, '*'); } catch (_) {}
+      const baseSurface = getActiveBaseSurface();
+      if (PERSONA_AWARE_OTTAVIA_SURFACES.has(baseSurface)) {
+        sendSurface(baseSurface, persona);
+      }
+    });
+  });
+
+  function scalePhone() {
+    const el = document.querySelector('.ps-phone-scale');
+    if (!el) return;
+    const PHONE_H = 848 + 8;
+    const avail = window.innerHeight - 80;
+    el.style.transform = 'scale(' + Math.min(1, avail / PHONE_H) + ')';
+  }
+  window.addEventListener('resize', scalePhone);
+  iframe.addEventListener('load', scalePhone);
+  scalePhone();
+</script>
+
+</body>
+</html>
