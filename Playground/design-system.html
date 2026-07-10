@@ -302,15 +302,13 @@
       background: white;
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: var(--card-shadow);
       border: 1px solid var(--card-border);
       cursor: pointer;
-      transition: transform var(--transition), box-shadow var(--transition);
+      transition: transform var(--transition);
       position: relative;
     }
     .swatch-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 16px rgba(97,97,255,0.08), 0 8px 32px rgba(0,0,0,0.06);
     }
     .swatch-card-color {
       width: 100%;
@@ -1687,6 +1685,36 @@
       .main { margin-left: 0; padding: 24px; }
     }
   </style>
+  <style>
+    .status-provisional { background: #FDF8E5; color: #A8811C; }
+    .archive-toggle {
+      display: inline-block;
+      padding: 8px 16px;
+      background: #766F64;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .archive-toggle:hover { background: #5C564D; }
+    #archiveContent .section-header h2::after {
+      content: 'Archived';
+      display: inline-block;
+      margin-left: 10px;
+      padding: 2px 8px;
+      background: #DBD6CD;
+      color: #766F64;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border-radius: 4px;
+      vertical-align: middle;
+    }
+  </style>
 </head>
 <body>
   <div class="layout">
@@ -1697,7 +1725,7 @@
     <nav class="sidebar">
       <div class="sidebar-logo">
         Ottavia Design System
-        <span>v1.0 — March 2026</span>
+        <span>v2.0 · Redesign v1 · July 2026</span>
       </div>
 
       <div class="sidebar-search">
@@ -1706,38 +1734,37 @@
 
       <a class="nav-link top-level" href="#get-started">Get started</a>
 
-      <div class="nav-section">Foundations</div>
+      <div class="nav-section">Foundations: Tokens</div>
       <a class="nav-link" href="#color">Color</a>
       <a class="nav-link" href="#typography">Typography</a>
       <a class="nav-link" href="#spacing">Spacing</a>
       <a class="nav-link" href="#border">Border</a>
       <a class="nav-link" href="#iconography">Iconography</a>
-      <a class="nav-link" href="#elevation">Elevation <span class="nav-badge nav-badge-stub">Stub</span></a>
+      <a class="nav-link" href="#elevation">Shadow</a>
 
       <div class="nav-section">Components</div>
-      <a class="nav-link" href="#comp-nav">Navigation & Chrome</a>
-      <a class="nav-link" href="#comp-messages">Messages</a>
-      <a class="nav-link" href="#comp-suggestions">Suggestions</a>
-      <a class="nav-link" href="#comp-coach-cards">Coach Cards</a>
-      <a class="nav-link" href="#comp-coach-reminders">Coach Reminders</a>
-      <a class="nav-link" href="#comp-memory">Memory & Context</a>
-      <a class="nav-link" href="#comp-data">Data Display</a>
-      <a class="nav-link" href="#comp-dataviz">Data Viz Examples</a>
-      <a class="nav-link" href="#comp-forms">Form Controls</a>
-      <a class="nav-link" href="#comp-buttons">Buttons</a>
-      <a class="nav-link" href="#comp-cards">Cards & Notices</a>
-      <a class="nav-link" href="#comp-surfaces">Surfaces</a>
+      <a class="nav-link" href="#components">Coming after tokens <span class="nav-badge nav-badge-stub">Stub</span></a>
 
-      <div class="nav-section">Chat</div>
-      <a class="nav-link" href="#chat-markdown">Markdown</a>
-      <a class="nav-link" href="#chat-spacing">Spacing rules</a>
-      <a class="nav-link" href="#chat-user-bubble">User bubble</a>
-
-      <div class="nav-section">Design Examples</div>
-      <a class="nav-link" href="#design-examples">Screen gallery <span class="nav-badge nav-badge-new">New</span></a>
-
-      <div class="nav-section">Status</div>
-      <a class="nav-link" href="#figma-vs-code">Figma vs Code</a>
+      <div class="nav-section">Archive</div>
+      <a class="nav-link" href="#archive" onclick="openArchive()">About the archive</a>
+      <a class="nav-link" href="#legacy-palette" onclick="openArchive()">Legacy palette</a>
+      <a class="nav-link" href="#chat-markdown" onclick="openArchive()">Chat — Markdown</a>
+      <a class="nav-link" href="#chat-spacing" onclick="openArchive()">Chat — Spacing rules</a>
+      <a class="nav-link" href="#chat-user-bubble" onclick="openArchive()">Chat — User bubble</a>
+      <a class="nav-link" href="#comp-nav" onclick="openArchive()">Navigation & Chrome</a>
+      <a class="nav-link" href="#comp-messages" onclick="openArchive()">Messages</a>
+      <a class="nav-link" href="#comp-suggestions" onclick="openArchive()">Suggestions</a>
+      <a class="nav-link" href="#comp-coach-cards" onclick="openArchive()">Coach Cards</a>
+      <a class="nav-link" href="#comp-coach-reminders" onclick="openArchive()">Coach Reminders</a>
+      <a class="nav-link" href="#comp-memory" onclick="openArchive()">Memory & Context</a>
+      <a class="nav-link" href="#comp-data" onclick="openArchive()">Data Display</a>
+      <a class="nav-link" href="#comp-dataviz" onclick="openArchive()">Data Viz Examples</a>
+      <a class="nav-link" href="#comp-forms" onclick="openArchive()">Form Controls</a>
+      <a class="nav-link" href="#comp-buttons" onclick="openArchive()">Buttons</a>
+      <a class="nav-link" href="#comp-cards" onclick="openArchive()">Cards & Notices</a>
+      <a class="nav-link" href="#comp-surfaces" onclick="openArchive()">Surfaces</a>
+      <a class="nav-link" href="#design-examples" onclick="openArchive()">Screen gallery</a>
+      <a class="nav-link" href="#figma-vs-code" onclick="openArchive()">Figma vs Code</a>
     </nav>
 
     <!-- ============================== -->
@@ -1747,7 +1774,7 @@
 
       <header class="page-header">
         <h1>Ottavia Design System</h1>
-        <p>The single source of truth for visual design decisions. Every color, type style, spacing value, and chat rendering rule — from Figma variables to React Native code.</p>
+        <p>The single source of truth for visual design decisions, synced to the <a href="https://www.figma.com/design/8zdDzD913vMpWD1I8EtbDJ/Ottavia--Redesign-v1--Visual-Refresh?node-id=2-2" target="_blank" style="color:#427EF7">Redesign v1 Figma token collection</a>. Tokens first; components follow once the token pass lands.</p>
       </header>
 
       <div class="legend">
@@ -1756,6 +1783,7 @@
         <div class="legend-item"><span class="status status-gap">Gap</span> Mismatch</div>
         <div class="legend-item"><span class="status status-new">New</span> Proposed</div>
         <div class="legend-item"><span class="status status-updated">Updated</span> Recently changed</div>
+        <div class="legend-item"><span class="status status-provisional">Provisional</span> Pending Day 1 token audit</div>
       </div>
 
 
@@ -1767,11 +1795,11 @@
           <h2>Get started</h2>
         </div>
         <p class="section-description">
-          This reference documents every visual decision in Ottavia. Use it to align Figma designs with React Native code.
+          This reference documents every visual decision in Ottavia. Source of truth: the <a href="https://www.figma.com/design/8zdDzD913vMpWD1I8EtbDJ/Ottavia--Redesign-v1--Visual-Refresh?node-id=2-2" target="_blank" style="color:#427EF7">Redesign v1 Figma file, Tokens page</a>, bound to the Ottavia Tokens variable collection.
         </p>
 
         <div class="info-box">
-          <strong>How to use this page:</strong> Navigate via the sidebar. Each section has visual references, token tables, and (where applicable) live previews. Status badges indicate where each token lives today and what gaps remain between design and code.
+          <strong>How this page is organized:</strong> The top half holds the token foundations (color, typography, spacing, border, iconography, shadow), synced 1:1 with Figma. Components are intentionally on hold until the token pass lands. Everything from the previous design language lives in the Archive at the bottom, kept intact so it can be revived if needed.
         </div>
 
         <h3 class="subsection-title">What's covered</h3>
@@ -1781,44 +1809,39 @@
           </thead>
           <tbody>
             <tr>
-              <td><span class="token-desc">Color palette + semantic tokens</span></td>
-              <td><span class="status status-figma">Figma</span> <span class="status status-code">Code</span></td>
-              <td><span class="token-desc">Neutrals, blue, green, purple, orange, yellow + 5 semantic groups</span></td>
+              <td><span class="token-desc">Color: brand, neutral, domain, semantic, data series</span></td>
+              <td><span class="status status-figma">Figma</span></td>
+              <td><span class="token-desc">Brand green is provisional, pending Day 1 token audit</span></td>
             </tr>
             <tr>
-              <td><span class="token-desc">Typography (8 text styles)</span></td>
-              <td><span class="status status-updated">Updated</span></td>
-              <td><span class="token-desc">Figma-ready text styles with SF Pro Display + Menlo</span></td>
+              <td><span class="token-desc">Typography (14 text styles)</span></td>
+              <td><span class="status status-figma">Figma</span> <span class="status status-provisional">Provisional</span></td>
+              <td><span class="token-desc">Modern Era shown as example, family still TBD; sizes and line heights are the tokens</span></td>
             </tr>
             <tr>
               <td><span class="token-desc">Spacing (8-value scale)</span></td>
-              <td><span class="status status-code">Code</span></td>
+              <td><span class="status status-figma">Figma</span></td>
               <td><span class="token-desc">4px grid, xs through 4xl</span></td>
             </tr>
             <tr>
-              <td><span class="token-desc">Border (3 colors + 5 radii)</span></td>
+              <td><span class="token-desc">Border radius (6 values)</span></td>
+              <td><span class="status status-figma">Figma</span></td>
+              <td><span class="token-desc">sm through full</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-desc">Iconography</span></td>
               <td><span class="status status-code">Code</span></td>
-              <td><span class="token-desc">Consolidating from 5+ code values to 3 tokens</span></td>
+              <td><span class="token-desc">Lucide, line style, 2px stroke</span></td>
             </tr>
             <tr>
-              <td><span class="token-desc">Chat markdown rendering</span></td>
-              <td><span class="status status-new">New</span></td>
-              <td><span class="token-desc">Full spec with live previews for every element</span></td>
+              <td><span class="token-desc">Shadow (4 effect styles)</span></td>
+              <td><span class="status status-figma">Figma</span></td>
+              <td><span class="token-desc">Warm neutral-80 alpha, sm through xl</span></td>
             </tr>
             <tr>
-              <td><span class="token-desc">Chat spacing rules</span></td>
-              <td><span class="status status-new">New</span></td>
-              <td><span class="token-desc">Gap math between markdown elements</span></td>
-            </tr>
-            <tr>
-              <td><span class="token-desc">Chat user bubble</span></td>
-              <td><span class="status status-new">New</span></td>
-              <td><span class="token-desc">Proposed spec for user message styling</span></td>
-            </tr>
-            <tr>
-              <td><span class="token-desc">Elevation / shadows</span></td>
-              <td><span class="status status-gap">Gap</span></td>
-              <td><span class="token-desc">Coming soon</span></td>
+              <td><span class="token-desc">Components</span></td>
+              <td><span class="status status-gap">On hold</span></td>
+              <td><span class="token-desc">Rebuilt on the new tokens after this pass; old specs in Archive</span></td>
             </tr>
           </tbody>
         </table>
@@ -1836,58 +1859,949 @@
           <span class="badge badge-section">Foundations</span>
         </div>
         <p class="section-description">
-          The Ottavia palette is warm and neutral-anchored. Raw palette values are the ingredients; semantic tokens tell engineers which to use where.
+          The Ottavia palette is warm and neutral-anchored. Synced 1:1 with the Redesign v1 Figma Tokens page: brand, neutral, domain, semantic, and additional data series. Raw palette values are the ingredients; alias tokens tell engineers which to use where.
         </p>
 
-        <!-- Base color -->
-        <h3 class="subsection-title">Base color</h3>
+        <!-- Brand -->
+        <h3 class="subsection-title">Brand</h3>
+        <p style="font-size:14px; color:#6B665D; margin-bottom:16px;">Brand green is provisional, flagged in Figma for refresh during the Day 1 token audit. The legacy terracotta accent is kept in the <a href="#legacy-palette" onclick="openArchive()" style="color:#427EF7">Archive</a>.</p>
         <div class="swatch-grid">
-          <div class="swatch-card" data-hex="#433E36" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#433E36"></div>
-            <div class="swatch-card-name">Neutral/80</div>
-            <div class="swatch-card-hex">#433E36</div>
+          <div class="swatch-card" data-hex="#2F703F" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#2F703F"></div>
+            <div class="swatch-card-name">brand/green/60 <span class="status status-provisional">Provisional</span></div>
+            <div class="swatch-card-hex">#2F703F</div>
           </div>
-          <div class="swatch-card" data-hex="#5C564D" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#5C564D"></div>
-            <div class="swatch-card-name">Neutral/70</div>
-            <div class="swatch-card-hex">#5C564D</div>
+        </div>
+
+        <!-- Neutral -->
+        <h3 class="subsection-title">Neutral</h3>
+        <div class="swatch-grid">
+          <div class="swatch-card" data-hex="#FEFCF9" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#FEFCF9; border:1px solid #E5E0D8"></div>
+            <div class="swatch-card-name">neutral/0</div>
+            <div class="swatch-card-hex">#FEFCF9</div>
           </div>
-          <div class="swatch-card" data-hex="#766F64" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#766F64"></div>
-            <div class="swatch-card-name">Neutral/60</div>
-            <div class="swatch-card-hex">#766F64</div>
-          </div>
-          <div class="swatch-card" data-hex="#8F897D" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#8F897D"></div>
-            <div class="swatch-card-name">Neutral/50</div>
-            <div class="swatch-card-hex">#8F897D</div>
-          </div>
-          <div class="swatch-card" data-hex="#A8A297" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#A8A297"></div>
-            <div class="swatch-card-name">Neutral/40</div>
-            <div class="swatch-card-hex">#A8A297</div>
-          </div>
-          <div class="swatch-card" data-hex="#C2BCB2" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#C2BCB2"></div>
-            <div class="swatch-card-name">Neutral/30</div>
-            <div class="swatch-card-hex">#C2BCB2</div>
+          <div class="swatch-card" data-hex="#F5F1EA" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#F5F1EA; border:1px solid #E5E0D8"></div>
+            <div class="swatch-card-name">neutral/10</div>
+            <div class="swatch-card-hex">#F5F1EA</div>
           </div>
           <div class="swatch-card" data-hex="#DBD6CD" onclick="copyHex(this)">
             <div class="swatch-card-color" style="background:#DBD6CD"></div>
-            <div class="swatch-card-name">Neutral/20</div>
+            <div class="swatch-card-name">neutral/20</div>
             <div class="swatch-card-hex">#DBD6CD</div>
           </div>
-          <div class="swatch-card" data-hex="#F5F1EA" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#F5F1EA"></div>
-            <div class="swatch-card-name">Neutral/10</div>
-            <div class="swatch-card-hex">#F5F1EA</div>
+          <div class="swatch-card" data-hex="#C2BCB2" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#C2BCB2"></div>
+            <div class="swatch-card-name">neutral/30</div>
+            <div class="swatch-card-hex">#C2BCB2</div>
           </div>
-          <div class="swatch-card" data-hex="#FFFFFF" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#FFFFFF; border:1px solid #E5E0D8"></div>
-            <div class="swatch-card-name">Neutral/0</div>
-            <div class="swatch-card-hex">#FFFFFF</div>
+          <div class="swatch-card" data-hex="#A8A297" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#A8A297"></div>
+            <div class="swatch-card-name">neutral/40</div>
+            <div class="swatch-card-hex">#A8A297</div>
+          </div>
+          <div class="swatch-card" data-hex="#8F897D" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#8F897D"></div>
+            <div class="swatch-card-name">neutral/50</div>
+            <div class="swatch-card-hex">#8F897D</div>
+          </div>
+          <div class="swatch-card" data-hex="#766F64" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#766F64"></div>
+            <div class="swatch-card-name">neutral/60</div>
+            <div class="swatch-card-hex">#766F64</div>
+          </div>
+          <div class="swatch-card" data-hex="#5C564D" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#5C564D"></div>
+            <div class="swatch-card-name">neutral/70</div>
+            <div class="swatch-card-hex">#5C564D</div>
+          </div>
+          <div class="swatch-card" data-hex="#433E36" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#433E36"></div>
+            <div class="swatch-card-name">neutral/80</div>
+            <div class="swatch-card-hex">#433E36</div>
           </div>
         </div>
+
+        <!-- Domain colors -->
+        <h3 class="subsection-title" id="color-data">Domain colors</h3>
+        <p style="font-size:14px; color:#6B665D; margin-bottom:16px;">4 domains &times; 6 shades (/10, /30, /50, /60, /70, /80). Used for domain cards, chips, and chart series.</p>
+        <h4 style="font-size:14px; font-weight:600; color:#6B665D; margin:0 0 12px;">Nutrition</h4>
+        <div class="swatch-grid">
+          <div class="swatch-card" data-hex="#E8F8F0" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#E8F8F0; border:1px solid #E5E0D8"></div>
+            <div class="swatch-card-name">nutrition/10</div>
+            <div class="swatch-card-hex">#E8F8F0</div>
+          </div>
+          <div class="swatch-card" data-hex="#B9EBD1" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#B9EBD1"></div>
+            <div class="swatch-card-name">nutrition/30</div>
+            <div class="swatch-card-hex">#B9EBD1</div>
+          </div>
+          <div class="swatch-card" data-hex="#8ADEB3" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#8ADEB3"></div>
+            <div class="swatch-card-name">nutrition/50</div>
+            <div class="swatch-card-hex">#8ADEB3</div>
+          </div>
+          <div class="swatch-card" data-hex="#52C188" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#52C188"></div>
+            <div class="swatch-card-name">nutrition/60</div>
+            <div class="swatch-card-hex">#52C188</div>
+          </div>
+          <div class="swatch-card" data-hex="#3A9A6A" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#3A9A6A"></div>
+            <div class="swatch-card-name">nutrition/70</div>
+            <div class="swatch-card-hex">#3A9A6A</div>
+          </div>
+          <div class="swatch-card" data-hex="#2A7A50" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#2A7A50"></div>
+            <div class="swatch-card-name">nutrition/80</div>
+            <div class="swatch-card-hex">#2A7A50</div>
+          </div>
+        </div>
+
+        <h4 style="font-size:14px; font-weight:600; color:#6B665D; margin:0 0 12px;">Recovery</h4>
+        <div class="swatch-grid">
+          <div class="swatch-card" data-hex="#EFEDFD" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#EFEDFD; border:1px solid #E5E0D8"></div>
+            <div class="swatch-card-name">recovery/10</div>
+            <div class="swatch-card-hex">#EFEDFD</div>
+          </div>
+          <div class="swatch-card" data-hex="#D0C8F9" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#D0C8F9"></div>
+            <div class="swatch-card-name">recovery/30</div>
+            <div class="swatch-card-hex">#D0C8F9</div>
+          </div>
+          <div class="swatch-card" data-hex="#B0A4F5" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#B0A4F5"></div>
+            <div class="swatch-card-name">recovery/50</div>
+            <div class="swatch-card-hex">#B0A4F5</div>
+          </div>
+          <div class="swatch-card" data-hex="#8C63CB" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#8C63CB"></div>
+            <div class="swatch-card-name">recovery/60</div>
+            <div class="swatch-card-hex">#8C63CB</div>
+          </div>
+          <div class="swatch-card" data-hex="#6F47B0" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#6F47B0"></div>
+            <div class="swatch-card-name">recovery/70</div>
+            <div class="swatch-card-hex">#6F47B0</div>
+          </div>
+          <div class="swatch-card" data-hex="#553584" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#553584"></div>
+            <div class="swatch-card-name">recovery/80</div>
+            <div class="swatch-card-hex">#553584</div>
+          </div>
+        </div>
+
+        <h4 style="font-size:14px; font-weight:600; color:#6B665D; margin:0 0 12px;">Hydration</h4>
+        <div class="swatch-grid">
+          <div class="swatch-card" data-hex="#EFF8FF" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#EFF8FF; border:1px solid #E5E0D8"></div>
+            <div class="swatch-card-name">hydration/10</div>
+            <div class="swatch-card-hex">#EFF8FF</div>
+          </div>
+          <div class="swatch-card" data-hex="#D0E9FF" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#D0E9FF"></div>
+            <div class="swatch-card-name">hydration/30</div>
+            <div class="swatch-card-hex">#D0E9FF</div>
+          </div>
+          <div class="swatch-card" data-hex="#B1DAFF" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#B1DAFF"></div>
+            <div class="swatch-card-name">hydration/50</div>
+            <div class="swatch-card-hex">#B1DAFF</div>
+          </div>
+          <div class="swatch-card" data-hex="#359FFF" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#359FFF"></div>
+            <div class="swatch-card-name">hydration/60</div>
+            <div class="swatch-card-hex">#359FFF</div>
+          </div>
+          <div class="swatch-card" data-hex="#1A7BD9" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#1A7BD9"></div>
+            <div class="swatch-card-name">hydration/70</div>
+            <div class="swatch-card-hex">#1A7BD9</div>
+          </div>
+          <div class="swatch-card" data-hex="#155EA8" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#155EA8"></div>
+            <div class="swatch-card-name">hydration/80</div>
+            <div class="swatch-card-hex">#155EA8</div>
+          </div>
+        </div>
+
+        <h4 style="font-size:14px; font-weight:600; color:#6B665D; margin:0 0 12px;">Activity</h4>
+        <div class="swatch-grid">
+          <div class="swatch-card" data-hex="#FCF7F1" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#FCF7F1; border:1px solid #E5E0D8"></div>
+            <div class="swatch-card-name">activity/10</div>
+            <div class="swatch-card-hex">#FCF7F1</div>
+          </div>
+          <div class="swatch-card" data-hex="#F7E8D4" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#F7E8D4"></div>
+            <div class="swatch-card-name">activity/30</div>
+            <div class="swatch-card-hex">#F7E8D4</div>
+          </div>
+          <div class="swatch-card" data-hex="#F9D9B3" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#F9D9B3"></div>
+            <div class="swatch-card-name">activity/50</div>
+            <div class="swatch-card-hex">#F9D9B3</div>
+          </div>
+          <div class="swatch-card" data-hex="#FFB078" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#FFB078"></div>
+            <div class="swatch-card-name">activity/60</div>
+            <div class="swatch-card-hex">#FFB078</div>
+          </div>
+          <div class="swatch-card" data-hex="#E08A50" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#E08A50"></div>
+            <div class="swatch-card-name">activity/70</div>
+            <div class="swatch-card-hex">#E08A50</div>
+          </div>
+          <div class="swatch-card" data-hex="#B86A38" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#B86A38"></div>
+            <div class="swatch-card-name">activity/80</div>
+            <div class="swatch-card-hex">#B86A38</div>
+          </div>
+        </div>
+
+        <!-- Semantic -->
+        <h3 class="subsection-title" id="color-status">Semantic</h3>
+        <p style="font-size:14px; color:#6B665D; margin-bottom:16px;">4 categories &times; 4 shades (/10, /30, /50, /60). Status feedback: success, error, warning, info.</p>
+        <h4 style="font-size:14px; font-weight:600; color:#6B665D; margin:0 0 12px;">Success</h4>
+        <div class="swatch-grid">
+          <div class="swatch-card" data-hex="#DFF2E4" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#DFF2E4; border:1px solid #E5E0D8"></div>
+            <div class="swatch-card-name">success/10</div>
+            <div class="swatch-card-hex">#DFF2E4</div>
+          </div>
+          <div class="swatch-card" data-hex="#A0D7AD" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#A0D7AD"></div>
+            <div class="swatch-card-name">success/30</div>
+            <div class="swatch-card-hex">#A0D7AD</div>
+          </div>
+          <div class="swatch-card" data-hex="#61BC77" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#61BC77"></div>
+            <div class="swatch-card-name">success/50</div>
+            <div class="swatch-card-hex">#61BC77</div>
+          </div>
+          <div class="swatch-card" data-hex="#47AD60" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#47AD60"></div>
+            <div class="swatch-card-name">success/60</div>
+            <div class="swatch-card-hex">#47AD60</div>
+          </div>
+        </div>
+
+        <h4 style="font-size:14px; font-weight:600; color:#6B665D; margin:0 0 12px;">Error</h4>
+        <div class="swatch-grid">
+          <div class="swatch-card" data-hex="#FFF3EE" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#FFF3EE; border:1px solid #E5E0D8"></div>
+            <div class="swatch-card-name">error/10</div>
+            <div class="swatch-card-hex">#FFF3EE</div>
+          </div>
+          <div class="swatch-card" data-hex="#FEDCCD" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#FEDCCD"></div>
+            <div class="swatch-card-name">error/30</div>
+            <div class="swatch-card-hex">#FEDCCD</div>
+          </div>
+          <div class="swatch-card" data-hex="#F7B5A7" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#F7B5A7"></div>
+            <div class="swatch-card-name">error/50</div>
+            <div class="swatch-card-hex">#F7B5A7</div>
+          </div>
+          <div class="swatch-card" data-hex="#F0846D" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#F0846D"></div>
+            <div class="swatch-card-name">error/60</div>
+            <div class="swatch-card-hex">#F0846D</div>
+          </div>
+        </div>
+
+        <h4 style="font-size:14px; font-weight:600; color:#6B665D; margin:0 0 12px;">Warning</h4>
+        <div class="swatch-grid">
+          <div class="swatch-card" data-hex="#FDF8E5" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#FDF8E5; border:1px solid #E5E0D8"></div>
+            <div class="swatch-card-name">warning/10</div>
+            <div class="swatch-card-hex">#FDF8E5</div>
+          </div>
+          <div class="swatch-card" data-hex="#FAE0A6" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#FAE0A6"></div>
+            <div class="swatch-card-name">warning/30</div>
+            <div class="swatch-card-hex">#FAE0A6</div>
+          </div>
+          <div class="swatch-card" data-hex="#F6CF74" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#F6CF74"></div>
+            <div class="swatch-card-name">warning/50</div>
+            <div class="swatch-card-hex">#F6CF74</div>
+          </div>
+          <div class="swatch-card" data-hex="#E0B043" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#E0B043"></div>
+            <div class="swatch-card-name">warning/60</div>
+            <div class="swatch-card-hex">#E0B043</div>
+          </div>
+        </div>
+
+        <h4 style="font-size:14px; font-weight:600; color:#6B665D; margin:0 0 12px;">Info</h4>
+        <div class="swatch-grid">
+          <div class="swatch-card" data-hex="#ECF2F7" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#ECF2F7; border:1px solid #E5E0D8"></div>
+            <div class="swatch-card-name">info/10</div>
+            <div class="swatch-card-hex">#ECF2F7</div>
+          </div>
+          <div class="swatch-card" data-hex="#C2D5E2" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#C2D5E2"></div>
+            <div class="swatch-card-name">info/30</div>
+            <div class="swatch-card-hex">#C2D5E2</div>
+          </div>
+          <div class="swatch-card" data-hex="#8AABCB" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#8AABCB"></div>
+            <div class="swatch-card-name">info/50</div>
+            <div class="swatch-card-hex">#8AABCB</div>
+          </div>
+          <div class="swatch-card" data-hex="#5A8AAD" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#5A8AAD"></div>
+            <div class="swatch-card-name">info/60</div>
+            <div class="swatch-card-hex">#5A8AAD</div>
+          </div>
+        </div>
+
+        <!-- Additional data -->
+        <h3 class="subsection-title">Additional data</h3>
+        <p style="font-size:14px; color:#6B665D; margin-bottom:16px;">Extra chart series colors for visualizations beyond the 4 domain set.</p>
+        <h4 style="font-size:14px; font-weight:600; color:#6B665D; margin:0 0 12px;">Lime</h4>
+        <div class="swatch-grid">
+          <div class="swatch-card" data-hex="#F6F9DE" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#F6F9DE"></div>
+            <div class="swatch-card-name">lime/10</div>
+            <div class="swatch-card-hex">#F6F9DE</div>
+          </div>
+          <div class="swatch-card" data-hex="#E4EE9C" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#E4EE9C"></div>
+            <div class="swatch-card-name">lime/30</div>
+            <div class="swatch-card-hex">#E4EE9C</div>
+          </div>
+          <div class="swatch-card" data-hex="#D2E35A" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#D2E35A"></div>
+            <div class="swatch-card-name">lime/50</div>
+            <div class="swatch-card-hex">#D2E35A</div>
+          </div>
+          <div class="swatch-card" data-hex="#AFBD4A" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#AFBD4A"></div>
+            <div class="swatch-card-name">lime/60</div>
+            <div class="swatch-card-hex">#AFBD4A</div>
+          </div>
+          <div class="swatch-card" data-hex="#8B973A" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#8B973A"></div>
+            <div class="swatch-card-name">lime/70</div>
+            <div class="swatch-card-hex">#8B973A</div>
+          </div>
+          <div class="swatch-card" data-hex="#68722B" onclick="copyHex(this)">
+            <div class="swatch-card-color" style="background:#68722B"></div>
+            <div class="swatch-card-name">lime/80</div>
+            <div class="swatch-card-hex">#68722B</div>
+          </div>
+        </div>
+
+        <!-- Semantic: Text -->
+        <h3 class="subsection-title" id="color-text">Aliases: Text colors</h3>
+        <div class="info-box">
+          <strong>Alias status:</strong> The alias tables below (text, surface, border) predate the Figma token collection and reference the neutral scale, which is unchanged. They get formally re-mapped to Figma variables in the Day 1 token audit.
+        </div>
+        <table class="token-table">
+          <thead><tr><th style="width:40px">Preview</th><th>Token</th><th>Value</th><th>Usage</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="swatch" style="background:#433E36"></div></td>
+              <td><span class="token-name">text.primary</span></td>
+              <td><span class="hex">#433E36</span></td>
+              <td><span class="token-desc">Headings, body text, primary content</span></td>
+              <td><span class="status status-figma">Figma</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#A8A297"></div></td>
+              <td><span class="token-name">text.secondary</span></td>
+              <td><span class="hex">#A8A297</span></td>
+              <td><span class="token-desc">Labels, subtitles, metadata, dates</span></td>
+              <td><span class="status status-figma">Figma</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#8F897D"></div></td>
+              <td><span class="token-name">text.muted</span></td>
+              <td><span class="hex">#8F897D</span></td>
+              <td><span class="token-desc">Body/Muted text style, de-emphasized content</span></td>
+              <td><span class="status status-updated">Updated</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#C2BCB2"></div></td>
+              <td><span class="token-name">text.tertiary</span></td>
+              <td><span class="hex">#C2BCB2</span></td>
+              <td><span class="token-desc">Placeholders, disabled text, hints</span></td>
+              <td><span class="status status-new">New</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#FFFFFF;border:1px solid #ddd"></div></td>
+              <td><span class="token-name">text.inverse</span></td>
+              <td><span class="hex">#FFFFFF</span></td>
+              <td><span class="token-desc">Text on dark backgrounds</span></td>
+              <td><span class="status status-new">New</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#427EF7"></div></td>
+              <td><span class="token-name">text.link</span></td>
+              <td><span class="hex">#427EF7</span></td>
+              <td><span class="token-desc">Clickable links, interactive text</span></td>
+              <td><span class="status status-gap">Gap</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="info-box">
+          <strong>Gap note:</strong> Code uses #000000 for primary text in many components instead of #433E36. Links use #0078FF / #007AFF instead of #427EF7. Need to unify.
+        </div>
+
+        <!-- Semantic: Surfaces -->
+        <h3 class="subsection-title" id="color-surfaces">Aliases: Surface colors</h3>
+        <table class="token-table">
+          <thead><tr><th style="width:40px">Preview</th><th>Token</th><th>Value</th><th>Usage</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="swatch" style="background:#F5F1EA"></div></td>
+              <td><span class="token-name">surface.background</span></td>
+              <td><span class="hex">#F5F1EA</span></td>
+              <td><span class="token-desc">Main app background (cream)</span></td>
+              <td><span class="status status-code">Code</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#FEFCF9;border:1px solid #ddd"></div></td>
+              <td><span class="token-name">surface.card</span></td>
+              <td><span class="hex">#FEFCF9</span></td>
+              <td><span class="token-desc">Card backgrounds, elevated content (neutral/0)</span></td>
+              <td><span class="status status-updated">Updated</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#F0EBE2"></div></td>
+              <td><span class="token-name">surface.subtle</span></td>
+              <td><span class="hex">#F0EBE2</span></td>
+              <td><span class="token-desc">Table headers, section backgrounds</span></td>
+              <td><span class="status status-new">New</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#8F897D"></div></td>
+              <td><span class="token-name">surface.dark</span></td>
+              <td><span class="hex">#8F897D</span></td>
+              <td><span class="token-desc">Dark headers, overlays</span></td>
+              <td><span class="status status-figma">Figma</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:rgba(0,0,0,0.5)"></div></td>
+              <td><span class="token-name">surface.overlay</span></td>
+              <td><span class="hex">rgba(0,0,0,0.5)</span></td>
+              <td><span class="token-desc">Modal overlays, loading screens</span></td>
+              <td><span class="status status-code">Code</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Semantic: Border Colors -->
+        <h3 class="subsection-title" id="color-border">Aliases: Border colors</h3>
+        <table class="token-table">
+          <thead><tr><th style="width:40px">Preview</th><th>Token</th><th>Value</th><th>Usage</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="swatch" style="background:#E7DFD0"></div></td>
+              <td><span class="token-name">border.default</span></td>
+              <td><span class="hex">#E7DFD0</span></td>
+              <td><span class="token-desc">Card borders, chart borders</span></td>
+              <td><span class="status status-code">Code</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#F0EBE4"></div></td>
+              <td><span class="token-name">border.subtle</span></td>
+              <td><span class="hex">#F0EBE4</span></td>
+              <td><span class="token-desc">Dividers, light separators</span></td>
+              <td><span class="status status-new">New</span></td>
+            </tr>
+            <tr>
+              <td><div class="swatch" style="background:#CBAC9B"></div></td>
+              <td><span class="token-name">border.strong</span></td>
+              <td><span class="hex">#CBAC9B</span></td>
+              <td><span class="token-desc">Active borders, selected states</span></td>
+              <td><span class="status status-code">Code</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="info-box">
+          <strong>Gap note:</strong> Code uses 5 different border colors (#F1F1F1, #f2f2f2, #E7DFD0, #DFD6C4, #CDC2AF) — consolidate to these 3 tokens.
+        </div>
+      </section>
+
+      <hr class="section-divider">
+
+
+      <!-- ============================================================ -->
+      <!-- TYPOGRAPHY                                                    -->
+      <!-- ============================================================ -->
+      <section class="section" id="typography">
+        <div class="section-header">
+          <h2>Typography</h2>
+          <span class="badge badge-section">Foundations</span>
+        </div>
+        <p class="section-description">
+          One font family, 14 text styles, 3 weights. Synced with the Redesign v1 Figma type scale; every style is bound to type/size and type/line-height variables.
+        </p>
+
+        <!-- Font Families -->
+        <h3 class="subsection-title">Font family</h3>
+        <table class="token-table">
+          <thead><tr><th>Token</th><th>Value</th><th>Usage</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="token-name">font.primary</span></td>
+              <td><span class="hex">Modern Era</span></td>
+              <td><span class="token-desc">All UI text: headings, body, labels, metrics</span></td>
+              <td><span class="status status-provisional">Provisional</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="info-box">
+          <strong>Family is still TBD:</strong> Modern Era is the example family in Figma, not a final decision. The committed tokens are the sizes, line heights, and weights below; they hold regardless of which family wins. Previews on this page render in a fallback font until the family is licensed and embedded.
+        </div>
+
+        <!-- 14 Text Styles -->
+        <h3 class="subsection-title">Text styles (14)</h3>
+        <div class="type-preview">
+          <div style="font-size:44px; font-weight:700; line-height:48px; color:#433E36; margin-bottom:12px;">Hero, quick brown fox</div>
+          <div style="font-size:28px; font-weight:700; line-height:36px; color:#433E36; margin-bottom:12px;">H1, the quick brown fox</div>
+          <div style="font-size:24px; font-weight:500; line-height:28px; color:#433E36; margin-bottom:12px;">H2, the quick brown fox</div>
+          <div style="font-size:18px; font-weight:500; line-height:24px; color:#433E36; margin-bottom:12px;">H3, the quick brown fox</div>
+          <div style="font-size:18px; font-weight:400; line-height:24px; color:#433E36; margin-bottom:12px;">P1, the quick brown fox jumps over the lazy dog</div>
+          <div style="font-size:16px; font-weight:400; line-height:22px; color:#433E36; margin-bottom:12px;">P2, the quick brown fox jumps over the lazy dog</div>
+          <div style="font-size:15px; font-weight:400; line-height:20px; color:#433E36; margin-bottom:12px;">P3, the quick brown fox jumps over the lazy dog</div>
+          <div style="font-size:13px; font-weight:400; line-height:18px; color:#433E36; margin-bottom:12px;">Meta 1, the quick brown fox jumps over the lazy dog</div>
+          <div style="font-size:11px; font-weight:400; line-height:16px; color:#433E36;">Meta 2, the quick brown fox jumps over the lazy dog</div>
+        </div>
+
+        <table class="token-table">
+          <thead>
+            <tr><th>Style Name</th><th>Weight</th><th>Size</th><th>Line Height</th><th>Variables</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="token-name">Hero</span></td><td><span class="hex">Bold 700</span></td><td><span class="hex">44</span></td><td><span class="hex">48</span></td><td><span class="token-desc">type/size/hero · type/line-height/hero</span></td></tr>
+            <tr><td><span class="token-name">H1</span></td><td><span class="hex">Bold 700</span></td><td><span class="hex">28</span></td><td><span class="hex">36</span></td><td><span class="token-desc">type/size/h1 · type/line-height/h1</span></td></tr>
+            <tr><td><span class="token-name">H2</span></td><td><span class="hex">Medium 500</span></td><td><span class="hex">24</span></td><td><span class="hex">28</span></td><td><span class="token-desc">type/size/h2 · type/line-height/h2</span></td></tr>
+            <tr><td><span class="token-name">H2 Strong</span></td><td><span class="hex">Bold 700</span></td><td><span class="hex">24</span></td><td><span class="hex">28</span></td><td><span class="token-desc">type/size/h2 · type/line-height/h2</span></td></tr>
+            <tr><td><span class="token-name">H3</span></td><td><span class="hex">Medium 500</span></td><td><span class="hex">18</span></td><td><span class="hex">24</span></td><td><span class="token-desc">type/size/h3 · type/line-height/h3</span></td></tr>
+            <tr><td><span class="token-name">H3 Strong</span></td><td><span class="hex">Bold 700</span></td><td><span class="hex">18</span></td><td><span class="hex">24</span></td><td><span class="token-desc">type/size/h3 · type/line-height/h3</span></td></tr>
+            <tr><td><span class="token-name">P1</span></td><td><span class="hex">Regular 400</span></td><td><span class="hex">18</span></td><td><span class="hex">24</span></td><td><span class="token-desc">type/size/p1 · type/line-height/p1</span></td></tr>
+            <tr><td><span class="token-name">P1 Strong</span></td><td><span class="hex">Bold 700</span></td><td><span class="hex">18</span></td><td><span class="hex">24</span></td><td><span class="token-desc">type/size/p1 · type/line-height/p1</span></td></tr>
+            <tr><td><span class="token-name">P2</span></td><td><span class="hex">Regular 400</span></td><td><span class="hex">16</span></td><td><span class="hex">22</span></td><td><span class="token-desc">type/size/p2 · type/line-height/p2</span></td></tr>
+            <tr><td><span class="token-name">P2 Strong</span></td><td><span class="hex">Bold 700</span></td><td><span class="hex">16</span></td><td><span class="hex">22</span></td><td><span class="token-desc">type/size/p2 · type/line-height/p2</span></td></tr>
+            <tr><td><span class="token-name">P3</span></td><td><span class="hex">Regular 400</span></td><td><span class="hex">15</span></td><td><span class="hex">20</span></td><td><span class="token-desc">type/size/p3 · type/line-height/p3</span></td></tr>
+            <tr><td><span class="token-name">P3 Strong</span></td><td><span class="hex">Bold 700</span></td><td><span class="hex">15</span></td><td><span class="hex">20</span></td><td><span class="token-desc">type/size/p3 · type/line-height/p3</span></td></tr>
+            <tr><td><span class="token-name">Meta 1</span></td><td><span class="hex">Regular 400</span></td><td><span class="hex">13</span></td><td><span class="hex">18</span></td><td><span class="token-desc">type/size/meta-1 · type/line-height/meta-1</span></td></tr>
+            <tr><td><span class="token-name">Meta 2</span></td><td><span class="hex">Regular 400</span></td><td><span class="hex">11</span></td><td><span class="hex">16</span></td><td><span class="token-desc">type/size/meta-2 · type/line-height/meta-2</span></td></tr>
+          </tbody>
+        </table>
+        <div class="info-box">
+          Letter spacing is 0 across all styles. Default text color: neutral/80 (#433E36).
+        </div>
+
+        <!-- Font Weights -->
+        <h3 class="subsection-title">Font weights</h3>
+        <table class="token-table">
+          <thead><tr><th>Token</th><th>Value</th><th>Used by</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="token-name">weight.regular</span></td>
+              <td><span class="hex">400</span></td>
+              <td><span class="hex">P1, P2, P3, Meta 1, Meta 2</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">weight.medium</span></td>
+              <td><span class="hex">500</span></td>
+              <td><span class="hex">H2, H3</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">weight.bold</span></td>
+              <td><span class="hex">700</span></td>
+              <td><span class="hex">Hero, H1, all Strong variants</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <hr class="section-divider">
+
+
+      <!-- ============================================================ -->
+      <!-- SPACING                                                       -->
+      <!-- ============================================================ -->
+      <section class="section" id="spacing">
+        <div class="section-header">
+          <h2>Spacing</h2>
+          <span class="badge badge-section">Foundations</span>
+        </div>
+        <p class="section-description">
+          Consistent spacing scale based on a 4px grid, synced with the Figma spacing variables. Applied via responsive scaling (widthRatio / heightRatio) in React Native.
+        </p>
+
+        <div class="spacing-preview">
+          <div style="text-align:center">
+            <div class="spacing-box" style="width:4px; height:4px; margin:0 auto;"></div>
+            <div class="spacing-label">xs<br>4px</div>
+          </div>
+          <div style="text-align:center">
+            <div class="spacing-box" style="width:8px; height:8px; margin:0 auto;"></div>
+            <div class="spacing-label">sm<br>8px</div>
+          </div>
+          <div style="text-align:center">
+            <div class="spacing-box" style="width:12px; height:12px; margin:0 auto;"></div>
+            <div class="spacing-label">md<br>12px</div>
+          </div>
+          <div style="text-align:center">
+            <div class="spacing-box" style="width:16px; height:16px; margin:0 auto;"></div>
+            <div class="spacing-label">lg<br>16px</div>
+          </div>
+          <div style="text-align:center">
+            <div class="spacing-box" style="width:20px; height:20px; margin:0 auto;"></div>
+            <div class="spacing-label">xl<br>20px</div>
+          </div>
+          <div style="text-align:center">
+            <div class="spacing-box" style="width:24px; height:24px; margin:0 auto;"></div>
+            <div class="spacing-label">2xl<br>24px</div>
+          </div>
+          <div style="text-align:center">
+            <div class="spacing-box" style="width:32px; height:32px; margin:0 auto;"></div>
+            <div class="spacing-label">3xl<br>32px</div>
+          </div>
+          <div style="text-align:center">
+            <div class="spacing-box" style="width:48px; height:48px; margin:0 auto;"></div>
+            <div class="spacing-label">4xl<br>48px</div>
+          </div>
+        </div>
+
+        <table class="token-table">
+          <thead><tr><th>Token</th><th>Value</th><th>Usage</th></tr></thead>
+          <tbody>
+            <tr><td><span class="token-name">spacing/xs</span></td><td><span class="hex">4px</span></td><td><span class="token-desc">Tight gaps, icon padding</span></td></tr>
+            <tr><td><span class="token-name">spacing/sm</span></td><td><span class="hex">8px</span></td><td><span class="token-desc">Related items, chip padding</span></td></tr>
+            <tr><td><span class="token-name">spacing/md</span></td><td><span class="hex">12px</span></td><td><span class="token-desc">Default internal padding</span></td></tr>
+            <tr><td><span class="token-name">spacing/lg</span></td><td><span class="hex">16px</span></td><td><span class="token-desc">Card padding, list item padding</span></td></tr>
+            <tr><td><span class="token-name">spacing/xl</span></td><td><span class="hex">20px</span></td><td><span class="token-desc">Screen horizontal padding, section gaps</span></td></tr>
+            <tr><td><span class="token-name">spacing/2xl</span></td><td><span class="hex">24px</span></td><td><span class="token-desc">Section separation</span></td></tr>
+            <tr><td><span class="token-name">spacing/3xl</span></td><td><span class="hex">32px</span></td><td><span class="token-desc">Major section gaps</span></td></tr>
+            <tr><td><span class="token-name">spacing/4xl</span></td><td><span class="hex">48px</span></td><td><span class="token-desc">Screen top/bottom padding</span></td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <hr class="section-divider">
+
+
+      <!-- ============================================================ -->
+      <!-- BORDER                                                        -->
+      <!-- ============================================================ -->
+      <section class="section" id="border">
+        <div class="section-header">
+          <h2>Border</h2>
+          <span class="badge badge-section">Foundations</span>
+        </div>
+        <p class="section-description">
+          Border colors and radius tokens. Consolidated from 5+ code values to a clean, small set.
+        </p>
+
+        <h3 class="subsection-title">Border radius</h3>
+        <div class="radius-preview">
+          <div style="text-align:center;">
+            <div style="width:48px; height:48px; background:#CBAC9B; border-radius:4px; opacity:0.5;"></div>
+            <div class="spacing-label" style="margin-top:8px">sm<br>4px</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="width:48px; height:48px; background:#CBAC9B; border-radius:8px; opacity:0.5;"></div>
+            <div class="spacing-label" style="margin-top:8px">md<br>8px</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="width:48px; height:48px; background:#CBAC9B; border-radius:12px; opacity:0.5;"></div>
+            <div class="spacing-label" style="margin-top:8px">lg<br>12px</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="width:48px; height:48px; background:#CBAC9B; border-radius:16px; opacity:0.5;"></div>
+            <div class="spacing-label" style="margin-top:8px">xl<br>16px</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="width:80px; height:48px; background:#CBAC9B; border-radius:24px; opacity:0.5;"></div>
+            <div class="spacing-label" style="margin-top:8px">2xl<br>24px</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="width:80px; height:48px; background:#CBAC9B; border-radius:999px; opacity:0.5;"></div>
+            <div class="spacing-label" style="margin-top:8px">full<br>999px</div>
+          </div>
+        </div>
+
+        <table class="token-table">
+          <thead><tr><th>Token</th><th>Value</th><th>Usage</th></tr></thead>
+          <tbody>
+            <tr><td><span class="token-name">radius/sm</span></td><td><span class="hex">4px</span></td><td><span class="token-desc">Color swatches, inline code, small elements</span></td></tr>
+            <tr><td><span class="token-name">radius/md</span></td><td><span class="hex">8px</span></td><td><span class="token-desc">Buttons, inputs, code blocks, small cards</span></td></tr>
+            <tr><td><span class="token-name">radius/lg</span></td><td><span class="hex">12px</span></td><td><span class="token-desc">Date pickers, medium containers</span></td></tr>
+            <tr><td><span class="token-name">radius/xl</span></td><td><span class="hex">16px</span></td><td><span class="token-desc">Cards, inner containers</span></td></tr>
+            <tr><td><span class="token-name">radius/2xl</span></td><td><span class="hex">24px</span></td><td><span class="token-desc">Large cards, bottom sheets, modals</span></td></tr>
+            <tr><td><span class="token-name">radius/full</span></td><td><span class="hex">999px</span></td><td><span class="token-desc">Pills, chips, toggles, avatars</span></td></tr>
+          </tbody>
+        </table>
+
+        <div class="info-box">
+          <strong>Gap note:</strong> Code uses 12 different radius values (6-200px). This consolidates to 6, synced with the Figma radius variables.
+        </div>
+      </section>
+
+      <hr class="section-divider">
+
+
+      <!-- ============================================================ -->
+      <!-- ICONOGRAPHY (STUB)                                            -->
+      <!-- ============================================================ -->
+      <section class="section" id="iconography">
+        <div class="section-header">
+          <h2>Iconography</h2>
+          <span class="badge badge-section">Foundations</span>
+        </div>
+        <p class="section-description">
+          Icon inventory for Ottavia. Line-style, 2px stroke, rounded caps/joins. Default color #433E36, secondary #A8A297. Destructive #C0392B.
+          Sourced from <a href="https://www.figma.com/design/Zci1tnQn86cVDQC09Lj66r/Ottavia-mobile-app?node-id=62-9365" style="color:#427EF7" target="_blank">Figma &rarr; Iconography</a>.
+          Icons via <a href="https://lucide.dev" style="color:#427EF7" target="_blank">Lucide</a>.
+        </p>
+
+        <style>
+          .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+            margin-bottom: 32px;
+          }
+          .icon-cell {
+            background: #fff;
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-md);
+            padding: 20px 12px 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+          }
+          .icon-cell img {
+            width: 28px;
+            height: 28px;
+            /* Tint to #433E36 using CSS filter — closest match */
+            filter: brightness(0) saturate(100%) invert(22%) sepia(8%) saturate(1089%) hue-rotate(13deg) brightness(97%) contrast(89%);
+          }
+          .icon-cell.destructive img {
+            filter: brightness(0) saturate(100%) invert(27%) sepia(72%) saturate(2125%) hue-rotate(346deg) brightness(82%) contrast(93%);
+          }
+          .icon-cell-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-align: center;
+            line-height: 1.3;
+          }
+          .icon-cell.destructive .icon-cell-label { color: #C0392B; }
+        </style>
+
+        <h3 class="subsection-title">Core Chat Icons</h3>
+        <p style="font-size:13px;color:#6B665D;margin-bottom:16px;">Icons used in the chat header, composer, and navigation chrome.</p>
+
+        <div class="icon-grid">
+          <div class="icon-cell">
+            <img src="icons/calendar.svg" alt="Calendar">
+            <div class="icon-cell-label">Calendar chat</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/circle-user-round.svg" alt="Profile">
+            <div class="icon-cell-label">Profile chat</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/camera.svg" alt="Camera">
+            <div class="icon-cell-label">Camera chat</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/plus.svg" alt="More">
+            <div class="icon-cell-label">More chat</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/file-text.svg" alt="Feedback">
+            <div class="icon-cell-label">Feedback chat</div>
+          </div>
+        </div>
+
+        <h3 class="subsection-title">Profile & Settings</h3>
+        <p style="font-size:13px;color:#6B665D;margin-bottom:16px;">Icons used across profile, settings, and detail screens.</p>
+
+        <div class="icon-grid">
+          <div class="icon-cell">
+            <img src="icons/user-round.svg" alt="Profile details">
+            <div class="icon-cell-label">Profile details</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/sliders-horizontal.svg" alt="My preferences">
+            <div class="icon-cell-label">My preferences</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/clipboard-list.svg" alt="Conditions">
+            <div class="icon-cell-label">Conditions</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/utensils-crossed.svg" alt="Nutrition">
+            <div class="icon-cell-label">Nutrition</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/activity.svg" alt="Movement">
+            <div class="icon-cell-label">Movement</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/leaf.svg" alt="Recovery">
+            <div class="icon-cell-label">Recovery</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/smartphone.svg" alt="Connected devices">
+            <div class="icon-cell-label">Connected devices</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/ruler.svg" alt="Units">
+            <div class="icon-cell-label">Units of Measurement</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/circle-help.svg" alt="Help">
+            <div class="icon-cell-label">How to use Ottavia</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/scroll-text.svg" alt="Terms">
+            <div class="icon-cell-label">Terms & Conditions</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/shield.svg" alt="Privacy">
+            <div class="icon-cell-label">Privacy & Policy</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/message-circle.svg" alt="Feedback">
+            <div class="icon-cell-label">Feedback & support</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/database.svg" alt="Data management">
+            <div class="icon-cell-label">Data management</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/settings.svg" alt="Version">
+            <div class="icon-cell-label">Version</div>
+          </div>
+          <div class="icon-cell">
+            <img src="icons/x.svg" alt="Close">
+            <div class="icon-cell-label">X (Close)</div>
+          </div>
+          <div class="icon-cell destructive">
+            <img src="icons/trash-2.svg" alt="Delete">
+            <div class="icon-cell-label">Delete</div>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <strong>Style rules:</strong> Line-style, 2px stroke, rounded caps/joins. Default color #433E36. Destructive actions use #C0392B. Size tokens: 24px (default), 20px (compact lists), 28px (settings headers). Background variant: cream circle (#F0EBE2) behind the icon for elevated surfaces.
+        </div>
+      </section>
+
+      <hr class="section-divider">
+
+
+      <!-- ============================================================ -->
+      <!-- ELEVATION (STUB)                                              -->
+      <!-- ============================================================ -->
+      <section class="section" id="elevation">
+        <div class="section-header">
+          <h2>Shadow</h2>
+          <span class="badge badge-section">Foundations</span>
+        </div>
+        <p class="section-description">
+          4 Effect Styles, synced with Figma. Warm shadow color (neutral/80 with alpha) to match the warm-neutral palette character.
+        </p>
+
+        <h3 class="subsection-title">Effect Styles</h3>
+        <table class="token-table">
+          <thead><tr><th>Style name</th><th>Properties</th><th style="width:100px">Sample</th><th>Usage</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="token-name">Shadow/sm</span></td>
+              <td><span class="token-desc">shadowColor: #433E36, offset: 0 1px, opacity: 0.06, radius: 2</span></td>
+              <td><div style="width:64px;height:40px;background:#fff;border-radius:8px;box-shadow:0px 1px 2px rgba(67,62,54,0.06)"></div></td>
+              <td><span class="token-desc">Subtle lift: chips, list rows</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">Shadow/md</span></td>
+              <td><span class="token-desc">shadowColor: #433E36, offset: 0 2px, opacity: 0.08, radius: 6</span></td>
+              <td><div style="width:64px;height:40px;background:#fff;border-radius:8px;box-shadow:0px 2px 6px rgba(67,62,54,0.08)"></div></td>
+              <td><span class="token-desc">Cards, standard elevated surfaces</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">Shadow/lg</span></td>
+              <td><span class="token-desc">shadowColor: #433E36, offset: 0 6px, opacity: 0.12, radius: 16</span></td>
+              <td><div style="width:64px;height:40px;background:#fff;border-radius:8px;box-shadow:0px 6px 16px rgba(67,62,54,0.12)"></div></td>
+              <td><span class="token-desc">Floating elements, popovers</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">Shadow/xl</span></td>
+              <td><span class="token-desc">shadowColor: #433E36, offset: 0 12px, opacity: 0.16, radius: 32</span></td>
+              <td><div style="width:64px;height:40px;background:#fff;border-radius:8px;box-shadow:0px 12px 32px rgba(67,62,54,0.16)"></div></td>
+              <td><span class="token-desc">Modals, bottom sheets</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="info-box">
+          <strong>Replaces</strong> the old code-extracted shadows (shadow.card, shadow.elevated, shadow.scroll, shadow.action), which used black or blue alpha. Old values are in the <a href="#figma-vs-code" onclick="openArchive()" style="color:#427EF7">Archive</a> for reference during migration.
+        </div>
+      </section>
+
+      <hr class="section-divider">
+
+
+      <!-- ============================================================ -->
+      <!-- COMPONENTS (STUB)                                             -->
+      <!-- ============================================================ -->
+      <section class="section" id="components">
+        <div class="section-header">
+          <h2>Components</h2>
+          <span class="badge badge-section">Coming next</span>
+        </div>
+        <p class="section-description">
+          Components are rebuilt on the new tokens once this token pass lands, following the sprint rule: re-skin existing components, no new components, no IA changes. The previous component specs are preserved in the Archive below and get revived one by one as they are re-skinned.
+        </p>
+      </section>
+
+      <hr class="section-divider">
+
+
+      <!-- ============================================================ -->
+      <!-- ARCHIVE                                                       -->
+      <!-- ============================================================ -->
+      <section class="section" id="archive">
+        <div class="section-header">
+          <h2>Archive</h2>
+          <span class="badge badge-section">Pre-redesign</span>
+        </div>
+        <p class="section-description">
+          Everything below predates Redesign v1 and is not part of the current design system. It is kept intact so any piece can be revived: the legacy palette, the chat rendering specs, all component specs, the screen gallery, and the last Figma vs Code report.
+        </p>
+        <button class="archive-toggle" id="archiveToggleBtn" onclick="toggleArchive()">Show archive</button>
+      </section>
+
+      <div id="archiveContent" style="display:none;">
+
+      <hr class="section-divider">
+
+
+      <!-- ============================================================ -->
+      <!-- ARCHIVE: LEGACY PALETTE                                       -->
+      <!-- ============================================================ -->
+      <section class="section" id="legacy-palette">
+        <div class="section-header">
+          <h2>Legacy palette</h2>
+          <span class="badge badge-section">Color</span>
+        </div>
+        <p class="section-description">
+          Pre-redesign color values: terracotta accent, old domain quartets (bg / border / title / text), old red, yellow, and orange scales, plus the superseded data and status alias tables.
+        </p>
 
         <!-- Data colors -->
         <h3 class="subsection-title">Data colors</h3>
@@ -2075,102 +2989,6 @@
           </div>
         </div>
 
-        <!-- Semantic: Text -->
-        <h3 class="subsection-title" id="color-text">Semantic — Text Colors</h3>
-        <table class="token-table">
-          <thead><tr><th style="width:40px">Preview</th><th>Token</th><th>Value</th><th>Usage</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr>
-              <td><div class="swatch" style="background:#433E36"></div></td>
-              <td><span class="token-name">text.primary</span></td>
-              <td><span class="hex">#433E36</span></td>
-              <td><span class="token-desc">Headings, body text, primary content</span></td>
-              <td><span class="status status-figma">Figma</span></td>
-            </tr>
-            <tr>
-              <td><div class="swatch" style="background:#A8A297"></div></td>
-              <td><span class="token-name">text.secondary</span></td>
-              <td><span class="hex">#A8A297</span></td>
-              <td><span class="token-desc">Labels, subtitles, metadata, dates</span></td>
-              <td><span class="status status-figma">Figma</span></td>
-            </tr>
-            <tr>
-              <td><div class="swatch" style="background:#8F897D"></div></td>
-              <td><span class="token-name">text.muted</span></td>
-              <td><span class="hex">#8F897D</span></td>
-              <td><span class="token-desc">Body/Muted text style, de-emphasized content</span></td>
-              <td><span class="status status-updated">Updated</span></td>
-            </tr>
-            <tr>
-              <td><div class="swatch" style="background:#C2BCB2"></div></td>
-              <td><span class="token-name">text.tertiary</span></td>
-              <td><span class="hex">#C2BCB2</span></td>
-              <td><span class="token-desc">Placeholders, disabled text, hints</span></td>
-              <td><span class="status status-new">New</span></td>
-            </tr>
-            <tr>
-              <td><div class="swatch" style="background:#FFFFFF;border:1px solid #ddd"></div></td>
-              <td><span class="token-name">text.inverse</span></td>
-              <td><span class="hex">#FFFFFF</span></td>
-              <td><span class="token-desc">Text on dark backgrounds</span></td>
-              <td><span class="status status-new">New</span></td>
-            </tr>
-            <tr>
-              <td><div class="swatch" style="background:#427EF7"></div></td>
-              <td><span class="token-name">text.link</span></td>
-              <td><span class="hex">#427EF7</span></td>
-              <td><span class="token-desc">Clickable links, interactive text</span></td>
-              <td><span class="status status-gap">Gap</span></td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="info-box">
-          <strong>Gap note:</strong> Code uses #000000 for primary text in many components instead of #433E36. Links use #0078FF / #007AFF instead of #427EF7. Need to unify.
-        </div>
-
-        <!-- Semantic: Surfaces -->
-        <h3 class="subsection-title" id="color-surfaces">Semantic — Surface Colors</h3>
-        <table class="token-table">
-          <thead><tr><th style="width:40px">Preview</th><th>Token</th><th>Value</th><th>Usage</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr>
-              <td><div class="swatch" style="background:#F5F1EA"></div></td>
-              <td><span class="token-name">surface.background</span></td>
-              <td><span class="hex">#F5F1EA</span></td>
-              <td><span class="token-desc">Main app background (cream)</span></td>
-              <td><span class="status status-code">Code</span></td>
-            </tr>
-            <tr>
-              <td><div class="swatch" style="background:#FFFFFF;border:1px solid #ddd"></div></td>
-              <td><span class="token-name">surface.card</span></td>
-              <td><span class="hex">#FFFFFF</span></td>
-              <td><span class="token-desc">Card backgrounds, elevated content</span></td>
-              <td><span class="status status-code">Code</span></td>
-            </tr>
-            <tr>
-              <td><div class="swatch" style="background:#F0EBE2"></div></td>
-              <td><span class="token-name">surface.subtle</span></td>
-              <td><span class="hex">#F0EBE2</span></td>
-              <td><span class="token-desc">Table headers, section backgrounds</span></td>
-              <td><span class="status status-new">New</span></td>
-            </tr>
-            <tr>
-              <td><div class="swatch" style="background:#8F897D"></div></td>
-              <td><span class="token-name">surface.dark</span></td>
-              <td><span class="hex">#8F897D</span></td>
-              <td><span class="token-desc">Dark headers, overlays</span></td>
-              <td><span class="status status-figma">Figma</span></td>
-            </tr>
-            <tr>
-              <td><div class="swatch" style="background:rgba(0,0,0,0.5)"></div></td>
-              <td><span class="token-name">surface.overlay</span></td>
-              <td><span class="hex">rgba(0,0,0,0.5)</span></td>
-              <td><span class="token-desc">Modal overlays, loading screens</span></td>
-              <td><span class="status status-code">Code</span></td>
-            </tr>
-          </tbody>
-        </table>
-
         <!-- Semantic: Data -->
         <h3 class="subsection-title" id="color-data">Semantic — Data Colors</h3>
         <table class="token-table">
@@ -2281,481 +3099,6 @@
               <td><span class="hex">#FCE7B5</span></td>
               <td><span class="token-desc">Chat highlights, ==mark== in markdown</span></td>
               <td><span class="status status-figma">Figma</span></td>
-            </tr>
-          </tbody>
-        </table>
-
-        <!-- Semantic: Border Colors -->
-        <h3 class="subsection-title" id="color-border">Semantic — Border Colors</h3>
-        <table class="token-table">
-          <thead><tr><th style="width:40px">Preview</th><th>Token</th><th>Value</th><th>Usage</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr>
-              <td><div class="swatch" style="background:#E7DFD0"></div></td>
-              <td><span class="token-name">border.default</span></td>
-              <td><span class="hex">#E7DFD0</span></td>
-              <td><span class="token-desc">Card borders, chart borders</span></td>
-              <td><span class="status status-code">Code</span></td>
-            </tr>
-            <tr>
-              <td><div class="swatch" style="background:#F0EBE4"></div></td>
-              <td><span class="token-name">border.subtle</span></td>
-              <td><span class="hex">#F0EBE4</span></td>
-              <td><span class="token-desc">Dividers, light separators</span></td>
-              <td><span class="status status-new">New</span></td>
-            </tr>
-            <tr>
-              <td><div class="swatch" style="background:#CBAC9B"></div></td>
-              <td><span class="token-name">border.strong</span></td>
-              <td><span class="hex">#CBAC9B</span></td>
-              <td><span class="token-desc">Active borders, selected states</span></td>
-              <td><span class="status status-code">Code</span></td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="info-box">
-          <strong>Gap note:</strong> Code uses 5 different border colors (#F1F1F1, #f2f2f2, #E7DFD0, #DFD6C4, #CDC2AF) — consolidate to these 3 tokens.
-        </div>
-      </section>
-
-      <hr class="section-divider">
-
-
-      <!-- ============================================================ -->
-      <!-- TYPOGRAPHY                                                    -->
-      <!-- ============================================================ -->
-      <section class="section" id="typography">
-        <div class="section-header">
-          <h2>Typography</h2>
-          <span class="badge badge-section">Foundations</span>
-        </div>
-        <p class="section-description">
-          Two font families, 8 text styles, 3 weights. These are the Figma-ready styles that map directly to React Native.
-        </p>
-
-        <!-- Font Families -->
-        <h3 class="subsection-title">Font families</h3>
-        <table class="token-table">
-          <thead><tr><th>Token</th><th>Value</th><th>Usage</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr>
-              <td><span class="token-name">font.primary</span></td>
-              <td><span class="hex">SF Pro Display</span></td>
-              <td><span class="token-desc">All UI text — headings, body, labels, metrics</span></td>
-              <td><span class="status status-updated">Updated</span></td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="info-box">
-          <strong>Decision:</strong> SF Pro Display is the single UI font. Poppins has been dropped. Code currently uses 3 names (SFProDisplay, SFUIDisplay, SFPro) — consolidate to one reference per weight.
-        </div>
-
-        <!-- 8 Text Styles -->
-        <h3 class="subsection-title">Text styles (8)</h3>
-        <div class="type-preview">
-          <div style="font-size:24px; font-weight:600; line-height:32px; color:#433E36; margin-bottom:12px;">Heading/H2 — The quick brown fox</div>
-          <div style="font-size:22px; font-weight:600; line-height:31px; color:#433E36; margin-bottom:12px;">Heading/H3 — The quick brown fox</div>
-          <div style="font-size:20px; font-weight:600; line-height:30px; color:#433E36; margin-bottom:12px;">Heading/H4 — The quick brown fox</div>
-          <div style="font-size:18px; line-height:26px; letter-spacing:0.2px; color:#433E36; margin-bottom:12px;">Body/Regular — The quick brown fox jumps over the lazy dog</div>
-          <div style="font-size:18px; font-weight:600; line-height:26px; letter-spacing:0.2px; color:#433E36; margin-bottom:12px;">Body/Bold — The quick brown fox jumps over</div>
-          <div style="font-size:18px; line-height:26px; letter-spacing:0.2px; color:#8F897D;">Body/Muted — The quick brown fox jumps over</div>
-        </div>
-
-        <table class="token-table">
-          <thead>
-            <tr><th>Style Name</th><th>Font</th><th>Size</th><th>Line Height</th><th>Letter Spacing</th><th>Color</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="token-name">Body/Regular</span></td>
-              <td><span class="hex">SF Pro Display Regular</span></td>
-              <td><span class="hex">18</span></td>
-              <td><span class="hex">26</span></td>
-              <td><span class="hex">0.2</span></td>
-              <td><span class="hex">#433E36</span></td>
-            </tr>
-            <tr>
-              <td><span class="token-name">Body/Bold</span></td>
-              <td><span class="hex">SF Pro Display Semibold</span></td>
-              <td><span class="hex">18</span></td>
-              <td><span class="hex">26</span></td>
-              <td><span class="hex">0.2</span></td>
-              <td><span class="hex">#433E36</span></td>
-            </tr>
-            <tr>
-              <td><span class="token-name">Body/Muted</span></td>
-              <td><span class="hex">SF Pro Display Regular</span></td>
-              <td><span class="hex">18</span></td>
-              <td><span class="hex">26</span></td>
-              <td><span class="hex">0.2</span></td>
-              <td><span class="hex">#8F897D</span></td>
-            </tr>
-            <tr>
-              <td><span class="token-name">Heading/H2</span></td>
-              <td><span class="hex">SF Pro Display Semibold</span></td>
-              <td><span class="hex">24</span></td>
-              <td><span class="hex">32</span></td>
-              <td><span class="hex">0</span></td>
-              <td><span class="hex">#433E36</span></td>
-            </tr>
-            <tr>
-              <td><span class="token-name">Heading/H3</span></td>
-              <td><span class="hex">SF Pro Display Semibold</span></td>
-              <td><span class="hex">22</span></td>
-              <td><span class="hex">31</span></td>
-              <td><span class="hex">0</span></td>
-              <td><span class="hex">#433E36</span></td>
-            </tr>
-            <tr>
-              <td><span class="token-name">Heading/H4</span></td>
-              <td><span class="hex">SF Pro Display Semibold</span></td>
-              <td><span class="hex">20</span></td>
-              <td><span class="hex">30</span></td>
-              <td><span class="hex">0</span></td>
-              <td><span class="hex">#433E36</span></td>
-            </tr>
-          </tbody>
-        </table>
-
-        <!-- Font Weights -->
-        <h3 class="subsection-title">Font weights</h3>
-        <table class="token-table">
-          <thead><tr><th>Token</th><th>Value</th><th>SF Pro File</th></tr></thead>
-          <tbody>
-            <tr>
-              <td><span class="token-name">weight.regular</span></td>
-              <td><span class="hex">400</span></td>
-              <td><span class="hex">SFProDisplay-Regular</span></td>
-            </tr>
-            <tr>
-              <td><span class="token-name">weight.medium</span></td>
-              <td><span class="hex">500</span></td>
-              <td><span class="hex">SFProDisplay-Medium</span></td>
-            </tr>
-            <tr>
-              <td><span class="token-name">weight.semibold</span></td>
-              <td><span class="hex">600</span></td>
-              <td><span class="hex">SFProDisplay-Semibold</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <hr class="section-divider">
-
-
-      <!-- ============================================================ -->
-      <!-- SPACING                                                       -->
-      <!-- ============================================================ -->
-      <section class="section" id="spacing">
-        <div class="section-header">
-          <h2>Spacing</h2>
-          <span class="badge badge-section">Foundations</span>
-        </div>
-        <p class="section-description">
-          Consistent spacing scale based on a 4px grid. Applied via responsive scaling (widthRatio / heightRatio) in React Native.
-        </p>
-
-        <div class="spacing-preview">
-          <div style="text-align:center">
-            <div class="spacing-box" style="width:4px; height:4px; margin:0 auto;"></div>
-            <div class="spacing-label">xs<br>4px</div>
-          </div>
-          <div style="text-align:center">
-            <div class="spacing-box" style="width:8px; height:8px; margin:0 auto;"></div>
-            <div class="spacing-label">sm<br>8px</div>
-          </div>
-          <div style="text-align:center">
-            <div class="spacing-box" style="width:12px; height:12px; margin:0 auto;"></div>
-            <div class="spacing-label">md<br>12px</div>
-          </div>
-          <div style="text-align:center">
-            <div class="spacing-box" style="width:16px; height:16px; margin:0 auto;"></div>
-            <div class="spacing-label">lg<br>16px</div>
-          </div>
-          <div style="text-align:center">
-            <div class="spacing-box" style="width:20px; height:20px; margin:0 auto;"></div>
-            <div class="spacing-label">xl<br>20px</div>
-          </div>
-          <div style="text-align:center">
-            <div class="spacing-box" style="width:24px; height:24px; margin:0 auto;"></div>
-            <div class="spacing-label">2xl<br>24px</div>
-          </div>
-          <div style="text-align:center">
-            <div class="spacing-box" style="width:32px; height:32px; margin:0 auto;"></div>
-            <div class="spacing-label">3xl<br>32px</div>
-          </div>
-          <div style="text-align:center">
-            <div class="spacing-box" style="width:48px; height:48px; margin:0 auto;"></div>
-            <div class="spacing-label">4xl<br>48px</div>
-          </div>
-        </div>
-
-        <table class="token-table">
-          <thead><tr><th>Token</th><th>Value</th><th>Usage</th></tr></thead>
-          <tbody>
-            <tr><td><span class="token-name">spacing.xs</span></td><td><span class="hex">4px</span></td><td><span class="token-desc">Tight gaps, icon padding</span></td></tr>
-            <tr><td><span class="token-name">spacing.sm</span></td><td><span class="hex">8px</span></td><td><span class="token-desc">Related items, chip padding</span></td></tr>
-            <tr><td><span class="token-name">spacing.md</span></td><td><span class="hex">12px</span></td><td><span class="token-desc">Default internal padding</span></td></tr>
-            <tr><td><span class="token-name">spacing.lg</span></td><td><span class="hex">16px</span></td><td><span class="token-desc">Card padding, list item padding</span></td></tr>
-            <tr><td><span class="token-name">spacing.xl</span></td><td><span class="hex">20px</span></td><td><span class="token-desc">Screen horizontal padding, section gaps</span></td></tr>
-            <tr><td><span class="token-name">spacing.2xl</span></td><td><span class="hex">24px</span></td><td><span class="token-desc">Section separation</span></td></tr>
-            <tr><td><span class="token-name">spacing.3xl</span></td><td><span class="hex">32px</span></td><td><span class="token-desc">Major section gaps</span></td></tr>
-            <tr><td><span class="token-name">spacing.4xl</span></td><td><span class="hex">48px</span></td><td><span class="token-desc">Screen top/bottom padding</span></td></tr>
-          </tbody>
-        </table>
-      </section>
-
-      <hr class="section-divider">
-
-
-      <!-- ============================================================ -->
-      <!-- BORDER                                                        -->
-      <!-- ============================================================ -->
-      <section class="section" id="border">
-        <div class="section-header">
-          <h2>Border</h2>
-          <span class="badge badge-section">Foundations</span>
-        </div>
-        <p class="section-description">
-          Border colors and radius tokens. Consolidated from 5+ code values to a clean, small set.
-        </p>
-
-        <h3 class="subsection-title">Border radius</h3>
-        <div class="radius-preview">
-          <div style="text-align:center;">
-            <div style="width:48px; height:48px; background:#CBAC9B; border-radius:4px; opacity:0.5;"></div>
-            <div class="spacing-label" style="margin-top:8px">sm<br>4px</div>
-          </div>
-          <div style="text-align:center;">
-            <div style="width:48px; height:48px; background:#CBAC9B; border-radius:8px; opacity:0.5;"></div>
-            <div class="spacing-label" style="margin-top:8px">md<br>8px</div>
-          </div>
-          <div style="text-align:center;">
-            <div style="width:48px; height:48px; background:#CBAC9B; border-radius:12px; opacity:0.5;"></div>
-            <div class="spacing-label" style="margin-top:8px">lg<br>12px</div>
-          </div>
-          <div style="text-align:center;">
-            <div style="width:80px; height:48px; background:#CBAC9B; border-radius:24px; opacity:0.5;"></div>
-            <div class="spacing-label" style="margin-top:8px">xl<br>24px</div>
-          </div>
-          <div style="text-align:center;">
-            <div style="width:80px; height:48px; background:#CBAC9B; border-radius:9999px; opacity:0.5;"></div>
-            <div class="spacing-label" style="margin-top:8px">full<br>9999px</div>
-          </div>
-        </div>
-
-        <table class="token-table">
-          <thead><tr><th>Token</th><th>Value</th><th>Usage</th></tr></thead>
-          <tbody>
-            <tr><td><span class="token-name">radius.sm</span></td><td><span class="hex">4px</span></td><td><span class="token-desc">Color swatches, inline code, small elements</span></td></tr>
-            <tr><td><span class="token-name">radius.md</span></td><td><span class="hex">8px</span></td><td><span class="token-desc">Buttons, inputs, code blocks, small cards</span></td></tr>
-            <tr><td><span class="token-name">radius.lg</span></td><td><span class="hex">12px</span></td><td><span class="token-desc">Date pickers, medium containers</span></td></tr>
-            <tr><td><span class="token-name">radius.xl</span></td><td><span class="hex">24px</span></td><td><span class="token-desc">Cards, bottom sheets, modals</span></td></tr>
-            <tr><td><span class="token-name">radius.full</span></td><td><span class="hex">9999px</span></td><td><span class="token-desc">Pills, chips, toggles, avatars</span></td></tr>
-          </tbody>
-        </table>
-
-        <div class="info-box">
-          <strong>Gap note:</strong> Code uses 12 different radius values (6-200px). This consolidates to 5.
-        </div>
-      </section>
-
-      <hr class="section-divider">
-
-
-      <!-- ============================================================ -->
-      <!-- ICONOGRAPHY (STUB)                                            -->
-      <!-- ============================================================ -->
-      <section class="section" id="iconography">
-        <div class="section-header">
-          <h2>Iconography</h2>
-          <span class="badge badge-section">Foundations</span>
-        </div>
-        <p class="section-description">
-          Icon inventory for Ottavia. Line-style, 2px stroke, rounded caps/joins. Default color #433E36, secondary #A8A297. Destructive #C0392B.
-          Sourced from <a href="https://www.figma.com/design/Zci1tnQn86cVDQC09Lj66r/Ottavia-mobile-app?node-id=62-9365" style="color:#427EF7" target="_blank">Figma &rarr; Iconography</a>.
-          Icons via <a href="https://lucide.dev" style="color:#427EF7" target="_blank">Lucide</a>.
-        </p>
-
-        <style>
-          .icon-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 12px;
-            margin-bottom: 32px;
-          }
-          .icon-cell {
-            background: #fff;
-            border: 1px solid var(--card-border);
-            border-radius: var(--radius-md);
-            padding: 20px 12px 14px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-          }
-          .icon-cell img {
-            width: 28px;
-            height: 28px;
-            /* Tint to #433E36 using CSS filter — closest match */
-            filter: brightness(0) saturate(100%) invert(22%) sepia(8%) saturate(1089%) hue-rotate(13deg) brightness(97%) contrast(89%);
-          }
-          .icon-cell.destructive img {
-            filter: brightness(0) saturate(100%) invert(27%) sepia(72%) saturate(2125%) hue-rotate(346deg) brightness(82%) contrast(93%);
-          }
-          .icon-cell-label {
-            font-size: 11px;
-            color: var(--text-secondary);
-            text-align: center;
-            line-height: 1.3;
-          }
-          .icon-cell.destructive .icon-cell-label { color: #C0392B; }
-        </style>
-
-        <h3 class="subsection-title">Core Chat Icons</h3>
-        <p style="font-size:13px;color:#6B665D;margin-bottom:16px;">Icons used in the chat header, composer, and navigation chrome.</p>
-
-        <div class="icon-grid">
-          <div class="icon-cell">
-            <img src="icons/calendar.svg" alt="Calendar">
-            <div class="icon-cell-label">Calendar chat</div>
-          </div>
-          <div class="icon-cell">
-            <img src="icons/circle-user-round.svg" alt="Profile">
-            <div class="icon-cell-label">Profile chat</div>
-          </div>
-          <div class="icon-cell">
-            <img src="icons/camera.svg" alt="Camera">
-            <div class="icon-cell-label">Camera chat</div>
-          </div>
-          <div class="icon-cell">
-            <img src="icons/plus.svg" alt="More">
-            <div class="icon-cell-label">More chat</div>
-          </div>
-          <div class="icon-cell">
-            <img src="icons/file-text.svg" alt="Feedback">
-            <div class="icon-cell-label">Feedback chat</div>
-          </div>
-        </div>
-
-        <h3 class="subsection-title">Profile & Settings</h3>
-        <p style="font-size:13px;color:#6B665D;margin-bottom:16px;">Icons used across profile, settings, and detail screens.</p>
-
-        <div class="icon-grid">
-          <div class="icon-cell">
-            <img src="icons/user-round.svg" alt="Profile details">
-            <div class="icon-cell-label">Profile details</div>
-          </div>
-          <div class="icon-cell">
-            <img src="icons/sliders-horizontal.svg" alt="My preferences">
-            <div class="icon-cell-label">My preferences</div>
-          </div>
-          <div class="icon-cell">
-            <img src="icons/clipboard-list.svg" alt="Conditions">
-            <div class="icon-cell-label">Conditions</div>
-          </div>
-          <div class="icon-cell">
-            <img src="icons/utensils-crossed.svg" alt="Nutrition">
-            <div class="icon-cell-label">Nutrition</div>
-          </div>
-          <div class="icon-cell">
-            <img src="icons/activity.svg" alt="Movement">
-            <div class="icon-cell-label">Movement</div>
-          </div>
-          <div class="icon-cell">
-            <img src="icons/leaf.svg" alt="Recovery">
-            <div class="icon-cell-label">Recovery</div>
-          </div>
-          <div class="icon-cell">
-            <img src="icons/smartphone.svg" alt="Connected devices">
-            <div class="icon-cell-label">Connected devices</div>
-          </div>
-          <div class="icon-cell">
-            <img src="icons/ruler.svg" alt="Units">
-            <div class="icon-cell-label">Units of Measurement</div>
-          </div>
-          <div class="icon-cell">
-            <img src="icons/circle-help.svg" alt="Help">
-            <div class="icon-cell-label">How to use Ottavia</div>
-          </div>
-          <div class="icon-cell">
-            <img src="icons/scroll-text.svg" alt="Terms">
-            <div class="icon-cell-label">Terms & Conditions</div>
-          </div>
-          <div class="icon-cell">
-            <img src="icons/shield.svg" alt="Privacy">
-            <div class="icon-cell-label">Privacy & Policy</div>
-          </div>
-          <div class="icon-cell">
-            <img src="icons/message-circle.svg" alt="Feedback">
-            <div class="icon-cell-label">Feedback & support</div>
-          </div>
-          <div class="icon-cell">
-            <img src="icons/database.svg" alt="Data management">
-            <div class="icon-cell-label">Data management</div>
-          </div>
-          <div class="icon-cell">
-            <img src="icons/settings.svg" alt="Version">
-            <div class="icon-cell-label">Version</div>
-          </div>
-          <div class="icon-cell">
-            <img src="icons/x.svg" alt="Close">
-            <div class="icon-cell-label">X (Close)</div>
-          </div>
-          <div class="icon-cell destructive">
-            <img src="icons/trash-2.svg" alt="Delete">
-            <div class="icon-cell-label">Delete</div>
-          </div>
-        </div>
-
-        <div class="info-box">
-          <strong>Style rules:</strong> Line-style, 2px stroke, rounded caps/joins. Default color #433E36. Destructive actions use #C0392B. Size tokens: 24px (default), 20px (compact lists), 28px (settings headers). Background variant: cream circle (#F0EBE2) behind the icon for elevated surfaces.
-        </div>
-      </section>
-
-      <hr class="section-divider">
-
-
-      <!-- ============================================================ -->
-      <!-- ELEVATION (STUB)                                              -->
-      <!-- ============================================================ -->
-      <section class="section" id="elevation">
-        <div class="section-header">
-          <h2>Shadow</h2>
-          <span class="badge badge-section">Foundations</span>
-        </div>
-        <p class="section-description">
-          Shadow and elevation tokens for layered surfaces. Extracted from the codebase (React Native shadow properties).
-        </p>
-
-        <h3 class="subsection-title">Effect Styles</h3>
-        <table class="token-table">
-          <thead><tr><th>Style name</th><th>Properties</th><th style="width:100px">Sample</th><th>Usage</th></tr></thead>
-          <tbody>
-            <tr>
-              <td><span class="token-name">shadow.card</span></td>
-              <td><span class="token-desc">shadowColor: #000, offset: 0 0, opacity: 0.1, radius: 5, elevation: 2</span></td>
-              <td><div style="width:64px;height:40px;background:#fff;border-radius:8px;box-shadow:0px 0px 5px rgba(0,0,0,0.1)"></div></td>
-              <td><span class="token-desc">Logging cards, detail cards</span></td>
-            </tr>
-            <tr>
-              <td><span class="token-name">shadow.elevated</span></td>
-              <td><span class="token-desc">shadowColor: #000, offset: 0 2px, opacity: 0.1, radius: 3, elevation: 3</span></td>
-              <td><div style="width:64px;height:40px;background:#fff;border-radius:8px;box-shadow:0px 2px 3px rgba(0,0,0,0.1)"></div></td>
-              <td><span class="token-desc">Content panels, version info</span></td>
-            </tr>
-            <tr>
-              <td><span class="token-name">shadow.scroll</span></td>
-              <td><span class="token-desc">shadowColor: #DAD5C7, offset: 0 2px, opacity: 1, radius: 4, elevation: 4</span></td>
-              <td><div style="width:64px;height:40px;background:#fff;border-radius:8px;box-shadow:0px 2px 4px #DAD5C7"></div></td>
-              <td><span class="token-desc">Scroll-to-bottom button in chat</span></td>
-            </tr>
-            <tr>
-              <td><span class="token-name">shadow.action</span></td>
-              <td><span class="token-desc">shadowColor: #007AFF, offset: 0 2px, opacity: 0.2, radius: 3, elevation: 3</span></td>
-              <td><div style="width:64px;height:40px;background:#fff;border-radius:8px;box-shadow:0px 2px 3px rgba(0,122,255,0.2)"></div></td>
-              <td><span class="token-desc">Action buttons (copy, CTA)</span></td>
             </tr>
           </tbody>
         </table>
@@ -5086,17 +5429,44 @@
       </section>
 
 
+      </div> <!-- /archiveContent -->
+
+
       <!-- ============================================================ -->
       <!-- FOOTER                                                        -->
       <!-- ============================================================ -->
       <footer class="page-footer">
-        <p>Ottavia Design System v1.0 — Updated 2026-03-10</p>
-        <p style="margin-top:4px;">Source: Figma + ottavia-client codebase + design sessions. Previous version: <a href="tokens.html" style="color:#427EF7">tokens.html (v0.1)</a></p>
+        <p>Ottavia Design System v2.0 &middot; Updated 2026-07-05</p>
+        <p style="margin-top:4px;">Source: <a href="https://www.figma.com/design/8zdDzD913vMpWD1I8EtbDJ/Ottavia--Redesign-v1--Visual-Refresh?node-id=2-2" style="color:#427EF7" target="_blank">Redesign v1 Figma, Tokens page</a> + design sessions. Previous version: <a href="tokens.html" style="color:#427EF7">tokens.html (v0.1)</a></p>
       </footer>
 
     </main>
   </div>
   <script>
+    // Archive show/hide
+    function toggleArchive() {
+      const c = document.getElementById('archiveContent');
+      const b = document.getElementById('archiveToggleBtn');
+      const open = c.style.display === 'none';
+      c.style.display = open ? '' : 'none';
+      b.textContent = open ? 'Hide archive' : 'Show archive';
+    }
+    function openArchive() {
+      const c = document.getElementById('archiveContent');
+      if (c.style.display === 'none') toggleArchive();
+    }
+    // If the page loads with a hash pointing inside the archive, open it
+    document.addEventListener('DOMContentLoaded', () => {
+      const id = location.hash.slice(1);
+      if (id) {
+        const el = document.getElementById(id);
+        if (el && el.closest('#archiveContent')) {
+          openArchive();
+          setTimeout(() => el.scrollIntoView(), 50);
+        }
+      }
+    });
+
     // Copy hex from swatch card
     function copyHex(card) {
       const hex = card.dataset.hex;
@@ -5137,7 +5507,7 @@
       links.forEach(link => {
         const id = link.getAttribute('href').slice(1);
         const section = document.getElementById(id);
-        if (section && section.getBoundingClientRect().top <= 100) {
+        if (section && section.offsetParent !== null && section.getBoundingClientRect().top <= 100) {
           current = id;
         }
       });

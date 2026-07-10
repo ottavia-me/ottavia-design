@@ -1452,5 +1452,148 @@ body{font-family:'Modern Era',-apple-system,sans-serif;background:#E7E1D6;color:
 
 </div>
 
+<!-- ============ SECTION J: WEEKLY PLAN — THE DELIVERY ============ -->
+<style>
+.wp-wrap{max-width:1100px;margin:0 auto;}
+.wp-cols{display:grid;grid-template-columns:430px 1fr;gap:40px;align-items:start;}
+/* Figma-settled day divider (node 187-3063): nutrition/30 tint, 10px radius, green dot */
+.wp-divider{display:flex;align-items:center;gap:14px;padding:20px 0;}
+.wp-divider .ln{flex:1;height:1px;background:var(--nut30);}
+.wp-divider .pill{background:var(--nut30);height:30px;display:inline-flex;align-items:center;gap:9px;padding:9px 18px;border-radius:10px;font-size:15px;font-weight:700;color:var(--green60);box-shadow:0 2px 2.5px rgba(186,178,164,.19);white-space:nowrap;}
+.wp-divider .pill .dot{width:7px;height:7px;border-radius:50%;background:var(--green60);}
+/* In-message H1 (Figma: Modern Era Bold 28/36, neutral/80) */
+.wp-h1{font-size:28px;line-height:36px;font-weight:700;color:var(--n80);margin:4px 0 16px;}
+/* Quick-action pills, Figma-exact: stacked, left-aligned, 46px */
+.wp-qa{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:16px 0 4px;}
+.wp-qa .qa{background:#EAF8F0;border:1px solid #D0ECDB;color:var(--green60);font-size:18px;line-height:24px;font-weight:700;padding:10px 14px;height:46px;display:inline-flex;align-items:center;border-radius:22px;box-shadow:0 2px 2.5px rgba(186,178,164,.19);}
+.wp-pts{list-style:none;}
+.wp-pts li{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--n20);font-size:14px;line-height:20px;color:var(--n70);}
+.wp-pts li:last-child{border:none;}
+.wp-pts b{color:var(--n80);}
+.wp-pts .num{width:24px;height:24px;border-radius:50%;background:var(--n80);color:var(--n0);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;}
+.wp-hdr{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--n50);font-weight:500;margin-bottom:6px;}
+</style>
+
+<div class="section-label">Section J</div>
+<div class="section-title">Weekly plan — the delivery</div>
+<div class="section-sub">The moment Ottavia hands a prepared week to the user, on the redesign canvas (Figma 187-3063). Composition: verdict headline → the why → week-at-a-glance → the plan → the adaptive promise → actions. Uses the general Week plan component from Section I.</div>
+
+<div class="wp-wrap">
+  <div class="wp-cols">
+
+    <!-- phone -->
+    <div>
+      <div class="phone">
+        <div class="statusbar"><span>7:02</span><span class="icons">▲ ▾ ▮</span></div>
+        <div class="appheader">
+          <div class="date-pill glass"><span class="d">17</span><span class="w">mon</span></div>
+          <div class="ottavia-sel glass">Ottavia <span class="chev">▼</span></div>
+          <div class="profile glass">◍</div>
+        </div>
+        <div class="thread">
+          <div class="wp-divider"><span class="ln"></span><span class="pill"><span class="dot"></span>Today</span><span class="ln"></span></div>
+
+          <div class="ottavia-msg">
+            <div class="wp-h1">Here's your week, Vika</div>
+            <p>The 100k is three weeks out, so this week starts the <span class="mark">taper</span> — volume drops about 20%, Wednesday carries the only hard session, and everything else protects Saturday's long run. Fueling and recovery are woven in where they earn those two days.</p>
+          </div>
+
+          <div class="stats">
+            <div class="stat accent"><div class="v">58<small> km</small></div><div class="l">volume · ↓20%</div></div>
+            <div class="stat"><div class="v">1</div><div class="l">hard day</div></div>
+            <div class="stat"><div class="v">28<small> km</small></div><div class="l">long run · Sat</div></div>
+          </div>
+
+          <div class="wk" style="margin:6px 0 16px;">
+            <div class="wk-row today">
+              <div class="wk-day">Mon</div>
+              <div class="wk-items"><div class="wk-item rest"><span class="dot"></span><span class="ti">Rest day<small>nothing to do but recover</small></span></div></div>
+            </div>
+            <div class="wk-row">
+              <div class="wk-day">Tue</div>
+              <div class="wk-items">
+                <div class="wk-item"><span class="dot" style="background:var(--act70);"></span><span class="ti">Easy run<small>zone 2, by feel</small></span><span class="val">8 km</span></div>
+                <div class="wk-item"><span class="dot" style="background:var(--nut60);"></span><span class="ti">Protein focus</span><span class="val">130g</span></div>
+              </div>
+            </div>
+            <div class="wk-row">
+              <div class="wk-day">Wed</div>
+              <div class="wk-items"><div class="wk-item"><span class="dot" style="background:var(--act70);"></span><span class="ti">Intervals<small>6×3 min @ threshold</small></span></div></div>
+            </div>
+            <div class="wk-row">
+              <div class="wk-day">Thu</div>
+              <div class="wk-items">
+                <div class="wk-item"><span class="dot" style="background:var(--act70);"></span><span class="ti">Tempo<small>40 min steady</small></span></div>
+                <div class="wk-item"><span class="dot" style="background:var(--hyd60);"></span><span class="ti">Extra fluids</span><span class="val">3 L</span></div>
+              </div>
+            </div>
+            <div class="wk-row">
+              <div class="wk-day">Fri</div>
+              <div class="wk-items">
+                <div class="wk-item rest"><span class="dot"></span><span class="ti">Rest day</span></div>
+                <div class="wk-item"><span class="dot" style="background:var(--rec60);"></span><span class="ti">Mobility<small>hips &amp; calves</small></span><span class="val">20 min</span></div>
+              </div>
+            </div>
+            <div class="wk-row">
+              <div class="wk-day">Sat</div>
+              <div class="wk-items">
+                <div class="wk-item"><span class="dot" style="background:var(--act70);"></span><span class="ti">Long run<small>fuel practice</small></span><span class="val">28 km</span></div>
+                <div class="wk-item"><span class="dot" style="background:var(--nut60);"></span><span class="ti">Carb-load breakfast</span></div>
+              </div>
+            </div>
+            <div class="wk-row">
+              <div class="wk-day">Sun</div>
+              <div class="wk-items">
+                <div class="wk-item"><span class="dot" style="background:var(--act70);"></span><span class="ti">Recovery jog</span><span class="val">6 km</span></div>
+                <div class="wk-item"><span class="dot" style="background:var(--rec60);"></span><span class="ti">Early wind-down</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout info"><span class="ico">↻</span><span class="body">This plan adapts. If Wednesday's intervals leave you flat, Thursday's tempo becomes easy — I'll watch your morning HRV and suggest the swap.</span></div>
+
+          <div class="wp-qa">
+            <span class="qa">Lock the week in</span>
+            <span class="qa">Adjust a day</span>
+            <span class="qa">Why taper now?</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- annotations -->
+    <div>
+      <div class="wp-hdr">How the delivery is composed</div>
+      <ul class="wp-pts">
+        <li><span class="num">1</span><span><b>Verdict headline</b> — the in-message H1 from the canvas reference ("Here's your week, Vika", Modern Era Bold 28/36). A prepared plan is a moment, not a reply — it earns the greeting weight the Morning brief uses.</span></li>
+        <li><span class="num">2</span><span><b>The why, before the what</b> — one paragraph of reasoning (taper, 20% down, protect Saturday). The plan must never feel generated; the prose is where trust is built.</span></li>
+        <li><span class="num">3</span><span><b>Week at a glance</b> — three stat callouts give the shape in numbers before the 7-day detail. <b>Critique target:</b> is this the dashboard line? Cut it and the headline+prose still carry the verdict.</span></li>
+        <li><span class="num">4</span><span><b>The plan itself</b> — the general Week plan component from Section I, unchanged: mixed-domain items (training, nutrition, hydration, recovery) carried by domain dots, today row highlighted. No new component needed.</span></li>
+        <li><span class="num">5</span><span><b>The adaptive promise</b> — the callout carries the one conditional. This is the difference between a PDF training plan and Ottavia: the plan watches back.</span></li>
+        <li><span class="num">6</span><span><b>Actions, stacked</b> — quick-action pills exactly per the canvas (46px, stacked, left-aligned). First pill is the commit ("Lock the week in"), then the edit, then the why.</span></li>
+      </ul>
+
+      <div class="wp-hdr" style="margin-top:24px;">Settled by the Figma canvas (187-3063)</div>
+      <ul class="wp-pts">
+        <li><span class="num">✓</span><span><b>Day divider decided</b> — nutrition/30 tint pill, 10px radius, green dot + hairlines. This is Section G direction B, refined; it supersedes the E/F explorations. Adopted here as <code>.wp-divider</code>.</span></li>
+        <li><span class="num">✓</span><span><b>In-message H1</b> — 28/36 bold exists on the canvas as a message-level style, not just a screen title. Added to the type needs list.</span></li>
+        <li><span class="num">✓</span><span><b>Quick actions stack vertically</b> — not the wrapped inline chips of Section A. Left-aligned column, full label visible.</span></li>
+      </ul>
+
+      <div class="wp-hdr" style="margin-top:24px;">States deferred, on purpose</div>
+      <ul class="wp-pts">
+        <li><span class="num">→</span><span><b>Mid-week view</b> — past days compress to a done/missed tick; today expands. Needed before build.</span></li>
+        <li><span class="num">→</span><span><b>Revision state</b> — after "Adjust a day": the changed day gets a "revised" marker and the volume stat updates.</span></li>
+        <li><span class="num">→</span><span><b>Low-data state</b> — a new user with no history gets a shorter, more tentative week and the prose says so.</span></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div style="font-size:14px;color:var(--n50);border-top:1px solid var(--n30);padding-top:16px;margin-top:32px;">
+    <b style="color:var(--n80);">My read:</b> the delivery pattern is <b>headline → why → glance → plan → promise → actions</b>, and it composes entirely from existing blocks — the only new thing on this artboard is the settled day divider and the message-level H1, both taken from the Figma canvas. The honest tension is the stats strip (element 3): it's the strongest candidate to cut if this reads as a dashboard rather than a conversation. Mock for critique, not canonized.
+  </div>
+</div>
+
 </body>
 </html>

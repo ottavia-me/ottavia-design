@@ -498,13 +498,19 @@ Source of old tokens: `src/utils/MarkdownStyles.ts → COLORS`. This table is th
 
 ## Open Questions (Builder decisions needed)
 
-1. **Brand accent.** The new system has no equivalent to old `TERRACOTTA_60` as a primary accent. Is there still a brand color, or is the system intentionally accent-free?
-2. **H1 typography.** Code has H1 at 28px; playground spec stops at H2. Is H1 still in use, and at what size?
+1. **Brand accent.** The new system has no equivalent to old `TERRACOTTA_60` as a primary accent. Is there still a brand color, or is the system intentionally accent-free? *Interim (2026-07-05): Redesign v1 Figma defines `brand/green/60` (#2F703F), marked provisional. Terracotta archived in the Playground. Final call at the Day 1 token audit.*
+2. **H1 typography.** Code has H1 at 28px; playground spec stops at H2. Is H1 still in use, and at what size? *Interim (2026-07-05): Redesign v1 type scale defines H1 at 28/36 Bold, plus Hero at 44/48. Family still TBD (Modern Era shown as example).*
 3. **Numeric display.** Large metric reads (HRV "62", sleep "7h 24m") need a dedicated type token. What's the size, weight, tracking?
 4. **Icon system.** Library, stroke weight, sizes? Currently scattered across screens.
 5. **Motion tokens** above are proposed by PDA — Builder to confirm or adjust.
 6. **Platform divergence.** What's the policy on iOS-specific patterns (sheets, SF Symbols) vs cross-platform parity?
 7. **Dark mode.** Out of scope, or future state? If future, tokens need a second mode.
+
+---
+
+## Log
+
+- **2026-07-05, Redesign v1 token sync (PDA).** Playground `design-system.html` restructured: Foundations now hold only tokens, synced 1:1 with the Redesign v1 Figma Tokens page (brand green provisional, neutral 0-80, 4 domains x 6 shades, semantic success/error/warning/info x 4, lime data series, spacing xs-4xl, radius sm-full, Shadow sm-xl warm alpha, 14-style type scale with family TBD). Components on hold until the token pass lands; all pre-redesign content (chat specs, 12 component categories, legacy palette, screen gallery, Figma vs Code report) moved to a collapsible Archive at the bottom of the page. Note: the token values in THIS file still describe the production (pre-redesign) system; Redesign v1 ships as a parallel v2 track and gets folded in here once tokens are final.
 
 ---
 
