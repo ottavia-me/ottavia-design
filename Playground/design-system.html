@@ -1687,6 +1687,34 @@
   </style>
   <style>
     .status-provisional { background: #FDF8E5; color: #A8811C; }
+    .status-missing { background: #FDE8E8; color: #B03A2E; }
+    .status-partial { background: #FDF8E5; color: #A8811C; }
+    .status-archive { background: #EEEEF2; color: #6B6B76; }
+    .registry-table td { padding: 10px 14px; font-size: 13px; }
+    .registry-table .token-name { font-size: 12.5px; }
+    .registry-note { color: var(--text-secondary); font-size: 12.5px; }
+    .crit-box {
+      border: 1px solid #F0D5C2;
+      background: #FDF7F2;
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin: 20px 0;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .crit-box strong { color: #B35C1E; }
+    .ai-box {
+      border: 1px solid #D8CEF5;
+      background: #F7F4FE;
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin: 20px 0;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .ai-box strong { color: #6B42C4; }
+    .ai-box ol { margin: 10px 0 0 18px; padding: 0; }
+    .ai-box li { margin-bottom: 8px; }
     .archive-toggle {
       display: inline-block;
       padding: 8px 16px;
@@ -1743,7 +1771,10 @@
       <a class="nav-link" href="#elevation">Shadow</a>
 
       <div class="nav-section">Components</div>
-      <a class="nav-link" href="#components">Coming after tokens <span class="nav-badge nav-badge-stub">Stub</span></a>
+      <a class="nav-link" href="#components">Registry &amp; status</a>
+      <a class="nav-link" href="#reg-conversation">Conversation tier</a>
+      <a class="nav-link" href="#comp-missing">What's missing</a>
+      <a class="nav-link" href="#comp-automation">Automation gaps</a>
 
       <div class="nav-section">Archive</div>
       <a class="nav-link" href="#archive" onclick="openArchive()">About the archive</a>
@@ -1774,7 +1805,7 @@
 
       <header class="page-header">
         <h1>Ottavia Design System</h1>
-        <p>The single source of truth for visual design decisions, synced to the <a href="https://www.figma.com/design/8zdDzD913vMpWD1I8EtbDJ/Ottavia--Redesign-v1--Visual-Refresh?node-id=2-2" target="_blank" style="color:#427EF7">Redesign v1 Figma token collection</a>. Tokens first; components follow once the token pass lands.</p>
+        <p>The single source of truth for visual design decisions, synced to the <a href="https://www.figma.com/design/8zdDzD913vMpWD1I8EtbDJ/Ottavia--Redesign-v1--Visual-Refresh?node-id=2-2" target="_blank" style="color:#427EF7">Redesign v1 Figma token collection</a>. Tokens first; components tracked in the registry below while they're re-skinned.</p>
       </header>
 
       <div class="legend">
@@ -1799,7 +1830,7 @@
         </p>
 
         <div class="info-box">
-          <strong>How this page is organized:</strong> The top half holds the token foundations (color, typography, spacing, border, iconography, shadow), synced 1:1 with Figma. Components are intentionally on hold until the token pass lands. Everything from the previous design language lives in the Archive at the bottom, kept intact so it can be revived if needed.
+          <strong>How this page is organized:</strong> The top half holds the token foundations (color, typography, spacing, border, iconography, shadow), synced 1:1 with Figma. Below them, the <a href="#components" style="color:#427EF7">Component Registry</a> tracks every component across Figma, code, and Playground — with status, gaps, and automation opportunities. Full pre-redesign specs live in the Archive at the bottom; the registry links to them and they get revived one by one as they're re-skinned.
         </div>
 
         <h3 class="subsection-title">What's covered</h3>
@@ -2761,12 +2792,175 @@
       <!-- ============================================================ -->
       <section class="section" id="components">
         <div class="section-header">
-          <h2>Components</h2>
-          <span class="badge badge-section">Coming next</span>
+          <h2>Components — Registry &amp; status</h2>
+          <span class="status status-new">Updated Jul 2026</span>
         </div>
         <p class="section-description">
-          Components are rebuilt on the new tokens once this token pass lands, following the sprint rule: re-skin existing components, no new components, no IA changes. The previous component specs are preserved in the Archive below and get revived one by one as they are re-skinned.
+          The single component registry across all four surfaces: <strong>Figma</strong> (Redesign v1 file, 19 component sets), <strong>Code</strong> (<code>ottavia-client/src/components</code>, 54 components), <strong>Playground</strong> (archived specs below), and <strong>DESIGN.md</strong>. Best-in-class teams (Polaris, Primer, Material) publish exactly this: one status page, every component, every surface — so nobody has to guess what exists. Ordered for a chat-first product: primitives first, then the conversation surface (the product), then everything that supports it.
         </p>
+        <p class="section-description">
+          Sprint rule still holds: <em>re-skin existing components on the new tokens, no new components, no IA changes.</em> This registry doesn't add components — it makes visible what we already have and what's missing.
+        </p>
+
+        <div class="crit-box">
+          <strong>The honest picture:</strong> code is the real source of truth (54 components), Figma covers ~19, and until today this page said "coming next" while hiding ~70 specs in the Archive. A design system that under-reports its own inventory trains the team to stop consulting it. The registry below is the fix — each row links its status per surface; <span class="status status-missing">Missing</span> means no spec exists anywhere and the component ships on tribal knowledge.
+        </div>
+
+        <!-- ===== TIER 1: PRIMITIVES ===== -->
+        <h3 class="subsection-title" id="reg-primitives">1 · Core primitives</h3>
+        <p class="section-description">Atoms everything else is built from. If these aren't tokenized and specced, every tier above inherits the drift.</p>
+        <table class="token-table registry-table">
+          <thead><tr><th>Component</th><th>Figma</th><th>Code</th><th>Playground spec</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="token-name">Text (type ramp)</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">Text.tsx</span></td><td><span class="status status-missing">Missing</span></td><td class="registry-note">Typography tokens exist above, but no documented variant API (heading/body/caption). Every screen re-declares font styles.</td></tr>
+            <tr><td class="token-name">Button</td><td><span class="status status-figma">Button + Continue</span></td><td><span class="status status-code">Button.tsx, AddEditButton</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note">Archive spec has 6 variants (primary/secondary/destructive/muted/link/skip). Needs re-skin + revive.</td></tr>
+            <tr><td class="token-name">Icon</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-missing">Missing</span></td><td><span class="status status-partial">Iconography page</span></td><td class="registry-note">Icons exist as assets; no Icon component with size/color API. Raw SVGs inlined per-screen.</td></tr>
+            <tr><td class="token-name">Chip / Tag</td><td><span class="status status-figma">Status Badge, Quick Actions</span></td><td><span class="status status-code">ExpertChip, MethodChip, QuickActionPills</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note">Three chip components in code with no shared base. Consolidation candidate.</td></tr>
+            <tr><td class="token-name">Toggle</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">CustomToggle</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note"></td></tr>
+            <tr><td class="token-name">Text Input</td><td><span class="status status-figma">Input Field</span></td><td><span class="status status-partial">Inline only</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note">No shared TextInput component in code — each form rolls its own.</td></tr>
+            <tr><td class="token-name">Progress (bar / step / ring)</td><td><span class="status status-figma">Progress Bar, Step Progress</span></td><td><span class="status status-code">ProgressBar, AnimatedProgressBar, Ring</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note">Ring.tsx has no Figma or spec counterpart.</td></tr>
+          </tbody>
+        </table>
+
+        <!-- ===== TIER 2: CONVERSATION ===== -->
+        <h3 class="subsection-title" id="reg-conversation">2 · Conversation — the product</h3>
+        <p class="section-description">Chat is Ottavia's primary interface. This tier should be the deepest-specced part of the system; today most of it lives in the Archive or only in code.</p>
+        <table class="token-table registry-table">
+          <thead><tr><th>Component</th><th>Figma</th><th>Code</th><th>Playground spec</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="token-name">Composer</td><td><span class="status status-figma">Chat Composer</span></td><td><span class="status status-code">RenderChatFooter, ComposerVoiceWaveform</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note">Voice waveform state exists in code only — no spec anywhere.</td></tr>
+            <tr><td class="token-name">User bubble</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">Chat screen</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note"></td></tr>
+            <tr><td class="token-name">Ottavia response (markdown)</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">MarkdownStyles.ts</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note"><strong>The single most important surface in the product renders on the legacy palette</strong> (COLORS in MarkdownStyles.ts, terracotta) while new tokens exist in <code>src/theme/tokens.ts</code>. Migration undefined.</td></tr>
+            <tr><td class="token-name">Streaming / thinking state</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">TypewriterText, KnowledgeDepthWave, ChatMessagesSkeleton</span></td><td><span class="status status-partial">Loading answer (archive)</span></td><td class="registry-note">Three loading treatments in code, no rule for which appears when. For an AI product, the waiting state IS brand surface.</td></tr>
+            <tr><td class="token-name">Suggestion chips</td><td><span class="status status-figma">Quick Actions Button</span></td><td><span class="status status-code">QuickActionPills</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note"></td></tr>
+            <tr><td class="token-name">Photo message</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">Chat screen</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note"></td></tr>
+            <tr><td class="token-name">Assistant mode selector</td><td><span class="status status-figma">Ottavia Selector</span></td><td><span class="status status-code">AssistantModeMenu</span></td><td><span class="status status-missing">Missing</span></td><td class="registry-note">Exists in Figma + code, never specced here.</td></tr>
+            <tr><td class="token-name">Expert chip</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">ExpertChip</span></td><td><span class="status status-missing">Missing</span></td><td class="registry-note"><strong>Experts are the current top sprint priority</strong> and their core UI element has zero design documentation.</td></tr>
+            <tr><td class="token-name">Chat queue bar</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">ChatQueueBar</span></td><td><span class="status status-missing">Missing</span></td><td class="registry-note">Code-only.</td></tr>
+            <tr><td class="token-name">System message</td><td><span class="status status-figma">System Message</span></td><td><span class="status status-partial">Chat screen</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note"></td></tr>
+            <tr><td class="token-name">New message banner / timestamp</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">Chat screen</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note"></td></tr>
+          </tbody>
+        </table>
+
+        <!-- ===== TIER 3: DATA DISPLAY ===== -->
+        <h3 class="subsection-title" id="reg-data">3 · Data display</h3>
+        <table class="token-table registry-table">
+          <thead><tr><th>Component</th><th>Figma</th><th>Code</th><th>Playground spec</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="token-name">Stat card / stat grid</td><td><span class="status status-figma">Today</span></td><td><span class="status status-code">StatCard</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note"></td></tr>
+            <tr><td class="token-name">Macros card + rows</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">MacrosCard, MacroProgressRow</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note"></td></tr>
+            <tr><td class="token-name">Meal card / meal row</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">MealExpandableCard, MealRow</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note"></td></tr>
+            <tr><td class="token-name">Report card</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">ReportCard</span></td><td><span class="status status-missing">Missing</span></td><td class="registry-note">Code-only.</td></tr>
+            <tr><td class="token-name">Conditions card</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">ConditionsCard</span></td><td><span class="status status-missing">Missing</span></td><td class="registry-note">Code-only.</td></tr>
+            <tr><td class="token-name">Table / list / collapsible</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">Table, TableHelper, List, ProfileList, Collapible</span></td><td><span class="status status-partial">Chat markdown (archive)</span></td><td class="registry-note">"Collapible" is a typo shipped as a component name — naming hygiene signal.</td></tr>
+            <tr><td class="token-name">Settings card / row</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">SettingsCard</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note"></td></tr>
+          </tbody>
+        </table>
+
+        <!-- ===== TIER 4: DATA VIZ ===== -->
+        <h3 class="subsection-title" id="reg-dataviz">4 · Data visualization</h3>
+        <table class="token-table registry-table">
+          <thead><tr><th>Component</th><th>Figma</th><th>Code</th><th>Playground spec</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="token-name">Bar chart</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">BarChart, ProgressBarChart</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note">Chart tokens exist in <code>src/theme/chartColors.ts</code> — undocumented here.</td></tr>
+            <tr><td class="token-name">Line chart</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">LineChart</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note"></td></tr>
+            <tr><td class="token-name">Progress ring</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">Ring</span></td><td><span class="status status-missing">Missing</span></td><td class="registry-note">Code-only.</td></tr>
+          </tbody>
+        </table>
+
+        <!-- ===== TIER 5: COACHING ===== -->
+        <h3 class="subsection-title" id="reg-coaching">5 · Coaching &amp; proactive</h3>
+        <table class="token-table registry-table">
+          <thead><tr><th>Component</th><th>Figma</th><th>Code</th><th>Playground spec</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="token-name">Coach card (4 domains)</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-partial">Screens</span></td><td><span class="status status-archive">Archive (6 specs)</span></td><td class="registry-note"></td></tr>
+            <tr><td class="token-name">Plan event card</td><td><span class="status status-figma">Plan Event Card</span></td><td><span class="status status-code">CoachPlan/constants.ts</span></td><td><span class="status status-missing">Missing</span></td><td class="registry-note">Uses a dedicated muted palette (OTRD-2627) documented only in DESIGN.md.</td></tr>
+            <tr><td class="token-name">Coach reminders</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-missing">Missing</span></td><td><span class="status status-archive">Archive (WIP)</span></td><td class="registry-note"></td></tr>
+            <tr><td class="token-name">Push notification templates</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-missing">Missing</span></td><td><span class="status status-missing">Missing</span></td><td class="registry-note"><strong>Communication Types 3 &amp; 4 (proactive insights, coach cues) are push-first — and have zero designed templates anywhere.</strong></td></tr>
+            <tr><td class="token-name">Memory event / saved-in labels</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-partial">Screens</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note">Memory transparency is a trust feature — deserves first-class spec.</td></tr>
+          </tbody>
+        </table>
+
+        <!-- ===== TIER 6: FORMS ===== -->
+        <h3 class="subsection-title" id="reg-forms">6 · Forms &amp; input</h3>
+        <table class="token-table registry-table">
+          <thead><tr><th>Component</th><th>Figma</th><th>Code</th><th>Playground spec</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="token-name">Wheel / date pickers</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">WheelPicker, AndroidDateWheelPicker, BodyBasicPicker</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note">Platform-forked picker with no shared spec.</td></tr>
+            <tr><td class="token-name">Option card / selector</td><td><span class="status status-figma">Option Card</span></td><td><span class="status status-partial">Screens</span></td><td><span class="status status-archive">Archive (gender selector)</span></td><td class="registry-note"></td></tr>
+            <tr><td class="token-name">Camera capture</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">OpenCamera</span></td><td><span class="status status-missing">Missing</span></td><td class="registry-note">Core to food logging; no states spec (permission denied, low light, retake).</td></tr>
+            <tr><td class="token-name">Onboarding progress</td><td><span class="status status-figma">Step Progress Bar</span></td><td><span class="status status-code">OnboardingLayout</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note"></td></tr>
+          </tbody>
+        </table>
+
+        <!-- ===== TIER 7: NAV & CHROME ===== -->
+        <h3 class="subsection-title" id="reg-nav">7 · Navigation &amp; chrome</h3>
+        <table class="token-table registry-table">
+          <thead><tr><th>Component</th><th>Figma</th><th>Code</th><th>Playground spec</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="token-name">Headers</td><td><span class="status status-figma">Chat Header, Profile Icon</span></td><td><span class="status status-code">Header, ChatNavBar, BlurHeader, SettingHeader</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note"><strong>Four header components in code, no rule for which to use where.</strong> Consolidation candidate.</td></tr>
+            <tr><td class="token-name">Back / close buttons</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-partial">Per-screen</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note"></td></tr>
+            <tr><td class="token-name">Scroll affordances</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">ScrollEdgeBlur, A11yScrollView</span></td><td><span class="status status-partial">Back-to-start (archive)</span></td><td class="registry-note"></td></tr>
+          </tbody>
+        </table>
+
+        <!-- ===== TIER 8: SURFACES ===== -->
+        <h3 class="subsection-title" id="reg-surfaces">8 · Surfaces &amp; overlays</h3>
+        <table class="token-table registry-table">
+          <thead><tr><th>Component</th><th>Figma</th><th>Code</th><th>Playground spec</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="token-name">Bottom sheet</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">BottomSheet</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note"></td></tr>
+            <tr><td class="token-name">Modal / dialog</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">BackfillLimitModal, GarminHistoryReminderModal, UpdatePrompt</span></td><td><span class="status status-archive">Confirmation dialog (archive)</span></td><td class="registry-note">Three bespoke modals, no shared Modal base. One-off UI is design debt.</td></tr>
+            <tr><td class="token-name">Glass surface</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">GlassSurface</span></td><td><span class="status status-missing">Missing</span></td><td class="registry-note">Code-only.</td></tr>
+          </tbody>
+        </table>
+
+        <!-- ===== TIER 9: FEEDBACK ===== -->
+        <h3 class="subsection-title" id="reg-feedback">9 · Feedback &amp; system states</h3>
+        <p class="section-description">The least-documented tier — and the one users hit when things go wrong. Trust is the product principle; these states are where trust is won or lost.</p>
+        <table class="token-table registry-table">
+          <thead><tr><th>Component</th><th>Figma</th><th>Code</th><th>Playground spec</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="token-name">Toast</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">Toast</span></td><td><span class="status status-missing">Missing</span></td><td class="registry-note">Code-only.</td></tr>
+            <tr><td class="token-name">Offline banner</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">OfflineBanner</span></td><td><span class="status status-missing">Missing</span></td><td class="registry-note">Code-only.</td></tr>
+            <tr><td class="token-name">Empty states</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">EmptyStateView, NoDataView</span></td><td><span class="status status-missing">Missing</span></td><td class="registry-note">Two empty-state components, no guidance on which/when.</td></tr>
+            <tr><td class="token-name">Skeletons</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">ChatMessagesSkeleton</span></td><td><span class="status status-missing">Missing</span></td><td class="registry-note">Only chat has one; every data screen loads without a skeleton spec.</td></tr>
+            <tr><td class="token-name">Error states (in-chat + screen)</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-missing">Missing</span></td><td><span class="status status-missing">Missing</span></td><td class="registry-note"><strong>No designed error pattern anywhere</strong> — what does Ottavia say when an answer fails, data is stale, or Garmin sync breaks?</td></tr>
+          </tbody>
+        </table>
+
+        <!-- ===== WHAT'S MISSING ===== -->
+        <h3 class="subsection-title" id="comp-missing">What's missing — pattern-level gaps</h3>
+        <p class="section-description">Beyond individual components, these are whole patterns best-in-class teams spec that don't exist on any of our four surfaces:</p>
+        <table class="token-table registry-table">
+          <thead><tr><th>Gap</th><th>Why it matters</th></tr></thead>
+          <tbody>
+            <tr><td class="token-name">States matrix (empty / loading / error / edge)</td><td class="registry-note">The agent rule says "a spec covering only the populated state is a sketch" — yet no archived spec covers non-happy-path states. Adopt a per-component states checklist before reviving anything.</td></tr>
+            <tr><td class="token-name">Push notification templates</td><td class="registry-note">Half the communication model (Types 3 &amp; 4) arrives as push. Character limits, preview truncation, emoji policy, deep-link behavior — all undesigned.</td></tr>
+            <tr><td class="token-name">AI trust patterns</td><td class="registry-note">Uncertainty phrasing ("I don't know" is a product principle), source/data grounding indicators, response feedback affordance, correction flow. For an AI-first product, these are core components — not copy.</td></tr>
+            <tr><td class="token-name">Streaming &amp; tool-status pattern</td><td class="registry-note">One rule for what users see while agents work ("Checking your sleep data…"). Three ad-hoc treatments exist in code.</td></tr>
+            <tr><td class="token-name">Motion &amp; haptics tokens</td><td class="registry-note">Reanimated + Lottie are used ad hoc. No duration/easing scale, no haptics vocabulary.</td></tr>
+            <tr><td class="token-name">Permission priming</td><td class="registry-note">Camera, notifications, Garmin auth — each is a make-or-break moment with no designed pattern.</td></tr>
+            <tr><td class="token-name">Accessibility annotations</td><td class="registry-note">No documented touch-target minimums, contrast checks on domain palettes (activity[60] #FFB078 on white fails for text), VoiceOver order, or Dynamic Type behavior.</td></tr>
+            <tr><td class="token-name">Dark mode</td><td class="registry-note">No decision recorded — even "explicitly not supported, here's why" belongs in the system.</td></tr>
+          </tbody>
+        </table>
+
+        <!-- ===== AI AUTOMATION ===== -->
+        <h3 class="subsection-title" id="comp-automation">AI-first: automation we're not doing</h3>
+        <div class="ai-box">
+          <strong>We're an AI-first company maintaining a design system by hand.</strong> Every item below is drift we currently absorb as manual labor that an agent or CI check should absorb instead:
+          <ol>
+            <li><strong>Token sync is 4-way manual.</strong> DESIGN.md ↔ <code>src/theme/tokens.ts</code> ↔ Figma variables ↔ this page are hand-synced. One JSON source of truth + codegen + a CI diff check ends an entire class of drift. The Figma MCP can already export/import variables.</li>
+            <li><strong>No hex lint.</strong> The system's #1 guardrail ("never raw hex") is enforced by nobody: <strong>39 of 54 production components contain raw hex — 190 occurrences.</strong> One ESLint rule + pre-commit hook enforces it forever, and an agent can codemod the existing 190 in a day.</li>
+            <li><strong>The weekly parity audit is manual.</strong> A scheduled agent can diff Figma variables vs tokens.ts vs DESIGN.md nightly and file a Jira ticket on drift — the audit becomes an exception report, not a chore.</li>
+            <li><strong>Playground previews are hand-coded HTML replicas</strong> that drift from the real components by construction. Generate previews from Figma component images (MCP) or render the actual RN components (Storybook / react-native-web).</li>
+            <li><strong>Props tables can be generated.</strong> Components are TypeScript — prop documentation should be extracted, not hand-written.</li>
+            <li><strong>No visual regression tests.</strong> Screenshot tests per component state would catch re-skin regressions automatically during the token migration.</li>
+            <li><strong>Usage analytics by script.</strong> An agent can count import sites per component, flag dead code, and auto-rank the revive order for the archive by real usage instead of gut feel.</li>
+            <li><strong>Chat markdown spec has no eval hook.</strong> The markdown rendering spec should link to golden-standard responses that gate agent-side changes — the design system and the eval framework are currently strangers.</li>
+          </ol>
+        </div>
       </section>
 
       <hr class="section-divider">
@@ -5436,7 +5630,7 @@
       <!-- FOOTER                                                        -->
       <!-- ============================================================ -->
       <footer class="page-footer">
-        <p>Ottavia Design System v2.0 &middot; Updated 2026-07-05</p>
+        <p>Ottavia Design System v2.1 &middot; Updated 2026-07-19 &middot; Component Registry added</p>
         <p style="margin-top:4px;">Source: <a href="https://www.figma.com/design/8zdDzD913vMpWD1I8EtbDJ/Ottavia--Redesign-v1--Visual-Refresh?node-id=2-2" style="color:#427EF7" target="_blank">Redesign v1 Figma, Tokens page</a> + design sessions. Previous version: <a href="tokens.html" style="color:#427EF7">tokens.html (v0.1)</a></p>
       </footer>
 
