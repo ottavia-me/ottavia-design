@@ -1778,7 +1778,6 @@
 
       <div class="nav-section">Archive</div>
       <a class="nav-link" href="#archive" onclick="openArchive()">About the archive</a>
-      <a class="nav-link" href="#legacy-palette" onclick="openArchive()">Legacy palette</a>
       <a class="nav-link" href="#chat-markdown" onclick="openArchive()">Chat — Markdown</a>
       <a class="nav-link" href="#chat-spacing" onclick="openArchive()">Chat — Spacing rules</a>
       <a class="nav-link" href="#chat-user-bubble" onclick="openArchive()">Chat — User bubble</a>
@@ -1845,7 +1844,7 @@
               <td><span class="token-desc">Brand green is provisional, pending Day 1 token audit</span></td>
             </tr>
             <tr>
-              <td><span class="token-desc">Typography (14 text styles)</span></td>
+              <td><span class="token-desc">Typography (16 text styles)</span></td>
               <td><span class="status status-figma">Figma</span> <span class="status status-provisional">Provisional</span></td>
               <td><span class="token-desc">Modern Era shown as example, family still TBD; sizes and line heights are the tokens</span></td>
             </tr>
@@ -1865,14 +1864,14 @@
               <td><span class="token-desc">Lucide, line style, 2px stroke</span></td>
             </tr>
             <tr>
-              <td><span class="token-desc">Shadow (4 effect styles)</span></td>
-              <td><span class="status status-figma">Figma</span></td>
-              <td><span class="token-desc">Warm neutral-80 alpha, sm through xl</span></td>
+              <td><span class="token-desc">Shadow (4 levels)</span></td>
+              <td><span class="status status-gap">Gap</span></td>
+              <td><span class="token-desc">Warm neutral-80 alpha, sm through xl — not yet in Figma as Effect Styles</span></td>
             </tr>
             <tr>
               <td><span class="token-desc">Components</span></td>
               <td><span class="status status-gap">On hold</span></td>
-              <td><span class="token-desc">Rebuilt on the new tokens after this pass; old specs in Archive</span></td>
+              <td><span class="token-desc">Registry &amp; status live below — Figma / Playground / Code per component</span></td>
             </tr>
           </tbody>
         </table>
@@ -1895,7 +1894,7 @@
 
         <!-- Brand -->
         <h3 class="subsection-title">Brand</h3>
-        <p style="font-size:14px; color:#6B665D; margin-bottom:16px;">Brand green is provisional, flagged in Figma for refresh during the Day 1 token audit. The legacy terracotta accent is kept in the <a href="#legacy-palette" onclick="openArchive()" style="color:#427EF7">Archive</a>.</p>
+        <p style="font-size:14px; color:#6B665D; margin-bottom:16px;">Brand green is provisional, flagged in Figma for refresh during the Day 1 token audit. Green is the only brand accent — the pre-redesign palette has been removed from this system.</p>
         <div class="swatch-grid">
           <div class="swatch-card" data-hex="#2F703F" onclick="copyHex(this)">
             <div class="swatch-card-color" style="background:#2F703F"></div>
@@ -2373,7 +2372,7 @@
           <span class="badge badge-section">Foundations</span>
         </div>
         <p class="section-description">
-          One font family, 14 text styles, 3 weights. Synced with the Redesign v1 Figma type scale; every style is bound to type/size and type/line-height variables.
+          One font family, 16 text styles. Synced with the Redesign v1 Figma type scale; every style is bound to type/size and type/line-height variables. Note the open weight question (medium vs semibold) flagged below.
         </p>
 
         <!-- Font Families -->
@@ -2394,7 +2393,7 @@
         </div>
 
         <!-- 14 Text Styles -->
-        <h3 class="subsection-title">Text styles (14)</h3>
+        <h3 class="subsection-title">Text styles (16)</h3>
         <div class="type-preview">
           <div style="font-size:44px; font-weight:700; line-height:48px; color:#433E36; margin-bottom:12px;">Hero, quick brown fox</div>
           <div style="font-size:28px; font-weight:700; line-height:36px; color:#433E36; margin-bottom:12px;">H1, the quick brown fox</div>
@@ -2425,7 +2424,9 @@
             <tr><td><span class="token-name">P3</span></td><td><span class="hex">Regular 400</span></td><td><span class="hex">15</span></td><td><span class="hex">20</span></td><td><span class="token-desc">type/size/p3 · type/line-height/p3</span></td></tr>
             <tr><td><span class="token-name">P3 Strong</span></td><td><span class="hex">Bold 700</span></td><td><span class="hex">15</span></td><td><span class="hex">20</span></td><td><span class="token-desc">type/size/p3 · type/line-height/p3</span></td></tr>
             <tr><td><span class="token-name">Meta 1</span></td><td><span class="hex">Regular 400</span></td><td><span class="hex">13</span></td><td><span class="hex">18</span></td><td><span class="token-desc">type/size/meta-1 · type/line-height/meta-1</span></td></tr>
+            <tr><td><span class="token-name">Meta 1 Strong</span></td><td><span class="hex">Bold 700</span></td><td><span class="hex">13</span></td><td><span class="hex">18</span></td><td><span class="token-desc">type/size/meta-1 · type/line-height/meta-1</span></td></tr>
             <tr><td><span class="token-name">Meta 2</span></td><td><span class="hex">Regular 400</span></td><td><span class="hex">11</span></td><td><span class="hex">16</span></td><td><span class="token-desc">type/size/meta-2 · type/line-height/meta-2</span></td></tr>
+            <tr><td><span class="token-name">Meta 2 Strong</span></td><td><span class="hex">Bold 700</span></td><td><span class="hex">11</span></td><td><span class="hex">16</span></td><td><span class="token-desc">type/size/meta-2 · type/line-height/meta-2</span></td></tr>
           </tbody>
         </table>
         <div class="info-box">
@@ -2435,25 +2436,37 @@
         <!-- Font Weights -->
         <h3 class="subsection-title">Font weights</h3>
         <table class="token-table">
-          <thead><tr><th>Token</th><th>Value</th><th>Used by</th></tr></thead>
+          <thead><tr><th>Token</th><th>Value</th><th>Used by</th><th>Status</th></tr></thead>
           <tbody>
             <tr>
-              <td><span class="token-name">weight.regular</span></td>
+              <td><span class="token-name">type/weight/regular</span></td>
               <td><span class="hex">400</span></td>
               <td><span class="hex">P1, P2, P3, Meta 1, Meta 2</span></td>
+              <td><span class="status status-figma">Figma</span></td>
             </tr>
             <tr>
-              <td><span class="token-name">weight.medium</span></td>
-              <td><span class="hex">500</span></td>
-              <td><span class="hex">H2, H3</span></td>
+              <td><span class="token-name">type/weight/semibold</span></td>
+              <td><span class="hex">600</span></td>
+              <td><span class="hex">No text style uses it yet</span></td>
+              <td><span class="status status-figma">Figma</span></td>
             </tr>
             <tr>
-              <td><span class="token-name">weight.bold</span></td>
+              <td><span class="token-name">type/weight/bold</span></td>
               <td><span class="hex">700</span></td>
               <td><span class="hex">Hero, H1, all Strong variants</span></td>
+              <td><span class="status status-figma">Figma</span></td>
+            </tr>
+            <tr>
+              <td><span class="token-name">(medium — no variable)</span></td>
+              <td><span class="hex">500</span></td>
+              <td><span class="hex">H2, H3 (via "Modern Era Medium")</span></td>
+              <td><span class="status status-gap">Gap</span></td>
             </tr>
           </tbody>
         </table>
+        <div class="info-box">
+          <strong>Weight mismatch in Figma:</strong> the H2/H3 text styles use Medium 500 (as the "Modern Era Medium" family), but the variable collection defines <code>type/weight/semibold</code> 600 — which no text style uses — and has no medium variable. One of the two should win in the Day 1 token audit: either add <code>type/weight/medium</code> and drop semibold, or move H2/H3 to semibold.
+        </div>
       </section>
 
       <hr class="section-divider">
@@ -2519,6 +2532,22 @@
             <tr><td><span class="token-name">spacing/4xl</span></td><td><span class="hex">48px</span></td><td><span class="token-desc">Screen top/bottom padding</span></td></tr>
           </tbody>
         </table>
+
+        <h3 class="subsection-title" id="progress-fill">Progress fill widths</h3>
+        <p class="section-description">Figma also defines a <code>progress/fill</code> group — pixel widths for progress-bar fills at 25% steps on the 430px base frame. Documented here for parity; not yet in DESIGN.md or code.</p>
+        <table class="token-table">
+          <thead><tr><th>Token</th><th>Value</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><span class="token-name">progress/fill/0</span></td><td><span class="hex">0</span></td><td><span class="status status-figma">Figma</span></td></tr>
+            <tr><td><span class="token-name">progress/fill/25</span></td><td><span class="hex">108</span></td><td><span class="status status-figma">Figma</span></td></tr>
+            <tr><td><span class="token-name">progress/fill/50</span></td><td><span class="hex">215</span></td><td><span class="status status-figma">Figma</span></td></tr>
+            <tr><td><span class="token-name">progress/fill/75</span></td><td><span class="hex">323</span></td><td><span class="status status-figma">Figma</span></td></tr>
+            <tr><td><span class="token-name">progress/fill/100</span></td><td><span class="hex">430</span></td><td><span class="status status-figma">Figma</span></td></tr>
+          </tbody>
+        </table>
+        <div class="info-box">
+          <strong>Flag for Day 1 audit:</strong> these are absolute pixel values tied to the 430px design frame — they can't drive a real progress bar in code, which computes fill as a percentage of container width. Recommend treating them as Figma-mock helpers only (or converting to 0/25/50/75/100 percentages) rather than exporting them as product tokens.
+        </div>
       </section>
 
       <hr class="section-divider">
@@ -2746,8 +2775,11 @@
           <span class="badge badge-section">Foundations</span>
         </div>
         <p class="section-description">
-          4 Effect Styles, synced with Figma. Warm shadow color (neutral/80 with alpha) to match the warm-neutral palette character.
+          4 shadow levels. Warm shadow color (neutral/80 with alpha) to match the warm-neutral palette character.
         </p>
+        <div class="info-box">
+          <strong>Gap — not in Figma yet:</strong> the Redesign v1 file currently has no shadow Effect Styles or variables; these four levels are defined only here and in DESIGN.md. Create the matching Effect Styles in Figma (Shadow/sm·md·lg·xl) so the source layer owns them.
+        </div>
 
         <h3 class="subsection-title">Effect Styles</h3>
         <table class="token-table">
@@ -2796,14 +2828,14 @@
           <span class="status status-new">Updated Jul 2026</span>
         </div>
         <p class="section-description">
-          The single component registry across all four surfaces: <strong>Figma</strong> (Redesign v1 file, 19 component sets), <strong>Code</strong> (<code>ottavia-client/src/components</code>, 54 components), <strong>Playground</strong> (archived specs below), and <strong>DESIGN.md</strong>. Best-in-class teams (Polaris, Primer, Material) publish exactly this: one status page, every component, every surface — so nobody has to guess what exists. Ordered for a chat-first product: primitives first, then the conversation surface (the product), then everything that supports it.
+          The single component registry across the three layers of the design system: <strong>Figma</strong> (the source — Redesign v1 file, 19 component sets), <strong>Playground</strong> (this page — the bridge between Figma and code, and the visual representation of the system), and <strong>Code</strong> (DESIGN.md + <code>src/theme/tokens.ts</code> + the component library, 54 components). Best-in-class teams (Polaris, Primer, Material) publish exactly this: one status page, every component, every layer — so nobody has to guess what exists. Ordered for a chat-first product: primitives first, then the conversation surface (the product), then everything that supports it.
         </p>
         <p class="section-description">
           Sprint rule still holds: <em>re-skin existing components on the new tokens, no new components, no IA changes.</em> This registry doesn't add components — it makes visible what we already have and what's missing.
         </p>
 
         <div class="crit-box">
-          <strong>The honest picture:</strong> code is the real source of truth (54 components), Figma covers ~19, and until today this page said "coming next" while hiding ~70 specs in the Archive. A design system that under-reports its own inventory trains the team to stop consulting it. The registry below is the fix — each row links its status per surface; <span class="status status-missing">Missing</span> means no spec exists anywhere and the component ships on tribal knowledge.
+          <strong>The honest picture:</strong> Figma is the source of the design system, but it defines 19 component sets while 54 components ship in code — that gap is exactly what this registry tracks, so the Figma library can catch up deliberately instead of by accident. Until today this page said "coming next" while hiding ~70 specs in the Archive; a design system that under-reports its own inventory trains the team to stop consulting it. <span class="status status-missing">Missing</span> means no definition exists at that layer.
         </div>
 
         <!-- ===== TIER 1: PRIMITIVES ===== -->
@@ -2830,7 +2862,7 @@
           <tbody>
             <tr><td class="token-name">Composer</td><td><span class="status status-figma">Chat Composer</span></td><td><span class="status status-code">RenderChatFooter, ComposerVoiceWaveform</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note">Voice waveform state exists in code only — no spec anywhere.</td></tr>
             <tr><td class="token-name">User bubble</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">Chat screen</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note"></td></tr>
-            <tr><td class="token-name">Ottavia response (markdown)</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">MarkdownStyles.ts</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note"><strong>The single most important surface in the product renders on the legacy palette</strong> (COLORS in MarkdownStyles.ts, terracotta) while new tokens exist in <code>src/theme/tokens.ts</code>. Migration undefined.</td></tr>
+            <tr><td class="token-name">Ottavia response (markdown)</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">MarkdownStyles.ts</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note">Markdown rendering is being replaced in the next version (future-design branch, Vika + Saloni). Current code styles are pre-redesign; do not re-skin — wait for the replacement.</td></tr>
             <tr><td class="token-name">Streaming / thinking state</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">TypewriterText, KnowledgeDepthWave, ChatMessagesSkeleton</span></td><td><span class="status status-partial">Loading answer (archive)</span></td><td class="registry-note">Three loading treatments in code, no rule for which appears when. For an AI product, the waiting state IS brand surface.</td></tr>
             <tr><td class="token-name">Suggestion chips</td><td><span class="status status-figma">Quick Actions Button</span></td><td><span class="status status-code">QuickActionPills</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note"></td></tr>
             <tr><td class="token-name">Photo message</td><td><span class="status status-missing">Missing</span></td><td><span class="status status-code">Chat screen</span></td><td><span class="status status-archive">Archive</span></td><td class="registry-note"></td></tr>
@@ -2975,7 +3007,7 @@
           <span class="badge badge-section">Pre-redesign</span>
         </div>
         <p class="section-description">
-          Everything below predates Redesign v1 and is not part of the current design system. It is kept intact so any piece can be revived: the legacy palette, the chat rendering specs, all component specs, the screen gallery, and the last Figma vs Code report.
+          Everything below predates Redesign v1 and is not part of the current design system. Structural specs are kept so they can be revived on the new tokens: the chat rendering specs, all component specs, the screen gallery, and the last Figma vs Code report. The legacy color palette has been removed entirely — green is the only brand accent.
         </p>
         <button class="archive-toggle" id="archiveToggleBtn" onclick="toggleArchive()">Show archive</button>
       </section>
@@ -2984,321 +3016,6 @@
 
       <hr class="section-divider">
 
-
-      <!-- ============================================================ -->
-      <!-- ARCHIVE: LEGACY PALETTE                                       -->
-      <!-- ============================================================ -->
-      <section class="section" id="legacy-palette">
-        <div class="section-header">
-          <h2>Legacy palette</h2>
-          <span class="badge badge-section">Color</span>
-        </div>
-        <p class="section-description">
-          Pre-redesign color values: terracotta accent, old domain quartets (bg / border / title / text), old red, yellow, and orange scales, plus the superseded data and status alias tables.
-        </p>
-
-        <!-- Data colors -->
-        <h3 class="subsection-title">Data colors</h3>
-        <p style="font-size:14px; color:#6B665D; margin-bottom:16px;">Pastel card colors used in the calendar/coach plan view. Each category has bg, border, title, and text values.</p>
-
-        <h4 style="font-size:14px; font-weight:600; color:#6B665D; margin:0 0 12px;">Hydration</h4>
-        <div class="swatch-grid">
-          <div class="swatch-card" data-hex="#DBEFFA" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#DBEFFA"></div>
-            <div class="swatch-card-name">hydration.bg</div>
-            <div class="swatch-card-hex">#DBEFFA</div>
-          </div>
-          <div class="swatch-card" data-hex="#92B7CE" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#92B7CE"></div>
-            <div class="swatch-card-name">hydration.border</div>
-            <div class="swatch-card-hex">#92B7CE</div>
-          </div>
-          <div class="swatch-card" data-hex="#3A647E" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#3A647E"></div>
-            <div class="swatch-card-name">hydration.title</div>
-            <div class="swatch-card-hex">#3A647E</div>
-          </div>
-          <div class="swatch-card" data-hex="#689BBB" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#689BBB"></div>
-            <div class="swatch-card-name">hydration.text</div>
-            <div class="swatch-card-hex">#689BBB</div>
-          </div>
-        </div>
-
-        <h4 style="font-size:14px; font-weight:600; color:#6B665D; margin:0 0 12px;">Activity</h4>
-        <div class="swatch-grid">
-          <div class="swatch-card" data-hex="#F9EFE0" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#F9EFE0"></div>
-            <div class="swatch-card-name">activity.bg</div>
-            <div class="swatch-card-hex">#F9EFE0</div>
-          </div>
-          <div class="swatch-card" data-hex="#E2C191" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#E2C191"></div>
-            <div class="swatch-card-name">activity.border</div>
-            <div class="swatch-card-hex">#E2C191</div>
-          </div>
-          <div class="swatch-card" data-hex="#9A6E3A" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#9A6E3A"></div>
-            <div class="swatch-card-name">activity.title</div>
-            <div class="swatch-card-hex">#9A6E3A</div>
-          </div>
-          <div class="swatch-card" data-hex="#D4A163" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#D4A163"></div>
-            <div class="swatch-card-name">activity.text</div>
-            <div class="swatch-card-hex">#D4A163</div>
-          </div>
-        </div>
-
-        <h4 style="font-size:14px; font-weight:600; color:#6B665D; margin:0 0 12px;">Nutrition</h4>
-        <div class="swatch-grid">
-          <div class="swatch-card" data-hex="#D7F4E8" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#D7F4E8"></div>
-            <div class="swatch-card-name">nutrition.bg</div>
-            <div class="swatch-card-hex">#D7F4E8</div>
-          </div>
-          <div class="swatch-card" data-hex="#83BD96" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#83BD96"></div>
-            <div class="swatch-card-name">nutrition.border</div>
-            <div class="swatch-card-hex">#83BD96</div>
-          </div>
-          <div class="swatch-card" data-hex="#3A7A4E" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#3A7A4E"></div>
-            <div class="swatch-card-name">nutrition.title</div>
-            <div class="swatch-card-hex">#3A7A4E</div>
-          </div>
-          <div class="swatch-card" data-hex="#58A471" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#58A471"></div>
-            <div class="swatch-card-name">nutrition.text</div>
-            <div class="swatch-card-hex">#58A471</div>
-          </div>
-        </div>
-
-        <h4 style="font-size:14px; font-weight:600; color:#6B665D; margin:0 0 12px;">Recovery</h4>
-        <div class="swatch-grid">
-          <div class="swatch-card" data-hex="#E7EBFF" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#E7EBFF"></div>
-            <div class="swatch-card-name">recovery.bg</div>
-            <div class="swatch-card-hex">#E7EBFF</div>
-          </div>
-          <div class="swatch-card" data-hex="#8292D5" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#8292D5"></div>
-            <div class="swatch-card-name">recovery.border</div>
-            <div class="swatch-card-hex">#8292D5</div>
-          </div>
-          <div class="swatch-card" data-hex="#58669D" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#58669D"></div>
-            <div class="swatch-card-name">recovery.title</div>
-            <div class="swatch-card-hex">#58669D</div>
-          </div>
-          <div class="swatch-card" data-hex="#8292D5" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#8292D5"></div>
-            <div class="swatch-card-name">recovery.text</div>
-            <div class="swatch-card-hex">#8292D5</div>
-          </div>
-        </div>
-
-        <h4 style="font-size:14px; font-weight:600; color:#6B665D; margin:0 0 12px;">Terracotta</h4>
-        <div class="swatch-grid">
-          <div class="swatch-card" data-hex="#A17A5B" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#A17A5B"></div>
-            <div class="swatch-card-name">Terracotta/60</div>
-            <div class="swatch-card-hex">#A17A5B</div>
-          </div>
-          <div class="swatch-card" data-hex="#C4A08E" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#C4A08E"></div>
-            <div class="swatch-card-name">Terracotta/30</div>
-            <div class="swatch-card-hex">#C4A08E</div>
-          </div>
-          <div class="swatch-card" data-hex="#F5E6DC" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#F5E6DC"></div>
-            <div class="swatch-card-name">Terracotta/10</div>
-            <div class="swatch-card-hex">#F5E6DC</div>
-          </div>
-        </div>
-
-        <h4 style="font-size:14px; font-weight:600; color:#6B665D; margin:0 0 12px;">Red</h4>
-        <div class="swatch-grid">
-          <div class="swatch-card" data-hex="#F76642" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#F76642"></div>
-            <div class="swatch-card-name">Red/60</div>
-            <div class="swatch-card-hex">#F76642</div>
-          </div>
-          <div class="swatch-card" data-hex="#FBA88E" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#FBA88E"></div>
-            <div class="swatch-card-name">Red/30</div>
-            <div class="swatch-card-hex">#FBA88E</div>
-          </div>
-          <div class="swatch-card" data-hex="#FFE5E5" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#FFE5E5"></div>
-            <div class="swatch-card-name">Red/10</div>
-            <div class="swatch-card-hex">#FFE5E5</div>
-          </div>
-        </div>
-
-        <h4 style="font-size:14px; font-weight:600; color:#6B665D; margin:0 0 12px;">Yellow</h4>
-        <div class="swatch-grid">
-          <div class="swatch-card" data-hex="#FCE7B5" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#FCE7B5"></div>
-            <div class="swatch-card-name">Yellow/30</div>
-            <div class="swatch-card-hex">#FCE7B5</div>
-          </div>
-          <div class="swatch-card" data-hex="#FEF6E3" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#FEF6E3"></div>
-            <div class="swatch-card-name">Yellow/10</div>
-            <div class="swatch-card-hex">#FEF6E3</div>
-          </div>
-        </div>
-
-        <h4 style="font-size:14px; font-weight:600; color:#6B665D; margin:0 0 12px;">Orange</h4>
-        <div class="swatch-grid">
-          <div class="swatch-card" data-hex="#E4763A" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#E4763A"></div>
-            <div class="swatch-card-name">Orange/80</div>
-            <div class="swatch-card-hex">#E4763A</div>
-          </div>
-          <div class="swatch-card" data-hex="#FF8C4E" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#FF8C4E"></div>
-            <div class="swatch-card-name">Orange/70</div>
-            <div class="swatch-card-hex">#FF8C4E</div>
-          </div>
-          <div class="swatch-card" data-hex="#FFA676" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#FFA676"></div>
-            <div class="swatch-card-name">Orange/60</div>
-            <div class="swatch-card-hex">#FFA676</div>
-          </div>
-          <div class="swatch-card" data-hex="#FFC09E" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#FFC09E"></div>
-            <div class="swatch-card-name">Orange/50</div>
-            <div class="swatch-card-hex">#FFC09E</div>
-          </div>
-          <div class="swatch-card" data-hex="#FFDAC5" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#FFDAC5"></div>
-            <div class="swatch-card-name">Orange/40</div>
-            <div class="swatch-card-hex">#FFDAC5</div>
-          </div>
-          <div class="swatch-card" data-hex="#FFF3ED" onclick="copyHex(this)">
-            <div class="swatch-card-color" style="background:#FFF3ED"></div>
-            <div class="swatch-card-name">Orange/20</div>
-            <div class="swatch-card-hex">#FFF3ED</div>
-          </div>
-        </div>
-
-        <!-- Semantic: Data -->
-        <h3 class="subsection-title" id="color-data">Semantic — Data Colors</h3>
-        <table class="token-table">
-          <thead><tr><th style="width:40px">Preview</th><th>Token</th><th>Value</th><th>Usage</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr>
-              <td><div class="swatch" style="background:#3A647E"></div></td>
-              <td><span class="token-name">data.hydration</span></td>
-              <td><span class="hex">#3A647E</span></td>
-              <td><span class="token-desc">Hydration cards, water tracking</span></td>
-              <td><span class="status status-updated">Updated</span></td>
-            </tr>
-            <tr>
-              <td><div class="swatch" style="background:#DBEFFA"></div></td>
-              <td><span class="token-name">data.hydration.subtle</span></td>
-              <td><span class="hex">#DBEFFA</span></td>
-              <td><span class="token-desc">Hydration card backgrounds</span></td>
-              <td><span class="status status-updated">Updated</span></td>
-            </tr>
-            <tr>
-              <td><div class="swatch" style="background:#9A6E3A"></div></td>
-              <td><span class="token-name">data.activity</span></td>
-              <td><span class="hex">#9A6E3A</span></td>
-              <td><span class="token-desc">Activity cards, exercise tracking</span></td>
-              <td><span class="status status-updated">Updated</span></td>
-            </tr>
-            <tr>
-              <td><div class="swatch" style="background:#F9EFE0"></div></td>
-              <td><span class="token-name">data.activity.subtle</span></td>
-              <td><span class="hex">#F9EFE0</span></td>
-              <td><span class="token-desc">Activity card backgrounds</span></td>
-              <td><span class="status status-updated">Updated</span></td>
-            </tr>
-            <tr>
-              <td><div class="swatch" style="background:#3A7A4E"></div></td>
-              <td><span class="token-name">data.nutrition</span></td>
-              <td><span class="hex">#3A7A4E</span></td>
-              <td><span class="token-desc">Nutrition cards, meal tracking</span></td>
-              <td><span class="status status-updated">Updated</span></td>
-            </tr>
-            <tr>
-              <td><div class="swatch" style="background:#D7F4E8"></div></td>
-              <td><span class="token-name">data.nutrition.subtle</span></td>
-              <td><span class="hex">#D7F4E8</span></td>
-              <td><span class="token-desc">Nutrition card backgrounds</span></td>
-              <td><span class="status status-updated">Updated</span></td>
-            </tr>
-            <tr>
-              <td><div class="swatch" style="background:#58669D"></div></td>
-              <td><span class="token-name">data.recovery</span></td>
-              <td><span class="hex">#58669D</span></td>
-              <td><span class="token-desc">Recovery cards, rest tracking</span></td>
-              <td><span class="status status-updated">Updated</span></td>
-            </tr>
-            <tr>
-              <td><div class="swatch" style="background:#E7EBFF"></div></td>
-              <td><span class="token-name">data.recovery.subtle</span></td>
-              <td><span class="hex">#E7EBFF</span></td>
-              <td><span class="token-desc">Recovery card backgrounds</span></td>
-              <td><span class="status status-updated">Updated</span></td>
-            </tr>
-          </tbody>
-        </table>
-
-        <!-- Semantic: Status -->
-        <h3 class="subsection-title" id="color-status">Semantic — Status Colors</h3>
-        <table class="token-table">
-          <thead><tr><th style="width:40px">Preview</th><th>Token</th><th>Value</th><th>Usage</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr>
-              <td><div class="swatch" style="background:#56B683"></div></td>
-              <td><span class="token-name">status.success</span></td>
-              <td><span class="hex">#56B683</span></td>
-              <td><span class="token-desc">Positive states, on-track</span></td>
-              <td><span class="status status-code">Code</span></td>
-            </tr>
-            <tr>
-              <td><div class="swatch" style="background:#E1F9EB"></div></td>
-              <td><span class="token-name">status.success.subtle</span></td>
-              <td><span class="hex">#E1F9EB</span></td>
-              <td><span class="token-desc">Success background, achievement chips</span></td>
-              <td><span class="status status-code">Code</span></td>
-            </tr>
-            <tr>
-              <td><div class="swatch" style="background:#E4763A"></div></td>
-              <td><span class="token-name">status.warning</span></td>
-              <td><span class="hex">#E4763A</span></td>
-              <td><span class="token-desc">Chronic conditions, attention needed</span></td>
-              <td><span class="status status-figma">Figma</span></td>
-            </tr>
-            <tr>
-              <td><div class="swatch" style="background:#FFD1B8"></div></td>
-              <td><span class="token-name">status.warning.subtle</span></td>
-              <td><span class="hex">#FFD1B8</span></td>
-              <td><span class="token-desc">Warning background, condition chips</span></td>
-              <td><span class="status status-code">Code</span></td>
-            </tr>
-            <tr>
-              <td><div class="swatch" style="background:#FF755D"></div></td>
-              <td><span class="token-name">status.error</span></td>
-              <td><span class="hex">#FF755D</span></td>
-              <td><span class="token-desc">Delete actions, destructive states</span></td>
-              <td><span class="status status-code">Code</span></td>
-            </tr>
-            <tr>
-              <td><div class="swatch" style="background:#FCE7B5"></div></td>
-              <td><span class="token-name">status.highlight</span></td>
-              <td><span class="hex">#FCE7B5</span></td>
-              <td><span class="token-desc">Chat highlights, ==mark== in markdown</span></td>
-              <td><span class="status status-figma">Figma</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <hr class="section-divider">
 
 
       <!-- ============================================================ -->
