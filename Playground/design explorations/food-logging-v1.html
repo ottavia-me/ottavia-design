@@ -206,9 +206,43 @@ svg{display:block;}
 .hardq .h p{font-size:14px;color:var(--n60);line-height:1.5;}
 .hardq .h .a{font-size:14px;color:var(--nut70);margin-top:7px;}
 .foot{max-width:1180px;margin:44px auto 0;font-size:13px;color:var(--n50);border-top:1px solid var(--n20);padding-top:16px;}
+
+/* ---------- Playground embed mode (?embed=1 → single phone in the shell's device frame) ---------- */
+.embed body{padding:0;background:var(--n10);}
+.embed .doc-head,.embed .section-label,.embed .section-title,.embed .section-sub,.embed .reco,.embed .hardq,.embed .foot,.embed .case-cap,.embed .case-q{display:none!important;}
+.embed .gallery{display:block;max-width:none;margin:0;padding:0;overflow:visible;}
+.embed .case{display:none;width:100%;margin:48px 0 0;}
+.embed .case.on{display:block;}
+.embed .phone{width:100%;height:calc(100vh - 48px);border-radius:0;border:none;box-shadow:none;}
+.embed-nav{display:none;}
+.embed .embed-nav{display:block;position:fixed;top:0;left:0;right:0;height:48px;z-index:1000;background:var(--n0);border-bottom:1px solid var(--n20);}
+.embed-nav select{width:100%;height:48px;border:none;background:transparent;font:inherit;font-size:15px;font-weight:600;color:var(--n80);padding:0 14px;}
 </style>
+<script>if(location.search.includes("embed=1"))document.documentElement.classList.add("embed");</script>
 </head>
 <body>
+
+<div class="embed-nav"><select id="embedSel">
+  <option value="0" selected>Q1·A — Composer-native ★</option>
+  <option value="1">Q1·B — Home quick-action ★</option>
+  <option value="2">Q1·C — Dedicated Log FAB</option>
+  <option value="3">Q2·A — Chooser is a step</option>
+  <option value="4">Q2·B — No step ★</option>
+  <option value="5">Q2·C — Camera-first sheet</option>
+  <option value="6">Q3·A — Confirm &amp; adjust</option>
+  <option value="7">Q3·B — Logged + context ★</option>
+  <option value="8">Q3·C — With expert opinion</option>
+</select></div>
+<script>
+window.addEventListener('DOMContentLoaded',function(){
+  if(!document.documentElement.classList.contains('embed'))return;
+  var cases=[].slice.call(document.querySelectorAll('.case'));
+  var sel=document.getElementById('embedSel');
+  function show(i){cases.forEach(function(c,j){c.classList.toggle('on',j===i);});}
+  sel.addEventListener('change',function(){show(+sel.value);});
+  show(+sel.value);
+});
+</script>
 
 <div class="doc-head">
   <div class="eyebrow">Sprint exploration · Nutrition · v1</div>
