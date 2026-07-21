@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Instruction Sprint: Primers &amp; Golden Standards</title>
+<style>
+  :root {
+    --primary-80: #433E36;
+    --primary-70: #5C564D;
+    --primary-60: #766F64;
+    --primary-50: #8F897D;
+    --primary-40: #A8A297;
+    --primary-30: #C2BCB2;
+    --primary-20: #DBD6CD;
+    --primary-10: #F5F1EA;
+    --green-60: #2F703F;
+    --green-30: #8FB59A;
+    --green-10: #E9F1EB;
+    --amber: #D4A163;
+    --red: #B9554D;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--primary-10); color: var(--primary-80); font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+  body { padding: 56px 64px 96px; line-height: 1.5; }
+  .wrap { max-width: 1080px; margin: 0 auto; }
+
+  /* Icons */
+  .ico { width: 14px; height: 14px; stroke-width: 2; flex-shrink: 0; }
+  .ico-md { width: 18px; height: 18px; stroke-width: 2; flex-shrink: 0; }
+  .ico-lg { width: 22px; height: 22px; stroke-width: 1.8; flex-shrink: 0; }
+
+  /* Header */
+  .header { border-bottom: 1px solid var(--primary-30); padding-bottom: 32px; margin-bottom: 48px; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; color: var(--green-60); margin-bottom: 16px; }
+  h1 { font-size: 64px; font-weight: 600; letter-spacing: -1.5px; line-height: 1.05; margin: 0 0 24px; }
+  h1 .title-accent { color: var(--green-60); }
+  .meta { display: flex; flex-wrap: wrap; gap: 24px; font-size: 13px; color: var(--primary-60); }
+  .meta-item { display: inline-flex; align-items: center; gap: 6px; }
+  .meta .label { color: var(--primary-50); margin-right: 4px; }
+  .meta .value { color: var(--primary-80); font-weight: 500; }
+  .meta-item .ico { color: var(--primary-50); }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 4px; background: var(--green-10); color: var(--green-60); font-size: 11px; font-weight: 600; letter-spacing: 0.3px; margin-left: 6px; }
+
+  /* Section */
+  section { margin-bottom: 56px; }
+  .section-label { display: flex; align-items: center; gap: 12px; font-size: 28px; font-weight: 600; letter-spacing: -0.5px; color: var(--primary-80); margin-bottom: 24px; flex-wrap: wrap; }
+  .section-label .ico { color: var(--green-60); width: 24px; height: 24px; }
+  h2 { font-size: 24px; font-weight: 600; letter-spacing: -0.3px; margin: 0 0 20px; }
+  h3 { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; margin: 0 0 12px; color: var(--primary-80); }
+  h3 .ico-md { color: var(--green-60); }
+  p { margin: 0 0 12px; color: var(--primary-70); }
+
+  /* Goal */
+  .goal-card { background: white; border: 1px solid var(--primary-20); border-radius: 12px; padding: 28px 32px; }
+  .goal-card p { font-size: 15px; line-height: 1.6; }
+  .goal-card strong { color: var(--primary-80); }
+
+  /* Two-col cards */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .state-card { background: white; border: 1px solid var(--primary-20); border-radius: 12px; padding: 24px 28px; }
+  .state-card ul { margin: 0; padding: 0; list-style: none; }
+  .state-card li { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; font-size: 14px; color: var(--primary-70); }
+  .state-card li .ico { color: var(--green-60); margin-top: 4px; }
+  .state-card.gaps li .ico { color: var(--red); opacity: 0.75; }
+  .state-card li strong { color: var(--primary-80); }
+  .state-card li .li-body { flex: 1; }
+  .state-card code { font-family: "SF Mono", Menlo, monospace; font-size: 12px; background: var(--primary-10); padding: 1px 5px; border-radius: 4px; color: var(--primary-80); }
+
+  /* Method */
+  .method-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .method-card { background: white; border: 1px solid var(--primary-20); border-radius: 12px; padding: 18px 22px; }
+  .method-card .m-title { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--primary-80); margin-bottom: 6px; }
+  .method-card .m-title .ico-md { color: var(--green-60); }
+  .method-card .m-body { font-size: 13px; color: var(--primary-60); line-height: 1.5; }
+  .method-card .m-src { font-size: 11px; color: var(--green-60); font-weight: 600; letter-spacing: 0.4px; text-transform: uppercase; margin-top: 8px; }
+
+  /* Buckets */
+  .buckets { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .bucket-col { background: white; border: 1px solid var(--primary-20); border-radius: 12px; overflow: hidden; }
+  .bucket-head { padding: 16px 20px 14px; border-bottom: 1px solid var(--primary-20); background: var(--primary-10); }
+  .bucket-head .head-row { display: flex; align-items: center; gap: 10px; }
+  .bucket-head .head-row .ico-lg { color: var(--green-60); }
+  .bucket-head .name { font-size: 16px; font-weight: 600; color: var(--primary-80); }
+  .bucket-head .count { font-size: 11px; color: var(--primary-50); font-weight: 600; letter-spacing: 0.4px; margin-top: 4px; padding-left: 32px; }
+  .bucket-head .owner { font-size: 11px; color: var(--green-60); font-weight: 600; letter-spacing: 0.4px; margin-top: 4px; padding-left: 32px; text-transform: uppercase; }
+  .bucket-list { padding: 8px 0; }
+  .bucket-item { padding: 12px 20px; border-bottom: 1px solid var(--primary-10); }
+  .bucket-item:last-child { border-bottom: none; }
+  .bucket-item .b-num { font-size: 10px; color: var(--primary-50); font-weight: 700; letter-spacing: 1px; }
+  .bucket-item .b-name { font-size: 14px; font-weight: 600; color: var(--primary-80); margin: 2px 0 4px; }
+  .bucket-item .b-detail { font-size: 12px; color: var(--primary-60); line-height: 1.45; }
+  .bucket-item .b-meta { font-size: 11px; color: var(--primary-50); margin-top: 6px; font-family: "SF Mono", Menlo, monospace; }
+
+  /* Bucket workflow status: planning · drafted · eval-passed · shipped */
+  .bucket-item, .longrun-bucket { position: relative; padding-right: 28px; }
+  .bucket-item[data-status="planning"],    .longrun-bucket[data-status="planning"]    { background: rgba(118, 111, 100, 0.06); }
+  .bucket-item[data-status="drafted"],     .longrun-bucket[data-status="drafted"]     { background: rgba(224, 138, 80, 0.10); }
+  .bucket-item[data-status="eval-passed"], .longrun-bucket[data-status="eval-passed"] { background: rgba(140, 99, 203, 0.10); }
+  .bucket-item[data-status="shipped"],     .longrun-bucket[data-status="shipped"]     { background: rgba(71, 173, 96, 0.10); }
+
+  .bucket-status { position: absolute; top: 12px; right: 16px; display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 999px; font-size: 9px; font-weight: 700; letter-spacing: 0.7px; text-transform: uppercase; color: #FEFCF9; line-height: 1.2; }
+  .bucket-item[data-status="planning"]    .bucket-status, .longrun-bucket[data-status="planning"]    .bucket-status { background: #766F64; }
+  .bucket-item[data-status="drafted"]     .bucket-status, .longrun-bucket[data-status="drafted"]     .bucket-status { background: #E08A50; }
+  .bucket-item[data-status="eval-passed"] .bucket-status, .longrun-bucket[data-status="eval-passed"] .bucket-status { background: #8C63CB; }
+  .bucket-item[data-status="shipped"]     .bucket-status, .longrun-bucket[data-status="shipped"]     .bucket-status { background: #47AD60; }
+
+  .bucket-status-legend { display: inline-flex; align-items: center; gap: 14px; margin-left: 12px; font-size: 11px; color: var(--primary-60); font-weight: 500; letter-spacing: 0.4px; text-transform: none; flex-wrap: wrap; }
+  .bucket-status-legend .legend-item { display: inline-flex; align-items: center; gap: 6px; }
+  .bucket-status-legend .leg-pill { display: inline-block; width: 22px; height: 10px; border-radius: 999px; }
+
+  /* The Long Run featured section */
+  .longrun-section { background: linear-gradient(to bottom, var(--green-10), white); border: 1px solid var(--green-30); border-radius: 12px; overflow: hidden; margin-top: 20px; }
+  .longrun-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 18px 22px; border-bottom: 1px solid var(--primary-20); background: rgba(47, 112, 63, 0.08); }
+  .longrun-head-left { display: flex; align-items: center; gap: 12px; }
+  .longrun-head-left .ico-lg { color: var(--green-60); }
+  .longrun-head .e-name { font-size: 17px; font-weight: 600; color: var(--primary-80); }
+  .longrun-head .e-count { font-size: 11px; color: var(--primary-50); font-weight: 600; letter-spacing: 0.4px; margin-top: 2px; }
+  .priority-pill { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; background: var(--green-60); color: white; font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; border-radius: 6px; }
+  .priority-pill .ico { color: white; }
+  .longrun-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .longrun-bucket { padding: 16px 22px; border-right: 1px solid var(--primary-20); }
+  .longrun-bucket:nth-child(2n) { border-right: none; }
+  .longrun-bucket:nth-child(-n+4) { border-bottom: 1px solid var(--primary-20); }
+  .longrun-bucket .b-num { font-size: 10px; color: var(--primary-50); font-weight: 700; letter-spacing: 1px; }
+  .longrun-bucket .b-name { font-size: 14px; font-weight: 600; color: var(--primary-80); margin: 2px 0 4px; }
+  .longrun-bucket .b-detail { font-size: 12px; color: var(--primary-60); line-height: 1.45; }
+  .longrun-bucket .b-meta { font-size: 11px; color: var(--primary-50); margin-top: 6px; font-family: "SF Mono", Menlo, monospace; }
+  .longrun-disclaimer { padding: 14px 22px; background: rgba(47, 112, 63, 0.05); border-top: 1px solid var(--primary-20); font-size: 12px; color: var(--primary-70); display: flex; align-items: flex-start; gap: 8px; }
+  .longrun-disclaimer .ico { color: var(--green-60); margin-top: 2px; flex-shrink: 0; }
+  .longrun-disclaimer strong { color: var(--primary-80); }
+
+  /* Timeline */
+  .timeline { background: white; border: 1px solid var(--primary-20); border-radius: 12px; padding: 24px 28px; }
+  .week-grid { display: grid; grid-template-columns: 80px repeat(5, 1fr); gap: 12px; align-items: stretch; }
+  .week-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--green-60); text-transform: uppercase; padding-top: 16px; }
+  .day { padding: 14px 12px; background: var(--primary-10); border-radius: 8px; min-height: 110px; display: flex; flex-direction: column; }
+  .day.gate { background: var(--green-10); border: 1px solid var(--green-30); }
+  .day-name { display: flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; letter-spacing: 0.8px; color: var(--primary-50); text-transform: uppercase; margin-bottom: 8px; }
+  .day.gate .day-name { color: var(--green-60); }
+  .day .ico { width: 11px; height: 11px; }
+  .day-content { font-size: 12px; color: var(--primary-70); line-height: 1.45; }
+  .day-content .who { display: inline-block; font-size: 10px; font-weight: 700; color: var(--primary-80); margin-right: 4px; }
+
+  .gates { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
+  .gate-card { padding: 16px 20px; background: var(--green-10); border: 1px solid var(--green-30); border-radius: 10px; }
+  .gate-card .g-when { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--green-60); text-transform: uppercase; }
+  .gate-card .g-title { font-size: 14px; font-weight: 600; color: var(--primary-80); margin: 4px 0; }
+  .gate-card .g-detail { font-size: 12px; color: var(--primary-60); }
+
+  /* Roles */
+  .roles-table { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--primary-20); border-radius: 12px; overflow: hidden; }
+  .roles-table th, .roles-table td { padding: 14px 20px; text-align: left; font-size: 13px; border-bottom: 1px solid var(--primary-10); }
+  .roles-table th { background: var(--primary-10); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-50); font-weight: 700; }
+  .roles-table td:first-child { width: 200px; }
+  .roles-table .role-name { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: var(--primary-80); }
+  .roles-table .role-name .ico-md { color: var(--green-60); }
+  .roles-table tr:last-child td { border-bottom: none; }
+
+  /* Workflow */
+  .workflow-flow { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+  .flow-step { display: inline-flex; align-items: center; gap: 8px; background: white; border: 1px solid var(--primary-20); border-radius: 8px; padding: 12px 16px; font-size: 13px; font-weight: 600; color: var(--primary-80); }
+  .flow-step .ico-md { color: var(--green-60); }
+  .flow-arrow { color: var(--primary-40); font-size: 18px; font-weight: 300; }
+  .workflow-detail { background: white; border: 1px solid var(--primary-20); border-radius: 12px; padding: 24px 28px; }
+  .workflow-detail dl { margin: 0; }
+  .workflow-detail dt { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--primary-80); margin-top: 16px; }
+  .workflow-detail dt .ico { color: var(--green-60); }
+  .workflow-detail dt:first-child { margin-top: 0; }
+  .workflow-detail dd { font-size: 13px; color: var(--primary-60); margin: 4px 0 0 22px; padding-left: 0; }
+
+  /* Out of scope */
+  .out-of-scope { background: white; border: 1px solid var(--primary-20); border-radius: 12px; padding: 24px 28px; }
+  .out-of-scope ul { columns: 2; column-gap: 32px; margin: 0; padding: 0; list-style: none; }
+  .out-of-scope li { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: var(--primary-70); margin-bottom: 8px; break-inside: avoid; }
+  .out-of-scope li .ico { color: var(--red); margin-top: 4px; opacity: 0.7; }
+
+  /* First moves */
+  .first-moves { background: white; border: 1px solid var(--primary-20); border-radius: 12px; padding: 24px 28px; }
+  .first-moves ol { margin: 0; padding-left: 20px; }
+  .first-moves li { font-size: 14px; color: var(--primary-70); margin-bottom: 12px; }
+  .first-moves li strong { color: var(--primary-80); }
+  .first-moves code { font-family: "SF Mono", Menlo, monospace; font-size: 12px; background: var(--primary-10); padding: 1px 5px; border-radius: 4px; color: var(--primary-80); }
+
+  @media (max-width: 900px) {
+    body { padding: 32px 20px 64px; }
+    h1 { font-size: 42px; }
+    .two-col, .method-grid, .buckets, .gates, .longrun-grid { grid-template-columns: 1fr; }
+    .week-grid { grid-template-columns: 1fr; }
+    .out-of-scope ul { columns: 1; }
+    .longrun-bucket { border-right: none; border-bottom: 1px solid var(--primary-20); }
+    .longrun-bucket:last-child { border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="eyebrow">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+      Instruction Sprint, Sprint 1
+    </div>
+    <h1>Instruction Sprint<br/><span class="title-accent">Primers &amp; Golden Standards</span></h1>
+    <div class="meta">
+      <span class="meta-item">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span class="label">Dates</span><span class="value">Jul 27 to Aug 7 <span class="pill">Proposed</span></span>
+      </span>
+      <span class="meta-item">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="label">Team</span><span class="value">Vika + Elad + agent crew</span>
+      </span>
+      <span class="meta-item">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="3" r="3"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="6" r="3"/><path d="M6 6v12"/><path d="M18 9v3a3 3 0 0 1-3 3h-6"/></svg>
+        <span class="label">Branch</span><span class="value">sprint/instructions-v1</span>
+      </span>
+      <span class="meta-item">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span class="label">Ship target</span><span class="value">Every prompt PR gated by a regression suite</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Goal -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+      Goal
+    </div>
+    <div class="goal-card">
+      <p>
+        <strong>Primary goal: prove one large task works as one long conversation.</strong>
+        A user starts a real multi-step task, the context window holds, agents hand off cleanly,
+        and the voice never breaks — validated end to end, run multiple times, graded pass or fail.
+      </p>
+      <p>
+        To get there we work only on <strong>instructions and primers</strong>: the horizontal layers every agent shares
+        (tone of voice, format rules, knowledge depth, the master instruction doc) and each agent's own instructions.
+        Every agent flow gets validated and receives a <strong>golden standard</strong>: 20 to 50 binary pass/fail cases mined from real transcripts, not invented ones.
+      </p>
+      <p>
+        Hard rule: this is a <strong>quality sprint</strong>, not a feature sprint. No new agents, no model swaps, no architecture rebuilds.
+        We read data before we write prompts, we change one thing at a time, and nothing merges without the suite passing.
+      </p>
+    </div>
+  </section>
+
+  <!-- What we have / gaps -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+      Where we stand
+    </div>
+    <div class="two-col">
+      <div class="state-card">
+        <h3>
+          <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          What exists today
+        </h3>
+        <ul>
+          <li>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6"/><path d="m19 5-4.5 4.5M9.5 14.5 5 19"/><path d="M5 5l4.5 4.5m5 5L19 19"/></svg>
+            <div class="li-body"><strong>14 product agents</strong> in ottavia-backend, each a static string in <code>*.instructions.ts</code>, composed with primers at runtime</div>
+          </li>
+          <li>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            <div class="li-body"><strong>Primer system</strong> in <code>shared/primers.ts</code>: 4 voice tones, 3 knowledge depths, methods, follow-up, data-pull contract</div>
+          </li>
+          <li>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <div class="li-body"><strong>Golden samples + rubrics</strong> in <code>eval/</code>: voice.md, 14-dimension scoring.md, gold-standard replies per response type</div>
+          </li>
+          <li>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            <div class="li-body"><strong>Real eval harness</strong> in ottavia-engineering: Opus-as-judge grader, dashboard, trends with confidence intervals</div>
+          </li>
+          <li>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <div class="li-body"><strong>Context strategy</strong>: prefetch-first briefs, 500-item history cap, cross-thread summary handoff</div>
+          </li>
+        </ul>
+      </div>
+      <div class="state-card gaps">
+        <h3>
+          <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          The gaps this sprint closes
+        </h3>
+        <ul>
+          <li>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <div class="li-body"><strong>Voice lives in 3+ places</strong> that drift: runtime <code>VOICE_PRIMERS</code>, <code>eval/standards/voice.md</code>, ops tone guide — with stale cross-references between them</div>
+          </li>
+          <li>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <div class="li-body"><strong>No eval gates anything.</strong> The harness runs by hand against Mongo dumps; a prompt change can ship with zero automated checks</div>
+          </li>
+          <li>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <div class="li-body"><strong>Patch-on-patch bloat</strong>: Nutrition at 230 lines of MANDATORY/CRITICAL rules; the known debt in <code>instruction-reduction-plan.md</code> is diagnosed but unpaid</div>
+          </li>
+          <li>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <div class="li-body"><strong>Routing rules duplicated in prose</strong> between Gateway (136 lines) and the newer Classifier — two sources that can diverge</div>
+          </li>
+          <li>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <div class="li-body"><strong>No versioning discipline</strong>: <code>INSTRUCTIONS_VERSION</code> frozen at "v1"; layer order copy-pasted per agent, so a layer can silently go missing</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Method -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      Method, borrowed from the best teams
+    </div>
+    <div class="method-grid">
+      <div class="method-card">
+        <div class="m-title">
+          <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Error analysis before edits
+        </div>
+        <div class="m-body">Read ~100 real transcripts, code failures into categories, count them, fix the biggest first. The best teams spend 60 to 80% of prompt time reading data, not writing prompts. No prompt edits days 1 to 3.</div>
+        <div class="m-src">Hamel Husain · Lenny's interview</div>
+      </div>
+      <div class="method-card">
+        <div class="m-title">
+          <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Golden = binary, from real failures
+        </div>
+        <div class="m-body">20 to 50 cases per agent drawn from actual bad transcripts, never hypothetical. One-sentence pass criterion two people would verdict identically. No Likert scores.</div>
+        <div class="m-src">Anthropic · Demystifying evals</div>
+      </div>
+      <div class="method-card">
+        <div class="m-title">
+          <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          Single-source layered primers
+        </div>
+        <div class="m-body">Tone, format, and safety live in one composable file each, assembled into every agent at build time. One place to edit, zero drift. Prompts written at the right altitude: heuristics and canonical examples, not edge-case laws.</div>
+        <div class="m-src">Sierra Agent OS · Anthropic context engineering</div>
+      </div>
+      <div class="method-card">
+        <div class="m-title">
+          <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M6 21V9a9 9 0 0 0 9 9"/></svg>
+          Prompts as code, suite as gate
+        </div>
+        <div class="m-body">Every instruction change is a PR with an eval run attached. Regression suites held at ~100% pass; capability evals drive improvement and graduate into regression. "Eval-driven development is the new TDD."</div>
+        <div class="m-src">Notion × Braintrust · industry standard</div>
+      </div>
+      <div class="method-card">
+        <div class="m-title">
+          <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Long runs graded pass^k
+        </div>
+        <div class="m-body">Scripted long-session scenarios recorded in full, replayed from clean state 3 to 5 times; all runs must pass. Failures bisected to the first upstream error, replayed standalone before touching a prompt.</div>
+        <div class="m-src">Anthropic · Hamel Husain</div>
+      </div>
+      <div class="method-card">
+        <div class="m-title">
+          <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M12 3a9 9 0 1 0 9 9"/></svg>
+          Deterministic first, judge second
+        </div>
+        <div class="m-body">Cheap programmatic checks (format present, length, banned phrases) run first; the LLM judge handles tone and empathy only after being calibrated against 30 to 50 human-labeled transcripts.</div>
+        <div class="m-src">Anthropic grader hierarchy</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Buckets -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Buckets, 22 total · The Long Run is the primary task
+      <span class="bucket-status-legend">
+        <span class="legend-item"><span class="leg-pill" style="background:#766F64;"></span>Planning</span>
+        <span class="legend-item"><span class="leg-pill" style="background:#E08A50;"></span>Drafted</span>
+        <span class="legend-item"><span class="leg-pill" style="background:#8C63CB;"></span>Eval passed</span>
+        <span class="legend-item"><span class="leg-pill" style="background:#47AD60;"></span>Shipped</span>
+      </span>
+    </div>
+    <div class="buckets">
+
+      <div class="bucket-col">
+        <div class="bucket-head">
+          <div class="head-row">
+            <svg class="ico-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            <div class="name">Horizontal primers</div>
+          </div>
+          <div class="count">6 buckets · shared by every agent</div>
+          <div class="owner">Vika</div>
+        </div>
+        <div class="bucket-list">
+          <div class="bucket-item" data-status="planning">
+            <div class="b-num">01</div>
+            <div class="b-name">Voice, one source of truth</div>
+            <div class="b-detail">Merge the 3 drifting voice definitions into one file that generates the runtime primers. Fix stale cross-references.</div>
+            <div class="b-meta">primers.ts · eval/standards/voice.md · ops tone guide</div>
+          </div>
+          <div class="bucket-item" data-status="planning">
+            <div class="b-num">02</div>
+            <div class="b-name">Format rules primer</div>
+            <div class="b-detail">Audit VOICE_FORMAT_RULES (markdown, numbers, units, dates). Every rule gets a deterministic checker.</div>
+            <div class="b-meta">shared/primers.ts</div>
+          </div>
+          <div class="bucket-item" data-status="planning">
+            <div class="b-num">03</div>
+            <div class="b-name">Knowledge-depth primers</div>
+            <div class="b-detail">Validate novice / medium / pro_athlete actually change depth without changing facts. Golden pair per level.</div>
+            <div class="b-meta">KNOWLEDGE_PRIMERS · insight agents only</div>
+          </div>
+          <div class="bucket-item" data-status="planning">
+            <div class="b-num">04</div>
+            <div class="b-name">Prompt anatomy template</div>
+            <div class="b-detail">One named-section skeleton all agents share: role, context contract, behavior heuristics, canonical examples, output spec.</div>
+            <div class="b-meta">New: INSTRUCTIONS.md template</div>
+          </div>
+          <div class="bucket-item" data-status="planning">
+            <div class="b-num">05</div>
+            <div class="b-name">Central composition</div>
+            <div class="b-detail">Replace the per-agent copy-pasted join with one composePrompt() so no agent can silently drop a layer.</div>
+            <div class="b-meta">*.agent.ts assembly arrays</div>
+          </div>
+          <div class="bucket-item" data-status="planning">
+            <div class="b-num">06</div>
+            <div class="b-name">Versioning discipline</div>
+            <div class="b-detail">Bump rule for INSTRUCTIONS_VERSION on any byte change; prompt version traceable from any prod response.</div>
+            <div class="b-meta">shared/instructionsVersion.ts</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bucket-col">
+        <div class="bucket-head">
+          <div class="head-row">
+            <svg class="ico-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>
+            <div class="name">Per-agent instructions</div>
+          </div>
+          <div class="count">6 buckets · all 14 agents covered</div>
+          <div class="owner">Vika + Elad</div>
+        </div>
+        <div class="bucket-list">
+          <div class="bucket-item" data-status="planning">
+            <div class="b-num">07</div>
+            <div class="b-name">General, the flagship</div>
+            <div class="b-detail">Main chat agent. Voice-critical: this is where "Ottavia sounds like Ottavia" is won or lost. Golden set first.</div>
+            <div class="b-meta">generalAgent.instructions.ts · gpt-5.6-luna</div>
+          </div>
+          <div class="bucket-item" data-status="planning">
+            <div class="b-num">08</div>
+            <div class="b-name">Nutrition debloat</div>
+            <div class="b-detail">230 lines of patch-on-patch rules rewritten to heuristics + canonical examples. Executes the instruction-reduction plan.</div>
+            <div class="b-meta">nutritionAgent.instructions.ts · largest prompt</div>
+          </div>
+          <div class="bucket-item" data-status="planning">
+            <div class="b-num">09</div>
+            <div class="b-name">Routing dedupe</div>
+            <div class="b-detail">Gateway + Classifier encode the same intents in prose twice. One source for routing rules; misroutes get eval cases.</div>
+            <div class="b-meta">gatewayAgent.instructions.ts · classifier.ts</div>
+          </div>
+          <div class="bucket-item" data-status="planning">
+            <div class="b-num">10</div>
+            <div class="b-name">Insight tier</div>
+            <div class="b-detail">Coach, DataAgency, Reports: proactive voice, data grounding, no hallucinated numbers. Shared golden themes, per-agent cases.</div>
+            <div class="b-meta">coach · DataAgencyAgent · reports</div>
+          </div>
+          <div class="bucket-item" data-status="planning">
+            <div class="b-num">11</div>
+            <div class="b-name">Logging tier</div>
+            <div class="b-detail">Goals, Profile, Condition: confirm-and-capture flows, tool-call correctness, "not a clinician" boundary.</div>
+            <div class="b-meta">goals · profile · condition</div>
+          </div>
+          <div class="bucket-item" data-status="planning">
+            <div class="b-num">12</div>
+            <div class="b-name">Surface tier</div>
+            <div class="b-detail">Onboarding, Engagement, Visualization, Expert panel: verbatim outputs, JSON-only contracts, nudge restraint.</div>
+            <div class="b-meta">onboarding · engagement · visulization · expert-panel</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bucket-col">
+        <div class="bucket-head">
+          <div class="head-row">
+            <svg class="ico-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M12 3a9 9 0 1 0 9 9"/></svg>
+            <div class="name">Golden standards &amp; evals</div>
+          </div>
+          <div class="count">4 buckets · the permanent gate</div>
+          <div class="owner">Elad</div>
+        </div>
+        <div class="bucket-list">
+          <div class="bucket-item" data-status="planning">
+            <div class="b-num">13</div>
+            <div class="b-name">Transcript mining</div>
+            <div class="b-detail">~100 real conversations pulled, open-coded, failure categories counted and ranked. The sprint's ordering function.</div>
+            <div class="b-meta">conversation-quality-eval · mongo_dump.py</div>
+          </div>
+          <div class="bucket-item" data-status="planning">
+            <div class="b-num">14</div>
+            <div class="b-name">Golden sets per agent</div>
+            <div class="b-detail">20 to 50 binary cases per agent from real failures. Existing gold-standard replies become reference solutions and must pass the graders first.</div>
+            <div class="b-meta">eval/gold-standard-replies → executable cases</div>
+          </div>
+          <div class="bucket-item" data-status="planning">
+            <div class="b-num">15</div>
+            <div class="b-name">Grader stack</div>
+            <div class="b-detail">Deterministic checks for format rules; Opus judge for tone, calibrated against 30 to 50 human-labeled transcripts before trusted.</div>
+            <div class="b-meta">grader.py · standards/scoring.md</div>
+          </div>
+          <div class="bucket-item" data-status="planning">
+            <div class="b-num">16</div>
+            <div class="b-name">Suite in CI</div>
+            <div class="b-detail">Regression suite wired into GitHub Actions; prompt PRs blocked on failure. The sprint's lasting artifact.</div>
+            <div class="b-meta">.github/workflows · merge gate</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- The Long Run: primary validation task -->
+    <div class="longrun-section">
+      <div class="longrun-head">
+        <div class="longrun-head-left">
+          <svg class="ico-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <div>
+            <div class="e-name">The Long Run</div>
+            <div class="e-count">6 buckets · one large task as one long conversation</div>
+          </div>
+        </div>
+        <span class="priority-pill">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Primary task
+        </span>
+      </div>
+      <div class="longrun-grid">
+        <div class="longrun-bucket" data-status="planning">
+          <div class="b-num">17</div>
+          <div class="b-name">Scenario scripts</div>
+          <div class="b-detail">3 to 5 scripted long sessions spanning agents: morning brief → log meals → device sync lands → coach adjusts the plan → evening recap. Each with a written reference solution.</div>
+          <div class="b-meta">Deliverable: eval/long-run-scenarios/</div>
+        </div>
+        <div class="longrun-bucket" data-status="planning">
+          <div class="b-num">18</div>
+          <div class="b-name">pass^k runs</div>
+          <div class="b-detail">Each scenario replayed 3 to 5 times from clean state; all runs must pass. Full transcript recorded, end-state graded deterministically, coherence and naturalness graded by rubric.</div>
+          <div class="b-meta">Grade: end-state + coherence + naturalness · all k must pass</div>
+        </div>
+        <div class="longrun-bucket" data-status="planning">
+          <div class="b-num">19</div>
+          <div class="b-name">Context boundary tests</div>
+          <div class="b-detail">Fact stated early, needed late. Behavior across the 500-item history cap and the cross-thread summary handoff. Does prefetch-first actually hold the thread?</div>
+          <div class="b-meta">read-path-deadline.ts · thread-state.service.ts</div>
+        </div>
+        <div class="longrun-bucket" data-status="planning">
+          <div class="b-num">20</div>
+          <div class="b-name">Seamless handovers</div>
+          <div class="b-detail">Agent switches must be invisible: one voice throughout, no tone or format reset when routing changes, never re-asking something already said, no "let me connect you" seams. Rubric: reading the transcript, you cannot tell where one agent ended and the next began.</div>
+          <div class="b-meta">Voice primer across all agents · handoff golden cases</div>
+        </div>
+        <div class="longrun-bucket" data-status="planning">
+          <div class="b-num">21</div>
+          <div class="b-name">Multi-intent messages</div>
+          <div class="b-detail">Two tasks in one message: "log my lunch and update my goal", "how did I sleep, and remind me to stretch". Both intents detected, both executed, answered as one coherent reply, nothing dropped. Golden set of 2-task combos across agent pairs.</div>
+          <div class="b-meta">classifier.ts routing · pairwise intent combos</div>
+        </div>
+        <div class="longrun-bucket" data-status="planning">
+          <div class="b-num">22</div>
+          <div class="b-name">Fix loop</div>
+          <div class="b-detail">Every failure bisected to the first upstream error, replayed standalone as a single turn, fixed with one change, re-run. New failures become permanent golden cases.</div>
+          <div class="b-meta">First-failure annotation · one change per PR</div>
+        </div>
+      </div>
+      <div class="longrun-disclaimer">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span>
+          <strong>Why this is the primary task.</strong> Everything else in the sprint exists to make this pass: primers keep the voice stable across agents, per-agent golden standards keep each handoff correct, and the eval stack is how we know instead of hope. Gate 2 is a live run of this, end to end.
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Timeline, 2 weeks
+    </div>
+    <div class="timeline">
+
+      <div class="week-grid" style="margin-bottom:16px;">
+        <div class="week-label">Week 1<br/>Baseline + Foundations</div>
+        <div class="day">
+          <div class="day-name">Mon Jul 27</div>
+          <div class="day-content"><span class="who">All</span> Pull ~100 transcripts. Edit freeze begins.<br/><span class="who">Elad</span> Baseline harness run.</div>
+        </div>
+        <div class="day">
+          <div class="day-name">Tue Jul 28</div>
+          <div class="day-content"><span class="who">All</span> Open-code failures, count categories, rank. Fix order = category size.</div>
+        </div>
+        <div class="day">
+          <div class="day-name">Wed Jul 29</div>
+          <div class="day-content"><span class="who">Vika</span> Voice single-source v1.<br/><span class="who">Elad</span> Anatomy template + composePrompt().</div>
+        </div>
+        <div class="day">
+          <div class="day-name">Thu Jul 30</div>
+          <div class="day-content"><span class="who">Vika</span> Golden sets: General + Nutrition.<br/><span class="who">Elad</span> Graders live; goldens must pass them.</div>
+        </div>
+        <div class="day gate">
+          <div class="day-name">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Fri Jul 31, Gate 1
+          </div>
+          <div class="day-content"><span class="who">All</span> Baseline report reviewed. Primers + anatomy locked or revised.</div>
+        </div>
+      </div>
+
+      <div class="week-grid">
+        <div class="week-label">Week 2<br/>Rewrite + Prove</div>
+        <div class="day">
+          <div class="day-name">Mon Aug 3</div>
+          <div class="day-content"><span class="who">Elad</span> Nutrition debloat + routing dedupe, one change at a time.<br/><span class="who">Vika</span> Golden sets: remaining tiers.</div>
+        </div>
+        <div class="day">
+          <div class="day-name">Tue Aug 4</div>
+          <div class="day-content"><span class="who">Elad</span> Rewrites continue against the suite.<br/><span class="who">Vika</span> Long Run scenarios scripted + reference solutions.</div>
+        </div>
+        <div class="day">
+          <div class="day-name">Wed Aug 5</div>
+          <div class="day-content"><span class="who">All</span> The Long Run: pass^k runs + context boundary tests. First-failure bisection.</div>
+        </div>
+        <div class="day gate">
+          <div class="day-name">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Thu Aug 6, Gate 2
+          </div>
+          <div class="day-content"><span class="who">All</span> Live Long Run review, end to end. Fix list. No new scope.</div>
+        </div>
+        <div class="day">
+          <div class="day-name">Fri Aug 7</div>
+          <div class="day-content"><span class="who">Elad</span> Suite wired into CI as merge gate.<br/><span class="who">Vika</span> INSTRUCTIONS.md handbook shipped.</div>
+        </div>
+      </div>
+
+      <div class="gates">
+        <div class="gate-card">
+          <div class="g-when">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Gate 1, Fri Jul 31
+          </div>
+          <div class="g-title">Baseline counted, primers locked</div>
+          <div class="g-detail">Failure categories ranked with counts. Voice single-source, anatomy template, and composition approved. Graders validated against existing gold-standard replies. Rewrites can start with confidence.</div>
+        </div>
+        <div class="gate-card">
+          <div class="g-when">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Gate 2, Thu Aug 6
+          </div>
+          <div class="g-title">The Long Run passes live</div>
+          <div class="g-detail">One large task, one long conversation, run live end to end. Context holds, handoffs clean, voice stable. Fix list generated, no new scope.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Roles -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Roles
+    </div>
+    <table class="roles-table">
+      <thead>
+        <tr><th>Person</th><th>Owns</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <span class="role-name">
+              <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+              Vika
+            </span>
+          </td>
+          <td>Voice single-source. Golden standard content, what "good" sounds like. Long Run scenario scripts + reference solutions. INSTRUCTIONS.md handbook. Both gate reviews.</td>
+        </tr>
+        <tr>
+          <td>
+            <span class="role-name">
+              <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              Elad
+            </span>
+          </td>
+          <td>Harness + CI, the permanent owner. Prompt refactors in ottavia-backend (debloat, dedupe, composePrompt, versioning). Context boundary instrumentation. Grader calibration.</td>
+        </tr>
+        <tr>
+          <td>
+            <span class="role-name">
+              <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6"/><path d="m19 5-4.5 4.5M9.5 14.5 5 19"/><path d="M5 5l4.5 4.5m5 5L19 19"/></svg>
+              Agent crew
+            </span>
+          </td>
+          <td>content-designer drafts golden standards and format specs. red-team supplies adversarial cases per agent. response-quality agents run transcript batches. All output human-approved before it lands.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Workflow -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      Workflow, order of edits is non-negotiable
+    </div>
+    <div class="workflow-flow">
+      <span class="flow-step">
+        <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Transcripts
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Golden standard
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        Instruction edit
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M12 3a9 9 0 1 0 9 9"/></svg>
+        Suite run
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <svg class="ico-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M6 21V9a9 9 0 0 0 9 9"/></svg>
+        PR + deploy
+      </span>
+    </div>
+    <div class="workflow-detail">
+      <dl>
+        <dt>
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Transcripts first
+        </dt>
+        <dd>No instruction is edited before its agent's real failures are read, coded, and counted. The biggest category gets fixed first. Days 1 to 3 are reading only.</dd>
+        <dt>
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Golden standard before rewrite
+        </dt>
+        <dd>The target is written down before the prompt changes: binary cases with one-sentence pass criteria. If Vika and Elad verdict a case differently, the criterion is rewritten, not argued.</dd>
+        <dt>
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          One change at a time
+        </dt>
+        <dd>Each PR changes one thing: one section, one rule, one primer. Deletion counts as a change and is a first-class deliverable, every prompt gets a token budget.</dd>
+        <dt>
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M12 3a9 9 0 1 0 9 9"/></svg>
+          Suite gates the merge
+        </dt>
+        <dd>Regression cases stay at 100% pass. A red suite blocks the PR, no exceptions, including Vika's own edits.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- Out of scope -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+      Out of scope, scope guard
+    </div>
+    <div class="out-of-scope">
+      <ul>
+        <li>
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          New agents (psychology, concierge, correlation, weather stay in planning)
+        </li>
+        <li>
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Model or provider swaps, tier changes stay as they are
+        </li>
+        <li>
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Runtime prompt store or DB-backed prompt editing
+        </li>
+        <li>
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Gateway architecture removal, we dedupe rules, not rebuild orchestration
+        </li>
+        <li>
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Mid-thread summarization or memory system rebuild, we test the boundary, we don't redesign it
+        </li>
+        <li>
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          UI, DESIGN.md, and the future-design branch, separate workstream
+        </li>
+        <li>
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Marketing tone guide rewrite, it only gets aligned to the single source
+        </li>
+        <li>
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Expert knowledge / methods MVP content, instructions only touch how experts render
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- First moves -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      Tomorrow, first three moves after kickoff
+    </div>
+    <div class="first-moves">
+      <ol>
+        <li><strong>Pull the data.</strong> Export ~100 recent production conversations via <code>mongo_dump.py</code> into a findings folder. Block three uninterrupted reading sessions in both calendars. The edit freeze starts the moment the export lands.</li>
+        <li><strong>Validate the eval before it judges anyone.</strong> Run the graders against the existing <code>eval/gold-standard-replies</code>. Reference solutions that fail mean the eval is broken, not the agents, fix the grader first.</li>
+        <li><strong>Write the one-page prompt anatomy.</strong> Named sections, layer order, token budget per agent. Every rewrite in week 2 lands inside this skeleton, no freeform prompts survive the sprint.</li>
+      </ol>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
