@@ -98,7 +98,7 @@
     <h1>Outside Intelligence<br/><span class="title-accent">How the best teams run instructions</span></h1>
     <div class="meta">
       <span class="meta-item"><span class="label">Method</span><span class="value">3 deep-research passes · every claim adversarially verified (3-vote)</span></span>
-      <span class="meta-item"><span class="label">Covered</span><span class="value">OpenAI · Sierra · Anthropic · Intercom · Oura · Google Health · RestOrTrain · Bevel</span></span>
+      <span class="meta-item"><span class="label">Covered</span><span class="value">OpenAI · Sierra · Anthropic · Intercom · WHOOP · Oura · Google Health · RestOrTrain · Bevel</span></span>
       <span class="meta-item"><span class="label">Date</span><span class="value">Jul 22, 2026</span></span>
     </div>
   </div>
@@ -149,8 +149,9 @@
       <div class="co-body"><ul>
         <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><div><strong>Model Spec = single cross-product source of truth</strong> with an explicit authority hierarchy (Root &gt; System &gt; Developer &gt; User &gt; Guideline) and deterministic conflict rules. Publicly admits the gap between spec and production behavior and ships open compliance evals tracking it.</div></li>
         <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><div><strong>Tone codified as overridable guidelines</strong>, not laws — "speak like a pirate" implicitly overrides "avoid swearing." Style rules bind by default, deviate by context.</div></li>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><div><strong>HealthBench — the published golden-standard template for health AI</strong>: 5,000 multi-turn health conversations, rubrics written by 262 physicians across 60 countries; 48,562 per-example criteria each weighted −10 to +10 (negative criteria penalize bad behavior), graded binary met/not-met by a GPT-4.1 judge whose agreement with physicians matches physician-physician agreement. A physician-validated "Consensus" core of 34 non-negotiable criteria, plus a "Hard" 1,000-example set for headroom.</div></li>
       </ul></div>
-      <div class="co-src">model-spec.openai.com · github.com/openai/model_spec · alignment.openai.com/model-spec-evals</div>
+      <div class="co-src">model-spec.openai.com · github.com/openai/model_spec · arXiv:2505.08775 (HealthBench) · github.com/openai/simple-evals</div>
     </div>
 
     <div class="company">
@@ -178,6 +179,16 @@
         <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><div><strong>Prompt edits in nearly every one of 243 releases</strong> — instruction text revised continuously, like any other shipped code. (Medium confidence: mechanical extraction of the shipped artifact, 2-1 verification vote.)</div></li>
       </ul></div>
       <div class="co-src">github.com/Piebald-AI/claude-code-system-prompts · dbreunig.com analysis</div>
+    </div>
+
+    <div class="company">
+      <div class="co-head"><span class="co-name">WHOOP — the closest analog, fully documented</span><span class="co-tag">First-party eng blog</span></div>
+      <div class="co-body"><ul>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><div><strong>Coach is a routed multi-model pipeline, not one mega-prompt</strong>: router classifies the question → PII stripped before anything leaves WHOOP → LLM decomposes into topic + date segments and requests data → a WHOOP-side model picks what <em>related</em> data rounds out the answer → correlation against their Performance Science research → answer → a final model re-inserts personal data and formats. Under 3s for most questions. 40% of questions are recommendation requests.</div></li>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><div><strong>An internal "AI Studio" runs 41 live agents (235 deployed iterations)</strong> where PMs, data scientists and health coaches — not engineers — write the prompts, with diff/approval/deploy flow. Their eval framework grew from spreadsheets of test questions + synthetic "Personas" (reproducible member profiles) into 2,000+ evals: LLM-as-judge, tool-call verification, mandatory safety gates, CI blocking deploys on regression, and the same metrics reused for production observability. Concrete tuning example: memory-agent save-rate 99%→46% while behavior alignment rose 34%→84%.</div></li>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><div><strong>Reception lesson: hallucinated data is the trust-killer.</strong> Users praise session comparisons and memory follow-ups, but the loudest complaints are fabricated stats (elevation, caffeine) — the AI even admitted fabricating when challenged. "Never state a data point not present in the payload" is the #1 criterion users actually enforce.</div></li>
+      </ul></div>
+      <div class="co-src">engineering.prod.whoop.com/ai-studio · engineering.prod.whoop.com/ai-evaluation-framework · whoop.com "Behind the development of WHOOP Coach" · openai.com/index/whoop</div>
     </div>
 
     <div class="company">
@@ -221,7 +232,7 @@
         <tr><td class="v-ours">Voice single-source (bucket 01)</td><td><span class="v-them">Oura</span> staffs a "guardian of AI voice" · <span class="v-them">OpenAI</span> keeps one spec-as-code for all products</td></tr>
         <tr><td class="v-ours">Prompt anatomy + central composition (04, 05)</td><td><span class="v-them">OpenAI</span> authority levels + conflict rules · <span class="v-them">Anthropic</span> 500+ modular components</td></tr>
         <tr><td class="v-ours">Versioning discipline (06)</td><td><span class="v-them">OpenAI</span> CHANGELOG + dated releases · <span class="v-them">Anthropic</span> prompt edits logged across 243 releases</td></tr>
-        <tr><td class="v-ours">Golden sets from real transcripts (13, 14)</td><td><span class="v-them">Intercom</span> Batch Test from real conversations · <span class="v-them">Google</span> 857 expert case studies · <span class="v-them">Oura</span> clinician-authored gold sets</td></tr>
+        <tr><td class="v-ours">Golden sets from real transcripts (13, 14)</td><td><span class="v-them">Intercom</span> Batch Test from real conversations · <span class="v-them">Google</span> 857 expert case studies · <span class="v-them">Oura</span> clinician-authored gold sets · <span class="v-them">OpenAI</span> HealthBench physician rubrics · <span class="v-them">WHOOP</span> 2,000+ evals gating deploys</td></tr>
         <tr><td class="v-ours">Deterministic lint before LLM-judge (15)</td><td><span class="v-them">Sierra</span> grades DB end-state, not conversation polish</td></tr>
         <tr><td class="v-ours">Suite in CI gating prompt PRs (16)</td><td><span class="v-them">Intercom</span> backtest gate + A/B on fixed metrics</td></tr>
         <tr><td class="v-ours">The Long Run, pass^k (17–22)</td><td><span class="v-them">Sierra</span> invented pass^k; expect ~half your single-shot score at k=8</td></tr>
@@ -234,7 +245,7 @@
   <section>
     <div class="section-label">
       <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-      Seven refinements worth adopting now
+      Ten refinements worth adopting now
     </div>
     <p class="section-sub">Things the research adds that are NOT yet in the sprint plan — each small enough to fold in this sprint.</p>
 
@@ -244,7 +255,10 @@
     <div class="adopt"><div class="a-title">4 · Root-cause taxonomy on every failed case</div><div class="a-body">Intercom forces every "Poor" rating into a fixed taxonomy that names tone as a failure mode. Our transcript mining should use a fixed category list from day one — it's what makes failure counts comparable across weeks.</div><div class="a-who">From Intercom Batch Test · lands in bucket 13</div></div>
     <div class="adopt"><div class="a-title">5 · Framework-anchored rubrics</div><div class="a-body">Google anchored rubrics to RU-SATED and SMART; graders and prompts shared a vocabulary. Anchor ours to the named frameworks in the methods system so "good sleep advice" is defined once.</div><div class="a-who">From Google PH-LLM · lands in scoring.md</div></div>
     <div class="adopt"><div class="a-title">6 · Authority levels + conflict default in the prompt anatomy</div><div class="a-body">Our anatomy template (bucket 04) should name its layers' authority order — primer beats agent prompt beats per-turn context — and define the conflict default, OpenAI-style. Voice sits at the overridable layer with documented sanctioned deviations (grief, crisis).</div><div class="a-who">From OpenAI Model Spec · lands in bucket 04</div></div>
-    <div class="adopt"><div class="a-title">7 · Weight evals toward Recommendations, not facts</div><div class="a-body">PH-LLM beat human experts on knowledge MCQs but lagged on realistic, achievable recommendations — the same place our low "value" and "lens" criteria point. Golden cases should over-sample "what should I do" turns vs "what is X" turns.</div><div class="a-who">From Google PH-LLM · lands in buckets 14, 10</div></div>
+    <div class="adopt"><div class="a-title">7 · Weight evals toward Recommendations, not facts</div><div class="a-body">PH-LLM beat human experts on knowledge MCQs but lagged on realistic, achievable recommendations — the same place our low "value" and "lens" criteria point. Golden cases should over-sample "what should I do" turns vs "what is X" turns. WHOOP confirms: 40% of Coach questions are recommendation requests.</div><div class="a-who">From Google PH-LLM + WHOOP · lands in buckets 14, 10</div></div>
+    <div class="adopt"><div class="a-title">8 · Weighted rubric criteria, including negative points</div><div class="a-body">HealthBench criteria carry weights from −10 to +10 — bad behaviors subtract, and a small physician-validated "Consensus" core is non-negotiable. Our golden cases can stay binary, but each agent should also get a short list of negative criteria (fabricated data, dropped intent, broken voice) that fail the case outright regardless of everything else.</div><div class="a-who">From OpenAI HealthBench · lands in buckets 14, 15</div></div>
+    <div class="adopt"><div class="a-title">9 · "Never state a data point not present in the payload"</div><div class="a-body">WHOOP's loudest user complaints are fabricated stats — their AI admitted inventing elevation and caffeine numbers when challenged. Add the rule to the shared primer verbatim, and make it a deterministic check where possible: every numeric claim in a reply must trace to the prefetch brief or a tool result.</div><div class="a-who">From WHOOP reception · lands in primers + voice_lint</div></div>
+    <div class="adopt"><div class="a-title">10 · Personas: reproducible synthetic users for eval inputs</div><div class="a-body">WHOOP evals run against synthetic "Personas" — reproducible member profiles like "15 green recoveries above 80%" — so the same test means the same thing every run. Our Long Run scenarios and golden cases should pin their user state the same way instead of pointing at live accounts.</div><div class="a-who">From WHOOP eval framework · lands in buckets 17, 14</div></div>
   </section>
 
   <!-- Caveats -->
