@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Instruction Sprint: Outside Intelligence</title>
+<style>
+  :root {
+    --primary-80: #433E36;
+    --primary-70: #5C564D;
+    --primary-60: #766F64;
+    --primary-50: #8F897D;
+    --primary-40: #A8A297;
+    --primary-30: #C2BCB2;
+    --primary-20: #DBD6CD;
+    --primary-10: #F5F1EA;
+    --green-60: #2F703F;
+    --green-30: #8FB59A;
+    --green-10: #E9F1EB;
+    --amber: #D4A163;
+    --red: #B9554D;
+    --purple: #8C63CB;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--primary-10); color: var(--primary-80); font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+  body { padding: 56px 64px 96px; line-height: 1.5; }
+  .wrap { max-width: 1080px; margin: 0 auto; }
+  .ico { width: 14px; height: 14px; stroke-width: 2; flex-shrink: 0; }
+
+  .header { border-bottom: 1px solid var(--primary-30); padding-bottom: 32px; margin-bottom: 48px; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; color: var(--green-60); margin-bottom: 16px; }
+  h1 { font-size: 56px; font-weight: 600; letter-spacing: -1.5px; line-height: 1.05; margin: 0 0 24px; }
+  h1 .title-accent { color: var(--green-60); }
+  .meta { display: flex; flex-wrap: wrap; gap: 24px; font-size: 13px; color: var(--primary-60); }
+  .meta .label { color: var(--primary-50); margin-right: 4px; }
+  .meta .value { color: var(--primary-80); font-weight: 500; }
+
+  section { margin-bottom: 56px; }
+  .section-label { display: flex; align-items: center; gap: 12px; font-size: 26px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 8px; }
+  .section-label .ico { color: var(--green-60); width: 24px; height: 24px; }
+  .section-sub { font-size: 14px; color: var(--primary-60); margin: 0 0 24px; }
+  p { margin: 0 0 12px; color: var(--primary-70); }
+  code { font-family: "SF Mono", Menlo, monospace; font-size: 12px; background: rgba(67,62,54,0.07); padding: 1px 5px; border-radius: 4px; color: var(--primary-80); }
+  a { color: var(--green-60); }
+
+  /* Practices */
+  .practice { display: grid; grid-template-columns: 44px 1fr 150px; gap: 16px; background: white; border: 1px solid var(--primary-20); border-radius: 10px; padding: 16px 22px; margin-bottom: 10px; align-items: start; }
+  .p-num { width: 32px; height: 32px; border-radius: 8px; background: var(--green-10); color: var(--green-60); font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+  .p-body { font-size: 13.5px; color: var(--primary-70); line-height: 1.55; }
+  .p-body strong { color: var(--primary-80); }
+  .p-who { font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--green-60); text-align: right; padding-top: 4px; }
+
+  /* Company cards */
+  .company { background: white; border: 1px solid var(--primary-20); border-radius: 12px; margin-bottom: 18px; overflow: hidden; }
+  .co-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding: 16px 24px; border-bottom: 1px solid var(--primary-20); background: var(--primary-10); }
+  .co-name { font-size: 17px; font-weight: 600; }
+  .co-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; padding: 4px 10px; border-radius: 6px; background: var(--green-60); color: white; }
+  .co-tag.med { background: var(--amber); }
+  .co-body { padding: 18px 24px; }
+  .co-body ul { margin: 0; padding: 0; list-style: none; }
+  .co-body li { display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; color: var(--primary-70); margin-bottom: 10px; line-height: 1.55; }
+  .co-body li .ico { color: var(--green-60); margin-top: 4px; }
+  .co-body li strong { color: var(--primary-80); }
+  .co-src { font-size: 11px; color: var(--primary-50); padding: 10px 24px 14px; border-top: 1px solid var(--primary-10); }
+
+  /* Validation table */
+  .vtable { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--primary-20); border-radius: 12px; overflow: hidden; }
+  .vtable th, .vtable td { padding: 12px 16px; text-align: left; font-size: 13px; border-bottom: 1px solid var(--primary-10); vertical-align: top; }
+  .vtable th { background: var(--primary-10); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-50); font-weight: 700; }
+  .vtable tr:last-child td { border-bottom: none; }
+  .vtable .v-ours { font-weight: 600; color: var(--primary-80); }
+  .vtable .v-them { color: var(--green-60); font-weight: 600; }
+
+  /* Adopt cards */
+  .adopt { background: linear-gradient(to bottom, var(--green-10), white); border: 1px solid var(--green-30); border-radius: 12px; padding: 18px 24px; margin-bottom: 12px; }
+  .adopt .a-title { font-size: 14px; font-weight: 600; color: var(--primary-80); margin-bottom: 4px; }
+  .adopt .a-body { font-size: 13px; color: var(--primary-70); line-height: 1.55; }
+  .adopt .a-who { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--green-60); margin-top: 8px; }
+
+  .caveat { background: white; border: 1px solid var(--primary-20); border-left: 4px solid var(--amber); border-radius: 10px; padding: 16px 22px; font-size: 13px; color: var(--primary-60); line-height: 1.6; }
+
+  @media (max-width: 900px) {
+    body { padding: 32px 20px 64px; }
+    h1 { font-size: 38px; }
+    .practice { grid-template-columns: 44px 1fr; }
+    .p-who { text-align: left; grid-column: 2; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div class="eyebrow">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      Instruction Sprint · Research brief
+    </div>
+    <h1>Outside Intelligence<br/><span class="title-accent">How the best teams run instructions</span></h1>
+    <div class="meta">
+      <span class="meta-item"><span class="label">Method</span><span class="value">3 deep-research passes · every claim adversarially verified (3-vote)</span></span>
+      <span class="meta-item"><span class="label">Covered</span><span class="value">OpenAI · Sierra · Anthropic · Intercom · Oura · Google Health · RestOrTrain · Bevel</span></span>
+      <span class="meta-item"><span class="label">Date</span><span class="value">Jul 22, 2026</span></span>
+    </div>
+  </div>
+
+  <!-- Verdict -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      The verdict
+    </div>
+    <div class="caveat" style="border-left-color: var(--green-60); font-size: 14px; color: var(--primary-70);">
+      <strong style="color:var(--primary-80);">Every pillar of our sprint is independently mirrored by at least one verified company practice.</strong>
+      Voice single-source → Oura's "guardian of AI voice" role and OpenAI's spec-as-code. Binary golden cases from real conversations → Intercom's Batch Test. Deterministic grading before LLM-judge → Sierra's DB-state grading. Prompt PRs + CI gates → OpenAI's versioned Model Spec and Intercom's backtest gate. pass^k long-run testing → Sierra invented the metric. This is convergent validation, not coincidence — and the pages below add the specific refinements worth stealing.
+    </div>
+  </section>
+
+  <!-- 10 practices -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      The 10 most transferable practices
+    </div>
+    <p class="section-sub">Each attributed to the company that verifiably does it. Every one is grounded in a claim that survived 3-vote adversarial verification.</p>
+
+    <div class="practice"><div class="p-num">1</div><div class="p-body"><strong>One layered instruction spec with named authority levels</strong> and an explicit override rule: primer beats agent prompt beats contextual guideline, with a defined conflict default ("when two top-level principles conflict, default to inaction").</div><div class="p-who">OpenAI · chain of command</div></div>
+    <div class="practice"><div class="p-num">2</div><div class="p-body"><strong>The spec lives in git with a CHANGELOG and dated releases</strong>; every change is a diff-reviewable PR. OpenAI ships its behavior spec exactly like software — 5 dated releases in under a year.</div><div class="p-who">OpenAI · model_spec repo</div></div>
+    <div class="practice"><div class="p-num">3</div><div class="p-body"><strong>Voice/tone defaults sit at the lowest authority layer</strong> with a documented implicit-override mechanism — so sensitive contexts (grief, crisis) can legitimately deviate without breaking the spec.</div><div class="p-who">OpenAI · guideline level</div></div>
+    <div class="practice"><div class="p-num">4</div><div class="p-body"><strong>Decompose prompts into shared, conditionally-injected modules</strong> instead of master strings. Claude Code ships 500+ prompt components — tools, subagents, utilities — assembled per context.</div><div class="p-who">Anthropic · Claude Code</div></div>
+    <div class="practice"><div class="p-num">5</div><div class="p-body"><strong>Ship prompt changes at high frequency, logged per release.</strong> Claude Code's instructions changed in nearly every one of 243 releases. Velocity is safe when gated — the gate, not change scarcity, is the safety mechanism.</div><div class="p-who">Anthropic · 243 releases</div></div>
+    <div class="practice"><div class="p-num">6</div><div class="p-body"><strong>Grade deterministically on end-state ground truth before any LLM-judge</strong> — check what the agent DID (database state, tool calls), "not how polished or convincing the conversation sounds."</div><div class="p-who">Sierra · τ-bench grading</div></div>
+    <div class="practice"><div class="p-num">7</div><div class="p-body"><strong>The policy/instruction doc is a first-class versioned artifact of each eval domain</strong> — <code>policy.md</code> checked into git beside the tasks and data it's tested against.</div><div class="p-who">Sierra · policy.md</div></div>
+    <div class="practice"><div class="p-num">8</div><div class="p-body"><strong>Measure pass^k across repeated identical trials, not pass@1.</strong> Expect roughly half your single-shot score by k=8 — GPT-4o fell from ~61% to ~25% on τ-retail. Single-shot evals overstate reliability ~2x.</div><div class="p-who">Sierra · invented pass^k</div></div>
+    <div class="practice"><div class="p-num">9</div><div class="p-body"><strong>Every prompt change goes backtest → controlled rollout</strong>, decided on 2-3 fixed metrics (Fin: resolution rate, CSAT, latency). No change ships on vibes.</div><div class="p-who">Intercom · Fin pipeline</div></div>
+    <div class="practice"><div class="p-num">10</div><div class="p-body"><strong>~50-question batch suites generated from REAL user conversations</strong>, graded Good/Acceptable/Poor with a fixed root-cause taxonomy that explicitly names "Tone wasn't right" as a failure mode — then fix and re-run. Ratings never silently train the agent; a human applies the fix.</div><div class="p-who">Intercom · Batch Test</div></div>
+    <div class="practice"><div class="p-num">+</div><div class="p-body"><strong>Bonus: defensive prompting</strong> — protective instructions embedded wherever the LLM reads end-user input, as standard prompt-injection hygiene.</div><div class="p-who">Intercom</div></div>
+  </section>
+
+  <!-- Company evidence -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      Company evidence, ranked
+    </div>
+    <p class="section-sub">Ranked by verified evidence quality. Notion, Duolingo, Perplexity and Cursor produced no claims that survived verification — absence of evidence, not evidence of absence.</p>
+
+    <div class="company">
+      <div class="co-head"><span class="co-name">OpenAI — the instruction architecture benchmark</span><span class="co-tag">Primary sources</span></div>
+      <div class="co-body"><ul>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><div><strong>Model Spec = single cross-product source of truth</strong> with an explicit authority hierarchy (Root &gt; System &gt; Developer &gt; User &gt; Guideline) and deterministic conflict rules. Publicly admits the gap between spec and production behavior and ships open compliance evals tracking it.</div></li>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><div><strong>Tone codified as overridable guidelines</strong>, not laws — "speak like a pirate" implicitly overrides "avoid swearing." Style rules bind by default, deviate by context.</div></li>
+      </ul></div>
+      <div class="co-src">model-spec.openai.com · github.com/openai/model_spec · alignment.openai.com/model-spec-evals</div>
+    </div>
+
+    <div class="company">
+      <div class="co-head"><span class="co-name">Sierra — the eval methodology benchmark</span><span class="co-tag">Peer-reviewed</span></div>
+      <div class="co-body"><ul>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><div><strong>τ-bench family (ICLR 2025)</strong>: agents graded on whether the right database updates happened, against a versioned <code>policy.md</code>, with LLM-simulated users. No subjective judging in the core loop.</div></li>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><div><strong>pass^k</strong> (all k trials must succeed) as the reliability metric — and eval realism that grows toward production: dual-control users with their own tools, 195K-token knowledge corpora, degraded voice channels.</div></li>
+      </ul></div>
+      <div class="co-src">sierra.ai/blog/benchmarking-ai-agents · github.com/sierra-research/tau2-bench · arXiv:2406.12045</div>
+    </div>
+
+    <div class="company">
+      <div class="co-head"><span class="co-name">Intercom (Fin) — the production ops benchmark</span><span class="co-tag">First-party docs</span></div>
+      <div class="co-body"><ul>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><div><strong>Backtest gate + A/B on every model or prompt change</strong>, decided on resolution rate, CSAT, latency. Defensive prompting wherever user input reaches the LLM.</div></li>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><div><strong>Batch Test productized</strong>: 50-question suites from real conversations, Good/Acceptable/Poor human grading, fixed root-cause taxonomy including "Tone wasn't right" — closest public analog to our per-agent golden sets.</div></li>
+      </ul></div>
+      <div class="co-src">intercom.com/blog/data-privacy-security-ai-chatbots · intercom.com/help — Batch Test docs (May 2026)</div>
+    </div>
+
+    <div class="company">
+      <div class="co-head"><span class="co-name">Anthropic — prompts as continuously deployed code</span><span class="co-tag med">3rd-party extraction</span></div>
+      <div class="co-body"><ul>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><div><strong>Claude Code = 500+ modular prompt strings</strong>, conditionally injected: 27 tool descriptions, separate subagent prompts, compaction and utility prompts. Not one master string.</div></li>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><div><strong>Prompt edits in nearly every one of 243 releases</strong> — instruction text revised continuously, like any other shipped code. (Medium confidence: mechanical extraction of the shipped artifact, 2-1 verification vote.)</div></li>
+      </ul></div>
+      <div class="co-src">github.com/Piebald-AI/claude-code-system-prompts · dbreunig.com analysis</div>
+    </div>
+
+    <div class="company">
+      <div class="co-head"><span class="co-name">Oura — the wearable-AI benchmark</span><span class="co-tag">Jobs + eng blog</span></div>
+      <div class="co-body"><ul>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><div><strong>Evals are a staffed function</strong>: an LLM Evaluation Lead is "guardian of Oura's AI voice" owning a curated eval dataset; a Health Intelligence team owns quality/safety/latency/cost evals pre- and post-release; toolkit names LLM-as-judge, rubrics, red-teaming, prompt versioning. Multi-provider LLM platform with routing and shadow-mode experiments.</div></li>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><div><strong>Clinician-in-the-loop goldens</strong>: board-certified clinicians define what a good response "must do and must never do" and author the rubrics. Product ships user-visible deletable Memories, user-selectable tone (conversational/direct), check-in frequency, and an honest hallucination disclaimer.</div></li>
+      </ul></div>
+      <div class="co-src">ouraring.com/blog/oura-advisor · "How Oura evaluates generative AI to earn trust" · Greenhouse postings 4250676009, 4273399009</div>
+    </div>
+
+    <div class="company">
+      <div class="co-head"><span class="co-name">Google Health (Fitbit / PH-LLM) — the published methodology</span><span class="co-tag">Nature Medicine</span></div>
+      <div class="co-body"><ul>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><div><strong>857 expert-written case studies</strong> as golden standards — with human-only holdouts written from scratch, no LLM assistance. 15-question rubric anchored to named clinical frameworks (RU-SATED, SMART). Fine-tuned judge matched human inter-rater agreement; <strong>a judge calibrated on one consistent rater beat one trained on all raters pooled</strong>.</div></li>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><div><strong>"Recommendations" was the weakest section for models AND experts</strong> — advice quality, not knowledge, is the frontier (the model beat human experts on fitness MCQs 88% vs 71%). Production coach ships as labeled preview behind Premium; famous failure mode: told a user to ditch their dog — ignoring a stated life constraint.</div></li>
+      </ul></div>
+      <div class="co-src">arXiv:2406.06474 · Nature Medicine s41591-025-03888-0 · research.google "Anatomy of a Personal Health Agent" · TechCrunch Oct 2025</div>
+    </div>
+
+    <div class="company">
+      <div class="co-head"><span class="co-name">RestOrTrain + Bevel — the small-team signals</span><span class="co-tag med">Vendor + hiring</span></div>
+      <div class="co-body"><ul>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><div><strong>RestOrTrain</strong> (cycling AI coach): deterministic pre-processing of training metrics before the LLM sees anything; multi-year athlete history as context; positioned explicitly against generic ChatGPT advice — "a coach that knows you, not the average rider." Same philosophy as our prefetch-first briefs.</div></li>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><div><strong>Bevel</strong>: hiring shows systematic AI experimentation across accuracy, speed, and cost; little product architecture publicly verifiable. ("Train or Rest" on the App Store is an unrelated solo-dev app — identity verified during research.)</div></li>
+      </ul></div>
+      <div class="co-src">restortrain.com/faq · App Store id6752621455 · Bevel hiring pages</div>
+    </div>
+  </section>
+
+  <!-- Validation map -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M12 3a9 9 0 1 0 9 9"/></svg>
+      Sprint validation map
+    </div>
+    <p class="section-sub">Every sprint pillar, and who independently does the same thing.</p>
+    <table class="vtable">
+      <thead><tr><th>Our sprint pillar</th><th>Verified external mirror</th></tr></thead>
+      <tbody>
+        <tr><td class="v-ours">Voice single-source (bucket 01)</td><td><span class="v-them">Oura</span> staffs a "guardian of AI voice" · <span class="v-them">OpenAI</span> keeps one spec-as-code for all products</td></tr>
+        <tr><td class="v-ours">Prompt anatomy + central composition (04, 05)</td><td><span class="v-them">OpenAI</span> authority levels + conflict rules · <span class="v-them">Anthropic</span> 500+ modular components</td></tr>
+        <tr><td class="v-ours">Versioning discipline (06)</td><td><span class="v-them">OpenAI</span> CHANGELOG + dated releases · <span class="v-them">Anthropic</span> prompt edits logged across 243 releases</td></tr>
+        <tr><td class="v-ours">Golden sets from real transcripts (13, 14)</td><td><span class="v-them">Intercom</span> Batch Test from real conversations · <span class="v-them">Google</span> 857 expert case studies · <span class="v-them">Oura</span> clinician-authored gold sets</td></tr>
+        <tr><td class="v-ours">Deterministic lint before LLM-judge (15)</td><td><span class="v-them">Sierra</span> grades DB end-state, not conversation polish</td></tr>
+        <tr><td class="v-ours">Suite in CI gating prompt PRs (16)</td><td><span class="v-them">Intercom</span> backtest gate + A/B on fixed metrics</td></tr>
+        <tr><td class="v-ours">The Long Run, pass^k (17–22)</td><td><span class="v-them">Sierra</span> invented pass^k; expect ~half your single-shot score at k=8</td></tr>
+        <tr><td class="v-ours">Tone as a user-facing dimension (primers)</td><td><span class="v-them">Oura</span> conversational/direct modes · <span class="v-them">OpenAI</span> overridable guideline layer</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- What to adopt -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      Seven refinements worth adopting now
+    </div>
+    <p class="section-sub">Things the research adds that are NOT yet in the sprint plan — each small enough to fold in this sprint.</p>
+
+    <div class="adopt"><div class="a-title">1 · Human-only holdout in every golden set</div><div class="a-body">Google kept 50 holdout case studies per vertical written by experts from scratch, no LLM assistance — only training examples were model-drafted-then-rewritten. Our golden sets should mark which cases are pure-human; those are the honest yardstick.</div><div class="a-who">From Google PH-LLM · lands in bucket 14</div></div>
+    <div class="adopt"><div class="a-title">2 · One canonical rater per agent, not averaged verdicts</div><div class="a-body">Google's judge calibrated on a single low-variance rater beat one trained on all raters pooled. When Vika and Elad disagree on a verdict, don't average — assign the agent to one canonical rater and rewrite the criterion.</div><div class="a-who">From Google PH-LLM · lands in bucket 15</div></div>
+    <div class="adopt"><div class="a-title">3 · "Never advise removing a stated life constraint"</div><div class="a-body">Fitbit's coach told a user to ditch their dog to walk faster. Add the rule verbatim to the shared primer and back it with eval cases (dog walks, shift work, kids' schedules, injuries). Optimization-over-empathy is the failure mode users punish hardest.</div><div class="a-who">From Fitbit reception · lands in primers + golden cases</div></div>
+    <div class="adopt"><div class="a-title">4 · Root-cause taxonomy on every failed case</div><div class="a-body">Intercom forces every "Poor" rating into a fixed taxonomy that names tone as a failure mode. Our transcript mining should use a fixed category list from day one — it's what makes failure counts comparable across weeks.</div><div class="a-who">From Intercom Batch Test · lands in bucket 13</div></div>
+    <div class="adopt"><div class="a-title">5 · Framework-anchored rubrics</div><div class="a-body">Google anchored rubrics to RU-SATED and SMART; graders and prompts shared a vocabulary. Anchor ours to the named frameworks in the methods system so "good sleep advice" is defined once.</div><div class="a-who">From Google PH-LLM · lands in scoring.md</div></div>
+    <div class="adopt"><div class="a-title">6 · Authority levels + conflict default in the prompt anatomy</div><div class="a-body">Our anatomy template (bucket 04) should name its layers' authority order — primer beats agent prompt beats per-turn context — and define the conflict default, OpenAI-style. Voice sits at the overridable layer with documented sanctioned deviations (grief, crisis).</div><div class="a-who">From OpenAI Model Spec · lands in bucket 04</div></div>
+    <div class="adopt"><div class="a-title">7 · Weight evals toward Recommendations, not facts</div><div class="a-body">PH-LLM beat human experts on knowledge MCQs but lagged on realistic, achievable recommendations — the same place our low "value" and "lens" criteria point. Golden cases should over-sample "what should I do" turns vs "what is X" turns.</div><div class="a-who">From Google PH-LLM · lands in buckets 14, 10</div></div>
+  </section>
+
+  <!-- Caveats -->
+  <section>
+    <div class="section-label">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Honest caveats
+    </div>
+    <div class="caveat">
+      Only 4 of the 7 targeted instruction-discipline companies produced claims that survived 3-vote verification — Notion, Duolingo, Perplexity, and Cursor yielded nothing verifiable, which reflects evidence scarcity, not absence of practice. The Anthropic evidence is a third-party mechanical extraction of shipped code (proves the artifact, not the internal process; one claim verified 2-1). Intercom's pipeline claims are first-party self-description corroborated by one VC write-up. Sierra's evidence describes its published research benchmark, not necessarily its internal production pipeline. Oura's eval practice is evidenced by job postings — mandate and intent more than audited operation. Google's PH-LLM methodology is peer-reviewed, but Google explicitly disclaims that the follow-up agent paper describes any shipping product, and the PH-LLM→Fitbit-coach lineage is implied, not confirmed. All figures are snapshots as of Jul 22, 2026.
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
